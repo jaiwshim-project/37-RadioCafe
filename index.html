@@ -1357,21 +1357,50 @@
       padding: 16px;
       transition: opacity 0.5s ease;
     }
+    .user-login-screen::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(212,175,105,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(212,175,105,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
     .user-login-screen.hidden { display: none; }
+    .login-radio-body {
+      width: 100%; max-width: 420px;
+      background: linear-gradient(145deg, #3a2e28, #2a201a);
+      border-radius: 28px;
+      padding: 3px;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.5),
+        0 0 40px rgba(212,175,105,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .login-radio-inner {
+      background: linear-gradient(145deg, #2a2018, #1e1610);
+      border-radius: 25px;
+      padding: 20px;
+      position: relative;
+    }
     .login-box {
-      background: linear-gradient(145deg, #2a2220, #1a1410);
-      border: 2px solid rgba(212,175,105,0.3);
-      border-radius: 24px; padding: 40px;
       text-align: center;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,105,0.1);
     }
-    .login-title {
-      font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800;
-      color: #d4af69; letter-spacing: 3px; margin-bottom: 8px;
+    .login-box.hidden { display: none; }
+    .login-lcd {
+      background: linear-gradient(180deg, #0a1a0a, #081408);
+      border-radius: 12px; padding: 16px;
+      margin-bottom: 16px;
+      border: 2px solid rgba(212,175,105,0.15);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
     }
-    .login-sub {
-      font-family: 'Inter', sans-serif; font-size: 14px;
-      color: rgba(212,175,105,0.6); margin-bottom: 24px;
+    .login-lcd-title {
+      font-family: 'Orbitron', monospace; font-size: 14px;
+      color: #55ff55; letter-spacing: 4px; font-weight: 700;
+      text-shadow: 0 0 10px rgba(85,255,85,0.6);
+      margin-bottom: 6px;
+    }
+    .login-lcd-sub {
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: #3abf3a;
     }
     .username-input {
       width: 100%; padding: 14px 20px; border-radius: 16px;
@@ -1383,6 +1412,16 @@
     }
     .username-input:focus { border-color: rgba(212,175,105,0.6); }
     .username-input::placeholder { color: rgba(255,255,255,0.3); }
+    .password-input {
+      width: 100%; padding: 14px 20px; border-radius: 16px;
+      border: 2px solid rgba(212,175,105,0.3);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 24px;
+      text-align: center; outline: none; letter-spacing: 8px;
+      transition: border-color 0.3s; margin-top: 12px;
+    }
+    .password-input:focus { border-color: rgba(212,175,105,0.6); }
+    .password-input::placeholder { color: rgba(255,255,255,0.3); font-size: 14px; letter-spacing: 0; }
     .login-btn {
       margin-top: 20px; width: 100%; padding: 14px;
       background: linear-gradient(135deg, #d4af69, #c49a50);
@@ -1394,6 +1433,50 @@
     .login-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(212,175,105,0.3);
+    }
+    .login-box.hidden { display: none; }
+    .user-list {
+      max-height: 200px; overflow-y: auto;
+      margin-bottom: 16px;
+    }
+    .user-list::-webkit-scrollbar { width: 6px; }
+    .user-list::-webkit-scrollbar-thumb { background: rgba(212,175,105,0.3); border-radius: 3px; }
+    .user-item {
+      padding: 14px 20px; margin: 8px 0;
+      background: rgba(0,0,0,0.3); border-radius: 12px;
+      border: 2px solid rgba(212,175,105,0.2);
+      color: #fff; font-family: 'Inter', sans-serif; font-size: 15px;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .user-item:hover {
+      border-color: rgba(212,175,105,0.5);
+      background: rgba(212,175,105,0.1);
+    }
+    .user-item-icon { font-size: 20px; }
+    .user-item-name { flex: 1; }
+    .new-user-btn {
+      width: 100%; padding: 12px;
+      background: transparent; border: 2px dashed rgba(212,175,105,0.4);
+      border-radius: 12px; color: rgba(212,175,105,0.7);
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .new-user-btn:hover {
+      border-color: rgba(212,175,105,0.7);
+      color: #d4af69;
+    }
+    .back-btn {
+      margin-top: 12px; width: 100%; padding: 10px;
+      background: transparent; border: none;
+      color: rgba(212,175,105,0.6); font-family: 'Inter', sans-serif;
+      font-size: 13px; cursor: pointer; transition: color 0.2s;
+    }
+    .back-btn:hover { color: #d4af69; }
+    .no-users {
+      padding: 30px; text-align: center;
+      color: rgba(212,175,105,0.5); font-size: 13px;
+      font-family: 'Inter', sans-serif;
     }
     .user-badge {
       position: absolute; top: 10px; right: 10px;
@@ -2074,11 +2157,55 @@
 
 <!-- User Login Screen -->
 <div class="user-login-screen" id="userLoginScreen">
-  <div class="login-box">
-    <div class="login-title">라디오카페</div>
-    <div class="login-sub">사용자 이름을 입력하세요</div>
-    <input type="text" id="usernameInput" class="username-input" placeholder="이름 입력..." maxlength="20">
-    <button class="login-btn" onclick="submitUsername()">시작하기</button>
+  <div class="login-radio-body">
+    <div class="login-radio-inner">
+      <div class="photo-screw photo-screw-tl"></div>
+      <div class="photo-screw photo-screw-tr"></div>
+      <div class="photo-screw photo-screw-bl"></div>
+      <div class="photo-screw photo-screw-br"></div>
+
+      <div class="photo-speaker">
+        <div class="photo-speaker-label">STEREO RADIO</div>
+      </div>
+
+      <div class="photo-brand">
+        <span class="photo-brand-text">라디오카페</span>
+        <span class="photo-brand-sub">나만의 추억 사진을 보면서 라디오 방송을 들으세요!</span>
+      </div>
+
+      <!-- 사용자 선택 화면 -->
+      <div class="login-box" id="userSelectBox">
+        <div class="login-lcd">
+          <div class="login-lcd-title">USER SELECT</div>
+          <div class="login-lcd-sub">사용자를 선택하세요</div>
+        </div>
+        <div class="user-list" id="userList"></div>
+        <button class="new-user-btn" onclick="showNewUserForm()">+ 새 사용자 등록</button>
+      </div>
+
+      <!-- 비밀번호 입력 화면 -->
+      <div class="login-box hidden" id="passwordBox">
+        <div class="login-lcd">
+          <div class="login-lcd-title">PASSWORD</div>
+          <div class="login-lcd-sub"><span id="selectedUserName"></span>님, 비밀번호를 입력하세요</div>
+        </div>
+        <input type="password" id="passwordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+        <button class="login-btn" onclick="submitPassword()">확인</button>
+        <button class="back-btn" onclick="showUserSelect()">← 돌아가기</button>
+      </div>
+
+      <!-- 새 사용자 등록 화면 -->
+      <div class="login-box hidden" id="newUserBox">
+        <div class="login-lcd">
+          <div class="login-lcd-title">NEW USER</div>
+          <div class="login-lcd-sub">이름과 비밀번호를 입력하세요</div>
+        </div>
+        <input type="text" id="newUsernameInput" class="username-input" placeholder="이름 입력..." maxlength="20">
+        <input type="password" id="newPasswordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+        <button class="login-btn" onclick="registerNewUser()">등록하기</button>
+        <button class="back-btn" onclick="showUserSelect()">← 돌아가기</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2797,37 +2924,136 @@
 
   // === 사용자 로그인 ===
   var currentUsername = '';
+  var selectedUser = '';
 
-  function submitUsername(){
-    var input = document.getElementById('usernameInput');
-    var name = input.value.trim();
-    if(!name){
-      alert('이름을 입력해주세요.');
+  function getUsers(){
+    return JSON.parse(localStorage.getItem('radioUsers') || '{}');
+  }
+
+  function renderUserList(){
+    var users = getUsers();
+    var userNames = Object.keys(users);
+    var listEl = document.getElementById('userList');
+
+    if(userNames.length === 0){
+      listEl.innerHTML = '<div class="no-users">등록된 사용자가 없습니다</div>';
+    } else {
+      listEl.innerHTML = '';
+      userNames.forEach(function(name){
+        var item = document.createElement('div');
+        item.className = 'user-item';
+        item.innerHTML = '<span class="user-item-icon">👤</span><span class="user-item-name">' + name + '</span>';
+        item.onclick = function(){ selectUser(name); };
+        listEl.appendChild(item);
+      });
+    }
+  }
+
+  function selectUser(name){
+    selectedUser = name;
+    document.getElementById('selectedUserName').textContent = name;
+    document.getElementById('userSelectBox').classList.add('hidden');
+    document.getElementById('passwordBox').classList.remove('hidden');
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('passwordInput').focus();
+  }
+
+  function showUserSelect(){
+    document.getElementById('userSelectBox').classList.remove('hidden');
+    document.getElementById('passwordBox').classList.add('hidden');
+    document.getElementById('newUserBox').classList.add('hidden');
+    renderUserList();
+  }
+
+  function showNewUserForm(){
+    document.getElementById('userSelectBox').classList.add('hidden');
+    document.getElementById('newUserBox').classList.remove('hidden');
+    document.getElementById('newUsernameInput').value = '';
+    document.getElementById('newPasswordInput').value = '';
+    document.getElementById('newUsernameInput').focus();
+  }
+
+  function submitPassword(){
+    var passInput = document.getElementById('passwordInput');
+    var pass = passInput.value.trim();
+
+    if(!pass || pass.length !== 4 || !/^\d{4}$/.test(pass)){
+      alert('비밀번호 4자리 숫자를 입력해주세요.');
+      passInput.focus();
       return;
     }
+
+    var users = getUsers();
+    if(users[selectedUser] !== pass){
+      alert('비밀번호가 일치하지 않습니다.');
+      passInput.value = '';
+      passInput.focus();
+      return;
+    }
+
+    currentUsername = selectedUser;
+    localStorage.setItem('radioUsername', selectedUser);
+    document.getElementById('userLoginScreen').classList.add('hidden');
+    document.getElementById('photoSelectScreen').classList.remove('hidden');
+  }
+
+  function registerNewUser(){
+    var nameInput = document.getElementById('newUsernameInput');
+    var passInput = document.getElementById('newPasswordInput');
+    var name = nameInput.value.trim();
+    var pass = passInput.value.trim();
+
+    if(!name){
+      alert('이름을 입력해주세요.');
+      nameInput.focus();
+      return;
+    }
+    if(!pass || pass.length !== 4 || !/^\d{4}$/.test(pass)){
+      alert('비밀번호 4자리 숫자를 입력해주세요.');
+      passInput.focus();
+      return;
+    }
+
+    var users = getUsers();
+    if(users[name]){
+      alert('이미 등록된 사용자입니다.');
+      return;
+    }
+
+    users[name] = pass;
+    localStorage.setItem('radioUsers', JSON.stringify(users));
+
     currentUsername = name;
     localStorage.setItem('radioUsername', name);
     document.getElementById('userLoginScreen').classList.add('hidden');
     document.getElementById('photoSelectScreen').classList.remove('hidden');
   }
 
-  function initUsername(){
-    var saved = localStorage.getItem('radioUsername');
-    if(saved){
-      currentUsername = saved;
-      document.getElementById('usernameInput').value = saved;
-    }
-  }
-
-  // Enter 키로 제출
+  // Enter 키로 제출 및 숫자만 입력
   document.addEventListener('DOMContentLoaded', function(){
-    var input = document.getElementById('usernameInput');
-    if(input){
-      input.addEventListener('keypress', function(e){
-        if(e.key === 'Enter') submitUsername();
+    var passInput = document.getElementById('passwordInput');
+    var newPassInput = document.getElementById('newPasswordInput');
+
+    [passInput, newPassInput].forEach(function(input){
+      if(input){
+        input.addEventListener('input', function(){
+          this.value = this.value.replace(/[^0-9]/g, '');
+        });
+      }
+    });
+
+    if(passInput){
+      passInput.addEventListener('keypress', function(e){
+        if(e.key === 'Enter') submitPassword();
       });
     }
-    initUsername();
+    if(newPassInput){
+      newPassInput.addEventListener('keypress', function(e){
+        if(e.key === 'Enter') registerNewUser();
+      });
+    }
+
+    renderUserList();
   });
 
   // === Supabase 설정 ===
