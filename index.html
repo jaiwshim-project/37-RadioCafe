@@ -891,20 +891,19 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent);
     }
     .power-area { display: flex; align-items: center; gap: 10px; }
-    .power-led {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #333; border: 1px solid #111;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
-      transition: all 0.5s ease;
+    .digital-to-analog-btn {
+      background: var(--btn-bg); color: var(--accent); border: 1px solid var(--btn-border);
+      padding: 5px 10px; border-radius: 12px;
+      font-family: 'Orbitron', monospace; font-size: 7px; font-weight: 700;
+      cursor: pointer; letter-spacing: 1px; transition: all 0.3s;
     }
-    .power-led.on {
-      background: var(--led-on);
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 0 8px var(--led-on), 0 0 20px var(--led-glow);
-      animation: ledPulse 2.5s ease-in-out infinite;
+    .digital-to-analog-btn:hover {
+      background: var(--accent); color: var(--inner-bg);
     }
-    @keyframes ledPulse {
-      0%,100%{box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 0 8px var(--led-on), 0 0 20px var(--led-glow);}
-      50%{box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 0 12px var(--led-on), 0 0 30px var(--led-glow);}
+    .power-btn.on {
+      border-color: #ff3333;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 8px rgba(255,51,51,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+      color: #ff3333;
     }
     .power-btn {
       width: 36px; height: 36px; border-radius: 50%;
@@ -1918,26 +1917,40 @@
       color: rgba(212,175,105,0.5); font-size: 13px;
       font-family: 'Inter', sans-serif;
     }
-    .photo-done-btn {
+    .mode-select-row {
+      display: flex; gap: 12px; justify-content: center;
+      opacity: 0.2; pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .mode-select-row.ready {
+      opacity: 1; pointer-events: auto;
+    }
+    .mode-btn {
       background: linear-gradient(135deg, #d4af69, #c49a50);
       color: #1a1410; border: 2px solid rgba(240,216,144,0.6);
-      padding: 14px 50px; border-radius: 28px;
-      font-size: 16px; font-weight: 900; font-family: 'Outfit', sans-serif;
-      cursor: pointer; letter-spacing: 3px;
+      padding: 14px 32px; border-radius: 28px;
+      font-size: 14px; font-weight: 900; font-family: 'Outfit', sans-serif;
+      cursor: pointer; letter-spacing: 2px;
       box-shadow: 0 6px 24px rgba(212,175,105,0.3);
       transition: all 0.3s ease;
-      opacity: 0.2; pointer-events: none;
+      flex: 1; max-width: 180px;
     }
-    .photo-done-btn.ready {
-      opacity: 1; pointer-events: auto;
+    .mode-select-row.ready .mode-btn {
       animation: landingFloat 3s ease-in-out infinite;
     }
-    .photo-done-btn.ready:hover {
+    .mode-btn:hover {
       transform: translateY(-2px);
       background: linear-gradient(135deg, #e0c080, #d4af69);
       box-shadow: 0 8px 32px rgba(212,175,105,0.4), 0 0 20px rgba(212,175,105,0.15);
     }
-    .photo-done-btn.ready:active { transform: scale(0.97); animation: none; }
+    .mode-btn:active { transform: scale(0.97); animation: none; }
+    .analog-btn {
+      background: linear-gradient(135deg, #b08040, #906830);
+      border-color: rgba(200,170,90,0.6);
+    }
+    .analog-btn:hover {
+      background: linear-gradient(135deg, #c09050, #b08040);
+    }
     /* Screws */
     .photo-screw {
       position: absolute; width: 8px; height: 8px;
@@ -2257,6 +2270,381 @@
       .play-btn { min-width: 52px; min-height: 52px; }
       .theme-dot { min-width: 28px; min-height: 28px; }
     }
+
+    /* ============================================
+       ANALOG RADIO MODE
+       ============================================ */
+    .analog-radio {
+      width: 100%; max-width: 420px; margin: 0 auto;
+      background: linear-gradient(135deg, var(--body-from), var(--body-to));
+      border: 2px solid var(--neon-light);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 15px var(--neon-glow), inset 0 1px 0 rgba(255,255,255,0.05);
+      position: relative; overflow: hidden;
+      display: none;
+    }
+    .analog-radio.visible { display: block; }
+    .analog-radio-inner {
+      background: var(--inner-bg);
+      padding: 14px 16px 12px;
+      position: relative; overflow: hidden;
+    }
+    .analog-radio-inner::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--texture);
+      pointer-events: none;
+    }
+
+    /* Analog: Top bar */
+    .analog-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px; position: relative; z-index: 1;
+    }
+    .analog-brand {
+      font-family: 'Orbitron', monospace; font-size: 18px; font-weight: 900;
+      color: var(--accent); text-shadow: 0 0 10px var(--accent-glow);
+      letter-spacing: 3px; white-space: nowrap; flex-shrink: 0;
+    }
+    .analog-photos { display: flex; gap: 3px; align-items: center; flex-shrink: 1; min-width: 0; overflow: hidden; }
+    .analog-photos img {
+      width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+      border: 1.5px solid var(--accent); cursor: pointer; flex-shrink: 0;
+    }
+    .analog-mode-switch {
+      background: var(--btn-bg); color: var(--accent); border: 1px solid var(--btn-border);
+      padding: 4px 8px; border-radius: 12px;
+      font-family: 'Orbitron', monospace; font-size: 7px; font-weight: 700;
+      cursor: pointer; letter-spacing: 1px; transition: all 0.3s;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .analog-mode-switch:hover {
+      background: var(--accent); color: var(--inner-bg);
+    }
+    .analog-power-area {
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+    }
+    .analog-power-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--btn-hi1), var(--btn-hi2));
+      border: 1px solid var(--neon-light); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--power-icon);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 4px var(--neon-light-glow), inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: all 0.15s ease;
+    }
+    .analog-power-btn:active {
+      transform: scale(0.92);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .analog-power-btn.on {
+      border-color: #ff3333;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 8px rgba(255,51,51,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+      color: #ff3333;
+    }
+
+    /* Analog: Speaker */
+    .analog-speaker {
+      background: linear-gradient(180deg, var(--speaker-bg), var(--speaker-to));
+      border-radius: 10px; padding: 8px;
+      border: 1px solid var(--speaker-border);
+      margin-bottom: 8px; position: relative; overflow: hidden; z-index: 1;
+    }
+    .analog-speaker-label {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--accent); letter-spacing: 3px; text-align: center;
+      margin-bottom: 4px; opacity: 0.7;
+    }
+    .analog-eq { display: flex; gap: 2px; justify-content: center; height: 28px; align-items: flex-end; }
+    .analog-eq-bar {
+      width: 3px; background: var(--accent); border-radius: 2px;
+      transition: height 0.15s; height: 6px; opacity: 0.6;
+    }
+    .analog-eq-bar.playing {
+      animation: eqBounce 0.6s ease-in-out infinite alternate;
+      opacity: 1;
+    }
+
+    /* Analog: Large FM Band Display */
+    .analog-fm-section {
+      background: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+      border-radius: 10px; padding: 10px 12px; margin-bottom: 8px;
+      border: 1px solid var(--neon-light); position: relative; z-index: 1;
+    }
+    .analog-fm-label {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--accent); letter-spacing: 3px; text-align: center;
+      margin-bottom: 6px; opacity: 0.8;
+    }
+    .analog-freq-band {
+      position: relative; height: 36px;
+      background: var(--speaker-bg);
+      border-radius: 6px; overflow: hidden;
+      border: 1px solid var(--speaker-border);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+      margin-bottom: 4px;
+    }
+    .analog-freq-ticks {
+      position: absolute; top: 0; left: 5%; right: 5%; bottom: 0;
+    }
+    .analog-freq-tick {
+      position: absolute; bottom: 0; width: 1px;
+      background: var(--tick-color); opacity: 0.4;
+    }
+    .analog-freq-tick.major { height: 16px; opacity: 0.7; width: 1.5px; }
+    .analog-freq-tick.minor { height: 8px; }
+    .analog-freq-marks {
+      display: flex; justify-content: space-between;
+      padding: 0 3%; position: absolute; bottom: 2px; left: 0; right: 0;
+    }
+    .analog-freq-mark {
+      font-family: 'Orbitron', monospace; font-size: 9px;
+      color: var(--lcd-idle); opacity: 0.6;
+    }
+    .analog-freq-needle {
+      position: absolute; top: 2px; width: 2px; height: 32px;
+      background: var(--needle);
+      box-shadow: 0 0 8px var(--needle-glow), 0 0 16px var(--needle-glow);
+      border-radius: 1px; left: 5%;
+      transition: left 0.15s ease-out;
+      z-index: 2;
+    }
+    .analog-freq-needle::after {
+      content: ''; position: absolute; top: -2px; left: -3px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--needle); box-shadow: 0 0 6px var(--needle-glow);
+    }
+    /* Station markers on the frequency band */
+    .analog-station-marker {
+      position: absolute; top: 4px; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--accent); opacity: 0.3;
+      transform: translateX(-50%);
+      transition: opacity 0.3s;
+    }
+    .analog-station-marker.active { opacity: 1; box-shadow: 0 0 6px var(--accent-glow); }
+
+    /* Analog: LCD */
+    .analog-lcd {
+      background: var(--lcd-bg);
+      border-radius: 8px; padding: 10px;
+      border: 1px solid var(--lcd-border);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5), 0 1px 0 var(--neon-light);
+      margin-bottom: 10px; text-align: center;
+      position: relative; z-index: 1;
+    }
+    .analog-lcd::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(180deg, var(--lcd-sheen), transparent);
+      border-radius: 8px 8px 0 0; pointer-events: none;
+    }
+    .analog-freq-display {
+      font-family: 'Orbitron', monospace;
+      font-size: 34px; font-weight: 900;
+      color: var(--lcd-text);
+      text-shadow: 0 0 12px var(--lcd-glow);
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .analog-freq-unit {
+      font-family: 'Orbitron', monospace;
+      font-size: 10px; color: var(--lcd-text);
+      opacity: 0.6; letter-spacing: 2px;
+    }
+    .analog-station-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600;
+      color: var(--lcd-text); margin-top: 4px;
+      min-height: 18px;
+      transition: opacity 0.3s;
+    }
+    .analog-station-provider {
+      font-family: 'Orbitron', monospace;
+      font-size: 7px; color: var(--lcd-text);
+      opacity: 0.5; letter-spacing: 2px;
+      margin-top: 1px;
+    }
+    .analog-tuning-status {
+      font-family: 'Orbitron', monospace;
+      font-size: 8px; letter-spacing: 2px;
+      margin-top: 4px;
+    }
+    .analog-tuning-status.tuning { color: var(--lcd-idle); animation: analogPulse 1s ease-in-out infinite; }
+    .analog-tuning-status.locked { color: #4ade80; }
+    @keyframes analogPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* Analog: Tuning Dial */
+    .analog-dial-section {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; margin-bottom: 10px; position: relative; z-index: 1;
+    }
+    .analog-dial-container {
+      position: relative; width: 120px; height: 120px;
+    }
+    .analog-dial-bg {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--knob-from), var(--knob-to));
+      border: 3px solid var(--btn-border);
+      box-shadow:
+        0 8px 24px rgba(0,0,0,0.5),
+        inset 0 2px 4px rgba(255,255,255,0.1),
+        0 0 20px var(--neon-glow);
+    }
+    .analog-dial-marks {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .analog-dial-tick {
+      position: absolute; top: 6px; left: 50%; width: 2px;
+      background: var(--accent); opacity: 0.3;
+      transform-origin: bottom center;
+    }
+    .analog-dial-tick.major { height: 14px; opacity: 0.7; width: 2px; }
+    .analog-dial-tick.minor { height: 8px; width: 1px; }
+    .analog-dial-knob {
+      position: absolute; top: 15px; left: 15px;
+      width: calc(100% - 30px); height: calc(100% - 30px);
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--body-from), var(--body-to));
+      border: 2px solid var(--btn-border);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.3);
+      cursor: grab; touch-action: none;
+      transition: box-shadow 0.2s;
+    }
+    .analog-dial-knob:active { cursor: grabbing; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 12px var(--accent-glow); }
+    .analog-dial-indicator {
+      position: absolute; top: 6px; left: 50%; width: 3px;
+      height: 22px; margin-left: -1.5px;
+      background: var(--needle);
+      border-radius: 2px;
+      box-shadow: 0 0 6px var(--needle-glow);
+    }
+    .analog-dial-label {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--accent); letter-spacing: 2px;
+      text-align: center; margin-top: 4px; opacity: 0.7;
+    }
+    .analog-dial-hint {
+      font-family: 'Inter', sans-serif; font-size: 9px;
+      color: var(--lcd-idle); text-align: center; opacity: 0.5;
+      margin-top: 1px;
+    }
+
+    /* Analog: Volume section */
+    .analog-controls {
+      display: flex; align-items: center; justify-content: center; gap: 20px;
+      position: relative; z-index: 1;
+    }
+    .analog-vol-area { text-align: center; }
+    .analog-vol-container {
+      position: relative; width: 46px; height: 46px;
+    }
+    .analog-vol-knob {
+      position: absolute; top: 3px; left: 3px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--knob-from), var(--knob-to));
+      border: 2px solid var(--btn-border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.1);
+      cursor: grab; touch-action: none;
+    }
+    .analog-vol-knob:active { cursor: grabbing; }
+    .analog-vol-indicator {
+      position: absolute; top: 5px; left: 50%; width: 2px;
+      height: 10px; margin-left: -1px;
+      background: var(--accent);
+      border-radius: 1px;
+    }
+    .analog-vol-label {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--accent); letter-spacing: 2px;
+      margin-top: 4px; opacity: 0.7;
+    }
+
+    /* Analog: Photo switch and back button */
+    .analog-bottom-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 12px; position: relative; z-index: 1;
+    }
+    .analog-photo-btn {
+      background: var(--btn-bg); color: var(--accent);
+      border: 1px solid var(--btn-border);
+      width: 32px; height: 32px; border-radius: 50%;
+      font-size: 16px; cursor: pointer; transition: all 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .analog-photo-btn:hover { background: var(--accent); color: var(--inner-bg); }
+
+    /* Analog: Footer */
+    .analog-footer {
+      text-align: center; margin-top: 6px; padding-top: 6px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative; z-index: 1;
+    }
+    .analog-footer-text {
+      font-size: 9px; color: var(--footer-color);
+      letter-spacing: 1px; font-weight: 500;
+    }
+    .analog-footer-text a { color: var(--footer-link); text-decoration: none; }
+    .analog-footer-text a:hover { color: var(--accent); }
+
+    /* Analog: Bottom photos */
+    .analog-ctrl-photos {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .analog-ctrl-photos img {
+      width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+      border: 1.5px solid var(--accent); cursor: pointer;
+    }
+
+    /* === Analog Responsive === */
+    @media (min-width: 481px) {
+      .analog-radio { padding: 6px; border-radius: 24px; }
+      .analog-radio-inner { border-radius: 20px; }
+    }
+    @media (max-width: 480px) {
+      .analog-radio {
+        max-width: 100%; border-radius: 0; padding: 0;
+        border-width: 2px 0;
+        min-height: 100vh; min-height: 100dvh;
+        display: none; flex-direction: column;
+      }
+      .analog-radio.visible { display: flex; }
+      .analog-radio-inner {
+        border-radius: 0; padding: 10px 14px 10px;
+        flex: 1; display: flex; flex-direction: column;
+      }
+      .analog-brand { font-size: 16px; letter-spacing: 2px; }
+      .analog-top { margin-bottom: 6px; }
+      .analog-speaker { padding: 6px; margin-bottom: 6px; }
+      .analog-eq { height: 24px; }
+      .analog-dial-container { width: 110px; height: 110px; }
+      .analog-dial-knob { top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 20px); }
+      .analog-dial-indicator { height: 20px; }
+      .analog-freq-display { font-size: 28px; }
+      .analog-freq-band { height: 30px; }
+      .analog-freq-needle { height: 26px; }
+      .analog-fm-section { padding: 8px 10px; margin-bottom: 6px; }
+      .analog-lcd { padding: 8px; margin-bottom: 8px; }
+      .analog-dial-section { gap: 10px; margin-bottom: 8px; }
+      .analog-vol-container { width: 40px; height: 40px; }
+      .analog-vol-knob { width: 34px; height: 34px; top: 3px; left: 3px; }
+      .analog-ctrl-photos img { width: 32px; height: 32px; }
+      .analog-footer { margin-top: 4px; padding-top: 4px; }
+      .analog-theme-switcher { padding: 6px 10px; gap: 8px; }
+    }
+    @media (max-width: 380px) {
+      .analog-radio-inner { padding: 8px 10px 8px; }
+      .analog-brand { font-size: 14px; }
+      .analog-dial-container { width: 96px; height: 96px; }
+      .analog-dial-indicator { height: 16px; }
+      .analog-freq-display { font-size: 24px; }
+      .analog-freq-band { height: 26px; }
+      .analog-freq-needle { height: 22px; }
+      .analog-lcd { padding: 6px; margin-bottom: 6px; }
+      .analog-fm-section { padding: 6px 8px; margin-bottom: 5px; }
+      .analog-speaker { padding: 5px; margin-bottom: 5px; }
+      .analog-eq { height: 20px; }
+      .analog-dial-section { gap: 8px; margin-bottom: 6px; }
+      .analog-ctrl-photos img { width: 28px; height: 28px; }
+      .analog-theme-switcher { padding: 5px 8px; gap: 5px; }
+    }
   </style>
 </head>
 <body>
@@ -2419,7 +2807,10 @@
           </div>
           <div class="album-list-content" id="albumListContent"></div>
         </div>
-        <button class="photo-done-btn" id="photoDoneBtn" onclick="completePhotoSelect()">PLAY</button>
+        <div class="mode-select-row" id="modeSelectRow">
+          <button class="mode-btn analog-btn" onclick="startAnalogMode()">ANALOG</button>
+          <button class="mode-btn digital-btn" onclick="completePhotoSelect()">DIGITAL</button>
+        </div>
       </div>
 
       <input type="file" id="slotFileInput" accept="image/*" style="display:none">
@@ -2458,7 +2849,7 @@
       <span class="brand-photos" id="brandPhotos"></span>
       <button class="photo-upload-btn" id="photoUploadBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
       <div class="power-area">
-        <div class="power-led" id="powerLed"></div>
+        <button class="digital-to-analog-btn" onclick="switchToAnalog()" title="아날로그 모드">ANALOG ▸</button>
         <button class="power-btn" id="powerBtn" title="전원">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
         </button>
@@ -2599,6 +2990,102 @@
   </div>
 </div>
 
+<!-- Analog Radio Screen -->
+<div class="analog-radio" id="analogRadio">
+  <!-- Theme Switcher -->
+  <div class="theme-switcher analog-theme-switcher" id="analogThemeSwitcher">
+    <div class="theme-dot" data-t="wood" title="우드 클래식 · 나무결" onclick="setTheme('wood')"></div>
+    <div class="theme-dot" data-t="cream" title="레트로 크림 · 가죽" onclick="setTheme('cream')"></div>
+    <div class="theme-dot" data-t="black" title="미드나잇 블랙 · 카본파이버" onclick="setTheme('black')"></div>
+    <div class="theme-dot" data-t="military" title="밀리터리 · 캔버스" onclick="setTheme('military')"></div>
+    <div class="theme-dot" data-t="silver" title="크롬 실버 · 브러시드메탈" onclick="setTheme('silver')"></div>
+    <div class="theme-dot" data-t="cyber" title="네온 사이버 · 회로기판" onclick="setTheme('cyber')"></div>
+    <div class="theme-dot" data-t="rose" title="로즈 골드 · 대리석" onclick="setTheme('rose')"></div>
+    <div class="theme-dot" data-t="maltese" title="말티즈 · 털 결" onclick="setTheme('maltese')"></div>
+  </div>
+
+  <div class="analog-radio-inner">
+
+    <!-- Top: Brand + Photos + Mode Switch -->
+    <div class="analog-top">
+      <div class="analog-brand">라디오카페</div>
+      <span class="analog-photos" id="analogBrandPhotos"></span>
+      <button class="analog-photo-btn" id="analogPhotoBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
+      <div class="analog-power-area">
+        <button class="analog-mode-switch" onclick="switchToDigital()">DIGITAL ▸</button>
+        <button class="analog-power-btn" id="analogPowerBtn" onclick="toggleAnalogPower()" title="전원">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Speaker Grille -->
+    <div class="analog-speaker">
+      <div class="analog-eq" id="analogEqualizer"></div>
+    </div>
+
+    <!-- FM Frequency Band -->
+    <div class="analog-fm-section">
+      <div class="analog-fm-label">FM TUNING</div>
+      <div class="analog-freq-band" id="analogFreqBand">
+        <div class="analog-freq-ticks" id="analogFreqTicks"></div>
+        <div class="analog-freq-marks">
+          <span class="analog-freq-mark">88</span>
+          <span class="analog-freq-mark">92</span>
+          <span class="analog-freq-mark">96</span>
+          <span class="analog-freq-mark">100</span>
+          <span class="analog-freq-mark">104</span>
+          <span class="analog-freq-mark">108</span>
+        </div>
+        <div class="analog-freq-needle" id="analogNeedle"></div>
+      </div>
+    </div>
+
+    <!-- LCD Display -->
+    <div class="analog-lcd" id="analogLcd">
+      <div class="analog-freq-display" id="analogFreqNum">88.0</div>
+      <div class="analog-freq-unit">MHz</div>
+      <div class="analog-station-name" id="analogStationName"></div>
+      <div class="analog-station-provider" id="analogStationProvider"></div>
+      <div class="analog-tuning-status tuning" id="analogStatus">TUNING...</div>
+    </div>
+
+    <!-- Tuning Dial + Volume -->
+    <div class="analog-dial-section">
+      <div class="analog-ctrl-photos" id="analogPhotoLeft"></div>
+      <div>
+        <div class="analog-dial-container" id="analogDialContainer">
+          <div class="analog-dial-bg"></div>
+          <div class="analog-dial-marks" id="analogDialMarks"></div>
+          <div class="analog-dial-knob" id="analogDialKnob">
+            <div class="analog-dial-indicator"></div>
+          </div>
+        </div>
+        <div class="analog-dial-label">TUNING</div>
+        <div class="analog-dial-hint">드래그하여 주파수 맞추기</div>
+      </div>
+      <div class="analog-ctrl-photos" id="analogPhotoRight"></div>
+    </div>
+
+    <!-- Volume -->
+    <div class="analog-controls">
+      <div class="analog-vol-area">
+        <div class="analog-vol-container" id="analogVolContainer">
+          <div class="analog-vol-knob" id="analogVolKnob">
+            <div class="analog-vol-indicator"></div>
+          </div>
+        </div>
+        <div class="analog-vol-label">VOLUME</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="analog-footer">
+      <div class="analog-footer-text">&copy; 2026 <a href="about.html"><strong>Hyein Cho</strong></a></div>
+    </div>
+  </div>
+</div>
+
 <script>
   // === Station Data ===
   var STATIONS = [
@@ -2648,6 +3135,16 @@
   var isPowered = false;
   var currentTheme = 'wood';
 
+  // === Analog Mode State ===
+  var isAnalogMode = false;
+  var analogFreq = 88.0;
+  var analogDialAngle = 0;
+  var analogSnappedStation = null;
+  var analogVolAngle = -135 + (0.8 * 270);
+  var staticNoiseNode = null;
+  var staticGainNode = null;
+  var analogAudioCtx = null;
+
   // === Theme ===
   function setTheme(name) {
     currentTheme = name;
@@ -2657,6 +3154,8 @@
     document.querySelectorAll('.theme-dot').forEach(function(d) {
       d.classList.toggle('active', d.getAttribute('data-t') === name);
     });
+    var analogEl = document.getElementById('analogRadio');
+    if (analogEl) analogEl.setAttribute('data-theme', name);
     try { localStorage.setItem('k-radio-theme', name); } catch(e) {}
   }
 
@@ -2688,6 +3187,7 @@
     setupKnobDrag();
     updateClock();
     setInterval(updateClock, 1000);
+    initAnalog();
     loadSavedPhotos();
   }
 
@@ -2735,7 +3235,7 @@
   // === Power ===
   document.getElementById('powerBtn').addEventListener('click',function(){
     isPowered=!isPowered;
-    document.getElementById('powerLed').classList.toggle('on',isPowered);
+    document.getElementById('powerBtn').classList.toggle('on',isPowered);
     if(!isPowered&&audio){
       audio.pause(); setPlayState(false); currentStation=null;
       document.getElementById('lcdIdle').classList.remove('hidden');
@@ -2748,7 +3248,7 @@
 
   // === Select Station ===
   function selectStation(id){
-    if(!isPowered){isPowered=true;document.getElementById('powerLed').classList.add('on');}
+    if(!isPowered){isPowered=true;document.getElementById('powerBtn').classList.add('on');}
     var station=STATIONS.find(function(s){return s.id===id;});
     if(!station)return;
     currentStation=station;
@@ -3074,13 +3574,13 @@
   function updatePhotoCount(){
     var count = slotPhotos.filter(function(p){return p!==null;}).length;
     document.getElementById('photoCount').textContent = count + ' / 6';
-    var btn = document.getElementById('photoDoneBtn');
+    var modeRow = document.getElementById('modeSelectRow');
     var saveBtn = document.getElementById('photoSaveBtn');
     if(count === 6) {
-      btn.classList.add('ready');
+      modeRow.classList.add('ready');
       saveBtn.classList.add('ready');
     } else {
-      btn.classList.remove('ready');
+      modeRow.classList.remove('ready');
       saveBtn.classList.remove('ready');
     }
   }
@@ -3493,6 +3993,7 @@
     var count = slotPhotos.filter(function(p){return p!==null;}).length;
     if(count < 6) return;
     try{ localStorage.setItem('radioUserPhotos', JSON.stringify(slotPhotos)); }catch(e){}
+    isAnalogMode = false;
     showRadioScreen(slotPhotos);
   }
 
@@ -3503,6 +4004,11 @@
     setTimeout(function(){
       screen.classList.add('hidden');
     }, 500);
+    // 아날로그 화면이 보이면 숨기기
+    document.getElementById('analogRadio').classList.remove('visible');
+    // 디지털 화면 보이기
+    document.getElementById('radioBody').style.display='';
+    document.getElementById('themeName').style.display='';
     renderUserPhotos(photos);
     // [+] 버튼 표시
     document.getElementById('photoUploadBtn').classList.add('has-photos');
@@ -3513,6 +4019,12 @@
     slotPhotos = [null,null,null,null,null,null];
     var screen = document.getElementById('photoSelectScreen');
     screen.classList.remove('hidden','hiding');
+    // 아날로그 모드일 경우 아날로그 화면 숨기기
+    if(isAnalogMode){
+      document.getElementById('analogRadio').classList.remove('visible');
+      stopStaticNoise();
+      isAnalogMode = false;
+    }
     // 슬롯 UI 초기화
     for(var i=0;i<6;i++) updateSlotUI(i);
     updatePhotoCount();
@@ -3618,6 +4130,473 @@
 
   function updateKnobVisual(){
     document.getElementById('volumeKnob').style.transform='rotate('+knobAngle+'deg)';
+  }
+
+  // ============================================
+  // ANALOG MODE
+  // ============================================
+
+  function initAnalog(){
+    renderAnalogFreqTicks();
+    renderAnalogDialMarks();
+    renderAnalogEqualizer();
+    renderAnalogStationMarkers();
+    setupAnalogDial();
+    setupAnalogVolDrag();
+    updateAnalogFreqDisplay();
+  }
+
+  function renderAnalogFreqTicks(){
+    var el=document.getElementById('analogFreqTicks');
+    if(!el) return;
+    var h='';
+    for(var f=88;f<=108;f+=0.5){
+      var pct=((f-88)/20)*90+5;
+      var cls=(f%2===0)?'analog-freq-tick major':'analog-freq-tick minor';
+      h+='<div class="'+cls+'" style="left:'+pct+'%"></div>';
+    }
+    el.innerHTML=h;
+  }
+
+  function renderAnalogDialMarks(){
+    var el=document.getElementById('analogDialMarks');
+    if(!el) return;
+    var h='';
+    for(var i=0;i<40;i++){
+      var angle=-150+(i*(300/39));
+      var cls=(i%5===0)?'analog-dial-tick major':'analog-dial-tick minor';
+      h+='<div class="'+cls+'" style="transform:rotate('+angle+'deg) translateX(-50%)"></div>';
+    }
+    el.innerHTML=h;
+  }
+
+  function renderAnalogEqualizer(){
+    var el=document.getElementById('analogEqualizer');
+    if(!el) return;
+    var h='';
+    for(var i=0;i<24;i++){
+      h+='<div class="analog-eq-bar" id="analogEqBar'+i+'"></div>';
+    }
+    el.innerHTML=h;
+  }
+
+  function renderAnalogStationMarkers(){
+    var band=document.getElementById('analogFreqBand');
+    if(!band) return;
+    // 기존 마커 제거
+    band.querySelectorAll('.analog-station-marker').forEach(function(m){m.remove();});
+    STATIONS.forEach(function(s){
+      var pct=((s.freqNum-88)/20)*90+5;
+      var marker=document.createElement('div');
+      marker.className='analog-station-marker';
+      marker.setAttribute('data-freq',s.freqNum);
+      marker.style.left=pct+'%';
+      marker.title=s.name+' ('+s.freq+')';
+      band.appendChild(marker);
+    });
+  }
+
+  function startAnalogMode(){
+    var count=slotPhotos.filter(function(p){return p!==null;}).length;
+    if(count<6) return;
+    try{localStorage.setItem('radioUserPhotos',JSON.stringify(slotPhotos));}catch(e){}
+    isAnalogMode=true;
+    showAnalogScreen(slotPhotos);
+  }
+
+  function showAnalogScreen(photos){
+    var screen=document.getElementById('photoSelectScreen');
+    screen.classList.add('hiding');
+    setTimeout(function(){screen.classList.add('hidden');},500);
+
+    // 디지털 라디오 숨기기
+    document.getElementById('radioBody').style.display='none';
+    document.getElementById('themeName').style.display='none';
+
+    var analogEl=document.getElementById('analogRadio');
+    analogEl.setAttribute('data-theme',currentTheme);
+    analogEl.classList.add('visible');
+
+    renderAnalogPhotos(photos);
+    renderAnalogStationMarkers();
+
+    // 아날로그 EQ 시작
+    analogFreq=88.0;
+    analogDialAngle=0;
+    analogSnappedStation=null;
+    updateAnalogFreqDisplay();
+    updateAnalogNeedle();
+  }
+
+  function renderAnalogPhotos(photos){
+    // Brand photos (top)
+    var bp=document.getElementById('analogBrandPhotos');
+    bp.innerHTML='';
+    for(var i=0;i<4&&i<photos.length;i++){
+      var img=document.createElement('img');
+      img.src=photos[i]; img.alt='사진'+(i+1);
+      img.onclick=(function(s){return function(){openLightbox(s)}})(photos[i]);
+      bp.appendChild(img);
+    }
+    // Left photo
+    var cl=document.getElementById('analogPhotoLeft');
+    cl.innerHTML='';
+    if(photos.length>4){
+      var il=document.createElement('img');
+      il.src=photos[4]; il.alt='사진5'; il.style.cursor='pointer';
+      il.onclick=(function(s){return function(){openLightbox(s)}})(photos[4]);
+      cl.appendChild(il);
+    }
+    // Right photo
+    var cr=document.getElementById('analogPhotoRight');
+    cr.innerHTML='';
+    if(photos.length>5){
+      var ir=document.createElement('img');
+      ir.src=photos[5]; ir.alt='사진6'; ir.style.cursor='pointer';
+      ir.onclick=(function(s){return function(){openLightbox(s)}})(photos[5]);
+      cr.appendChild(ir);
+    }
+  }
+
+  function setupAnalogDial(){
+    var knob=document.getElementById('analogDialKnob');
+    var container=document.getElementById('analogDialContainer');
+    if(!knob||!container) return;
+    var isDragging=false;
+    var lastAngle=null;
+
+    function getAngle(e){
+      var r=container.getBoundingClientRect();
+      var cx=r.left+r.width/2, cy=r.top+r.height/2;
+      var x=e.touches?e.touches[0].clientX:e.clientX;
+      var y=e.touches?e.touches[0].clientY:e.clientY;
+      return Math.atan2(y-cy,x-cx)*(180/Math.PI)+90;
+    }
+
+    function handleStart(e){
+      isDragging=true;
+      lastAngle=getAngle(e);
+      if(e.preventDefault) e.preventDefault();
+    }
+    function handleMove(e){
+      if(!isDragging) return;
+      e.preventDefault();
+      var a=getAngle(e);
+      var delta=a-lastAngle;
+      // Handle wrap-around
+      if(delta>180) delta-=360;
+      if(delta<-180) delta+=360;
+      lastAngle=a;
+      analogDialAngle+=delta;
+      // Clamp: map -150~150 to 88~108 MHz, but allow free rotation
+      // Each full rotation = 20 MHz range, map 300 degrees = 20 MHz
+      analogFreq+=(delta/300)*20;
+      analogFreq=Math.max(88.0,Math.min(108.0,analogFreq));
+      // Round to 0.1
+      analogFreq=Math.round(analogFreq*10)/10;
+      updateAnalogFreqDisplay();
+      updateAnalogNeedle();
+      updateAnalogDial();
+      checkAnalogStation();
+    }
+    function handleEnd(){
+      isDragging=false;
+      lastAngle=null;
+    }
+
+    knob.addEventListener('mousedown',handleStart);
+    knob.addEventListener('touchstart',handleStart,{passive:false});
+    document.addEventListener('mousemove',handleMove);
+    document.addEventListener('touchmove',handleMove,{passive:false});
+    document.addEventListener('mouseup',handleEnd);
+    document.addEventListener('touchend',handleEnd);
+
+    // Wheel support
+    container.addEventListener('wheel',function(e){
+      e.preventDefault();
+      var delta=e.deltaY>0?-0.2:0.2;
+      analogFreq=Math.max(88.0,Math.min(108.0,analogFreq+delta));
+      analogFreq=Math.round(analogFreq*10)/10;
+      analogDialAngle+=(delta/20)*300;
+      updateAnalogFreqDisplay();
+      updateAnalogNeedle();
+      updateAnalogDial();
+      checkAnalogStation();
+    },{passive:false});
+  }
+
+  function updateAnalogDial(){
+    var knob=document.getElementById('analogDialKnob');
+    if(knob){
+      var angle=((analogFreq-88)/20)*300-150;
+      knob.style.transform='rotate('+angle+'deg)';
+    }
+  }
+
+  function updateAnalogFreqDisplay(){
+    var el=document.getElementById('analogFreqNum');
+    if(el) el.textContent=analogFreq.toFixed(1);
+  }
+
+  function updateAnalogNeedle(){
+    var needle=document.getElementById('analogNeedle');
+    if(needle){
+      var pct=((analogFreq-88)/20)*90+5;
+      needle.style.left=pct+'%';
+    }
+  }
+
+  function checkAnalogStation(){
+    var SNAP_RANGE=0.3;
+    var found=null;
+    for(var i=0;i<STATIONS.length;i++){
+      if(Math.abs(STATIONS[i].freqNum-analogFreq)<=SNAP_RANGE){
+        found=STATIONS[i];
+        break;
+      }
+    }
+
+    // Update station markers
+    document.querySelectorAll('.analog-station-marker').forEach(function(m){
+      var mf=parseFloat(m.getAttribute('data-freq'));
+      m.classList.toggle('active',found&&Math.abs(mf-found.freqNum)<0.01);
+    });
+
+    if(found){
+      if(analogSnappedStation && analogSnappedStation.id===found.id) return;
+      // Snap to station
+      analogSnappedStation=found;
+      analogFreq=found.freqNum;
+      updateAnalogFreqDisplay();
+      updateAnalogNeedle();
+      updateAnalogDial();
+
+      document.getElementById('analogStationName').textContent=found.name;
+      document.getElementById('analogStationProvider').textContent=found.provider;
+      var status=document.getElementById('analogStatus');
+      status.textContent='● ON AIR';
+      status.className='analog-tuning-status locked';
+
+      stopStaticNoise();
+      isPowered=true;
+      document.getElementById('powerBtn').classList.add('on');
+      document.getElementById('analogPowerBtn').classList.add('on');
+      currentStation=found;
+      loadStream(found.url);
+      startAnalogEqAnimation();
+    } else {
+      if(analogSnappedStation!==null){
+        analogSnappedStation=null;
+        document.getElementById('analogStationName').textContent='';
+        document.getElementById('analogStationProvider').textContent='';
+        var status=document.getElementById('analogStatus');
+        status.textContent='TUNING...';
+        status.className='analog-tuning-status tuning';
+
+        // Stop current stream
+        if(audio){audio.pause();audio.src='';}
+        if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
+        isPlaying=false;
+        isPowered=false;
+        document.getElementById('analogPowerBtn').classList.remove('on');
+        stopAnalogEqAnimation();
+        playStaticNoise();
+      }
+    }
+  }
+
+  // === Static Noise (White Noise) ===
+  function playStaticNoise(){
+    try{
+      if(!analogAudioCtx) analogAudioCtx=new(window.AudioContext||window.webkitAudioContext)();
+      if(staticNoiseNode) return; // already playing
+
+      var bufferSize=2*analogAudioCtx.sampleRate;
+      var buffer=analogAudioCtx.createBuffer(1,bufferSize,analogAudioCtx.sampleRate);
+      var data=buffer.getChannelData(0);
+      for(var i=0;i<bufferSize;i++){
+        data[i]=Math.random()*2-1;
+      }
+      staticNoiseNode=analogAudioCtx.createBufferSource();
+      staticNoiseNode.buffer=buffer;
+      staticNoiseNode.loop=true;
+
+      staticGainNode=analogAudioCtx.createGain();
+      staticGainNode.gain.value=0.05*volume;
+
+      staticNoiseNode.connect(staticGainNode);
+      staticGainNode.connect(analogAudioCtx.destination);
+      staticNoiseNode.start();
+    }catch(e){console.log('Static noise error:',e);}
+  }
+
+  function stopStaticNoise(){
+    if(staticNoiseNode){
+      try{staticNoiseNode.stop();}catch(e){}
+      staticNoiseNode.disconnect();
+      staticNoiseNode=null;
+    }
+    if(staticGainNode){
+      staticGainNode.disconnect();
+      staticGainNode=null;
+    }
+  }
+
+  // === Analog EQ Animation ===
+  var analogEqInterval=null;
+  function startAnalogEqAnimation(){
+    stopAnalogEqAnimation();
+    analogEqInterval=setInterval(function(){
+      for(var i=0;i<24;i++){
+        var bar=document.getElementById('analogEqBar'+i);
+        if(bar){
+          bar.style.height=(6+Math.random()*30)+'px';
+          bar.classList.add('playing');
+        }
+      }
+    },150);
+  }
+  function stopAnalogEqAnimation(){
+    if(analogEqInterval){clearInterval(analogEqInterval);analogEqInterval=null;}
+    for(var i=0;i<24;i++){
+      var bar=document.getElementById('analogEqBar'+i);
+      if(bar){bar.style.height='6px';bar.classList.remove('playing');}
+    }
+  }
+
+  // === Analog Volume Knob ===
+  function setupAnalogVolDrag(){
+    var knob=document.getElementById('analogVolKnob');
+    var container=document.getElementById('analogVolContainer');
+    if(!knob||!container) return;
+    var isDragging=false;
+
+    function getAngle(e){
+      var r=container.getBoundingClientRect();
+      var cx=r.left+r.width/2, cy=r.top+r.height/2;
+      var x=e.touches?e.touches[0].clientX:e.clientX;
+      var y=e.touches?e.touches[0].clientY:e.clientY;
+      return Math.atan2(y-cy,x-cx)*(180/Math.PI)+90;
+    }
+    function handleMove(e){
+      if(!isDragging) return;
+      e.preventDefault();
+      var a=getAngle(e); if(a>180) a-=360;
+      analogVolAngle=Math.max(-135,Math.min(135,a));
+      volume=(analogVolAngle+135)/270;
+      if(audio) audio.volume=volume;
+      if(staticGainNode) staticGainNode.gain.value=0.05*volume;
+      knob.style.transform='rotate('+analogVolAngle+'deg)';
+      // Sync digital volume knob
+      knobAngle=analogVolAngle;
+      updateKnobVisual();
+    }
+    knob.addEventListener('mousedown',function(e){isDragging=true;e.preventDefault();});
+    knob.addEventListener('touchstart',function(){isDragging=true;},{passive:true});
+    document.addEventListener('mousemove',handleMove);
+    document.addEventListener('touchmove',handleMove,{passive:false});
+    document.addEventListener('mouseup',function(){isDragging=false;});
+    document.addEventListener('touchend',function(){isDragging=false;});
+    container.addEventListener('wheel',function(e){
+      e.preventDefault();
+      volume=Math.max(0,Math.min(1,volume+(e.deltaY>0?-0.05:0.05)));
+      analogVolAngle=-135+(volume*270);
+      if(audio) audio.volume=volume;
+      if(staticGainNode) staticGainNode.gain.value=0.05*volume;
+      knob.style.transform='rotate('+analogVolAngle+'deg)';
+      knobAngle=analogVolAngle;
+      updateKnobVisual();
+    },{passive:false});
+  }
+
+  // === Analog Power ===
+  function toggleAnalogPower(){
+    var btn = document.getElementById('analogPowerBtn');
+    if(analogSnappedStation && isPlaying){
+      // 전원 끄기: 스트림 정지
+      if(audio){audio.pause();audio.src='';}
+      if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
+      isPlaying=false;
+      isPowered=false;
+      btn.classList.remove('on');
+      stopAnalogEqAnimation();
+      var status=document.getElementById('analogStatus');
+      status.textContent='OFF';
+      status.className='analog-tuning-status tuning';
+    } else {
+      // 전원 켜기: 현재 스냅된 방송국 재생
+      isPowered=true;
+      btn.classList.add('on');
+      if(analogSnappedStation){
+        loadStream(analogSnappedStation.url);
+        startAnalogEqAnimation();
+        var status=document.getElementById('analogStatus');
+        status.textContent='● ON AIR';
+        status.className='analog-tuning-status locked';
+      } else {
+        var status=document.getElementById('analogStatus');
+        status.textContent='TUNING...';
+        status.className='analog-tuning-status tuning';
+      }
+    }
+  }
+
+  // === Switch between modes ===
+  function switchToDigital(){
+    if(!isAnalogMode) return;
+    isAnalogMode=false;
+    stopStaticNoise();
+    stopAnalogEqAnimation();
+
+    // Stop current stream
+    if(audio){audio.pause();audio.src='';}
+    if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
+    isPlaying=false;
+    currentStation=null;
+
+    // Hide analog, show digital
+    document.getElementById('analogRadio').classList.remove('visible');
+    document.getElementById('radioBody').style.display='';
+    document.getElementById('themeName').style.display='';
+    var photos=slotPhotos.slice();
+    showRadioScreen(photos);
+  }
+
+  function switchToAnalog(){
+    if(isAnalogMode) return;
+    isAnalogMode=true;
+
+    // Stop current stream
+    if(audio){audio.pause();audio.src='';}
+    if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
+    isPlaying=false;
+    currentStation=null;
+    isPowered=false;
+    document.getElementById('powerBtn').classList.remove('on');
+
+    // Get current photos from localStorage
+    var photos=slotPhotos.slice();
+    try{
+      var saved=localStorage.getItem('radioUserPhotos');
+      if(saved) photos=JSON.parse(saved);
+    }catch(e){}
+
+    // 디지털 라디오 숨기기
+    document.getElementById('radioBody').style.display='none';
+    document.getElementById('themeName').style.display='none';
+
+    // Show analog screen
+    var analogEl=document.getElementById('analogRadio');
+    analogEl.setAttribute('data-theme',currentTheme);
+    analogEl.classList.add('visible');
+
+    renderAnalogPhotos(photos);
+    renderAnalogStationMarkers();
+    analogFreq=88.0;
+    analogSnappedStation=null;
+    updateAnalogFreqDisplay();
+    updateAnalogNeedle();
+    updateAnalogDial();
   }
 
   document.addEventListener('DOMContentLoaded',init);
