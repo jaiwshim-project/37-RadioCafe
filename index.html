@@ -3112,7 +3112,7 @@
 
   function getUsers(){
     if(cachedUsers) return cachedUsers;
-    return JSON.parse(localStorage.getItem('radioUsers') || '{}');
+    return {};
   }
 
   async function loadUsersFromCloud(){
@@ -3122,13 +3122,10 @@
         var text = await data.text();
         var users = JSON.parse(text);
         cachedUsers = users;
-        localStorage.setItem('radioUsers', JSON.stringify(users));
         return users;
       }
     } catch(e){ console.log('클라우드 사용자 로드 실패:', e); }
-    // 클라우드 로드 실패 시에도 localStorage를 클라우드 기준으로 초기화
     cachedUsers = {};
-    localStorage.removeItem('radioUsers');
     return {};
   }
 
@@ -3223,7 +3220,7 @@
     }
 
     currentUsername = selectedUser;
-    localStorage.setItem('radioUsername', selectedUser);
+    sessionStorage.setItem('radioUsername', selectedUser);
     document.getElementById('userLoginScreen').classList.add('hidden');
     document.getElementById('photoSelectScreen').classList.remove('hidden');
   }
@@ -3260,11 +3257,10 @@
 
     users[name] = { password: pass, email: email };
     cachedUsers = users;
-    localStorage.setItem('radioUsers', JSON.stringify(users));
     await saveUsersToCloud(users);
 
     currentUsername = name;
-    localStorage.setItem('radioUsername', name);
+    sessionStorage.setItem('radioUsername', name);
     document.getElementById('userLoginScreen').classList.add('hidden');
     document.getElementById('photoSelectScreen').classList.remove('hidden');
   }
