@@ -1938,14 +1938,6 @@
       box-shadow: 0 8px 32px rgba(212,175,105,0.4), 0 0 20px rgba(212,175,105,0.15);
     }
     .photo-done-btn.ready:active { transform: scale(0.97); animation: none; }
-    .photo-select-skip {
-      margin-top: 4px; background: none; border: none;
-      color: rgba(212,175,105,0.55); font-size: 11px; cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      text-decoration: none; font-weight: 500; letter-spacing: 0.5px;
-      transition: color 0.3s;
-    }
-    .photo-select-skip:hover { color: rgba(212,175,105,0.8); }
     /* Screws */
     .photo-screw {
       position: absolute; width: 8px; height: 8px;
@@ -2428,7 +2420,6 @@
           <div class="album-list-content" id="albumListContent"></div>
         </div>
         <button class="photo-done-btn" id="photoDoneBtn" onclick="completePhotoSelect()">PLAY</button>
-        <button class="photo-select-skip" onclick="skipPhotoSelect()">기본 사진으로 시작</button>
       </div>
 
       <input type="file" id="slotFileInput" accept="image/*" style="display:none">
@@ -3505,9 +3496,6 @@
     showRadioScreen(slotPhotos);
   }
 
-  function skipPhotoSelect(){
-    showRadioScreen(DEFAULT_PHOTOS);
-  }
 
   function showRadioScreen(photos){
     var screen = document.getElementById('photoSelectScreen');
