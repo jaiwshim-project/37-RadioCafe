@@ -424,18 +424,38 @@
       document.getElementById('loginMessage').className = 'message';
     }
 
+    async function loadUsersFromCloud() {
+      try {
+        const { data, error } = await supabase.storage.from('photo-albums').download('_system/users.json');
+        if (data) {
+          const text = await data.text();
+          return JSON.parse(text);
+        }
+      } catch(e) { console.log('클라우드 사용자 로드 실패:', e); }
+      return JSON.parse(localStorage.getItem('radioUsers') || '{}');
+    }
+
+    async function saveUsersToCloud(users) {
+      try {
+        const blob = new Blob([JSON.stringify(users)], {type: 'application/json'});
+        await supabase.storage.from('photo-albums').upload('_system/users.json', blob, { upsert: true });
+        localStorage.setItem('radioUsers', JSON.stringify(users));
+      } catch(e) { console.log('클라우드 사용자 저장 실패:', e); }
+    }
+
     async function loadAdminData() {
-      // 로컬 사용자 목록 가져오기
-      const users = JSON.parse(localStorage.getItem('radiocafe_users') || '[]');
-      document.getElementById('userCount').textContent = users.length;
+      // 클라우드에서 사용자 목록 가져오기
+      const users = await loadUsersFromCloud();
+      const userNames = Object.keys(users);
+      document.getElementById('userCount').textContent = userNames.length;
 
       // 사진첩 개수 가져오기
       let totalAlbums = 0;
       const userListEl = document.getElementById('userList');
       userListEl.innerHTML = '';
 
-      for (const user of users) {
-        const safeName = toSafePath(user.name);
+      for (const name of userNames) {
+        const safeName = toSafePath(name);
         let albumCount = 0;
 
         try {
@@ -444,7 +464,7 @@
             albumCount = data.filter(item => item.id).length;
           }
         } catch (e) {
-          console.log('Error loading albums for', user.name);
+          console.log('Error loading albums for', name);
         }
 
         totalAlbums += albumCount;
@@ -453,10 +473,10 @@
         userItem.className = 'user-item';
         userItem.innerHTML = `
           <div>
-            <div class="user-name">${user.name}</div>
+            <div class="user-name">${name}</div>
             <div class="user-albums">사진첩 ${albumCount}개</div>
           </div>
-          <button class="delete-btn" onclick="deleteUser('${user.name}')">삭제</button>
+          <button class="delete-btn" onclick="deleteUser('${name}')">삭제</button>
         `;
         userListEl.appendChild(userItem);
       }
@@ -464,12 +484,12 @@
       document.getElementById('albumCount').textContent = totalAlbums;
     }
 
-    function deleteUser(userName) {
+    async function deleteUser(userName) {
       if (!confirm(`"${userName}" 사용자를 삭제하시겠습니까?`)) return;
 
-      let users = JSON.parse(localStorage.getItem('radiocafe_users') || '[]');
-      users = users.filter(u => u.name !== userName);
-      localStorage.setItem('radiocafe_users', JSON.stringify(users));
+      const users = await loadUsersFromCloud();
+      delete users[userName];
+      await saveUsersToCloud(users);
       loadAdminData();
     }
 

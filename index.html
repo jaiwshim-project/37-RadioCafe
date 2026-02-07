@@ -3095,8 +3095,32 @@
     document.getElementById('aboutModal').classList.remove('visible');
   }
 
+  var cachedUsers = null;
+
   function getUsers(){
+    if(cachedUsers) return cachedUsers;
     return JSON.parse(localStorage.getItem('radioUsers') || '{}');
+  }
+
+  async function loadUsersFromCloud(){
+    try {
+      var { data, error } = await supabase.storage.from(BUCKET_NAME).download('_system/users.json');
+      if(data){
+        var text = await data.text();
+        var users = JSON.parse(text);
+        cachedUsers = users;
+        localStorage.setItem('radioUsers', JSON.stringify(users));
+        return users;
+      }
+    } catch(e){ console.log('클라우드 사용자 로드 실패:', e); }
+    return getUsers();
+  }
+
+  async function saveUsersToCloud(users){
+    try {
+      var blob = new Blob([JSON.stringify(users)], {type: 'application/json'});
+      await supabase.storage.from(BUCKET_NAME).upload('_system/users.json', blob, { upsert: true });
+    } catch(e){ console.log('클라우드 사용자 저장 실패:', e); }
   }
 
   function renderUserList(filter){
@@ -3181,7 +3205,7 @@
     document.getElementById('photoSelectScreen').classList.remove('hidden');
   }
 
-  function registerNewUser(){
+  async function registerNewUser(){
     var nameInput = document.getElementById('newUsernameInput');
     var passInput = document.getElementById('newPasswordInput');
     var name = nameInput.value.trim();
@@ -3205,7 +3229,9 @@
     }
 
     users[name] = pass;
+    cachedUsers = users;
     localStorage.setItem('radioUsers', JSON.stringify(users));
+    await saveUsersToCloud(users);
 
     currentUsername = name;
     localStorage.setItem('radioUsername', name);
@@ -3237,7 +3263,10 @@
       });
     }
 
-    renderUserList();
+    // 클라우드에서 사용자 목록 로드 후 렌더링
+    loadUsersFromCloud().then(function(){
+      renderUserList();
+    });
   });
 
   // === 한글을 안전한 경로로 변환 ===
