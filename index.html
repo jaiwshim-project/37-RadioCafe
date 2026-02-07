@@ -1445,10 +1445,11 @@
     .about-avatar {
       width: 80px; height: 80px; margin: 0 auto 16px;
       background: linear-gradient(135deg, #d4af69, #c49a50);
-      border-radius: 50%; display: flex;
-      align-items: center; justify-content: center;
-      font-family: 'Outfit', sans-serif; font-size: 28px;
-      font-weight: 800; color: #1a1410;
+      border-radius: 50%; overflow: hidden;
+    }
+    .about-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
     }
     .about-name {
       font-family: 'Outfit', sans-serif; font-size: 22px;
@@ -2317,7 +2318,7 @@
   <div class="about-content" onclick="event.stopPropagation()">
     <button class="about-close" onclick="hideAbout()">&times;</button>
     <div class="about-header">
-      <div class="about-avatar">HIC</div>
+      <div class="about-avatar"><img src="profile.jpg" alt="Hyein Cho"></div>
       <div class="about-name">조혜인 (Hyein Cho)</div>
       <div class="about-title">마이펫태일 대표 · 인셀랩 대표 · 서양화가</div>
     </div>
