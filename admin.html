@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>라디오카페 | 관리자</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(212,175,105,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(212,175,105,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .admin-card {
+      width: 100%; max-width: 520px;
+      background: linear-gradient(145deg, #3a2e28, #2a201a);
+      border-radius: 28px; padding: 3px;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.5),
+        0 0 40px rgba(212,175,105,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      position: relative; z-index: 1;
+    }
+
+    .admin-inner {
+      background: linear-gradient(145deg, #2a2018, #1e1610);
+      border-radius: 25px; padding: 40px 30px;
+      position: relative;
+    }
+
+    /* 나사 장식 */
+    .screw {
+      position: absolute; width: 10px; height: 10px;
+      background: linear-gradient(145deg, #4a3a28, #2a1c10);
+      border-radius: 50%;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .screw::after {
+      content: ''; position: absolute;
+      top: 50%; left: 50%; width: 60%; height: 1px;
+      background: #1a120a; transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .screw-tl { top: 12px; left: 12px; }
+    .screw-tr { top: 12px; right: 12px; }
+    .screw-bl { bottom: 12px; left: 12px; }
+    .screw-br { bottom: 12px; right: 12px; }
+
+    /* 스피커 */
+    .speaker {
+      background: linear-gradient(145deg, #1a120a, #0e0a06);
+      border-radius: 8px; padding: 8px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(212,175,105,0.1);
+    }
+    .speaker-label {
+      text-align: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 10px; letter-spacing: 4px;
+      color: rgba(212,175,105,0.4);
+    }
+
+    /* 헤더 */
+    .admin-header {
+      text-align: center; margin-bottom: 30px;
+    }
+
+    .admin-icon {
+      width: 80px; height: 80px; margin: 0 auto 20px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 10px 30px rgba(212,175,105,0.3);
+    }
+
+    .admin-title {
+      font-family: 'Outfit', sans-serif; font-size: 24px;
+      font-weight: 800; color: #d4af69;
+      letter-spacing: 2px; margin-bottom: 8px;
+    }
+
+    .admin-subtitle {
+      font-size: 13px; color: rgba(212,175,105,0.6);
+    }
+
+    /* 로그인 폼 */
+    .login-form {
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      color: rgba(212,175,105,0.7);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(212,175,105,0.2);
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #d4af69;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      border: none;
+      border-radius: 12px;
+      color: #1a1410;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212,175,105,0.4);
+    }
+
+    /* 관리 패널 */
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-panel.active {
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      color: #d4af69;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: #d4af69;
+      border-radius: 2px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.2);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Orbitron', monospace;
+      font-size: 28px;
+      color: #55ff55;
+      text-shadow: 0 0 10px rgba(85,255,85,0.4);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: rgba(212,175,105,0.6);
+      margin-top: 4px;
+    }
+
+    .user-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 24px;
+    }
+
+    .user-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.15);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .user-name {
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .user-albums {
+      font-size: 12px;
+      color: rgba(212,175,105,0.6);
+    }
+
+    .delete-btn {
+      padding: 6px 12px;
+      background: rgba(255,100,100,0.2);
+      border: 1px solid rgba(255,100,100,0.4);
+      border-radius: 6px;
+      color: #ff6464;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .delete-btn:hover {
+      background: rgba(255,100,100,0.3);
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      border: 2px solid rgba(212,175,105,0.3);
+      border-radius: 12px;
+      color: rgba(212,175,105,0.7);
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 16px;
+    }
+
+    .logout-btn:hover {
+      border-color: #d4af69;
+      color: #d4af69;
+    }
+
+    /* 링크 버튼 */
+    .link-section {
+      display: flex; justify-content: center; gap: 12px;
+      flex-wrap: wrap; margin-bottom: 24px;
+    }
+
+    .link-btn {
+      padding: 12px 28px; border-radius: 24px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      color: #1a1410; text-decoration: none;
+      font-family: 'Outfit', sans-serif; font-size: 14px;
+      font-weight: 700; letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+
+    .link-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(212,175,105,0.4);
+    }
+
+    /* 푸터 */
+    .admin-footer {
+      padding-top: 20px;
+      border-top: 1px solid rgba(212,175,105,0.15);
+      text-align: center;
+    }
+
+    .copyright {
+      font-size: 11px; color: rgba(212,175,105,0.3);
+    }
+
+    /* 메시지 */
+    .message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      text-align: center;
+      display: none;
+    }
+
+    .message.error {
+      display: block;
+      background: rgba(255,100,100,0.1);
+      border: 1px solid rgba(255,100,100,0.3);
+      color: #ff6464;
+    }
+
+    .message.success {
+      display: block;
+      background: rgba(85,255,85,0.1);
+      border: 1px solid rgba(85,255,85,0.3);
+      color: #55ff55;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-card">
+    <div class="admin-inner">
+      <div class="screw screw-tl"></div>
+      <div class="screw screw-tr"></div>
+      <div class="screw screw-bl"></div>
+      <div class="screw screw-br"></div>
+
+      <div class="speaker">
+        <div class="speaker-label">ADMIN PANEL</div>
+      </div>
+
+      <div class="admin-header">
+        <div class="admin-icon">&#9881;</div>
+        <div class="admin-title">관리자</div>
+        <div class="admin-subtitle">라디오카페 관리 페이지</div>
+      </div>
+
+      <!-- 로그인 폼 -->
+      <div id="loginSection">
+        <div id="loginMessage" class="message"></div>
+        <div class="login-form">
+          <div class="form-group">
+            <label class="form-label">관리자 비밀번호</label>
+            <input type="password" id="adminPassword" class="form-input" placeholder="비밀번호 입력..." maxlength="20">
+          </div>
+          <button class="login-btn" onclick="adminLogin()">로그인</button>
+        </div>
+      </div>
+
+      <!-- 관리 패널 -->
+      <div id="adminPanel" class="admin-panel">
+        <div class="section-title">통계</div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-number" id="userCount">0</div>
+            <div class="stat-label">등록된 사용자</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="albumCount">0</div>
+            <div class="stat-label">총 사진첩</div>
+          </div>
+        </div>
+
+        <div class="section-title">사용자 목록</div>
+        <div class="user-list" id="userList">
+          <!-- 사용자 목록이 여기에 표시됩니다 -->
+        </div>
+
+        <button class="logout-btn" onclick="adminLogout()">로그아웃</button>
+      </div>
+
+      <div class="link-section">
+        <a href="index.html" class="link-btn">← 라디오카페</a>
+      </div>
+
+      <div class="admin-footer">
+        <div class="copyright">© 2026 Hyein Cho. All rights reserved.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://ykwdotzdejoatepzqqst.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlrd2RvdHpkZWpvYXRlcHpxcXN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1NjgxMDIsImV4cCI6MjA1NDE0NDEwMn0.kMJNEeeOvIMLhB4BbFyK_S_SHUz46-YlTKOdoNaLfpk';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const ADMIN_PASSWORD = 'admin1234';
+
+    function adminLogin() {
+      const password = document.getElementById('adminPassword').value;
+      const messageEl = document.getElementById('loginMessage');
+
+      if (password === ADMIN_PASSWORD) {
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('active');
+        loadAdminData();
+      } else {
+        messageEl.className = 'message error';
+        messageEl.textContent = '비밀번호가 올바르지 않습니다.';
+      }
+    }
+
+    function adminLogout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      document.getElementById('loginSection').style.display = 'block';
+      document.getElementById('adminPanel').classList.remove('active');
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('loginMessage').className = 'message';
+    }
+
+    async function loadAdminData() {
+      // 로컬 사용자 목록 가져오기
+      const users = JSON.parse(localStorage.getItem('radiocafe_users') || '[]');
+      document.getElementById('userCount').textContent = users.length;
+
+      // 사진첩 개수 가져오기
+      let totalAlbums = 0;
+      const userListEl = document.getElementById('userList');
+      userListEl.innerHTML = '';
+
+      for (const user of users) {
+        const safeName = toSafePath(user.name);
+        let albumCount = 0;
+
+        try {
+          const { data, error } = await supabase.storage.from('photo-albums').list(safeName);
+          if (data && !error) {
+            albumCount = data.filter(item => item.id).length;
+          }
+        } catch (e) {
+          console.log('Error loading albums for', user.name);
+        }
+
+        totalAlbums += albumCount;
+
+        const userItem = document.createElement('div');
+        userItem.className = 'user-item';
+        userItem.innerHTML = `
+          <div>
+            <div class="user-name">${user.name}</div>
+            <div class="user-albums">사진첩 ${albumCount}개</div>
+          </div>
+          <button class="delete-btn" onclick="deleteUser('${user.name}')">삭제</button>
+        `;
+        userListEl.appendChild(userItem);
+      }
+
+      document.getElementById('albumCount').textContent = totalAlbums;
+    }
+
+    function deleteUser(userName) {
+      if (!confirm(`"${userName}" 사용자를 삭제하시겠습니까?`)) return;
+
+      let users = JSON.parse(localStorage.getItem('radiocafe_users') || '[]');
+      users = users.filter(u => u.name !== userName);
+      localStorage.setItem('radiocafe_users', JSON.stringify(users));
+      loadAdminData();
+    }
+
+    function toSafePath(str) {
+      return str.split('').map(function(c) {
+        var code = c.charCodeAt(0);
+        if ((code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122) || c === '-' || c === '_') {
+          return c;
+        }
+        return '_' + code.toString(16) + '_';
+      }).join('');
+    }
+
+    // 엔터키로 로그인
+    document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') adminLogin();
+    });
+
+    // 세션 체크
+    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('adminPanel').classList.add('active');
+      loadAdminData();
+    }
+  </script>
+</body>
+</html>
