@@ -1402,6 +1402,91 @@
       font-family: 'Inter', sans-serif; font-size: 12px;
       color: #3abf3a;
     }
+    .login-footer {
+      margin-top: 20px; padding-top: 16px;
+      border-top: 1px solid rgba(212,175,105,0.15);
+      text-align: center;
+      font-family: 'Inter', sans-serif; font-size: 11px;
+      color: rgba(212,175,105,0.4);
+    }
+    .footer-divider { margin: 0 8px; opacity: 0.5; }
+    .footer-link {
+      color: rgba(212,175,105,0.6); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: #d4af69; }
+
+    /* About Modal */
+    .about-modal {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 20000;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .about-modal.visible { display: flex; }
+    .about-content {
+      background: linear-gradient(145deg, #2a2018, #1e1610);
+      border: 2px solid rgba(212,175,105,0.3);
+      border-radius: 24px; padding: 30px;
+      max-width: 360px; width: 100%;
+      position: relative;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+    .about-close {
+      position: absolute; top: 15px; right: 20px;
+      background: none; border: none;
+      color: rgba(212,175,105,0.5); font-size: 28px;
+      cursor: pointer; transition: color 0.2s;
+    }
+    .about-close:hover { color: #d4af69; }
+    .about-header { text-align: center; margin-bottom: 20px; }
+    .about-avatar {
+      width: 80px; height: 80px; margin: 0 auto 16px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-size: 28px;
+      font-weight: 800; color: #1a1410;
+    }
+    .about-name {
+      font-family: 'Outfit', sans-serif; font-size: 22px;
+      font-weight: 700; color: #d4af69; margin-bottom: 4px;
+    }
+    .about-title {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: rgba(212,175,105,0.6);
+    }
+    .about-body { text-align: center; }
+    .about-intro {
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      color: rgba(255,255,255,0.9); margin-bottom: 12px;
+    }
+    .about-desc {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: rgba(255,255,255,0.6); line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .about-links { display: flex; justify-content: center; gap: 12px; }
+    .about-link-btn {
+      padding: 10px 24px; border-radius: 20px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      color: #1a1410; text-decoration: none;
+      font-family: 'Outfit', sans-serif; font-size: 13px;
+      font-weight: 600; transition: all 0.2s;
+    }
+    .about-link-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212,175,105,0.3);
+    }
+    .about-footer {
+      margin-top: 20px; padding-top: 16px;
+      border-top: 1px solid rgba(212,175,105,0.15);
+      text-align: center;
+      font-family: 'Inter', sans-serif; font-size: 11px;
+      color: rgba(212,175,105,0.4);
+    }
     .username-input {
       width: 100%; padding: 14px 20px; border-radius: 16px;
       border: 2px solid rgba(212,175,105,0.3);
@@ -2205,6 +2290,35 @@
         <button class="login-btn" onclick="registerNewUser()">등록하기</button>
         <button class="back-btn" onclick="showUserSelect()">← 돌아가기</button>
       </div>
+
+      <!-- 푸터 -->
+      <div class="login-footer">
+        <span>© 2025 라디오카페</span>
+        <span class="footer-divider">|</span>
+        <a href="about.html" class="footer-link">Jaiwoo Shim</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- About Modal -->
+<div class="about-modal" id="aboutModal" onclick="hideAbout(event)">
+  <div class="about-content" onclick="event.stopPropagation()">
+    <button class="about-close" onclick="hideAbout()">&times;</button>
+    <div class="about-header">
+      <div class="about-avatar">JS</div>
+      <div class="about-name">심재우 (Jaiwoo Shim)</div>
+      <div class="about-title">Developer & Creator</div>
+    </div>
+    <div class="about-body">
+      <p class="about-intro">안녕하세요! 라디오카페를 만든 심재우입니다.</p>
+      <p class="about-desc">음악과 추억을 함께 즐길 수 있는 공간을 만들고 싶었습니다. 나만의 사진을 보면서 라디오를 들으며 편안한 시간을 보내세요.</p>
+      <div class="about-links">
+        <a href="https://github.com/jaiwshim-project" target="_blank" class="about-link-btn">GitHub</a>
+      </div>
+    </div>
+    <div class="about-footer">
+      <span>라디오카페 v1.0</span>
     </div>
   </div>
 </div>
@@ -2925,6 +3039,16 @@
   // === 사용자 로그인 ===
   var currentUsername = '';
   var selectedUser = '';
+
+  // === About Modal ===
+  function showAbout(e){
+    if(e) e.preventDefault();
+    document.getElementById('aboutModal').classList.add('visible');
+  }
+  function hideAbout(e){
+    if(e && e.target !== document.getElementById('aboutModal')) return;
+    document.getElementById('aboutModal').classList.remove('visible');
+  }
 
   function getUsers(){
     return JSON.parse(localStorage.getItem('radioUsers') || '{}');

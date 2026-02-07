@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jaiwoo Shim | 개발자 소개</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(212,175,105,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(212,175,105,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .profile-card {
+      width: 100%; max-width: 480px;
+      background: linear-gradient(145deg, #3a2e28, #2a201a);
+      border-radius: 28px; padding: 3px;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.5),
+        0 0 40px rgba(212,175,105,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      position: relative; z-index: 1;
+    }
+
+    .profile-inner {
+      background: linear-gradient(145deg, #2a2018, #1e1610);
+      border-radius: 25px; padding: 40px 30px;
+      position: relative;
+    }
+
+    /* 나사 장식 */
+    .screw {
+      position: absolute; width: 10px; height: 10px;
+      background: linear-gradient(145deg, #4a3a28, #2a1c10);
+      border-radius: 50%;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .screw::after {
+      content: ''; position: absolute;
+      top: 50%; left: 50%; width: 60%; height: 1px;
+      background: #1a120a; transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .screw-tl { top: 12px; left: 12px; }
+    .screw-tr { top: 12px; right: 12px; }
+    .screw-bl { bottom: 12px; left: 12px; }
+    .screw-br { bottom: 12px; right: 12px; }
+
+    /* 스피커 */
+    .speaker {
+      background: linear-gradient(145deg, #1a120a, #0e0a06);
+      border-radius: 8px; padding: 8px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(212,175,105,0.1);
+    }
+    .speaker-label {
+      text-align: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 10px; letter-spacing: 4px;
+      color: rgba(212,175,105,0.4);
+    }
+
+    /* 프로필 헤더 */
+    .profile-header {
+      text-align: center; margin-bottom: 30px;
+    }
+
+    .avatar {
+      width: 120px; height: 120px; margin: 0 auto 20px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-size: 42px;
+      font-weight: 800; color: #1a1410;
+      box-shadow: 0 10px 30px rgba(212,175,105,0.3);
+    }
+
+    .name {
+      font-family: 'Outfit', sans-serif; font-size: 28px;
+      font-weight: 800; color: #d4af69;
+      letter-spacing: 2px; margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 14px; color: rgba(212,175,105,0.6);
+      letter-spacing: 1px;
+    }
+
+    /* LCD 스타일 소개 */
+    .lcd-box {
+      background: linear-gradient(180deg, #0a1a0a, #081408);
+      border-radius: 12px; padding: 20px;
+      margin-bottom: 24px;
+      border: 2px solid rgba(212,175,105,0.15);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .lcd-title {
+      font-family: 'Orbitron', monospace; font-size: 12px;
+      color: #55ff55; letter-spacing: 3px; font-weight: 700;
+      text-shadow: 0 0 10px rgba(85,255,85,0.6);
+      margin-bottom: 12px; text-align: center;
+    }
+
+    .lcd-text {
+      font-size: 13px; color: #3abf3a;
+      line-height: 1.8; text-align: center;
+    }
+
+    /* 프로젝트 섹션 */
+    .section-title {
+      font-family: 'Outfit', sans-serif; font-size: 14px;
+      color: rgba(212,175,105,0.7); letter-spacing: 2px;
+      margin-bottom: 16px; text-align: center;
+    }
+
+    .project-list {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .project-item {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.2);
+      border-radius: 12px; padding: 16px;
+      transition: all 0.2s;
+    }
+
+    .project-item:hover {
+      border-color: rgba(212,175,105,0.4);
+      background: rgba(212,175,105,0.05);
+    }
+
+    .project-name {
+      font-family: 'Outfit', sans-serif; font-size: 15px;
+      color: #d4af69; font-weight: 600; margin-bottom: 6px;
+    }
+
+    .project-desc {
+      font-size: 12px; color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+
+    /* 링크 버튼 */
+    .link-section {
+      display: flex; justify-content: center; gap: 12px;
+      flex-wrap: wrap; margin-bottom: 24px;
+    }
+
+    .link-btn {
+      padding: 12px 28px; border-radius: 24px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      color: #1a1410; text-decoration: none;
+      font-family: 'Outfit', sans-serif; font-size: 14px;
+      font-weight: 700; letter-spacing: 1px;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .link-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(212,175,105,0.4);
+    }
+
+    .link-btn.secondary {
+      background: transparent;
+      border: 2px solid rgba(212,175,105,0.4);
+      color: #d4af69;
+    }
+
+    .link-btn.secondary:hover {
+      border-color: #d4af69;
+      background: rgba(212,175,105,0.1);
+    }
+
+    /* 푸터 */
+    .profile-footer {
+      padding-top: 20px;
+      border-top: 1px solid rgba(212,175,105,0.15);
+      text-align: center;
+    }
+
+    .back-link {
+      color: rgba(212,175,105,0.5); text-decoration: none;
+      font-size: 13px; transition: color 0.2s;
+    }
+
+    .back-link:hover { color: #d4af69; }
+
+    .copyright {
+      margin-top: 12px;
+      font-size: 11px; color: rgba(212,175,105,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-card">
+    <div class="profile-inner">
+      <div class="screw screw-tl"></div>
+      <div class="screw screw-tr"></div>
+      <div class="screw screw-bl"></div>
+      <div class="screw screw-br"></div>
+
+      <div class="speaker">
+        <div class="speaker-label">DEVELOPER PROFILE</div>
+      </div>
+
+      <div class="profile-header">
+        <div class="avatar">JS</div>
+        <div class="name">심재우</div>
+        <div class="title">Jaiwoo Shim · Developer & Creator</div>
+      </div>
+
+      <div class="lcd-box">
+        <div class="lcd-title">ABOUT ME</div>
+        <div class="lcd-text">
+          안녕하세요! 라디오카페를 만든 심재우입니다.<br>
+          음악과 추억을 함께 즐길 수 있는 공간을 만들고 싶었습니다.<br>
+          나만의 사진을 보면서 라디오를 들으며 편안한 시간을 보내세요.
+        </div>
+      </div>
+
+      <div class="section-title">PROJECTS</div>
+      <div class="project-list">
+        <div class="project-item">
+          <div class="project-name">라디오카페</div>
+          <div class="project-desc">나만의 추억 사진과 함께 대한민국 실시간 라디오를 즐기는 웹 앱</div>
+        </div>
+      </div>
+
+      <div class="link-section">
+        <a href="index.html" class="link-btn">← 라디오카페</a>
+      </div>
+
+      <div class="profile-footer">
+        <div class="copyright">© 2025 Jaiwoo Shim. All rights reserved.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
