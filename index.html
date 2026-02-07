@@ -2293,7 +2293,7 @@
           <div class="login-lcd-title">USER SELECT</div>
           <div class="login-lcd-sub">사용자를 선택(또는 검색)하거나, 새 사용자 등록하세요.</div>
         </div>
-        <input type="text" id="userSearchInput" class="user-search-input" placeholder="사용자 검색..." oninput="filterUsers()">
+        <input type="text" id="userSearchInput" class="user-search-input" placeholder="예: 홍길동" oninput="filterUsers()">
         <div class="user-list" id="userList"></div>
         <button class="new-user-btn" onclick="showNewUserForm()">+ 새 사용자 등록</button>
       </div>
@@ -2315,8 +2315,8 @@
           <div class="login-lcd-title">NEW USER</div>
           <div class="login-lcd-sub">이름, 이메일, 비밀번호를 입력하세요</div>
         </div>
-        <input type="text" id="newUsernameInput" class="username-input" placeholder="이름 입력..." maxlength="20">
-        <input type="email" id="newEmailInput" class="username-input" placeholder="이메일 입력..." style="margin-top:8px;">
+        <input type="text" id="newUsernameInput" class="username-input" placeholder="예: 홍길동" maxlength="20">
+        <input type="email" id="newEmailInput" class="username-input" placeholder="예: hong@email.com" style="margin-top:8px;">
         <input type="password" id="newPasswordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
         <button class="login-btn" onclick="registerNewUser()">등록하기</button>
         <button class="back-btn" onclick="showUserSelect()">← 돌아가기</button>
@@ -3288,6 +3288,9 @@
         if(e.key === 'Enter') registerNewUser();
       });
     }
+
+    // 오래된 localStorage 사용자 캐시 정리
+    try { localStorage.removeItem('radioUsers'); localStorage.removeItem('radioUsername'); } catch(e){}
 
     // 클라우드에서 사용자 목록 로드 후 렌더링
     loadUsersFromCloud().then(function(){
