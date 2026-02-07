@@ -1334,122 +1334,226 @@
       text-shadow: 0 0 4px var(--lcd-glow);
     }
 
-    /* === PHOTO SELECTION SCREEN === */
+    /* === PHOTO SELECTION SCREEN (Radio Style) === */
     .photo-select-screen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #FFFAF0 0%, #FFF0F5 50%, #F0F8FF 100%);
+      background: #f0ebe5;
       z-index: 10000;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 24px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
     .photo-select-screen.hiding {
       opacity: 0; transform: scale(1.05); pointer-events: none;
     }
     .photo-select-screen.hidden { display: none; }
-    .photo-select-title {
+    .photo-radio-body {
+      width: 100%; max-width: 420px;
+      background: linear-gradient(145deg, #e8ddd0, #d8ccc0);
+      border-radius: 24px;
+      padding: 3px;
+      box-shadow:
+        0 30px 60px rgba(100,70,40,0.25),
+        0 0 10px rgba(222,184,135,0.4),
+        0 0 25px rgba(222,184,135,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+      border: 2px solid rgba(222,184,135,0.6);
+    }
+    .photo-radio-inner {
+      background: linear-gradient(145deg, #faf8f5, #f0ebe5);
+      border-radius: 21px;
+      padding: 20px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .photo-radio-inner::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(90deg, rgba(139,94,60,0.02) 0px, transparent 1px, transparent 4px),
+        repeating-linear-gradient(0deg, rgba(139,94,60,0.015) 0px, transparent 1px, transparent 4px);
+      pointer-events: none; border-radius: inherit;
+    }
+    /* Speaker grille top */
+    .photo-speaker {
+      background: #e0d5ca;
+      border-radius: 12px;
+      padding: 8px;
+      margin-bottom: 14px;
+      border: 1px solid #c8b8a5;
+      position: relative;
+      overflow: hidden;
+    }
+    .photo-speaker::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle, rgba(139,94,60,0.1) 1px, transparent 1px),
+        radial-gradient(circle, rgba(139,94,60,0.06) 1px, transparent 1px);
+      background-size: 4px 4px, 4px 4px;
+      background-position: 0 0, 2px 2px;
+    }
+    .photo-speaker-label {
+      text-align: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 10px; letter-spacing: 4px;
+      font-weight: 900;
+      color: #6a4830;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+      position: relative; z-index: 1;
+    }
+    /* Brand */
+    .photo-brand {
+      text-align: center; margin-bottom: 12px; position: relative; z-index: 1;
+    }
+    .photo-brand-text {
       font-family: 'Outfit', sans-serif;
-      font-size: 26px; font-weight: 800;
-      color: #333; margin-bottom: 6px;
-      letter-spacing: 1px;
+      font-size: 24px; font-weight: 800;
+      color: #6a4830; letter-spacing: 3px;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.5), 0 2px 4px rgba(0,0,0,0.15);
     }
-    .photo-select-sub {
-      font-size: 13px; color: #888; margin-bottom: 24px;
-      text-align: center; line-height: 1.5;
+    /* LCD area - instructions */
+    .photo-lcd {
+      background: #1a120a;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      border: 1px solid #0e0a06;
+      text-align: center;
+      position: relative; z-index: 1;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.3);
     }
+    .photo-lcd-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 14px; color: #ffdd88; letter-spacing: 2px;
+      text-shadow: 0 0 12px rgba(255,221,136,0.8), 0 0 4px rgba(255,221,136,0.5);
+      margin-bottom: 6px; font-weight: 700;
+    }
+    .photo-lcd-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; color: #ccaa55; line-height: 1.6;
+      text-shadow: 0 0 6px rgba(204,170,85,0.5);
+    }
+    .photo-lcd-count {
+      font-family: 'Orbitron', monospace;
+      font-size: 22px; font-weight: 900;
+      color: #ffdd88; margin-top: 8px;
+      text-shadow: 0 0 14px rgba(255,221,136,0.9), 0 0 6px rgba(255,221,136,0.5);
+    }
+    /* Photo grid */
     .photo-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      width: 100%; max-width: 340px;
-      margin-bottom: 24px;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 14px;
+      position: relative; z-index: 1;
     }
     .photo-slot {
       position: relative;
       aspect-ratio: 1;
-      border-radius: 16px;
-      border: 2px dashed #ccc;
+      border-radius: 10px;
+      border: 2px dashed #c8b8a5;
       background: #fff;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       overflow: hidden;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.06);
     }
-    .photo-slot:hover { border-color: #FF85A2; box-shadow: 0 4px 16px rgba(255,133,162,0.2); }
-    .photo-slot.filled { border: 2px solid #FF85A2; }
+    .photo-slot:hover { border-color: #8B5E3C; box-shadow: 0 4px 12px rgba(139,94,60,0.2); }
+    .photo-slot.filled { border: 2px solid #8B5E3C; box-shadow: 0 4px 12px rgba(139,94,60,0.2); }
     .photo-slot.filled img {
       width: 100%; height: 100%; object-fit: cover;
-      border-radius: 14px;
+      border-radius: 8px;
     }
     .photo-slot .slot-label {
-      position: absolute; bottom: 6px; left: 0; right: 0;
-      text-align: center; font-size: 10px; color: #aaa;
-      font-weight: 600; letter-spacing: 0.5px;
+      position: absolute; bottom: 4px; left: 0; right: 0;
+      text-align: center; font-size: 10px; color: #6a4830;
+      font-family: 'Orbitron', monospace;
+      font-weight: 700; letter-spacing: 0.5px;
     }
     .photo-slot.filled .slot-label {
-      background: rgba(0,0,0,0.5); color: #fff;
-      border-radius: 0 0 14px 14px;
+      background: rgba(0,0,0,0.65); color: #fff;
+      border-radius: 0 0 8px 8px;
       padding: 3px 0; bottom: 0;
     }
     .photo-slot .slot-icon {
-      font-size: 28px; color: #ddd; transition: color 0.3s;
+      font-size: 28px; color: #c8b8a5; transition: color 0.3s;
     }
-    .photo-slot:hover .slot-icon { color: #FF85A2; }
+    .photo-slot:hover .slot-icon { color: #8B5E3C; }
     .photo-slot .remove-photo {
-      position: absolute; top: 4px; right: 4px;
+      position: absolute; top: 3px; right: 3px;
       width: 22px; height: 22px; border-radius: 50%;
-      background: rgba(0,0,0,0.6); color: #fff;
-      border: none; font-size: 13px; line-height: 1;
+      background: #cc3333; color: #fff;
+      border: none;
+      font-size: 14px; font-weight: 700; line-height: 1;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      z-index: 2;
+      z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    /* Control area */
+    .photo-controls {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      position: relative; z-index: 1;
+    }
+    .photo-batch-btn {
+      background: #8B5E3C;
+      color: #fff; border: none;
+      padding: 12px 26px; border-radius: 20px;
+      font-size: 14px; font-weight: 800; font-family: 'Outfit', sans-serif;
+      cursor: pointer; letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(139,94,60,0.4);
+      transition: all 0.3s ease;
+    }
+    .photo-batch-btn:hover {
+      background: #6a4830;
+      box-shadow: 0 6px 16px rgba(139,94,60,0.5);
+    }
+    .photo-batch-btn:active { transform: scale(0.96); }
+    .photo-select-or {
+      font-size: 11px; color: #8a7060;
+      font-family: 'Inter', sans-serif; letter-spacing: 1px; font-weight: 600;
     }
     .photo-done-btn {
-      background: linear-gradient(135deg, #FF85A2, #FF6B8A);
+      background: #6a4830;
       color: #fff; border: none;
-      padding: 14px 48px; border-radius: 30px;
-      font-size: 16px; font-weight: 700;
-      cursor: pointer; letter-spacing: 1px;
-      box-shadow: 0 6px 20px rgba(255,107,138,0.4);
+      padding: 14px 44px; border-radius: 24px;
+      font-size: 17px; font-weight: 900; font-family: 'Outfit', sans-serif;
+      cursor: pointer; letter-spacing: 2px;
+      box-shadow: 0 6px 20px rgba(106,72,48,0.4);
       transition: all 0.3s ease;
-      opacity: 0.4; pointer-events: none;
+      opacity: 0.3; pointer-events: none;
     }
     .photo-done-btn.ready {
       opacity: 1; pointer-events: auto;
     }
     .photo-done-btn.ready:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(255,107,138,0.5);
+      background: #5a3820;
+      box-shadow: 0 8px 28px rgba(106,72,48,0.5);
     }
     .photo-done-btn.ready:active { transform: scale(0.96); }
     .photo-select-skip {
-      margin-top: 12px; background: none; border: none;
-      color: #aaa; font-size: 13px; cursor: pointer;
-      text-decoration: underline;
+      margin-top: 4px; background: none; border: none;
+      color: #8a7060; font-size: 12px; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      text-decoration: underline; font-weight: 600;
     }
-    .photo-select-skip:hover { color: #666; }
-    .photo-select-count {
-      font-size: 14px; font-weight: 700; color: #FF6B8A;
-      margin-bottom: 16px;
+    .photo-select-skip:hover { color: #5a3820; }
+    /* Screws */
+    .photo-screw {
+      position: absolute; width: 10px; height: 10px;
+      background: linear-gradient(145deg, #d8ccc0, #bfb0a0);
+      border-radius: 50%; border: 1px solid #a09080;
+      z-index: 2;
     }
-    .photo-batch-btn {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #fff; border: none;
-      padding: 14px 28px; border-radius: 30px;
-      font-size: 15px; font-weight: 700;
-      cursor: pointer; letter-spacing: 0.5px;
-      box-shadow: 0 4px 15px rgba(102,126,234,0.4);
-      transition: all 0.3s ease;
-      margin-bottom: 12px;
+    .photo-screw::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%) rotate(35deg);
+      width: 6px; height: 1px; background: #a09080;
     }
-    .photo-batch-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102,126,234,0.5);
-    }
-    .photo-batch-btn:active { transform: scale(0.96); }
-    .photo-select-or {
-      font-size: 12px; color: #bbb; margin-bottom: 12px;
-    }
+    .photo-screw-tl { top: 8px; left: 8px; }
+    .photo-screw-tr { top: 8px; right: 8px; }
+    .photo-screw-bl { bottom: 8px; left: 8px; }
+    .photo-screw-br { bottom: 8px; right: 8px; }
 
     /* === PHOTO UPLOAD (in-radio) === */
     .photo-upload-btn {
@@ -1758,41 +1862,65 @@
 
 <!-- Photo Selection Screen -->
 <div class="photo-select-screen" id="photoSelectScreen">
-  <div class="photo-select-title">라디오카페</div>
-  <div class="photo-select-sub">갤러리에서 사진을 선택하세요<br>6장의 사진이 라디오에 배치됩니다 (상단 4장 + 하단 2장)</div>
-  <div class="photo-select-count" id="photoCount">0 / 6</div>
-  <button class="photo-batch-btn" onclick="pickAllPhotos()">갤러리에서 6장 한번에 선택</button>
-  <input type="file" id="batchFileInput" accept="image/*" multiple style="display:none">
-  <div class="photo-select-or">또는 아래에서 한 장씩 선택</div>
-  <div class="photo-grid" id="photoGrid">
-    <div class="photo-slot" data-idx="0" onclick="pickSlotPhoto(0)">
-      <span class="slot-icon">+</span>
-      <div class="slot-label">상단 1</div>
-    </div>
-    <div class="photo-slot" data-idx="1" onclick="pickSlotPhoto(1)">
-      <span class="slot-icon">+</span>
-      <div class="slot-label">상단 2</div>
-    </div>
-    <div class="photo-slot" data-idx="2" onclick="pickSlotPhoto(2)">
-      <span class="slot-icon">+</span>
-      <div class="slot-label">상단 3</div>
-    </div>
-    <div class="photo-slot" data-idx="3" onclick="pickSlotPhoto(3)">
-      <span class="slot-icon">+</span>
-      <div class="slot-label">상단 4</div>
-    </div>
-    <div class="photo-slot" data-idx="4" onclick="pickSlotPhoto(4)">
-      <span class="slot-icon">+</span>
-      <div class="slot-label">하단 좌</div>
-    </div>
-    <div class="photo-slot" data-idx="5" onclick="pickSlotPhoto(5)">
-      <span class="slot-icon">+</span>
-      <div class="slot-label">하단 우</div>
+  <div class="photo-radio-body">
+    <div class="photo-radio-inner">
+      <div class="photo-screw photo-screw-tl"></div>
+      <div class="photo-screw photo-screw-tr"></div>
+      <div class="photo-screw photo-screw-bl"></div>
+      <div class="photo-screw photo-screw-br"></div>
+
+      <div class="photo-speaker">
+        <div class="photo-speaker-label">STEREO RADIO</div>
+      </div>
+
+      <div class="photo-brand">
+        <span class="photo-brand-text">라디오카페</span>
+      </div>
+
+      <div class="photo-lcd">
+        <div class="photo-lcd-title">PHOTO SELECT</div>
+        <div class="photo-lcd-sub">갤러리에서 사진을 선택하세요<br>상단 4장 + 하단 2장</div>
+        <div class="photo-lcd-count" id="photoCount">0 / 6</div>
+      </div>
+
+      <div class="photo-grid" id="photoGrid">
+        <div class="photo-slot" data-idx="0" onclick="pickSlotPhoto(0)">
+          <span class="slot-icon">+</span>
+          <div class="slot-label">상단 1</div>
+        </div>
+        <div class="photo-slot" data-idx="1" onclick="pickSlotPhoto(1)">
+          <span class="slot-icon">+</span>
+          <div class="slot-label">상단 2</div>
+        </div>
+        <div class="photo-slot" data-idx="2" onclick="pickSlotPhoto(2)">
+          <span class="slot-icon">+</span>
+          <div class="slot-label">상단 3</div>
+        </div>
+        <div class="photo-slot" data-idx="3" onclick="pickSlotPhoto(3)">
+          <span class="slot-icon">+</span>
+          <div class="slot-label">상단 4</div>
+        </div>
+        <div class="photo-slot" data-idx="4" onclick="pickSlotPhoto(4)">
+          <span class="slot-icon">+</span>
+          <div class="slot-label">하단 좌</div>
+        </div>
+        <div class="photo-slot" data-idx="5" onclick="pickSlotPhoto(5)">
+          <span class="slot-icon">+</span>
+          <div class="slot-label">하단 우</div>
+        </div>
+      </div>
+
+      <div class="photo-controls">
+        <button class="photo-batch-btn" onclick="pickAllPhotos()">갤러리에서 6장 한번에 선택</button>
+        <input type="file" id="batchFileInput" accept="image/*" multiple style="display:none">
+        <div class="photo-select-or">- OR -</div>
+        <button class="photo-done-btn" id="photoDoneBtn" onclick="completePhotoSelect()">PLAY</button>
+        <button class="photo-select-skip" onclick="skipPhotoSelect()">기본 사진으로 시작</button>
+      </div>
+
+      <input type="file" id="slotFileInput" accept="image/*" style="display:none">
     </div>
   </div>
-  <button class="photo-done-btn" id="photoDoneBtn" onclick="completePhotoSelect()">완료</button>
-  <button class="photo-select-skip" onclick="skipPhotoSelect()">기본 사진으로 시작</button>
-  <input type="file" id="slotFileInput" accept="image/*" style="display:none">
 </div>
 
 <!-- Theme Name (desktop only) -->
