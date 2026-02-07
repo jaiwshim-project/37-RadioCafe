@@ -2285,7 +2285,7 @@
           <div class="login-lcd-title">USER SELECT</div>
           <div class="login-lcd-sub">사용자를 선택(또는 검색)하거나, 새 사용자 등록하세요.</div>
         </div>
-        <input type="text" id="userSearchInput" class="user-search-input" placeholder="예: 홍길동" oninput="filterUsers()">
+        <input type="text" id="userSearchInput" class="user-search-input" placeholder="" autocomplete="off" oninput="filterUsers()">
         <div class="user-list" id="userList"></div>
         <button class="new-user-btn" onclick="showNewUserForm()">+ 새 사용자 등록</button>
       </div>
@@ -2305,9 +2305,9 @@
       <div class="login-box hidden" id="newUserBox">
         <div class="login-lcd">
           <div class="login-lcd-title">NEW USER</div>
-          <div class="login-lcd-sub">이름, 이메일, 비밀번호를 입력하세요</div>
+          <div class="login-lcd-sub">닉네임, 이메일, 비밀번호를 입력하세요</div>
         </div>
-        <input type="text" id="newUsernameInput" class="username-input" placeholder="예: 홍길동" maxlength="20">
+        <input type="text" id="newUsernameInput" class="username-input" placeholder="닉네임을 입력하세요" maxlength="20">
         <input type="email" id="newEmailInput" class="username-input" placeholder="예: hong@email.com" style="margin-top:8px;">
         <input type="password" id="newPasswordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
         <button class="login-btn" onclick="registerNewUser()">등록하기</button>
@@ -3225,7 +3225,7 @@
     var pass = passInput.value.trim();
 
     if(!name){
-      alert('이름을 입력해주세요.');
+      alert('닉네임을 입력해주세요.');
       nameInput.focus();
       return;
     }
