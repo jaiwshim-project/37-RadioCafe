@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1016,27 +1018,20 @@
 
   <div id="toastContainer"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
   <script>
     // === Supabase 설정 (index.html과 동일) ===
-    const SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
-    let supabase = null;
-    try {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    } catch(e) {
-      console.log('Supabase 초기화 실패:', e);
-    }
-    const BUCKET = 'photo-albums';
+    var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
+    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
+    var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    var BUCKET = 'photo-albums';
 
-    let ADMIN_PASSWORD = '9633';
-    let allUsers = {};
-    let allStations = [];
-    let appSettings = {};
-    let selectedTheme = 'wood';
+    var ADMIN_PASSWORD = '9633';
+    var allUsers = {};
+    var allStations = [];
+    var appSettings = {};
+    var selectedTheme = 'wood';
 
-    const THEMES = [
+    var THEMES = [
       { id: 'wood', name: '우드 클래식', color: '#8B6914' },
       { id: 'cream', name: '레트로 크림', color: '#d4c5a9' },
       { id: 'black', name: '미드나잇 블랙', color: '#333333' },
@@ -1047,7 +1042,7 @@
       { id: 'maltese', name: '말티즈', color: '#f0ebe5' }
     ];
 
-    const DEFAULT_STATIONS = [
+    var DEFAULT_STATIONS = [
       {id:'kbs-1fm',name:'KBS 클래식FM',url:'https://1fm.gscdn.kbs.co.kr/1fm_192_2.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly8xZm0uZ3NjZG4ua2JzLmNvLmtyLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3Njc4Mjc3NjB9fX1dfQ__&Key-Pair-Id=APKAICDSGT3Y7IXGJ3TA&Signature=mXsMdZtv5pVJjKsZawW0ms8KkzrfYXBgWpi4HtpZO9TKLhUg22n6XIZkLrz2C4HftzhtPbG1vyByHlwHMzMlwXeXwjaxMkU4PNj2Wy-ubyRr8uP2zw41~8ZSCCGF5EV2OFhG1XH-88dD0nWrbSaUsij0SgZREDvrofiA6ip4xha4ZUAwH4vhP7GenNaJXu99DlZYuMfx5o7errctTKY-U6gppCruRl00NCpaOwJTVrwKVc5RnZSs2goGc~uqY8OQZuRwcp1cFTkqCt83FMlIiMKXItPvj8S8x2knhY4cXv1uAyTdKbmHEKTU-lfZVXzmq~NNf5Z0XUC7kLSe90dY3Q__',freq:'93.1 MHz',freqNum:93.1,logoText:'1FM',provider:'KBS'},
       {id:'ebs-fm',name:'EBS FM',url:'https://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8',freq:'104.5 MHz',freqNum:104.5,logoText:'EBS',provider:'EBS'},
       {id:'gwangju-mbc-fm',name:'광주MBC FM',url:'https://media.kjmbc.co.kr/hls/fmlive/GWANGJU-MBC-FM/playlist.m3u8',freq:'93.9 MHz',freqNum:93.9,logoText:'MBC',provider:'MBC'},
@@ -1135,7 +1130,6 @@
 
     // === Supabase 데이터 함수 ===
     async function loadUsersFromCloud() {
-      if (!supabase) return {};
       try {
         var r = await supabase.storage.from(BUCKET).download('_system/users.json');
         if (r.data) {
@@ -1147,7 +1141,6 @@
     }
 
     async function saveUsersToCloud(users) {
-      if (!supabase) return;
       try {
         var blob = new Blob([JSON.stringify(users)], {type: 'application/json'});
         await supabase.storage.from(BUCKET).upload('_system/users.json', blob, { upsert: true });
@@ -1155,7 +1148,6 @@
     }
 
     async function loadStationsFromCloud() {
-      if (!supabase) return null;
       try {
         var r = await supabase.storage.from(BUCKET).download('_system/stations.json');
         if (r.data) {
@@ -1168,13 +1160,11 @@
     }
 
     async function saveStationsToCloud(stations) {
-      if (!supabase) { showToast('Supabase 연결 없음'); return; }
       var blob = new Blob([JSON.stringify(stations)], {type: 'application/json'});
       await supabase.storage.from(BUCKET).upload('_system/stations.json', blob, { upsert: true });
     }
 
     async function loadSettingsFromCloud() {
-      if (!supabase) return { welcomeMessage: '', defaultTheme: 'wood', adminPassword: '9633' };
       try {
         var r = await supabase.storage.from(BUCKET).download('_system/settings.json');
         if (r.data) {
@@ -1186,7 +1176,6 @@
     }
 
     async function saveSettingsToCloud(settings) {
-      if (!supabase) { showToast('Supabase 연결 없음'); return; }
       var blob = new Blob([JSON.stringify(settings)], {type: 'application/json'});
       await supabase.storage.from(BUCKET).upload('_system/settings.json', blob, { upsert: true });
     }
@@ -1205,13 +1194,8 @@
       document.getElementById('statUsers').textContent = userNames.length;
 
       // Supabase 상태
-      if (supabase) {
-        document.getElementById('statusSupabase').className = 'status-dot online';
-        document.getElementById('statusSupabaseText').textContent = '연결됨';
-      } else {
-        document.getElementById('statusSupabase').className = 'status-dot offline';
-        document.getElementById('statusSupabaseText').textContent = '연결 안됨';
-      }
+      document.getElementById('statusSupabase').className = 'status-dot online';
+      document.getElementById('statusSupabaseText').textContent = '연결됨';
 
       // 방송국 로드
       var cloudStations = await loadStationsFromCloud();
@@ -1370,11 +1354,6 @@
       item.classList.add('expanded');
       var detail = document.getElementById('userDetail-' + index);
 
-      if (!supabase) {
-        detail.innerHTML = '<div style="padding:12px;color:rgba(212,175,105,0.5);font-size:12px;">Supabase 연결 없음</div>';
-        return;
-      }
-
       var safeName = toSafePath(userName);
       try {
         var res = await supabase.storage.from(BUCKET).list(safeName);
@@ -1435,7 +1414,6 @@
     }
 
     async function viewAlbumPhotos(albumPath) {
-      if (!supabase) { showToast('Supabase 연결 없음'); return; }
       var lightbox = document.getElementById('photoLightbox');
       var content = document.getElementById('lightboxContent');
       content.innerHTML = '<div class="loading"><div class="spinner"></div>사진 불러오는 중...</div>';
