@@ -849,9 +849,19 @@
     }
 
     /* === BRAND & POWER === */
-    .radio-top {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 16px; position: relative; z-index: 1;
+    .radio-top-row1 {
+      display: flex; justify-content: center; align-items: center;
+      margin-bottom: 6px; position: relative; z-index: 1;
+    }
+    .radio-top-row1 .power-btn {
+      position: absolute; right: 0;
+    }
+    .radio-top-row2 {
+      display: flex; justify-content: center; align-items: center;
+      gap: 8px;
+      margin-bottom: 12px; position: relative; z-index: 1;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     .brand {
       font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800;
@@ -885,11 +895,6 @@
       align-self: center;
     }
 
-    .radio-top::after {
-      content: ''; display: block; position: absolute; bottom: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent);
-    }
     .power-area { display: flex; align-items: center; gap: 10px; }
     .digital-to-analog-btn {
       background: var(--btn-bg); color: var(--accent); border: 1px solid var(--btn-border);
@@ -1584,8 +1589,9 @@
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
       z-index: 10000;
-      display: flex; align-items: center; justify-content: center;
+      display: flex; align-items: flex-start; justify-content: center;
       padding: 16px;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
     .photo-select-screen::before {
@@ -1604,6 +1610,7 @@
       background: linear-gradient(145deg, #3a2e28, #2a201a);
       border-radius: 28px;
       padding: 3px;
+      margin: auto 0; flex-shrink: 0;
       box-shadow:
         0 40px 80px rgba(0,0,0,0.5),
         0 0 40px rgba(212,175,105,0.08),
@@ -2127,7 +2134,8 @@
       .screw { display: none; }
 
       /* Brand */
-      .radio-top { margin-bottom: 10px; }
+      .radio-top-row1 { margin-bottom: 4px; }
+      .radio-top-row2 { margin-bottom: 8px; padding-bottom: 8px; }
       .brand { font-size: 18px; letter-spacing: 2px; }
       .power-btn { width: 38px; height: 38px; }
 
@@ -2273,72 +2281,14 @@
 
     /* ============================================
        ANALOG RADIO MODE
+       (.radio .radio-inner 클래스를 공유하여 동일 셸 사용)
        ============================================ */
-    .analog-radio {
-      width: 100%; max-width: 420px; margin: 0 auto;
-      background: linear-gradient(135deg, var(--body-from), var(--body-to));
-      border: 2px solid var(--neon-light);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 15px var(--neon-glow), inset 0 1px 0 rgba(255,255,255,0.05);
-      position: relative; overflow: hidden;
-      display: none;
-    }
-    .analog-radio.visible { display: block; }
-    .analog-radio-inner {
-      background: var(--inner-bg);
-      padding: 14px 16px 12px;
-      position: relative; overflow: hidden;
-    }
-    .analog-radio-inner::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: var(--texture);
-      pointer-events: none;
-    }
 
-    /* Analog: Top bar */
-    .analog-top {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 8px; position: relative; z-index: 1;
-    }
-    .analog-brand {
-      font-family: 'Orbitron', monospace; font-size: 18px; font-weight: 900;
-      color: var(--accent); text-shadow: 0 0 10px var(--accent-glow);
-      letter-spacing: 3px; white-space: nowrap; flex-shrink: 0;
-    }
+    /* Analog: Photos (top row2에 들어가는 사진들) */
     .analog-photos { display: flex; gap: 3px; align-items: center; flex-shrink: 1; min-width: 0; overflow: hidden; }
     .analog-photos img {
       width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
       border: 1.5px solid var(--accent); cursor: pointer; flex-shrink: 0;
-    }
-    .analog-mode-switch {
-      background: var(--btn-bg); color: var(--accent); border: 1px solid var(--btn-border);
-      padding: 4px 8px; border-radius: 12px;
-      font-family: 'Orbitron', monospace; font-size: 7px; font-weight: 700;
-      cursor: pointer; letter-spacing: 1px; transition: all 0.3s;
-      white-space: nowrap; flex-shrink: 0;
-    }
-    .analog-mode-switch:hover {
-      background: var(--accent); color: var(--inner-bg);
-    }
-    .analog-power-area {
-      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
-    }
-    .analog-power-btn {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: linear-gradient(145deg, var(--btn-hi1), var(--btn-hi2));
-      border: 1px solid var(--neon-light); cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--power-icon);
-      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 4px var(--neon-light-glow), inset 0 1px 0 rgba(255,255,255,0.08);
-      transition: all 0.15s ease;
-    }
-    .analog-power-btn:active {
-      transform: scale(0.92);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 3px rgba(0,0,0,0.3);
-    }
-    .analog-power-btn.on {
-      border-color: #ff3333;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 8px rgba(255,51,51,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
-      color: #ff3333;
     }
 
     /* Analog: Speaker */
@@ -2562,15 +2512,6 @@
       display: flex; align-items: center; justify-content: space-between;
       margin-top: 12px; position: relative; z-index: 1;
     }
-    .analog-photo-btn {
-      background: var(--btn-bg); color: var(--accent);
-      border: 1px solid var(--btn-border);
-      width: 32px; height: 32px; border-radius: 50%;
-      font-size: 16px; cursor: pointer; transition: all 0.3s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .analog-photo-btn:hover { background: var(--accent); color: var(--inner-bg); }
-
     /* Analog: Footer */
     .analog-footer {
       text-align: center; margin-top: 6px; padding-top: 6px;
@@ -2593,25 +2534,8 @@
       border: 1.5px solid var(--accent); cursor: pointer;
     }
 
-    /* === Analog Responsive === */
-    @media (min-width: 481px) {
-      .analog-radio { padding: 6px; border-radius: 24px; }
-      .analog-radio-inner { border-radius: 20px; }
-    }
+    /* === Analog Responsive (내부 컴포넌트만) === */
     @media (max-width: 480px) {
-      .analog-radio {
-        max-width: 100%; border-radius: 0; padding: 0;
-        border-width: 2px 0;
-        min-height: 100vh; min-height: 100dvh;
-        display: none; flex-direction: column;
-      }
-      .analog-radio.visible { display: flex; }
-      .analog-radio-inner {
-        border-radius: 0; padding: 10px 14px 10px;
-        flex: 1; display: flex; flex-direction: column;
-      }
-      .analog-brand { font-size: 16px; letter-spacing: 2px; }
-      .analog-top { margin-bottom: 6px; }
       .analog-speaker { padding: 6px; margin-bottom: 6px; }
       .analog-eq { height: 24px; }
       .analog-dial-container { width: 110px; height: 110px; }
@@ -2630,8 +2554,6 @@
       .analog-theme-switcher { padding: 6px 10px; gap: 8px; }
     }
     @media (max-width: 380px) {
-      .analog-radio-inner { padding: 8px 10px 8px; }
-      .analog-brand { font-size: 14px; }
       .analog-dial-container { width: 96px; height: 96px; }
       .analog-dial-indicator { height: 16px; }
       .analog-freq-display { font-size: 24px; }
@@ -2842,18 +2764,18 @@
     <div class="screw screw-bl"></div>
     <div class="screw screw-br"></div>
 
-    <!-- Brand & Power -->
-    <div class="radio-top">
+    <!-- Brand & Power (1줄) -->
+    <div class="radio-top-row1">
       <div class="brand">라디오카페</div>
-      <!-- Maltese photos (동적) -->
-      <span class="brand-photos" id="brandPhotos"></span>
+      <button class="power-btn" id="powerBtn" title="전원">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
+      </button>
+    </div>
+    <!-- Photos & Mode Switch (2줄) -->
+    <div class="radio-top-row2">
       <button class="photo-upload-btn" id="photoUploadBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
-      <div class="power-area">
-        <button class="digital-to-analog-btn" onclick="switchToAnalog()" title="아날로그 모드">ANALOG ▸</button>
-        <button class="power-btn" id="powerBtn" title="전원">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
-        </button>
-      </div>
+      <span class="brand-photos" id="brandPhotos"></span>
+      <button class="digital-to-analog-btn" onclick="switchToAnalog()" title="아날로그 모드">ANALOG ▸</button>
     </div>
 
     <!-- Speaker Grille -->
@@ -2990,8 +2912,8 @@
   </div>
 </div>
 
-<!-- Analog Radio Screen -->
-<div class="analog-radio" id="analogRadio">
+<!-- Analog Radio Screen (디지털과 동일한 .radio 셸 사용) -->
+<div class="radio" id="analogRadio" style="display:none">
   <!-- Theme Switcher -->
   <div class="theme-switcher analog-theme-switcher" id="analogThemeSwitcher">
     <div class="theme-dot" data-t="wood" title="우드 클래식 · 나무결" onclick="setTheme('wood')"></div>
@@ -3004,19 +2926,20 @@
     <div class="theme-dot" data-t="maltese" title="말티즈 · 털 결" onclick="setTheme('maltese')"></div>
   </div>
 
-  <div class="analog-radio-inner">
+  <div class="radio-inner">
 
-    <!-- Top: Brand + Photos + Mode Switch -->
-    <div class="analog-top">
-      <div class="analog-brand">라디오카페</div>
+    <!-- Brand & Power (1줄) - 디지털과 동일 -->
+    <div class="radio-top-row1">
+      <div class="brand">라디오카페</div>
+      <button class="power-btn" id="analogPowerBtn" onclick="toggleAnalogPower()" title="전원">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
+      </button>
+    </div>
+    <!-- Photos & Mode Switch (2줄) - 디지털과 동일 -->
+    <div class="radio-top-row2">
+      <button class="photo-upload-btn has-photos" id="analogPhotoBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
       <span class="analog-photos" id="analogBrandPhotos"></span>
-      <button class="analog-photo-btn" id="analogPhotoBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
-      <div class="analog-power-area">
-        <button class="analog-mode-switch" onclick="switchToDigital()">DIGITAL ▸</button>
-        <button class="analog-power-btn" id="analogPowerBtn" onclick="toggleAnalogPower()" title="전원">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
-        </button>
-      </div>
+      <button class="digital-to-analog-btn" onclick="switchToDigital()">DIGITAL ▸</button>
     </div>
 
     <!-- Speaker Grille -->
@@ -4005,7 +3928,7 @@
       screen.classList.add('hidden');
     }, 500);
     // 아날로그 화면이 보이면 숨기기
-    document.getElementById('analogRadio').classList.remove('visible');
+    document.getElementById('analogRadio').style.display='none';
     // 디지털 화면 보이기
     document.getElementById('radioBody').style.display='';
     document.getElementById('themeName').style.display='';
@@ -4021,7 +3944,7 @@
     screen.classList.remove('hidden','hiding');
     // 아날로그 모드일 경우 아날로그 화면 숨기기
     if(isAnalogMode){
-      document.getElementById('analogRadio').classList.remove('visible');
+      document.getElementById('analogRadio').style.display='none';
       stopStaticNoise();
       isAnalogMode = false;
     }
@@ -4215,7 +4138,7 @@
 
     var analogEl=document.getElementById('analogRadio');
     analogEl.setAttribute('data-theme',currentTheme);
-    analogEl.classList.add('visible');
+    analogEl.style.display='';
 
     renderAnalogPhotos(photos);
     renderAnalogStationMarkers();
@@ -4555,7 +4478,7 @@
     currentStation=null;
 
     // Hide analog, show digital
-    document.getElementById('analogRadio').classList.remove('visible');
+    document.getElementById('analogRadio').style.display='none';
     document.getElementById('radioBody').style.display='';
     document.getElementById('themeName').style.display='';
     var photos=slotPhotos.slice();
@@ -4588,7 +4511,7 @@
     // Show analog screen
     var analogEl=document.getElementById('analogRadio');
     analogEl.setAttribute('data-theme',currentTheme);
-    analogEl.classList.add('visible');
+    analogEl.style.display='';
 
     renderAnalogPhotos(photos);
     renderAnalogStationMarkers();
