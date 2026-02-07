@@ -1183,10 +1183,7 @@
     // ========================================
     //  대시보드 탭
     // ========================================
-    var dashboardLoaded = false;
-
     async function loadDashboard() {
-      if (dashboardLoaded) return;
 
       // 사용자 로드
       allUsers = await loadUsersFromCloud();
@@ -1252,7 +1249,7 @@
       appSettings = await loadSettingsFromCloud();
       if (appSettings.adminPassword) ADMIN_PASSWORD = appSettings.adminPassword;
 
-      dashboardLoaded = true;
+      // dashboard loaded
     }
 
     function renderAlbumChart(data) {
@@ -1484,7 +1481,7 @@
       await saveUsersToCloud(allUsers);
 
       showToast('"' + userName + '" 삭제 완료');
-      dashboardLoaded = false;
+      // refresh dashboard next time
       loadUsersTab();
     }
 
@@ -1597,7 +1594,7 @@
       await saveStationsToCloud(allStations);
       closeStationModal();
       renderStationList();
-      dashboardLoaded = false;
+      // refresh dashboard next time
     }
 
     async function deleteStation(index) {
@@ -1606,7 +1603,7 @@
       await saveStationsToCloud(allStations);
       renderStationList();
       showToast('방송 삭제 완료');
-      dashboardLoaded = false;
+      // refresh dashboard next time
     }
 
     async function moveStation(index, dir) {
@@ -1675,7 +1672,7 @@
       await saveStationsToCloud(allStations);
       renderStationList();
       showToast('기본 방송국으로 초기화 완료');
-      dashboardLoaded = false;
+      // refresh dashboard next time
     }
 
     // ========================================
