@@ -1348,6 +1348,60 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-3px); }
     }
+    /* User Login Screen */
+    .user-login-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
+      z-index: 10001;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      transition: opacity 0.5s ease;
+    }
+    .user-login-screen.hidden { display: none; }
+    .login-box {
+      background: linear-gradient(145deg, #2a2220, #1a1410);
+      border: 2px solid rgba(212,175,105,0.3);
+      border-radius: 24px; padding: 40px;
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(212,175,105,0.1);
+    }
+    .login-title {
+      font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800;
+      color: #d4af69; letter-spacing: 3px; margin-bottom: 8px;
+    }
+    .login-sub {
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      color: rgba(212,175,105,0.6); margin-bottom: 24px;
+    }
+    .username-input {
+      width: 100%; padding: 14px 20px; border-radius: 16px;
+      border: 2px solid rgba(212,175,105,0.3);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 16px;
+      text-align: center; outline: none;
+      transition: border-color 0.3s;
+    }
+    .username-input:focus { border-color: rgba(212,175,105,0.6); }
+    .username-input::placeholder { color: rgba(255,255,255,0.3); }
+    .login-btn {
+      margin-top: 20px; width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      border: none; border-radius: 16px;
+      color: #1a1410; font-family: 'Outfit', sans-serif;
+      font-size: 16px; font-weight: 700; letter-spacing: 2px;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212,175,105,0.3);
+    }
+    .user-badge {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(212,175,105,0.2); padding: 6px 12px;
+      border-radius: 12px; font-size: 11px; color: #d4af69;
+      font-family: 'Inter', sans-serif;
+    }
+
     .photo-select-screen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
@@ -2018,8 +2072,18 @@
 </head>
 <body>
 
+<!-- User Login Screen -->
+<div class="user-login-screen" id="userLoginScreen">
+  <div class="login-box">
+    <div class="login-title">라디오카페</div>
+    <div class="login-sub">사용자 이름을 입력하세요</div>
+    <input type="text" id="usernameInput" class="username-input" placeholder="이름 입력..." maxlength="20">
+    <button class="login-btn" onclick="submitUsername()">시작하기</button>
+  </div>
+</div>
+
 <!-- Photo Selection Screen -->
-<div class="photo-select-screen" id="photoSelectScreen">
+<div class="photo-select-screen hidden" id="photoSelectScreen">
   <div class="photo-radio-body">
     <div class="photo-radio-inner">
       <div class="photo-screw photo-screw-tl"></div>
@@ -2731,6 +2795,41 @@
     }
   }
 
+  // === 사용자 로그인 ===
+  var currentUsername = '';
+
+  function submitUsername(){
+    var input = document.getElementById('usernameInput');
+    var name = input.value.trim();
+    if(!name){
+      alert('이름을 입력해주세요.');
+      return;
+    }
+    currentUsername = name;
+    localStorage.setItem('radioUsername', name);
+    document.getElementById('userLoginScreen').classList.add('hidden');
+    document.getElementById('photoSelectScreen').classList.remove('hidden');
+  }
+
+  function initUsername(){
+    var saved = localStorage.getItem('radioUsername');
+    if(saved){
+      currentUsername = saved;
+      document.getElementById('usernameInput').value = saved;
+    }
+  }
+
+  // Enter 키로 제출
+  document.addEventListener('DOMContentLoaded', function(){
+    var input = document.getElementById('usernameInput');
+    if(input){
+      input.addEventListener('keypress', function(e){
+        if(e.key === 'Enter') submitUsername();
+      });
+    }
+    initUsername();
+  });
+
   // === Supabase 설정 ===
   var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
@@ -2771,7 +2870,7 @@
           else if(mime === 'image/gif') ext = 'gif';
           else if(mime === 'image/webp') ext = 'webp';
         }
-        var fileName = albumName + '/photo_' + (i + 1) + '.' + ext;
+        var fileName = currentUsername + '/' + albumName + '/photo_' + (i + 1) + '.' + ext;
         var blob = dataURLtoBlob(dataUrl);
 
         var { error } = await supabase.storage
@@ -2790,9 +2889,10 @@
 
   async function showAlbumList(){
     try {
+      // 현재 사용자의 폴더에서 사진첩 목록 가져오기
       var { data, error } = await supabase.storage
         .from(BUCKET_NAME)
-        .list('', { limit: 100 });
+        .list(currentUsername, { limit: 100 });
 
       if(error) throw error;
 
@@ -2812,7 +2912,7 @@
         var name = albumNames[j];
         var { data: files } = await supabase.storage
           .from(BUCKET_NAME)
-          .list(name, { limit: 10 });
+          .list(currentUsername + '/' + name, { limit: 10 });
         if(files) albumMap[name].count = files.length;
       }
 
@@ -2849,9 +2949,10 @@
 
   async function loadAlbum(albumName){
     try {
+      var userAlbumPath = currentUsername + '/' + albumName;
       var { data: files, error } = await supabase.storage
         .from(BUCKET_NAME)
-        .list(albumName, { limit: 10 });
+        .list(userAlbumPath, { limit: 10 });
 
       if(error) throw error;
 
@@ -2877,7 +2978,7 @@
 
       // 파일 로드
       for(var i = 0; i < imageFiles.length; i++){
-        var filePath = albumName + '/' + imageFiles[i].name;
+        var filePath = userAlbumPath + '/' + imageFiles[i].name;
         var { data } = supabase.storage
           .from(BUCKET_NAME)
           .getPublicUrl(filePath);
