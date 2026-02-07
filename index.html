@@ -950,11 +950,12 @@
       transition: all 0.4s ease;
     }
     img.brand-mascot {
-      width: 48px; height: 48px;
+      width: 34px; height: 34px;
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid var(--neon-light);
       box-shadow: 0 0 6px var(--neon-light-glow);
+      margin-left: 3px;
     }
     .ctrl-mascot {
       display: none;
@@ -1419,6 +1420,26 @@
       text-shadow: 0 0 4px var(--lcd-glow);
     }
 
+    /* === PHOTO LIGHTBOX === */
+    .photo-lightbox {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      z-index: 9999; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .photo-lightbox.visible { display: flex; }
+    .photo-lightbox img {
+      max-width: 85%; max-height: 85%;
+      border-radius: 16px; object-fit: contain;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 12px var(--neon-glow);
+      border: 2px solid var(--neon-border);
+      animation: lightboxIn 0.3s ease;
+    }
+    @keyframes lightboxIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
     /* === SCREWS === */
     .screw {
       position: absolute; width: 10px; height: 10px; border-radius: 50%;
@@ -1741,8 +1762,11 @@
           <circle cx="-3" cy="-24" r="2.5" fill="#ff3366"/>
         </g>
       </svg>
-      <!-- Maltese mascot (실제 사진) -->
-      <img class="brand-mascot mascot-maltese" src="maltese.jpg" alt="말티즈" width="48" height="48">
+      <!-- Maltese mascots (실제 사진) -->
+      <img class="brand-mascot mascot-maltese" src="maltese.jpg" alt="말티즈" width="34" height="34" onclick="openLightbox(this.src)" style="cursor:pointer">
+      <img class="brand-mascot mascot-maltese" src="photo1.jpg" alt="말티즈" width="34" height="34" onclick="openLightbox(this.src)" style="cursor:pointer">
+      <img class="brand-mascot mascot-maltese" src="photo2.jpg" alt="말티즈" width="34" height="34" onclick="openLightbox(this.src)" style="cursor:pointer">
+      <img class="brand-mascot mascot-maltese" src="photo5.jpg" alt="커플" width="34" height="34" onclick="openLightbox(this.src)" style="cursor:pointer">
       <div class="power-area">
         <div class="power-led" id="powerLed"></div>
         <button class="power-btn" id="powerBtn" title="전원">
@@ -1855,7 +1879,7 @@
         </div>
         <div class="knob-label">VOLUME</div>
       </div>
-      <img class="ctrl-mascot mascot-maltese" src="maltese.jpg" alt="말티즈">
+      <img class="ctrl-mascot mascot-maltese" src="photo3.jpg" alt="말티즈" onclick="openLightbox(this.src)" style="cursor:pointer">
       <div class="play-btn-container">
         <button class="play-btn" id="playBtn" onclick="togglePlay()">
           <svg id="playIcon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="7,3 21,12 7,21"/></svg>
@@ -1863,7 +1887,7 @@
           <svg id="loaderIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:none" class="spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
         </button>
       </div>
-      <img class="ctrl-mascot mascot-maltese" src="maltese.jpg" alt="말티즈">
+      <img class="ctrl-mascot mascot-maltese" src="photo4.jpg" alt="말티즈" onclick="openLightbox(this.src)" style="cursor:pointer">
       <div class="knob-area">
         <button class="eq-toggle-btn" id="eqToggleBtn" onclick="toggleEqPanel()" title="이퀄라이저">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
@@ -1873,6 +1897,11 @@
     </div>
 
     <div class="error-msg" id="errorMsg"></div>
+
+    <!-- Photo Lightbox -->
+    <div class="photo-lightbox" id="photoLightbox" onclick="closeLightbox()">
+      <img id="lightboxImg" src="" alt="">
+    </div>
 
     <div class="radio-footer">
       <div class="footer-text">&copy; 2026 <a href="mailto:jaiwshim@gmail.com"><strong>Jaiwoo Shim</strong></a></div>
@@ -2257,6 +2286,16 @@
         document.getElementById('virtualizerSlider').value = virtualizerValue;
       }
     } catch(e){}
+  }
+
+  // === Photo Lightbox ===
+  function openLightbox(src){
+    var lb=document.getElementById('photoLightbox');
+    document.getElementById('lightboxImg').src=src;
+    lb.classList.add('visible');
+  }
+  function closeLightbox(){
+    document.getElementById('photoLightbox').classList.remove('visible');
   }
 
   // === Volume Knob ===
