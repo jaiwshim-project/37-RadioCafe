@@ -1809,6 +1809,9 @@
       box-shadow: 0 4px 20px rgba(212,175,105,0.2);
     }
     .photo-batch-btn:active { transform: scale(0.97); }
+    .photo-batch-row {
+      display: flex; gap: 10px; align-items: center; justify-content: center;
+    }
     .photo-select-or {
       font-size: 10px; color: rgba(212,175,105,0.45);
       font-family: 'Orbitron', monospace; letter-spacing: 3px; font-weight: 600;
@@ -1855,7 +1858,7 @@
       font-size: 12px; font-weight: 600; font-family: 'Outfit', sans-serif;
       cursor: pointer; letter-spacing: 1px;
       box-shadow: 0 3px 12px rgba(100,100,100,0.3);
-      transition: all 0.3s ease; margin-top: 8px;
+      transition: all 0.3s ease;
     }
     .photo-reset-btn:hover {
       background: linear-gradient(135deg, #999, #777);
@@ -2406,14 +2409,16 @@
       </div>
 
       <div class="photo-controls">
-        <button class="photo-batch-btn" onclick="pickAllPhotos()">갤러리에서 6장 한번에 선택</button>
+        <div class="photo-batch-row">
+          <button class="photo-batch-btn" onclick="pickAllPhotos()">갤러리에서 6장 한번에 선택</button>
+          <button class="photo-reset-btn" onclick="resetPhotos()">초기화</button>
+        </div>
         <input type="file" id="batchFileInput" accept="image/*" multiple style="display:none">
         <div class="photo-select-or">- OR -</div>
         <div class="photo-save-load-row">
           <button class="photo-save-btn" id="photoSaveBtn" onclick="savePhotosToAlbum()">새 사진첩 저장</button>
           <button class="photo-load-btn" id="photoLoadBtn" onclick="showAlbumList()">사진첩 불러오기</button>
         </div>
-        <button class="photo-reset-btn" onclick="resetPhotos()">초기화</button>
         <div class="album-list-popup" id="albumListPopup">
           <div class="album-list-header">
             <span>📚 사진첩 목록</span>
