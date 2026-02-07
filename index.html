@@ -3126,7 +3126,10 @@
         return users;
       }
     } catch(e){ console.log('클라우드 사용자 로드 실패:', e); }
-    return getUsers();
+    // 클라우드 로드 실패 시에도 localStorage를 클라우드 기준으로 초기화
+    cachedUsers = {};
+    localStorage.removeItem('radioUsers');
+    return {};
   }
 
   async function saveUsersToCloud(users){
