@@ -2669,12 +2669,24 @@
   }
 
   // === Init ===
-  function init() {
+  async function init() {
     // Restore saved theme
     try {
       var saved = localStorage.getItem('k-radio-theme');
       if (saved && THEME_NAMES[saved]) setTheme(saved);
     } catch(e) {}
+
+    // 클라우드에서 방송국 데이터 로드 시도
+    try {
+      var r = await supabase.storage.from(BUCKET_NAME).download('_system/stations.json');
+      if (r.data) {
+        var text = await r.data.text();
+        var cloudStations = JSON.parse(text);
+        if (cloudStations && cloudStations.length > 0) {
+          STATIONS = cloudStations;
+        }
+      }
+    } catch(e) { /* 기본 하드코딩 방송국 사용 */ }
 
     renderPresets();
     renderEqualizer();

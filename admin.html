@@ -13,7 +13,7 @@
     body {
       min-height: 100vh;
       background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
-      display: flex; align-items: center; justify-content: center;
+      display: flex; align-items: flex-start; justify-content: center;
       padding: 20px;
       font-family: 'Inter', sans-serif;
     }
@@ -27,7 +27,7 @@
     }
 
     .admin-card {
-      width: 100%; max-width: 520px;
+      width: 100%; max-width: 900px;
       background: linear-gradient(145deg, #3a2e28, #2a201a);
       border-radius: 28px; padding: 3px;
       box-shadow:
@@ -99,56 +99,54 @@
     }
 
     /* 로그인 폼 */
-    .login-form {
-      margin-bottom: 24px;
-    }
+    .login-form { margin-bottom: 24px; }
 
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .form-group { margin-bottom: 16px; }
 
     .form-label {
-      display: block;
-      font-size: 12px;
+      display: block; font-size: 12px;
       color: rgba(212,175,105,0.7);
-      margin-bottom: 8px;
-      letter-spacing: 1px;
+      margin-bottom: 8px; letter-spacing: 1px;
     }
 
     .form-input {
-      width: 100%;
-      padding: 14px 16px;
+      width: 100%; padding: 14px 16px;
       background: rgba(0,0,0,0.4);
       border: 2px solid rgba(212,175,105,0.2);
-      border-radius: 12px;
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
+      border-radius: 12px; color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 14px;
       transition: all 0.2s;
     }
 
     .form-input:focus {
-      outline: none;
-      border-color: #d4af69;
+      outline: none; border-color: #d4af69;
       background: rgba(0,0,0,0.5);
     }
 
-    .form-input::placeholder {
-      color: rgba(255,255,255,0.3);
+    .form-input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .form-textarea {
+      width: 100%; padding: 14px 16px;
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(212,175,105,0.2);
+      border-radius: 12px; color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      transition: all 0.2s; resize: vertical; min-height: 80px;
+    }
+
+    .form-textarea:focus {
+      outline: none; border-color: #d4af69;
+      background: rgba(0,0,0,0.5);
     }
 
     .login-btn {
-      width: 100%;
-      padding: 14px;
+      width: 100%; padding: 14px;
       background: linear-gradient(135deg, #d4af69, #c49a50);
-      border: none;
-      border-radius: 12px;
+      border: none; border-radius: 12px;
       color: #1a1410;
       font-family: 'Outfit', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      cursor: pointer;
+      font-size: 14px; font-weight: 700;
+      letter-spacing: 1px; cursor: pointer;
       transition: all 0.2s;
     }
 
@@ -157,54 +155,74 @@
       box-shadow: 0 8px 24px rgba(212,175,105,0.4);
     }
 
+    /* 탭 네비게이션 */
+    .tab-nav {
+      display: flex; gap: 4px;
+      margin-bottom: 24px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px; padding: 4px;
+      border: 1px solid rgba(212,175,105,0.15);
+    }
+
+    .tab-btn {
+      flex: 1; padding: 12px 8px;
+      background: transparent; border: none;
+      color: rgba(212,175,105,0.5);
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 600;
+      border-radius: 8px; cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: rgba(212,175,105,0.8); }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      color: #1a1410;
+    }
+
     /* 관리 패널 */
-    .admin-panel {
-      display: none;
-    }
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
 
-    .admin-panel.active {
-      display: block;
-    }
+    /* 탭 콘텐츠 */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
 
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 섹션 타이틀 */
     .section-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 14px;
-      color: #d4af69;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
+      font-size: 14px; color: #d4af69;
+      letter-spacing: 1px; margin-bottom: 12px;
       font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
     }
 
     .section-title::before {
-      content: '';
-      width: 4px;
-      height: 16px;
-      background: #d4af69;
-      border-radius: 2px;
+      content: ''; width: 4px; height: 16px;
+      background: #d4af69; border-radius: 2px;
     }
 
+    /* 통계 그리드 (4열) */
     .stats-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px; margin-bottom: 24px;
     }
 
     .stat-box {
       background: rgba(0,0,0,0.3);
       border: 1px solid rgba(212,175,105,0.2);
-      border-radius: 12px;
-      padding: 16px;
+      border-radius: 12px; padding: 16px;
       text-align: center;
     }
 
     .stat-number {
       font-family: 'Orbitron', monospace;
-      font-size: 28px;
-      color: #55ff55;
+      font-size: 28px; color: #55ff55;
       text-shadow: 0 0 10px rgba(85,255,85,0.4);
     }
 
@@ -214,71 +232,486 @@
       margin-top: 4px;
     }
 
-    .user-list {
-      max-height: 200px;
-      overflow-y: auto;
+    /* 시스템 상태 */
+    .status-panel {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.15);
+      border-radius: 12px; padding: 16px;
       margin-bottom: 24px;
     }
 
-    .user-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
+    .status-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0;
+    }
+
+    .status-row + .status-row {
+      border-top: 1px solid rgba(212,175,105,0.1);
+    }
+
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.online {
+      background: #55ff55;
+      box-shadow: 0 0 6px rgba(85,255,85,0.5);
+    }
+
+    .status-dot.offline {
+      background: #ff6464;
+      box-shadow: 0 0 6px rgba(255,100,100,0.5);
+    }
+
+    .status-dot.checking {
+      background: #ffaa33;
+      box-shadow: 0 0 6px rgba(255,170,51,0.5);
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .status-text {
+      font-size: 13px; color: rgba(255,255,255,0.8);
+    }
+
+    .status-value {
+      margin-left: auto; font-size: 12px;
+      color: rgba(212,175,105,0.6);
+      font-family: 'Orbitron', monospace;
+    }
+
+    /* 바 차트 */
+    .chart-container {
       background: rgba(0,0,0,0.3);
       border: 1px solid rgba(212,175,105,0.15);
-      border-radius: 8px;
-      margin-bottom: 8px;
+      border-radius: 12px; padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .chart-title {
+      font-size: 12px; color: rgba(212,175,105,0.6);
+      margin-bottom: 16px; letter-spacing: 1px;
+    }
+
+    .bar-chart {
+      display: flex; align-items: flex-end; gap: 8px;
+      height: 120px; padding-bottom: 24px;
+      border-bottom: 1px solid rgba(212,175,105,0.15);
+      position: relative;
+    }
+
+    .bar-col {
+      flex: 1; min-width: 20px; position: relative;
+      background: linear-gradient(to top, #d4af69, rgba(212,175,105,0.4));
+      border-radius: 4px 4px 0 0;
+      transition: height 0.5s ease;
+    }
+
+    .bar-value {
+      position: absolute; top: -18px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px; color: #55ff55;
+      font-family: 'Orbitron', monospace;
+    }
+
+    .bar-label {
+      position: absolute; bottom: -20px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px; color: rgba(212,175,105,0.5);
+      white-space: nowrap; max-width: 60px;
+      overflow: hidden; text-overflow: ellipsis;
+      text-align: center;
+    }
+
+    .chart-empty {
+      text-align: center; padding: 40px;
+      color: rgba(212,175,105,0.4); font-size: 13px;
+    }
+
+    /* 검색바 */
+    .search-bar {
+      display: flex; gap: 8px; margin-bottom: 16px;
+    }
+
+    .search-input {
+      flex: 1; padding: 12px 16px;
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(212,175,105,0.2);
+      border-radius: 10px; color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 13px;
+    }
+
+    .search-input:focus {
+      outline: none; border-color: #d4af69;
+    }
+
+    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+
+    /* 사용자 목록 */
+    .user-list {
+      max-height: 500px; overflow-y: auto;
+      margin-bottom: 24px;
+    }
+
+    .user-list::-webkit-scrollbar { width: 6px; }
+    .user-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 3px; }
+    .user-list::-webkit-scrollbar-thumb { background: rgba(212,175,105,0.3); border-radius: 3px; }
+
+    .user-item {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.15);
+      border-radius: 10px; margin-bottom: 8px;
+      overflow: hidden;
+    }
+
+    .user-row {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 14px 16px;
+      cursor: pointer; transition: background 0.2s;
+    }
+
+    .user-row:hover { background: rgba(212,175,105,0.05); }
+
+    .user-info { display: flex; align-items: center; gap: 12px; }
+
+    .user-avatar {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, rgba(212,175,105,0.2), rgba(212,175,105,0.1));
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 14px; color: #d4af69;
     }
 
     .user-name {
-      font-size: 14px;
-      color: rgba(255,255,255,0.9);
+      font-size: 14px; color: rgba(255,255,255,0.9);
     }
 
-    .user-albums {
-      font-size: 12px;
-      color: rgba(212,175,105,0.6);
+    .user-meta {
+      font-size: 11px; color: rgba(212,175,105,0.5);
+      margin-top: 2px;
     }
 
-    .delete-btn {
-      padding: 6px 12px;
-      background: rgba(255,100,100,0.2);
-      border: 1px solid rgba(255,100,100,0.4);
-      border-radius: 6px;
-      color: #ff6464;
-      font-size: 11px;
-      cursor: pointer;
+    .user-actions {
+      display: flex; gap: 6px; align-items: center;
+    }
+
+    .expand-arrow {
+      font-size: 12px; color: rgba(212,175,105,0.4);
+      transition: transform 0.3s;
+    }
+
+    .user-item.expanded .expand-arrow { transform: rotate(180deg); }
+
+    /* 사용자 상세 (확장) */
+    .user-detail {
+      display: none; padding: 0 16px 16px;
+      border-top: 1px solid rgba(212,175,105,0.1);
+    }
+
+    .user-item.expanded .user-detail { display: block; }
+
+    .album-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px; margin-top: 12px;
+    }
+
+    .album-card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.1);
+      border-radius: 8px; padding: 10px;
+      text-align: center; cursor: pointer;
       transition: all 0.2s;
     }
 
-    .delete-btn:hover {
-      background: rgba(255,100,100,0.3);
+    .album-card:hover {
+      border-color: rgba(212,175,105,0.3);
+      transform: translateY(-2px);
     }
 
+    .album-thumb {
+      width: 100%; aspect-ratio: 1;
+      background: rgba(0,0,0,0.3);
+      border-radius: 6px; margin-bottom: 6px;
+      overflow: hidden;
+    }
+
+    .album-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .album-name {
+      font-size: 11px; color: rgba(255,255,255,0.7);
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .album-count {
+      font-size: 10px; color: rgba(212,175,105,0.5);
+    }
+
+    /* 버튼 */
+    .btn {
+      padding: 8px 16px; border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      color: #1a1410;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(212,175,105,0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(212,175,105,0.3);
+      color: rgba(212,175,105,0.7);
+    }
+
+    .btn-outline:hover {
+      border-color: #d4af69; color: #d4af69;
+    }
+
+    .btn-danger {
+      background: rgba(255,100,100,0.15);
+      border: 1px solid rgba(255,100,100,0.3);
+      color: #ff6464;
+    }
+
+    .btn-danger:hover {
+      background: rgba(255,100,100,0.25);
+    }
+
+    .btn-sm { padding: 6px 12px; font-size: 11px; }
+
+    /* 방송국 목록 */
+    .station-list {
+      max-height: 500px; overflow-y: auto;
+      margin-bottom: 16px;
+    }
+
+    .station-list::-webkit-scrollbar { width: 6px; }
+    .station-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 3px; }
+    .station-list::-webkit-scrollbar-thumb { background: rgba(212,175,105,0.3); border-radius: 3px; }
+
+    .station-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.15);
+      border-radius: 10px; margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .station-item:hover { border-color: rgba(212,175,105,0.3); }
+
+    .station-logo {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: rgba(212,175,105,0.12);
+      border-radius: 8px; display: flex;
+      align-items: center; justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 11px; color: #d4af69;
+      font-weight: 700;
+    }
+
+    .station-info { flex: 1; min-width: 0; }
+
+    .station-name {
+      font-size: 13px; color: rgba(255,255,255,0.9);
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .station-freq {
+      font-size: 11px; color: rgba(212,175,105,0.5);
+      font-family: 'Orbitron', monospace;
+    }
+
+    .station-actions {
+      display: flex; gap: 4px; flex-shrink: 0;
+    }
+
+    .station-actions .btn-sm { padding: 5px 8px; font-size: 10px; }
+
+    .test-result {
+      display: inline-block; font-size: 12px;
+      margin-left: 4px;
+    }
+
+    .test-ok { color: #55ff55; }
+    .test-fail { color: #ff6464; }
+    .test-loading { color: #ffaa33; animation: pulse 1s infinite; }
+
+    /* 방송국 순서 버튼 */
+    .order-btns {
+      display: flex; flex-direction: column; gap: 2px;
+      margin-left: 4px;
+    }
+
+    .order-btn {
+      background: rgba(212,175,105,0.1);
+      border: 1px solid rgba(212,175,105,0.2);
+      color: rgba(212,175,105,0.6);
+      width: 24px; height: 18px;
+      border-radius: 4px; cursor: pointer;
+      font-size: 10px; display: flex;
+      align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .order-btn:hover {
+      background: rgba(212,175,105,0.2);
+      color: #d4af69;
+    }
+
+    /* 모달 */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-overlay.hidden { display: none; }
+
+    .modal-content {
+      background: linear-gradient(145deg, #2a2018, #1e1610);
+      border: 1px solid rgba(212,175,105,0.3);
+      border-radius: 16px; padding: 30px;
+      max-width: 500px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+    }
+
+    .modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px; color: #d4af69;
+      font-weight: 700; margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex; gap: 8px; justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    /* 사진 라이트박스 */
+    .lightbox {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1100; padding: 20px; cursor: pointer;
+    }
+
+    .lightbox.hidden { display: none; }
+
+    .lightbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px; max-width: 800px; width: 100%;
+      max-height: 80vh; overflow-y: auto;
+    }
+
+    .lightbox-grid img {
+      width: 100%; border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .lightbox-single img {
+      max-width: 90vw; max-height: 85vh;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: fixed; top: 16px; right: 16px;
+      background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2);
+      color: white; width: 40px; height: 40px;
+      border-radius: 50%; cursor: pointer;
+      font-size: 18px; display: flex;
+      align-items: center; justify-content: center;
+      z-index: 1101;
+    }
+
+    /* 설정 */
+    .setting-group {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.15);
+      border-radius: 12px; padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .setting-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px; color: #d4af69;
+      font-weight: 600; margin-bottom: 10px;
+    }
+
+    .setting-desc {
+      font-size: 11px; color: rgba(212,175,105,0.5);
+      margin-bottom: 12px;
+    }
+
+    /* 테마 선택 */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .theme-option {
+      padding: 12px 8px;
+      background: rgba(0,0,0,0.3);
+      border: 2px solid rgba(212,175,105,0.1);
+      border-radius: 10px; text-align: center;
+      cursor: pointer; transition: all 0.2s;
+    }
+
+    .theme-option:hover { border-color: rgba(212,175,105,0.3); }
+
+    .theme-option.selected {
+      border-color: #d4af69;
+      background: rgba(212,175,105,0.1);
+    }
+
+    .theme-dot-preview {
+      width: 24px; height: 24px;
+      border-radius: 50%; margin: 0 auto 6px;
+      border: 2px solid rgba(255,255,255,0.15);
+    }
+
+    .theme-name-label {
+      font-size: 10px; color: rgba(255,255,255,0.6);
+    }
+
+    /* 로그아웃 버튼 */
     .logout-btn {
-      width: 100%;
-      padding: 12px;
+      width: 100%; padding: 12px;
       background: transparent;
       border: 2px solid rgba(212,175,105,0.3);
       border-radius: 12px;
       color: rgba(212,175,105,0.7);
       font-family: 'Outfit', sans-serif;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 16px;
+      font-size: 13px; cursor: pointer;
+      transition: all 0.2s; margin-top: 16px;
     }
 
     .logout-btn:hover {
-      border-color: #d4af69;
-      color: #d4af69;
+      border-color: #d4af69; color: #d4af69;
     }
 
-    /* 링크 버튼 */
+    /* 링크 */
     .link-section {
       display: flex; justify-content: center; gap: 12px;
-      flex-wrap: wrap; margin-bottom: 24px;
+      flex-wrap: wrap; margin-bottom: 24px; margin-top: 24px;
     }
 
     .link-btn {
@@ -308,12 +741,9 @@
 
     /* 메시지 */
     .message {
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 13px;
-      text-align: center;
-      display: none;
+      padding: 12px; border-radius: 8px;
+      margin-bottom: 16px; font-size: 13px;
+      text-align: center; display: none;
     }
 
     .message.error {
@@ -328,6 +758,53 @@
       background: rgba(85,255,85,0.1);
       border: 1px solid rgba(85,255,85,0.3);
       color: #55ff55;
+    }
+
+    /* 토스트 */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.9);
+      border: 1px solid rgba(212,175,105,0.3);
+      color: #fff; padding: 12px 24px;
+      border-radius: 10px; font-size: 13px;
+      z-index: 2000; animation: toastIn 0.3s ease;
+    }
+
+    @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+    /* 로딩 스피너 */
+    .loading {
+      text-align: center; padding: 30px;
+      color: rgba(212,175,105,0.5); font-size: 13px;
+    }
+
+    .spinner {
+      width: 24px; height: 24px;
+      border: 2px solid rgba(212,175,105,0.2);
+      border-top-color: #d4af69;
+      border-radius: 50%; margin: 0 auto 10px;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 반응형 */
+    @media (max-width: 600px) {
+      body { padding: 0; align-items: flex-start; }
+      .admin-card { border-radius: 0; max-width: 100%; }
+      .admin-inner { border-radius: 0; padding: 24px 16px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat-number { font-size: 22px; }
+      .tab-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .tab-btn { padding: 10px 6px; font-size: 11px; }
+      .station-item { flex-wrap: wrap; }
+      .station-actions { width: 100%; justify-content: flex-end; margin-top: 8px; }
+      .theme-grid { grid-template-columns: repeat(2, 1fr); }
+      .album-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+      .bar-chart { height: 80px; }
+      .user-actions { gap: 4px; }
+      .screw { display: none; }
     }
   </style>
 </head>
@@ -363,53 +840,259 @@
 
       <!-- 관리 패널 -->
       <div id="adminPanel" class="admin-panel">
-        <div class="section-title">통계</div>
-        <div class="stats-grid">
-          <div class="stat-box">
-            <div class="stat-number" id="userCount">0</div>
-            <div class="stat-label">등록된 사용자</div>
+        <!-- 탭 네비게이션 -->
+        <div class="tab-nav">
+          <button class="tab-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">대시보드</button>
+          <button class="tab-btn" data-tab="users" onclick="switchTab('users')">사용자/앨범</button>
+          <button class="tab-btn" data-tab="stations" onclick="switchTab('stations')">라디오 방송</button>
+          <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">설정</button>
+        </div>
+
+        <!-- 탭: 대시보드 -->
+        <div class="tab-content active" id="tab-dashboard">
+          <div class="section-title">통계 요약</div>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-number" id="statUsers">-</div>
+              <div class="stat-label">등록된 사용자</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" id="statAlbums">-</div>
+              <div class="stat-label">총 앨범</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" id="statPhotos">-</div>
+              <div class="stat-label">총 사진</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" id="statStations">-</div>
+              <div class="stat-label">방송국</div>
+            </div>
           </div>
-          <div class="stat-box">
-            <div class="stat-number" id="albumCount">0</div>
-            <div class="stat-label">총 사진첩</div>
+
+          <div class="section-title">시스템 상태</div>
+          <div class="status-panel">
+            <div class="status-row">
+              <div class="status-dot checking" id="statusSupabase"></div>
+              <div class="status-text">Supabase 연결</div>
+              <div class="status-value" id="statusSupabaseText">확인 중...</div>
+            </div>
+            <div class="status-row">
+              <div class="status-dot checking" id="statusStations"></div>
+              <div class="status-text">방송국 데이터</div>
+              <div class="status-value" id="statusStationsText">확인 중...</div>
+            </div>
+          </div>
+
+          <div class="section-title">사용자별 앨범 현황</div>
+          <div class="chart-container">
+            <div id="albumChart"></div>
           </div>
         </div>
 
-        <div class="section-title">사용자 목록</div>
-        <div class="user-list" id="userList">
-          <!-- 사용자 목록이 여기에 표시됩니다 -->
+        <!-- 탭: 사용자/앨범 -->
+        <div class="tab-content" id="tab-users">
+          <div class="section-title">사용자 관리</div>
+          <div class="search-bar">
+            <input type="text" class="search-input" id="userSearch" placeholder="사용자 검색..." oninput="filterUsers()">
+          </div>
+          <div class="user-list" id="userList">
+            <div class="loading"><div class="spinner"></div>사용자 목록 불러오는 중...</div>
+          </div>
+        </div>
+
+        <!-- 탭: 라디오 방송 -->
+        <div class="tab-content" id="tab-stations">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div class="section-title" style="margin-bottom:0;">방송국 관리</div>
+            <button class="btn btn-gold" onclick="openStationModal()">+ 새 방송 추가</button>
+          </div>
+          <div class="station-list" id="stationList">
+            <div class="loading"><div class="spinner"></div>방송국 목록 불러오는 중...</div>
+          </div>
+          <div style="text-align:center; margin-top:12px;">
+            <button class="btn btn-outline btn-sm" onclick="seedDefaultStations()">기본 방송국 초기화</button>
+          </div>
+        </div>
+
+        <!-- 탭: 설정 -->
+        <div class="tab-content" id="tab-settings">
+          <div class="section-title">사이트 설정</div>
+
+          <div class="setting-group">
+            <div class="setting-label">환영 메시지</div>
+            <div class="setting-desc">로그인 화면에 표시되는 메시지</div>
+            <textarea class="form-textarea" id="welcomeMessage" placeholder="환영 메시지를 입력하세요..."></textarea>
+            <div style="margin-top:10px;">
+              <button class="btn btn-gold btn-sm" onclick="saveWelcomeMessage()">저장</button>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <div class="setting-label">기본 테마</div>
+            <div class="setting-desc">새 사용자의 기본 라디오 테마</div>
+            <div class="theme-grid" id="themeGrid"></div>
+            <div style="margin-top:10px;">
+              <button class="btn btn-gold btn-sm" onclick="saveDefaultTheme()">저장</button>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <div class="setting-label">관리자 비밀번호 변경</div>
+            <div class="form-group" style="margin-top:12px;">
+              <label class="form-label">현재 비밀번호</label>
+              <input type="password" class="form-input" id="currentPw" maxlength="20">
+            </div>
+            <div class="form-group">
+              <label class="form-label">새 비밀번호</label>
+              <input type="password" class="form-input" id="newPw" maxlength="20">
+            </div>
+            <div class="form-group">
+              <label class="form-label">새 비밀번호 확인</label>
+              <input type="password" class="form-input" id="confirmPw" maxlength="20">
+            </div>
+            <button class="btn btn-gold btn-sm" onclick="changeAdminPassword()">비밀번호 변경</button>
+          </div>
         </div>
 
         <button class="logout-btn" onclick="adminLogout()">로그아웃</button>
       </div>
 
       <div class="link-section">
-        <a href="index.html" class="link-btn">← 라디오카페</a>
+        <a href="index.html" class="link-btn">&larr; 라디오카페</a>
       </div>
 
       <div class="admin-footer">
-        <div class="copyright">© 2026 Hyein Cho. All rights reserved.</div>
+        <div class="copyright">&copy; 2026 Hyein Cho. All rights reserved.</div>
       </div>
     </div>
   </div>
 
+  <!-- 방송국 추가/수정 모달 -->
+  <div class="modal-overlay hidden" id="stationModal">
+    <div class="modal-content">
+      <div class="modal-title" id="stationModalTitle">새 방송 추가</div>
+      <input type="hidden" id="editStationId">
+      <div class="form-group">
+        <label class="form-label">방송국 이름</label>
+        <input type="text" class="form-input" id="stationFormName" placeholder="예: KBS 클래식FM">
+      </div>
+      <div class="form-group">
+        <label class="form-label">스트림 URL</label>
+        <input type="text" class="form-input" id="stationFormUrl" placeholder="https://...m3u8">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label class="form-label">주파수 (표시용)</label>
+          <input type="text" class="form-input" id="stationFormFreq" placeholder="93.1 MHz">
+        </div>
+        <div class="form-group">
+          <label class="form-label">주파수 (숫자)</label>
+          <input type="number" class="form-input" id="stationFormFreqNum" placeholder="93.1" step="0.1">
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label class="form-label">로고 텍스트</label>
+          <input type="text" class="form-input" id="stationFormLogo" placeholder="1FM" maxlength="4">
+        </div>
+        <div class="form-group">
+          <label class="form-label">제공사</label>
+          <input type="text" class="form-input" id="stationFormProvider" placeholder="KBS">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeStationModal()">취소</button>
+        <button class="btn btn-gold" onclick="saveStation()">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 앨범 사진 라이트박스 -->
+  <div class="lightbox hidden" id="photoLightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+    <div id="lightboxContent"></div>
+  </div>
+
+  <div id="toastContainer"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
   <script>
-    const SUPABASE_URL = 'https://ykwdotzdejoatepzqqst.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlrd2RvdHpkZWpvYXRlcHpxcXN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1NjgxMDIsImV4cCI6MjA1NDE0NDEwMn0.kMJNEeeOvIMLhB4BbFyK_S_SHUz46-YlTKOdoNaLfpk';
+    // === Supabase 설정 (index.html과 동일) ===
+    const SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const BUCKET = 'photo-albums';
 
-    const ADMIN_PASSWORD = '9633';
+    let ADMIN_PASSWORD = '9633';
+    let allUsers = {};
+    let allStations = [];
+    let appSettings = {};
+    let selectedTheme = 'wood';
 
+    const THEMES = [
+      { id: 'wood', name: '우드 클래식', color: '#8B6914' },
+      { id: 'cream', name: '레트로 크림', color: '#d4c5a9' },
+      { id: 'black', name: '미드나잇 블랙', color: '#333333' },
+      { id: 'military', name: '밀리터리', color: '#4a5e3a' },
+      { id: 'silver', name: '크롬 실버', color: '#a0a0b0' },
+      { id: 'cyber', name: '네온 사이버', color: '#00e5ff' },
+      { id: 'rose', name: '로즈 골드', color: '#e8a0b0' },
+      { id: 'maltese', name: '말티즈', color: '#f0ebe5' }
+    ];
+
+    const DEFAULT_STATIONS = [
+      {id:'kbs-1fm',name:'KBS 클래식FM',url:'https://1fm.gscdn.kbs.co.kr/1fm_192_2.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly8xZm0uZ3NjZG4ua2JzLmNvLmtyLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3Njc4Mjc3NjB9fX1dfQ__&Key-Pair-Id=APKAICDSGT3Y7IXGJ3TA&Signature=mXsMdZtv5pVJjKsZawW0ms8KkzrfYXBgWpi4HtpZO9TKLhUg22n6XIZkLrz2C4HftzhtPbG1vyByHlwHMzMlwXeXwjaxMkU4PNj2Wy-ubyRr8uP2zw41~8ZSCCGF5EV2OFhG1XH-88dD0nWrbSaUsij0SgZREDvrofiA6ip4xha4ZUAwH4vhP7GenNaJXu99DlZYuMfx5o7errctTKY-U6gppCruRl00NCpaOwJTVrwKVc5RnZSs2goGc~uqY8OQZuRwcp1cFTkqCt83FMlIiMKXItPvj8S8x2knhY4cXv1uAyTdKbmHEKTU-lfZVXzmq~NNf5Z0XUC7kLSe90dY3Q__',freq:'93.1 MHz',freqNum:93.1,logoText:'1FM',provider:'KBS'},
+      {id:'ebs-fm',name:'EBS FM',url:'https://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8',freq:'104.5 MHz',freqNum:104.5,logoText:'EBS',provider:'EBS'},
+      {id:'gwangju-mbc-fm',name:'광주MBC FM',url:'https://media.kjmbc.co.kr/hls/fmlive/GWANGJU-MBC-FM/playlist.m3u8',freq:'93.9 MHz',freqNum:93.9,logoText:'MBC',provider:'MBC'},
+      {id:'sbs-powerfm',name:'SBS 파워FM',url:'https://radiolive.sbs.co.kr/powerpc/powerfm.stream/playlist.m3u8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3Njc2OTc5ODksInBhdGgiOiIvcG93ZXJmbS5zdHJlYW0iLCJkdXJhdGlvbiI6LTEsInVubyI6IjNlZjRmZDA1LTZiYWQtNGYwOC1hMzYzLTBjNjkxMjUyZTEyNiIsImlhdCI6MTc2NzY1NDc4OX0.R-HyadR3JwB4rXJwXBqP33GX4RslvtM0dHb92hBHjo4',freq:'107.7 MHz',freqNum:107.7,logoText:'SBS',provider:'SBS'},
+      {id:'ytn-radio',name:'YTN 라디오',url:'https://radiolive.ytn.co.kr/radio/_definst_/20211118_fmlive/playlist.m3u8',freq:'94.5 MHz',freqNum:94.5,logoText:'YTN',provider:'YTN'},
+      {id:'tbs-fm',name:'TBS FM',url:'https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8',freq:'95.1 MHz',freqNum:95.1,logoText:'TBS',provider:'TBS'},
+      {id:'cbs-music',name:'CBS 음악FM',url:'https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8',freq:'93.9 MHz',freqNum:93.9,logoText:'M',provider:'CBS'},
+      {id:'cbs-std',name:'CBS 표준FM',url:'https://aac.cbs.co.kr/cbs981/_definst_/cbs981.stream/playlist.m3u8',freq:'98.1 MHz',freqNum:98.1,logoText:'CBS',provider:'CBS'},
+      {id:'febc',name:'극동방송',url:'http://mlive2.febc.net:1935/live/seoulfm/playlist.m3u8',freq:'106.9 MHz',freqNum:106.9,logoText:'극동',provider:'FEBC'},
+      {id:'bbs',name:'BBS 불교방송',url:'https://bbslive.clouducs.com/bbsradio-live/livestream/playlist.m3u8',freq:'101.9 MHz',freqNum:101.9,logoText:'BBS',provider:'BBS'},
+      {id:'cpbc',name:'CPBC 평화방송',url:'https://stream.cpbc.co.kr/cpbc_live/live/playlist.m3u8',freq:'105.3 MHz',freqNum:105.3,logoText:'평화',provider:'CPBC'},
+      {id:'tbn',name:'TBN 교통방송',url:'http://radio2.tbn.or.kr:1935/gyeongin/myStream/playlist.m3u8',freq:'95.1 MHz',freqNum:95.1,logoText:'TBN',provider:'TBN'},
+      {id:'obs',name:'OBS 라디오',url:'https://vod3.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8',freq:'90.3 MHz',freqNum:90.3,logoText:'OBS',provider:'OBS'},
+      {id:'knn',name:'KNN 러브FM',url:'https://stream1.knn.co.kr/hls/b3y26uu6471k8tes9w7h_lfm/index.m3u8',freq:'99.9 MHz',freqNum:99.9,logoText:'KNN',provider:'KNN'},
+      {id:'arirang',name:'Arirang Radio',url:'http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8',freq:'101.3 MHz',freqNum:101.3,logoText:'ARI',provider:'아리랑'}
+    ];
+
+    // === 유틸리티 ===
+    function toSafePath(str) {
+      return str.split('').map(function(c) {
+        var code = c.charCodeAt(0);
+        if ((code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122) || c === '-' || c === '_') return c;
+        return '_' + code.toString(16) + '_';
+      }).join('');
+    }
+
+    function showToast(msg) {
+      var el = document.createElement('div');
+      el.className = 'toast';
+      el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(function() { el.remove(); }, 3000);
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // === 로그인/로그아웃 ===
     function adminLogin() {
-      const password = document.getElementById('adminPassword').value;
-      const messageEl = document.getElementById('loginMessage');
+      var password = document.getElementById('adminPassword').value;
+      var messageEl = document.getElementById('loginMessage');
 
       if (password === ADMIN_PASSWORD) {
         sessionStorage.setItem('adminLoggedIn', 'true');
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminPanel').classList.add('active');
-        loadAdminData();
+        loadDashboard();
       } else {
         messageEl.className = 'message error';
         messageEl.textContent = '비밀번호가 올바르지 않습니다.';
@@ -424,96 +1107,662 @@
       document.getElementById('loginMessage').className = 'message';
     }
 
-    async function loadUsersFromCloud() {
-      try {
-        const { data, error } = await supabase.storage.from('photo-albums').download('_system/users.json');
-        if (data) {
-          const text = await data.text();
-          return JSON.parse(text);
-        }
-      } catch(e) { console.log('클라우드 사용자 로드 실패:', e); }
-      return JSON.parse(localStorage.getItem('radioUsers') || '{}');
-    }
-
-    async function saveUsersToCloud(users) {
-      try {
-        const blob = new Blob([JSON.stringify(users)], {type: 'application/json'});
-        await supabase.storage.from('photo-albums').upload('_system/users.json', blob, { upsert: true });
-        localStorage.setItem('radioUsers', JSON.stringify(users));
-      } catch(e) { console.log('클라우드 사용자 저장 실패:', e); }
-    }
-
-    async function loadAdminData() {
-      // 클라우드에서 사용자 목록 가져오기
-      const users = await loadUsersFromCloud();
-      const userNames = Object.keys(users);
-      document.getElementById('userCount').textContent = userNames.length;
-
-      // 사진첩 개수 가져오기
-      let totalAlbums = 0;
-      const userListEl = document.getElementById('userList');
-      userListEl.innerHTML = '';
-
-      for (const name of userNames) {
-        const safeName = toSafePath(name);
-        let albumCount = 0;
-
-        try {
-          const { data, error } = await supabase.storage.from('photo-albums').list(safeName);
-          if (data && !error) {
-            albumCount = data.filter(item => item.id).length;
-          }
-        } catch (e) {
-          console.log('Error loading albums for', name);
-        }
-
-        totalAlbums += albumCount;
-
-        const userItem = document.createElement('div');
-        userItem.className = 'user-item';
-        userItem.innerHTML = `
-          <div>
-            <div class="user-name">${name}</div>
-            <div class="user-albums">사진첩 ${albumCount}개</div>
-          </div>
-          <button class="delete-btn" onclick="deleteUser('${name}')">삭제</button>
-        `;
-        userListEl.appendChild(userItem);
-      }
-
-      document.getElementById('albumCount').textContent = totalAlbums;
-    }
-
-    async function deleteUser(userName) {
-      if (!confirm(`"${userName}" 사용자를 삭제하시겠습니까?`)) return;
-
-      const users = await loadUsersFromCloud();
-      delete users[userName];
-      await saveUsersToCloud(users);
-      loadAdminData();
-    }
-
-    function toSafePath(str) {
-      return str.split('').map(function(c) {
-        var code = c.charCodeAt(0);
-        if ((code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122) || c === '-' || c === '_') {
-          return c;
-        }
-        return '_' + code.toString(16) + '_';
-      }).join('');
-    }
-
-    // 엔터키로 로그인
     document.getElementById('adminPassword').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') adminLogin();
     });
 
-    // 세션 체크
-    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-      document.getElementById('loginSection').style.display = 'none';
-      document.getElementById('adminPanel').classList.add('active');
-      loadAdminData();
+    // === 탭 전환 ===
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.tab === tabName);
+      });
+      document.querySelectorAll('.tab-content').forEach(function(tab) {
+        tab.classList.remove('active');
+      });
+      var target = document.getElementById('tab-' + tabName);
+      if (target) target.classList.add('active');
+
+      if (tabName === 'dashboard') loadDashboard();
+      if (tabName === 'users') loadUsersTab();
+      if (tabName === 'stations') loadStationsTab();
+      if (tabName === 'settings') loadSettingsTab();
     }
+
+    // === Supabase 데이터 함수 ===
+    async function loadUsersFromCloud() {
+      try {
+        var r = await supabase.storage.from(BUCKET).download('_system/users.json');
+        if (r.data) {
+          var text = await r.data.text();
+          return JSON.parse(text);
+        }
+      } catch(e) { console.log('사용자 로드 실패:', e); }
+      return {};
+    }
+
+    async function saveUsersToCloud(users) {
+      try {
+        var blob = new Blob([JSON.stringify(users)], {type: 'application/json'});
+        await supabase.storage.from(BUCKET).upload('_system/users.json', blob, { upsert: true });
+      } catch(e) { console.log('사용자 저장 실패:', e); }
+    }
+
+    async function loadStationsFromCloud() {
+      try {
+        var r = await supabase.storage.from(BUCKET).download('_system/stations.json');
+        if (r.data) {
+          var text = await r.data.text();
+          var parsed = JSON.parse(text);
+          if (parsed && parsed.length > 0) return parsed;
+        }
+      } catch(e) { console.log('방송국 로드 실패:', e); }
+      return null;
+    }
+
+    async function saveStationsToCloud(stations) {
+      var blob = new Blob([JSON.stringify(stations)], {type: 'application/json'});
+      await supabase.storage.from(BUCKET).upload('_system/stations.json', blob, { upsert: true });
+    }
+
+    async function loadSettingsFromCloud() {
+      try {
+        var r = await supabase.storage.from(BUCKET).download('_system/settings.json');
+        if (r.data) {
+          var text = await r.data.text();
+          return JSON.parse(text);
+        }
+      } catch(e) {}
+      return { welcomeMessage: '', defaultTheme: 'wood', adminPassword: '9633' };
+    }
+
+    async function saveSettingsToCloud(settings) {
+      var blob = new Blob([JSON.stringify(settings)], {type: 'application/json'});
+      await supabase.storage.from(BUCKET).upload('_system/settings.json', blob, { upsert: true });
+    }
+
+    // ========================================
+    //  대시보드 탭
+    // ========================================
+    var dashboardLoaded = false;
+
+    async function loadDashboard() {
+      if (dashboardLoaded) return;
+
+      // 사용자 로드
+      allUsers = await loadUsersFromCloud();
+      var userNames = Object.keys(allUsers);
+      document.getElementById('statUsers').textContent = userNames.length;
+
+      // Supabase 상태
+      document.getElementById('statusSupabase').className = 'status-dot online';
+      document.getElementById('statusSupabaseText').textContent = '연결됨';
+
+      // 방송국 로드
+      var cloudStations = await loadStationsFromCloud();
+      allStations = cloudStations || DEFAULT_STATIONS;
+      document.getElementById('statStations').textContent = allStations.length;
+
+      if (cloudStations) {
+        document.getElementById('statusStations').className = 'status-dot online';
+        document.getElementById('statusStationsText').textContent = '클라우드';
+      } else {
+        document.getElementById('statusStations').className = 'status-dot offline';
+        document.getElementById('statusStationsText').textContent = '기본값 사용';
+      }
+
+      // 앨범/사진 수 집계
+      var totalAlbums = 0;
+      var totalPhotos = 0;
+      var userAlbumData = [];
+
+      for (var i = 0; i < userNames.length; i++) {
+        var name = userNames[i];
+        var safeName = toSafePath(name);
+        var albumCount = 0;
+        var photoCount = 0;
+
+        try {
+          var res = await supabase.storage.from(BUCKET).list(safeName);
+          if (res.data) {
+            for (var j = 0; j < res.data.length; j++) {
+              var item = res.data[j];
+              if (!item.id) {
+                albumCount++;
+                try {
+                  var filesRes = await supabase.storage.from(BUCKET).list(safeName + '/' + item.name);
+                  if (filesRes.data) photoCount += filesRes.data.filter(function(f) { return f.id; }).length;
+                } catch(e) {}
+              }
+            }
+          }
+        } catch(e) {}
+
+        totalAlbums += albumCount;
+        totalPhotos += photoCount;
+        userAlbumData.push({ name: name, albums: albumCount });
+      }
+
+      document.getElementById('statAlbums').textContent = totalAlbums;
+      document.getElementById('statPhotos').textContent = totalPhotos;
+
+      // 바 차트 렌더링
+      renderAlbumChart(userAlbumData);
+
+      // 설정 로드
+      appSettings = await loadSettingsFromCloud();
+      if (appSettings.adminPassword) ADMIN_PASSWORD = appSettings.adminPassword;
+
+      dashboardLoaded = true;
+    }
+
+    function renderAlbumChart(data) {
+      var container = document.getElementById('albumChart');
+      if (!data || data.length === 0) {
+        container.innerHTML = '<div class="chart-empty">사용자 데이터가 없습니다</div>';
+        return;
+      }
+
+      var maxAlbums = Math.max.apply(null, data.map(function(d) { return d.albums; }));
+      if (maxAlbums === 0) maxAlbums = 1;
+
+      var html = '<div class="chart-title">사용자별 앨범 수</div><div class="bar-chart">';
+      for (var i = 0; i < data.length; i++) {
+        var pct = (data[i].albums / maxAlbums) * 100;
+        html += '<div class="bar-col" style="height:' + Math.max(pct, 4) + '%">'
+          + '<div class="bar-value">' + data[i].albums + '</div>'
+          + '<div class="bar-label">' + escapeHtml(data[i].name) + '</div>'
+          + '</div>';
+      }
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // ========================================
+    //  사용자/앨범 탭
+    // ========================================
+    var usersTabLoaded = false;
+
+    async function loadUsersTab() {
+      if (!allUsers || Object.keys(allUsers).length === 0) {
+        allUsers = await loadUsersFromCloud();
+      }
+      renderUserList(Object.keys(allUsers));
+      usersTabLoaded = true;
+    }
+
+    function filterUsers() {
+      var query = document.getElementById('userSearch').value.toLowerCase();
+      var filtered = Object.keys(allUsers).filter(function(name) {
+        return name.toLowerCase().indexOf(query) !== -1;
+      });
+      renderUserList(filtered);
+    }
+
+    function renderUserList(userNames) {
+      var container = document.getElementById('userList');
+      if (userNames.length === 0) {
+        container.innerHTML = '<div class="chart-empty">사용자가 없습니다</div>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < userNames.length; i++) {
+        var name = userNames[i];
+        html += '<div class="user-item" id="user-' + i + '">'
+          + '<div class="user-row" onclick="toggleUserDetail(' + i + ',\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">'
+          + '<div class="user-info">'
+          + '<div class="user-avatar">' + escapeHtml(name.charAt(0)) + '</div>'
+          + '<div><div class="user-name">' + escapeHtml(name) + '</div>'
+          + '<div class="user-meta" id="userMeta-' + i + '">불러오는 중...</div></div>'
+          + '</div>'
+          + '<div class="user-actions">'
+          + '<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteUser(\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">삭제</button>'
+          + '<span class="expand-arrow">&#9660;</span>'
+          + '</div></div>'
+          + '<div class="user-detail" id="userDetail-' + i + '">'
+          + '<div class="loading"><div class="spinner"></div></div>'
+          + '</div></div>';
+      }
+      container.innerHTML = html;
+
+      // 앨범 수 비동기 로드
+      for (var j = 0; j < userNames.length; j++) {
+        loadUserMeta(j, userNames[j]);
+      }
+    }
+
+    async function loadUserMeta(index, userName) {
+      var safeName = toSafePath(userName);
+      var albumCount = 0;
+      try {
+        var res = await supabase.storage.from(BUCKET).list(safeName);
+        if (res.data) albumCount = res.data.filter(function(item) { return !item.id; }).length;
+      } catch(e) {}
+      var metaEl = document.getElementById('userMeta-' + index);
+      if (metaEl) metaEl.textContent = '앨범 ' + albumCount + '개';
+    }
+
+    async function toggleUserDetail(index, userName) {
+      var item = document.getElementById('user-' + index);
+      if (!item) return;
+
+      if (item.classList.contains('expanded')) {
+        item.classList.remove('expanded');
+        return;
+      }
+
+      item.classList.add('expanded');
+      var detail = document.getElementById('userDetail-' + index);
+
+      var safeName = toSafePath(userName);
+      try {
+        var res = await supabase.storage.from(BUCKET).list(safeName);
+        if (!res.data || res.data.length === 0) {
+          detail.innerHTML = '<div style="padding:12px;color:rgba(212,175,105,0.5);font-size:12px;">앨범이 없습니다</div>';
+          return;
+        }
+
+        var albums = res.data.filter(function(item) { return !item.id; });
+        if (albums.length === 0) {
+          detail.innerHTML = '<div style="padding:12px;color:rgba(212,175,105,0.5);font-size:12px;">앨범이 없습니다</div>';
+          return;
+        }
+
+        var html = '<div class="album-grid">';
+        for (var i = 0; i < albums.length; i++) {
+          var albumName = albums[i].name;
+          var albumPath = safeName + '/' + albumName;
+          html += '<div class="album-card" onclick="viewAlbumPhotos(\'' + albumPath + '\')">'
+            + '<div class="album-thumb" id="thumb-' + index + '-' + i + '"></div>'
+            + '<div class="album-name">' + escapeHtml(albumName) + '</div>'
+            + '</div>';
+        }
+        html += '</div>';
+        detail.innerHTML = html;
+
+        // 썸네일 로드
+        for (var j = 0; j < albums.length; j++) {
+          loadAlbumThumb(index, j, safeName + '/' + albums[j].name);
+        }
+      } catch(e) {
+        detail.innerHTML = '<div style="padding:12px;color:#ff6464;font-size:12px;">로드 실패</div>';
+      }
+    }
+
+    async function loadAlbumThumb(userIdx, albumIdx, albumPath) {
+      try {
+        var res = await supabase.storage.from(BUCKET).list(albumPath);
+        if (res.data && res.data.length > 0) {
+          var firstFile = res.data.find(function(f) { return f.id; });
+          if (firstFile) {
+            var pubUrl = supabase.storage.from(BUCKET).getPublicUrl(albumPath + '/' + firstFile.name);
+            var thumbEl = document.getElementById('thumb-' + userIdx + '-' + albumIdx);
+            if (thumbEl) thumbEl.innerHTML = '<img src="' + pubUrl.data.publicUrl + '" alt="">';
+          }
+        }
+      } catch(e) {}
+
+      var thumbEl = document.getElementById('thumb-' + userIdx + '-' + albumIdx);
+      if (thumbEl && !thumbEl.innerHTML) {
+        thumbEl.style.display = 'flex';
+        thumbEl.style.alignItems = 'center';
+        thumbEl.style.justifyContent = 'center';
+        thumbEl.style.color = 'rgba(212,175,105,0.3)';
+        thumbEl.style.fontSize = '20px';
+        thumbEl.textContent = '📷';
+      }
+    }
+
+    async function viewAlbumPhotos(albumPath) {
+      var lightbox = document.getElementById('photoLightbox');
+      var content = document.getElementById('lightboxContent');
+      content.innerHTML = '<div class="loading"><div class="spinner"></div>사진 불러오는 중...</div>';
+      lightbox.classList.remove('hidden');
+
+      try {
+        var res = await supabase.storage.from(BUCKET).list(albumPath);
+        if (!res.data || res.data.length === 0) {
+          content.innerHTML = '<div style="color:white;text-align:center;">사진이 없습니다</div>';
+          return;
+        }
+
+        var files = res.data.filter(function(f) { return f.id; });
+        var html = '<div class="lightbox-grid">';
+        for (var i = 0; i < files.length; i++) {
+          var pubUrl = supabase.storage.from(BUCKET).getPublicUrl(albumPath + '/' + files[i].name);
+          html += '<img src="' + pubUrl.data.publicUrl + '" alt="" onclick="event.stopPropagation()">';
+        }
+        html += '</div>';
+        content.innerHTML = html;
+      } catch(e) {
+        content.innerHTML = '<div style="color:#ff6464;text-align:center;">로드 실패</div>';
+      }
+    }
+
+    function closeLightbox(e) {
+      if (e.target.tagName === 'IMG') return;
+      document.getElementById('photoLightbox').classList.add('hidden');
+    }
+
+    async function deleteUser(userName) {
+      if (!confirm('"' + userName + '" 사용자를 삭제하시겠습니까?\n관련 앨범과 사진도 함께 삭제됩니다.')) return;
+
+      showToast('삭제 중...');
+
+      // 사용자 파일 삭제
+      var safeName = toSafePath(userName);
+      try {
+        var res = await supabase.storage.from(BUCKET).list(safeName);
+        if (res.data) {
+          for (var i = 0; i < res.data.length; i++) {
+            var item = res.data[i];
+            var itemPath = safeName + '/' + item.name;
+            if (!item.id) {
+              // 폴더 - 하위 파일 삭제
+              var filesRes = await supabase.storage.from(BUCKET).list(itemPath);
+              if (filesRes.data && filesRes.data.length > 0) {
+                var filePaths = filesRes.data.map(function(f) { return itemPath + '/' + f.name; });
+                await supabase.storage.from(BUCKET).remove(filePaths);
+              }
+            } else {
+              await supabase.storage.from(BUCKET).remove([itemPath]);
+            }
+          }
+        }
+      } catch(e) { console.log('파일 삭제 오류:', e); }
+
+      // 사용자 목록에서 제거
+      delete allUsers[userName];
+      await saveUsersToCloud(allUsers);
+
+      showToast('"' + userName + '" 삭제 완료');
+      dashboardLoaded = false;
+      loadUsersTab();
+    }
+
+    // ========================================
+    //  라디오 방송 탭
+    // ========================================
+    async function loadStationsTab() {
+      if (allStations.length === 0) {
+        var cloud = await loadStationsFromCloud();
+        allStations = cloud || DEFAULT_STATIONS;
+      }
+      renderStationList();
+    }
+
+    function renderStationList() {
+      var container = document.getElementById('stationList');
+      if (allStations.length === 0) {
+        container.innerHTML = '<div class="chart-empty">등록된 방송국이 없습니다</div>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < allStations.length; i++) {
+        var s = allStations[i];
+        html += '<div class="station-item" id="station-' + i + '">'
+          + '<div class="station-logo">' + escapeHtml(s.logoText) + '</div>'
+          + '<div class="station-info">'
+          + '<div class="station-name">' + escapeHtml(s.name) + '</div>'
+          + '<div class="station-freq">' + escapeHtml(s.freq) + ' · ' + escapeHtml(s.provider) + '</div>'
+          + '</div>'
+          + '<div class="station-actions">'
+          + '<button class="btn btn-outline btn-sm" onclick="testStation(' + i + ')">테스트<span class="test-result" id="testResult-' + i + '"></span></button>'
+          + '<button class="btn btn-outline btn-sm" onclick="editStation(' + i + ')">수정</button>'
+          + '<button class="btn btn-danger btn-sm" onclick="deleteStation(' + i + ')">삭제</button>'
+          + '</div>'
+          + '<div class="order-btns">'
+          + '<button class="order-btn" onclick="moveStation(' + i + ',-1)">&#9650;</button>'
+          + '<button class="order-btn" onclick="moveStation(' + i + ',1)">&#9660;</button>'
+          + '</div>'
+          + '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    function openStationModal(editIndex) {
+      document.getElementById('stationModal').classList.remove('hidden');
+      document.getElementById('stationFormName').value = '';
+      document.getElementById('stationFormUrl').value = '';
+      document.getElementById('stationFormFreq').value = '';
+      document.getElementById('stationFormFreqNum').value = '';
+      document.getElementById('stationFormLogo').value = '';
+      document.getElementById('stationFormProvider').value = '';
+      document.getElementById('editStationId').value = '';
+      document.getElementById('stationModalTitle').textContent = '새 방송 추가';
+
+      if (editIndex !== undefined && allStations[editIndex]) {
+        var s = allStations[editIndex];
+        document.getElementById('stationModalTitle').textContent = '방송 수정';
+        document.getElementById('editStationId').value = editIndex;
+        document.getElementById('stationFormName').value = s.name;
+        document.getElementById('stationFormUrl').value = s.url;
+        document.getElementById('stationFormFreq').value = s.freq;
+        document.getElementById('stationFormFreqNum').value = s.freqNum;
+        document.getElementById('stationFormLogo').value = s.logoText;
+        document.getElementById('stationFormProvider').value = s.provider;
+      }
+    }
+
+    function closeStationModal() {
+      document.getElementById('stationModal').classList.add('hidden');
+    }
+
+    function editStation(index) {
+      openStationModal(index);
+    }
+
+    async function saveStation() {
+      var name = document.getElementById('stationFormName').value.trim();
+      var url = document.getElementById('stationFormUrl').value.trim();
+      var freq = document.getElementById('stationFormFreq').value.trim();
+      var freqNum = parseFloat(document.getElementById('stationFormFreqNum').value) || 0;
+      var logo = document.getElementById('stationFormLogo').value.trim();
+      var provider = document.getElementById('stationFormProvider').value.trim();
+
+      if (!name || !url) {
+        showToast('이름과 URL은 필수입니다');
+        return;
+      }
+
+      var editIndex = document.getElementById('editStationId').value;
+
+      var station = {
+        id: name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-'),
+        name: name,
+        url: url,
+        freq: freq || (freqNum + ' MHz'),
+        freqNum: freqNum,
+        logoText: logo || name.substring(0, 3),
+        provider: provider || ''
+      };
+
+      if (editIndex !== '') {
+        allStations[parseInt(editIndex)] = station;
+        showToast('방송 수정 완료');
+      } else {
+        allStations.push(station);
+        showToast('새 방송 추가 완료');
+      }
+
+      await saveStationsToCloud(allStations);
+      closeStationModal();
+      renderStationList();
+      dashboardLoaded = false;
+    }
+
+    async function deleteStation(index) {
+      if (!confirm('"' + allStations[index].name + '" 방송을 삭제하시겠습니까?')) return;
+      allStations.splice(index, 1);
+      await saveStationsToCloud(allStations);
+      renderStationList();
+      showToast('방송 삭제 완료');
+      dashboardLoaded = false;
+    }
+
+    async function moveStation(index, dir) {
+      var newIndex = index + dir;
+      if (newIndex < 0 || newIndex >= allStations.length) return;
+      var temp = allStations[index];
+      allStations[index] = allStations[newIndex];
+      allStations[newIndex] = temp;
+      await saveStationsToCloud(allStations);
+      renderStationList();
+    }
+
+    function testStation(index) {
+      var resultEl = document.getElementById('testResult-' + index);
+      resultEl.className = 'test-result test-loading';
+      resultEl.textContent = ' ...';
+
+      var url = allStations[index].url;
+      var audio = document.createElement('audio');
+      var hls = null;
+      var timeout = null;
+
+      function cleanup() {
+        clearTimeout(timeout);
+        if (hls) { hls.destroy(); hls = null; }
+        audio.pause();
+        audio.src = '';
+        audio.remove();
+      }
+
+      function onSuccess() {
+        cleanup();
+        resultEl.className = 'test-result test-ok';
+        resultEl.textContent = ' OK';
+        setTimeout(function() { resultEl.textContent = ''; resultEl.className = 'test-result'; }, 5000);
+      }
+
+      function onFail() {
+        cleanup();
+        resultEl.className = 'test-result test-fail';
+        resultEl.textContent = ' FAIL';
+        setTimeout(function() { resultEl.textContent = ''; resultEl.className = 'test-result'; }, 5000);
+      }
+
+      timeout = setTimeout(onFail, 10000);
+
+      if (url.includes('.m3u8') && Hls.isSupported()) {
+        hls = new Hls({ enableWorker: false });
+        hls.loadSource(url);
+        hls.attachMedia(audio);
+        hls.on(Hls.Events.MANIFEST_PARSED, onSuccess);
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          if (data.fatal) onFail();
+        });
+      } else {
+        audio.src = url;
+        audio.addEventListener('canplay', onSuccess);
+        audio.addEventListener('error', onFail);
+        audio.load();
+      }
+    }
+
+    async function seedDefaultStations() {
+      if (!confirm('현재 방송 목록을 기본값으로 초기화하시겠습니까?\n기존 수정 사항이 모두 사라집니다.')) return;
+      allStations = JSON.parse(JSON.stringify(DEFAULT_STATIONS));
+      await saveStationsToCloud(allStations);
+      renderStationList();
+      showToast('기본 방송국으로 초기화 완료');
+      dashboardLoaded = false;
+    }
+
+    // ========================================
+    //  설정 탭
+    // ========================================
+    var settingsTabLoaded = false;
+
+    async function loadSettingsTab() {
+      if (!settingsTabLoaded) {
+        appSettings = await loadSettingsFromCloud();
+        if (appSettings.adminPassword) ADMIN_PASSWORD = appSettings.adminPassword;
+      }
+
+      document.getElementById('welcomeMessage').value = appSettings.welcomeMessage || '';
+      selectedTheme = appSettings.defaultTheme || 'wood';
+      renderThemeGrid();
+      settingsTabLoaded = true;
+    }
+
+    function renderThemeGrid() {
+      var container = document.getElementById('themeGrid');
+      var html = '';
+      for (var i = 0; i < THEMES.length; i++) {
+        var t = THEMES[i];
+        var sel = t.id === selectedTheme ? ' selected' : '';
+        html += '<div class="theme-option' + sel + '" onclick="selectTheme(\'' + t.id + '\')">'
+          + '<div class="theme-dot-preview" style="background:' + t.color + '"></div>'
+          + '<div class="theme-name-label">' + escapeHtml(t.name) + '</div>'
+          + '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    function selectTheme(themeId) {
+      selectedTheme = themeId;
+      renderThemeGrid();
+    }
+
+    async function saveWelcomeMessage() {
+      appSettings.welcomeMessage = document.getElementById('welcomeMessage').value;
+      await saveSettingsToCloud(appSettings);
+      showToast('환영 메시지 저장 완료');
+    }
+
+    async function saveDefaultTheme() {
+      appSettings.defaultTheme = selectedTheme;
+      await saveSettingsToCloud(appSettings);
+      showToast('기본 테마 저장 완료');
+    }
+
+    async function changeAdminPassword() {
+      var current = document.getElementById('currentPw').value;
+      var newPw = document.getElementById('newPw').value;
+      var confirm2 = document.getElementById('confirmPw').value;
+
+      if (current !== ADMIN_PASSWORD) {
+        showToast('현재 비밀번호가 올바르지 않습니다');
+        return;
+      }
+      if (!newPw || newPw.length < 4) {
+        showToast('새 비밀번호는 4자 이상이어야 합니다');
+        return;
+      }
+      if (newPw !== confirm2) {
+        showToast('새 비밀번호가 일치하지 않습니다');
+        return;
+      }
+
+      ADMIN_PASSWORD = newPw;
+      appSettings.adminPassword = newPw;
+      await saveSettingsToCloud(appSettings);
+
+      document.getElementById('currentPw').value = '';
+      document.getElementById('newPw').value = '';
+      document.getElementById('confirmPw').value = '';
+      showToast('비밀번호 변경 완료');
+    }
+
+    // === 초기화 ===
+    (async function() {
+      // 페이지 로드 시 클라우드에서 관리자 비밀번호 먼저 로드
+      try {
+        var settings = await loadSettingsFromCloud();
+        if (settings && settings.adminPassword) {
+          ADMIN_PASSWORD = settings.adminPassword;
+        }
+        appSettings = settings;
+      } catch(e) { console.log('설정 로드 실패:', e); }
+
+      if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('active');
+        loadDashboard();
+      }
+    })();
   </script>
 </body>
 </html>
