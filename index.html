@@ -1,26 +1,2052 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>K-RADIO | 대한민국 실시간 라디오</title>
-
-  <!-- Google Fonts -->
+  <title>라디오카페 | 대한민국 실시간 라디오</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <!-- Beer CSS (ONLY CSS) -->
-  <link href="https://cdn.jsdelivr.net/npm/beercss@3.7.10/dist/cdn/beer.min.css" rel="stylesheet">
+    /* ============================================
+       7 RADIO DESIGN THEMES
+       ============================================ */
+
+    /* 1. Wood Classic (우드 클래식) */
+    :root, [data-theme="wood"] {
+      --bg: #1a1a2e;
+      --body-out1: #3a2a1a; --body-out2: #2a1c0e;
+      --body-in1: #2c1e10; --body-in2: #1e140a;
+      --texture-color: rgba(255,200,100,0.015);
+      --accent: #d4a862;
+      --accent-glow: rgba(212,168,98,0.5);
+      --btn-bg1: #3a2a1a; --btn-bg2: #2a1c10;
+      --btn-hi1: #4a3a28; --btn-hi2: #2a1c10;
+      --btn-active1: #5a4020; --btn-active2: #3a2a1a;
+      --btn-border: #1a120a;
+      --speaker-bg: #1a120a; --speaker-border: #0e0a06;
+      --mesh-color: rgba(200,180,140,0.12);
+      --lcd-bg: #0a1a0a;
+      --lcd-text: #3adf3a; --lcd-dim: #2a8a2a; --lcd-idle: #1a5a1a;
+      --lcd-glow: rgba(58,223,58,0.5);
+      --screw1: #5a4a38; --screw2: #3a2a1a; --screw-line: #1a120a;
+      --label-color: #8a7a6a; --freq-mark: #5a4a3a;
+      --tick-color: #4a3a2a;
+      --needle: #ff3333; --needle-glow: rgba(255,51,51,0.6);
+      --led-on: #00ff88; --led-glow: rgba(0,255,136,0.3);
+      --knob-ind: #d4a862;
+      --footer-color: #5a4a3a; --footer-link: #8a7a6a;
+      --antenna1: #8a7a6a; --antenna2: #c0b0a0;
+      --preset-num: #6a5a4a; --preset-name: #8a7a6a;
+      --power-icon: #8a7a6a;
+      --neon-border: #ff9933; --neon-glow: rgba(255,153,51,0.6);
+      --neon-light: rgba(255,180,100,0.35); --neon-light-glow: rgba(255,180,100,0.15);
+    }
+
+    /* 2. Retro Cream (레트로 크림) */
+    [data-theme="cream"] {
+      --bg: #d4c5a9;
+      --body-out1: #f5e6c8; --body-out2: #e8d5b0;
+      --body-in1: #ede0c8; --body-in2: #e2d1b0;
+      --texture-color: rgba(180,140,80,0.03);
+      --accent: #8b4513;
+      --accent-glow: rgba(139,69,19,0.4);
+      --btn-bg1: #e8d5b0; --btn-bg2: #d4c09a;
+      --btn-hi1: #f0e0c0; --btn-hi2: #d4c09a;
+      --btn-active1: #c9a96e; --btn-active2: #b89858;
+      --btn-border: #b89858;
+      --speaker-bg: #c9a96e; --speaker-border: #a88640;
+      --mesh-color: rgba(100,60,20,0.08);
+      --lcd-bg: #2a1a0a;
+      --lcd-text: #ffaa33; --lcd-dim: #aa6600; --lcd-idle: #885500;
+      --lcd-glow: rgba(255,170,51,0.5);
+      --screw1: #c9a96e; --screw2: #a88640; --screw-line: #8a6a30;
+      --label-color: #8b6e4e; --freq-mark: #a88640;
+      --tick-color: #b89858;
+      --needle: #cc0000; --needle-glow: rgba(204,0,0,0.5);
+      --led-on: #ff6600; --led-glow: rgba(255,102,0,0.3);
+      --knob-ind: #8b4513;
+      --footer-color: #a88640; --footer-link: #8b6e4e;
+      --antenna1: #a88640; --antenna2: #c9a96e;
+      --preset-num: #8b6e4e; --preset-name: #a88640;
+      --power-icon: #8b6e4e;
+      --neon-border: #ff6600; --neon-glow: rgba(255,102,0,0.5);
+      --neon-light: rgba(255,140,60,0.3); --neon-light-glow: rgba(255,140,60,0.12);
+    }
+
+    /* 3. Midnight Black (미드나잇 블랙) */
+    [data-theme="black"] {
+      --bg: #0a0a0a;
+      --body-out1: #222222; --body-out2: #111111;
+      --body-in1: #1a1a1a; --body-in2: #0e0e0e;
+      --texture-color: rgba(255,255,255,0.008);
+      --accent: #ffffff;
+      --accent-glow: rgba(255,255,255,0.3);
+      --btn-bg1: #1e1e1e; --btn-bg2: #0e0e0e;
+      --btn-hi1: #2a2a2a; --btn-hi2: #151515;
+      --btn-active1: #333333; --btn-active2: #1a1a1a;
+      --btn-border: #080808;
+      --speaker-bg: #0a0a0a; --speaker-border: #050505;
+      --mesh-color: rgba(255,255,255,0.04);
+      --lcd-bg: #000000;
+      --lcd-text: #ffffff; --lcd-dim: #666666; --lcd-idle: #333333;
+      --lcd-glow: rgba(255,255,255,0.3);
+      --screw1: #2a2a2a; --screw2: #1a1a1a; --screw-line: #080808;
+      --label-color: #555555; --freq-mark: #444444;
+      --tick-color: #333333;
+      --needle: #ff0044; --needle-glow: rgba(255,0,68,0.6);
+      --led-on: #ff0044; --led-glow: rgba(255,0,68,0.3);
+      --knob-ind: #ffffff;
+      --footer-color: #333333; --footer-link: #555555;
+      --antenna1: #444444; --antenna2: #666666;
+      --preset-num: #555555; --preset-name: #444444;
+      --power-icon: #555555;
+      --neon-border: #ff0044; --neon-glow: rgba(255,0,68,0.6);
+      --neon-light: rgba(255,80,120,0.3); --neon-light-glow: rgba(255,80,120,0.12);
+    }
+
+    /* 4. Military (밀리터리) */
+    [data-theme="military"] {
+      --bg: #1a2016;
+      --body-out1: #4a5540; --body-out2: #354030;
+      --body-in1: #3d4a34; --body-in2: #2e3828;
+      --texture-color: rgba(100,120,80,0.02);
+      --accent: #c8b400;
+      --accent-glow: rgba(200,180,0,0.4);
+      --btn-bg1: #3d4a34; --btn-bg2: #2e3828;
+      --btn-hi1: #4a5a40; --btn-hi2: #354530;
+      --btn-active1: #556840; --btn-active2: #3d4a34;
+      --btn-border: #1e2818;
+      --speaker-bg: #222c1e; --speaker-border: #1a2216;
+      --mesh-color: rgba(150,170,120,0.08);
+      --lcd-bg: #0a120a;
+      --lcd-text: #33ff33; --lcd-dim: #228822; --lcd-idle: #115511;
+      --lcd-glow: rgba(51,255,51,0.5);
+      --screw1: #5a6a4a; --screw2: #3d4a34; --screw-line: #1e2818;
+      --label-color: #7a8a6a; --freq-mark: #5a6a4a;
+      --tick-color: #4a5a3a;
+      --needle: #ff3300; --needle-glow: rgba(255,51,0,0.6);
+      --led-on: #33ff33; --led-glow: rgba(51,255,51,0.3);
+      --knob-ind: #c8b400;
+      --footer-color: #4a5a3a; --footer-link: #7a8a6a;
+      --antenna1: #5a6a4a; --antenna2: #8a9a7a;
+      --preset-num: #7a8a6a; --preset-name: #6a7a5a;
+      --power-icon: #7a8a6a;
+      --neon-border: #39ff14; --neon-glow: rgba(57,255,20,0.5);
+      --neon-light: rgba(120,255,80,0.3); --neon-light-glow: rgba(120,255,80,0.12);
+    }
+
+    /* 5. Chrome Silver (크롬 실버) */
+    [data-theme="silver"] {
+      --bg: #2a2a3a;
+      --body-out1: #c0c0cc; --body-out2: #9a9aaa;
+      --body-in1: #b0b0be; --body-in2: #8a8a9a;
+      --texture-color: rgba(255,255,255,0.02);
+      --accent: #1a1a2a;
+      --accent-glow: rgba(26,26,42,0.3);
+      --btn-bg1: #a0a0b0; --btn-bg2: #808090;
+      --btn-hi1: #b8b8c8; --btn-hi2: #909098;
+      --btn-active1: #7070a0; --btn-active2: #5a5a80;
+      --btn-border: #6a6a7a;
+      --speaker-bg: #5a5a6a; --speaker-border: #4a4a5a;
+      --mesh-color: rgba(200,200,220,0.1);
+      --lcd-bg: #0a0a1a;
+      --lcd-text: #44aaff; --lcd-dim: #2266aa; --lcd-idle: #114488;
+      --lcd-glow: rgba(68,170,255,0.5);
+      --screw1: #c8c8d8; --screw2: #a0a0b0; --screw-line: #6a6a7a;
+      --label-color: #4a4a5a; --freq-mark: #5a5a6a;
+      --tick-color: #6a6a7a;
+      --needle: #ff2222; --needle-glow: rgba(255,34,34,0.6);
+      --led-on: #44aaff; --led-glow: rgba(68,170,255,0.3);
+      --knob-ind: #1a1a2a;
+      --footer-color: #6a6a7a; --footer-link: #4a4a5a;
+      --antenna1: #9a9aaa; --antenna2: #d0d0dd;
+      --preset-num: #4a4a5a; --preset-name: #5a5a6a;
+      --power-icon: #4a4a5a;
+      --neon-border: #4488ff; --neon-glow: rgba(68,136,255,0.5);
+      --neon-light: rgba(120,170,255,0.3); --neon-light-glow: rgba(120,170,255,0.12);
+    }
+
+    /* 6. Neon Cyber (네온 사이버) */
+    [data-theme="cyber"] {
+      --bg: #05050f;
+      --body-out1: #15152a; --body-out2: #0a0a18;
+      --body-in1: #101025; --body-in2: #08081a;
+      --texture-color: rgba(0,200,255,0.008);
+      --accent: #00e5ff;
+      --accent-glow: rgba(0,229,255,0.5);
+      --btn-bg1: #12122a; --btn-bg2: #0a0a1a;
+      --btn-hi1: #1a1a38; --btn-hi2: #0e0e22;
+      --btn-active1: #1a1a48; --btn-active2: #101030;
+      --btn-border: #0a0a18;
+      --speaker-bg: #08081a; --speaker-border: #050510;
+      --mesh-color: rgba(0,229,255,0.06);
+      --lcd-bg: #020210;
+      --lcd-text: #00e5ff; --lcd-dim: #006688; --lcd-idle: #004455;
+      --lcd-glow: rgba(0,229,255,0.6);
+      --screw1: #1a1a38; --screw2: #101025; --screw-line: #050510;
+      --label-color: #006688; --freq-mark: #005566;
+      --tick-color: #004455;
+      --needle: #ff00aa; --needle-glow: rgba(255,0,170,0.7);
+      --led-on: #ff00aa; --led-glow: rgba(255,0,170,0.4);
+      --knob-ind: #00e5ff;
+      --footer-color: #004455; --footer-link: #006688;
+      --antenna1: #006688; --antenna2: #00aacc;
+      --preset-num: #006688; --preset-name: #005566;
+      --power-icon: #006688;
+      --neon-border: #00e5ff; --neon-glow: rgba(0,229,255,0.6);
+      --neon-light: rgba(80,230,255,0.3); --neon-light-glow: rgba(80,230,255,0.12);
+    }
+
+    /* 7. Rose Gold (로즈 골드) */
+    [data-theme="rose"] {
+      --bg: #1a1018;
+      --body-out1: #8a6070; --body-out2: #6a4050;
+      --body-in1: #7a5565; --body-in2: #5a3545;
+      --texture-color: rgba(255,180,200,0.015);
+      --accent: #ffc8d0;
+      --accent-glow: rgba(255,200,208,0.4);
+      --btn-bg1: #6a4858; --btn-bg2: #5a3545;
+      --btn-hi1: #7a5565; --btn-hi2: #5a3a4a;
+      --btn-active1: #8a5a6a; --btn-active2: #6a4858;
+      --btn-border: #3a2030;
+      --speaker-bg: #3a2030; --speaker-border: #2a1520;
+      --mesh-color: rgba(255,200,208,0.06);
+      --lcd-bg: #120810;
+      --lcd-text: #ff88aa; --lcd-dim: #993366; --lcd-idle: #662244;
+      --lcd-glow: rgba(255,136,170,0.5);
+      --screw1: #8a6878; --screw2: #6a4858; --screw-line: #3a2030;
+      --label-color: #aa8898; --freq-mark: #7a5868;
+      --tick-color: #6a4858;
+      --needle: #ff4488; --needle-glow: rgba(255,68,136,0.6);
+      --led-on: #ff88aa; --led-glow: rgba(255,136,170,0.3);
+      --knob-ind: #ffc8d0;
+      --footer-color: #6a4858; --footer-link: #aa8898;
+      --antenna1: #8a6878; --antenna2: #bb99aa;
+      --preset-num: #aa8898; --preset-name: #8a6878;
+      --power-icon: #aa8898;
+      --neon-border: #ff44aa; --neon-glow: rgba(255,68,170,0.6);
+      --neon-light: rgba(255,130,200,0.3); --neon-light-glow: rgba(255,130,200,0.12);
+    }
+
+    /* ============================================
+       MATERIAL TEXTURES per theme
+       ============================================ */
+
+    /* 1. Wood - 나무결 (Woodgrain) */
+    [data-theme="wood"] .radio-inner::before {
+      background:
+        /* knot */
+        radial-gradient(ellipse 18px 30px at 25% 40%, rgba(180,120,50,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 14px 22px at 72% 65%, rgba(180,120,50,0.05) 0%, transparent 70%),
+        /* grain lines */
+        repeating-linear-gradient(92deg, transparent, transparent 2px, rgba(255,200,100,0.025) 2px, rgba(255,200,100,0.025) 4px),
+        repeating-linear-gradient(88deg, transparent, transparent 5px, rgba(200,150,60,0.018) 5px, rgba(200,150,60,0.018) 7px),
+        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(160,100,30,0.02) 11px, rgba(160,100,30,0.02) 12px);
+    }
+    [data-theme="wood"] .speaker-mesh {
+      background-image:
+        radial-gradient(circle, rgba(200,180,140,0.14) 1px, transparent 1px);
+      background-size: 6px 6px;
+    }
+    [data-theme="wood"] .radio {
+      border-radius: 24px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.6),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* 2. Cream - 가죽 (Leather) */
+    [data-theme="cream"] .radio-inner::before {
+      background:
+        /* leather pebble bumps */
+        radial-gradient(circle 2px at 30% 30%, rgba(120,70,20,0.06), transparent 50%),
+        radial-gradient(circle 3px at 70% 60%, rgba(120,70,20,0.05), transparent 50%),
+        radial-gradient(circle 2px at 50% 80%, rgba(120,70,20,0.04), transparent 50%),
+        /* pebble pattern */
+        radial-gradient(ellipse 4px 3px at 20% 20%, rgba(100,50,10,0.04), transparent 70%),
+        radial-gradient(ellipse 3px 4px at 60% 40%, rgba(100,50,10,0.035), transparent 70%),
+        radial-gradient(ellipse 4px 3px at 80% 70%, rgba(100,50,10,0.04), transparent 70%),
+        radial-gradient(ellipse 3px 4px at 40% 90%, rgba(100,50,10,0.03), transparent 70%),
+        /* fine grain */
+        repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(80,40,10,0.012) 1px, rgba(80,40,10,0.012) 2px),
+        repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(80,40,10,0.01) 1px, rgba(80,40,10,0.01) 2px);
+    }
+    [data-theme="cream"] .radio {
+      border-radius: 28px;
+      box-shadow:
+        0 30px 60px rgba(80,50,20,0.3),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    /* Stitching effect */
+    [data-theme="cream"] .radio-inner {
+      border: 2px solid rgba(139,69,19,0.15);
+      outline: 2px dashed rgba(139,69,19,0.12);
+      outline-offset: 4px;
+    }
+    [data-theme="cream"] .speaker-mesh {
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(100,60,20,0.06) 3px, rgba(100,60,20,0.06) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(100,60,20,0.06) 3px, rgba(100,60,20,0.06) 4px);
+      background-size: 4px 4px;
+    }
+
+    /* 3. Black - 카본 파이버 (Carbon Fiber) */
+    [data-theme="black"] .radio-inner::before {
+      background:
+        /* carbon weave */
+        repeating-linear-gradient(
+          45deg,
+          transparent, transparent 4px,
+          rgba(255,255,255,0.02) 4px, rgba(255,255,255,0.02) 5px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          transparent, transparent 4px,
+          rgba(255,255,255,0.015) 4px, rgba(255,255,255,0.015) 5px
+        ),
+        /* cross-fiber shimmer */
+        repeating-linear-gradient(
+          45deg,
+          rgba(255,255,255,0.01) 0px, transparent 1px,
+          transparent 3px, rgba(255,255,255,0.008) 4px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(255,255,255,0.01) 0px, transparent 1px,
+          transparent 3px, rgba(255,255,255,0.008) 4px
+        );
+      background-size: 8px 8px, 8px 8px, 8px 8px, 8px 8px;
+    }
+    [data-theme="black"] .radio {
+      border-radius: 18px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.8),
+        0 0 10px var(--neon-glow),
+        0 0 25px var(--neon-glow),
+        inset 0 0 10px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    [data-theme="black"] .speaker-mesh {
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.06) 0.5px, transparent 0.5px);
+      background-size: 4px 4px;
+    }
+    [data-theme="black"] .screw {
+      background: linear-gradient(145deg, #333, #111);
+      border-color: #080808;
+    }
+    [data-theme="black"] .screw::after { background: #050505; }
+
+    /* 4. Military - 캔버스 (Canvas Fabric) */
+    [data-theme="military"] .radio-inner::before {
+      background:
+        /* canvas weave horizontal */
+        repeating-linear-gradient(
+          0deg,
+          transparent, transparent 2px,
+          rgba(150,170,120,0.025) 2px, rgba(150,170,120,0.025) 3px,
+          transparent 3px, transparent 5px
+        ),
+        /* canvas weave vertical */
+        repeating-linear-gradient(
+          90deg,
+          transparent, transparent 2px,
+          rgba(140,160,110,0.02) 2px, rgba(140,160,110,0.02) 3px,
+          transparent 3px, transparent 5px
+        ),
+        /* coarser fabric overlay */
+        repeating-linear-gradient(
+          0deg,
+          transparent, transparent 8px,
+          rgba(100,130,70,0.015) 8px, rgba(100,130,70,0.015) 9px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent, transparent 8px,
+          rgba(100,130,70,0.012) 8px, rgba(100,130,70,0.012) 9px
+        );
+    }
+    [data-theme="military"] .radio {
+      border-radius: 12px;
+      box-shadow:
+        0 25px 50px rgba(0,0,0,0.5),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    [data-theme="military"] .radio-inner { border-radius: 10px; }
+    [data-theme="military"] .speaker-mesh {
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(150,170,120,0.07) 2px, rgba(150,170,120,0.07) 3px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(150,170,120,0.07) 2px, rgba(150,170,120,0.07) 3px);
+      background-size: 5px 5px;
+    }
+    [data-theme="military"] .speaker-grille { border-radius: 6px; }
+    [data-theme="military"] .lcd-display { border-radius: 4px; }
+    [data-theme="military"] .preset-btn { border-radius: 4px; }
+
+    /* 5. Silver - 브러시드 메탈 (Brushed Aluminum) */
+    [data-theme="silver"] .radio-inner::before {
+      background:
+        /* fine brush strokes horizontal */
+        repeating-linear-gradient(
+          0deg,
+          transparent, transparent 1px,
+          rgba(255,255,255,0.015) 1px, rgba(255,255,255,0.015) 2px
+        ),
+        /* slightly thicker brush strokes */
+        repeating-linear-gradient(
+          2deg,
+          transparent, transparent 3px,
+          rgba(255,255,255,0.02) 3px, rgba(255,255,255,0.02) 4px
+        ),
+        /* highlight sheen */
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,0.06) 0%,
+          transparent 15%,
+          transparent 60%,
+          rgba(255,255,255,0.03) 100%
+        ),
+        /* subtle color variation */
+        radial-gradient(ellipse at 30% 0%, rgba(255,255,255,0.04), transparent 50%);
+    }
+    [data-theme="silver"] .radio {
+      border-radius: 20px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.4),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    [data-theme="silver"] .radio-inner {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    [data-theme="silver"] .speaker-mesh {
+      background-image:
+        radial-gradient(circle, rgba(200,200,220,0.12) 1px, transparent 1px);
+      background-size: 5px 5px;
+    }
+    [data-theme="silver"] .knob {
+      background: linear-gradient(145deg, #c0c0d0, #808090) !important;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.2), inset 0 -2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* 6. Cyber - 회로기판 (Circuit Board) */
+    [data-theme="cyber"] .radio-inner::before {
+      background:
+        /* circuit grid */
+        repeating-linear-gradient(
+          0deg,
+          transparent, transparent 19px,
+          rgba(0,229,255,0.03) 19px, rgba(0,229,255,0.03) 20px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent, transparent 19px,
+          rgba(0,229,255,0.03) 19px, rgba(0,229,255,0.03) 20px
+        ),
+        /* circuit traces */
+        linear-gradient(0deg, transparent 48%, rgba(0,229,255,0.015) 49%, rgba(0,229,255,0.015) 51%, transparent 52%),
+        linear-gradient(90deg, transparent 28%, rgba(0,229,255,0.01) 29%, rgba(0,229,255,0.01) 31%, transparent 32%),
+        linear-gradient(90deg, transparent 68%, rgba(0,229,255,0.012) 69%, rgba(0,229,255,0.012) 71%, transparent 72%),
+        /* solder point dots */
+        radial-gradient(circle 1px at 20px 20px, rgba(0,229,255,0.04), transparent 2px),
+        radial-gradient(circle 1px at 40px 40px, rgba(0,229,255,0.03), transparent 2px);
+      background-size: 20px 20px, 20px 20px, 100% 100%, 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+    }
+    [data-theme="cyber"] .radio {
+      border-radius: 16px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.7),
+        0 0 12px var(--neon-glow),
+        0 0 30px var(--neon-glow),
+        0 0 60px rgba(0,229,255,0.15),
+        inset 0 0 12px var(--neon-glow);
+    }
+    [data-theme="cyber"] .speaker-mesh {
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,229,255,0.04) 3px, rgba(0,229,255,0.04) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,229,255,0.04) 3px, rgba(0,229,255,0.04) 4px);
+      background-size: 4px 4px;
+    }
+    [data-theme="cyber"] .speaker-grille {
+      box-shadow: inset 0 4px 12px rgba(0,0,0,0.6), 0 0 8px rgba(0,229,255,0.08);
+    }
+    /* Neon border glow */
+    [data-theme="cyber"] .radio-inner::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(0,229,255,0.06);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 7. Rose - 대리석 (Marble) */
+    [data-theme="rose"] .radio-inner::before {
+      background:
+        /* marble veins - primary */
+        linear-gradient(
+          137deg,
+          transparent 20%,
+          rgba(255,220,230,0.04) 22%, rgba(255,220,230,0.04) 23%,
+          transparent 25%,
+          transparent 45%,
+          rgba(255,200,210,0.035) 47%, rgba(255,200,210,0.035) 48%,
+          transparent 50%,
+          transparent 70%,
+          rgba(255,210,220,0.03) 72%, rgba(255,210,220,0.03) 73%,
+          transparent 75%
+        ),
+        /* marble veins - secondary */
+        linear-gradient(
+          52deg,
+          transparent 10%,
+          rgba(255,180,200,0.025) 12%, rgba(255,180,200,0.025) 13%,
+          transparent 15%,
+          transparent 35%,
+          rgba(255,190,210,0.03) 37%, rgba(255,190,210,0.03) 38%,
+          transparent 40%,
+          transparent 55%,
+          rgba(255,200,220,0.02) 57%, rgba(255,200,220,0.02) 58%,
+          transparent 60%,
+          transparent 80%,
+          rgba(255,180,200,0.025) 82%, rgba(255,180,200,0.025) 83%,
+          transparent 85%
+        ),
+        /* fine veins */
+        linear-gradient(
+          165deg,
+          transparent 30%,
+          rgba(255,220,230,0.02) 31%, rgba(255,220,230,0.02) 31.5%,
+          transparent 32%,
+          transparent 60%,
+          rgba(255,220,230,0.018) 61%, rgba(255,220,230,0.018) 61.5%,
+          transparent 62%
+        ),
+        /* polished sheen */
+        radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.04), transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(255,255,255,0.03), transparent 40%);
+    }
+    [data-theme="rose"] .radio {
+      border-radius: 26px;
+      box-shadow:
+        0 30px 60px rgba(40,10,20,0.5),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    /* Polished marble sheen overlay */
+    [data-theme="rose"] .radio-inner {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    [data-theme="rose"] .speaker-mesh {
+      background-image:
+        radial-gradient(circle, rgba(255,200,208,0.08) 1px, transparent 1px);
+      background-size: 5px 5px;
+    }
+    [data-theme="rose"] .speaker-grille {
+      border-radius: 16px;
+    }
+
+    /* ============================================
+       TEXT READABILITY & VIVID COLORS
+       ============================================ */
+    :root, [data-theme="wood"] {
+      --label-color: #d4b88a; --freq-mark: #b89a6a; --tick-color: #8a7050;
+      --preset-num: #e8c080; --preset-name: #c4a87a;
+      --footer-color: #b89a6a; --footer-link: #d4a862;
+      --power-icon: #d4b88a;
+      --lcd-text: #44ff44; --lcd-dim: #33bb33; --lcd-idle: #22aa22;
+      --lcd-glow: rgba(68,255,68,0.6);
+    }
+    [data-theme="cream"] {
+      --label-color: #6a4520; --freq-mark: #8b5e30; --tick-color: #a87040;
+      --preset-num: #6a3810; --preset-name: #7a4e28;
+      --footer-color: #8b5e30; --footer-link: #6a3810;
+      --power-icon: #6a4520;
+      --lcd-text: #ffbb44; --lcd-dim: #cc8822; --lcd-idle: #aa6600;
+      --lcd-glow: rgba(255,187,68,0.6);
+    }
+    [data-theme="black"] {
+      --label-color: #888; --freq-mark: #777; --tick-color: #555;
+      --preset-num: #bbb; --preset-name: #888;
+      --footer-color: #666; --footer-link: #999;
+      --power-icon: #999;
+      --lcd-text: #ffffff; --lcd-dim: #888; --lcd-idle: #555;
+      --lcd-glow: rgba(255,255,255,0.4);
+    }
+    [data-theme="military"] {
+      --label-color: #b8cc88; --freq-mark: #8aa866; --tick-color: #6a8a44;
+      --preset-num: #c8dd88; --preset-name: #a0bb70;
+      --footer-color: #8aa866; --footer-link: #b8cc88;
+      --power-icon: #b8cc88;
+      --lcd-text: #44ff44; --lcd-dim: #33bb33; --lcd-idle: #22aa22;
+      --lcd-glow: rgba(68,255,68,0.6);
+    }
+    [data-theme="silver"] {
+      --label-color: #333345; --freq-mark: #444458; --tick-color: #555568;
+      --preset-num: #222238; --preset-name: #444458;
+      --footer-color: #555568; --footer-link: #333345;
+      --power-icon: #333345;
+      --lcd-text: #55ccff; --lcd-dim: #3388cc; --lcd-idle: #2266aa;
+      --lcd-glow: rgba(85,204,255,0.6);
+    }
+    [data-theme="cyber"] {
+      --label-color: #00aacc; --freq-mark: #0088aa; --tick-color: #006688;
+      --preset-num: #00ccee; --preset-name: #00aacc;
+      --footer-color: #0088aa; --footer-link: #00ccee;
+      --power-icon: #00aacc;
+      --lcd-text: #00ffff; --lcd-dim: #00aacc; --lcd-idle: #0088aa;
+      --lcd-glow: rgba(0,255,255,0.7);
+    }
+    [data-theme="rose"] {
+      --label-color: #ddaabc; --freq-mark: #bb8899; --tick-color: #997788;
+      --preset-num: #ffc0cc; --preset-name: #ddaabc;
+      --footer-color: #bb8899; --footer-link: #ffc0cc;
+      --power-icon: #ddaabc;
+      --lcd-text: #ff99bb; --lcd-dim: #cc5588; --lcd-idle: #aa3366;
+      --lcd-glow: rgba(255,153,187,0.6);
+    }
+
+    /* ============================================
+       CORE STYLES (using CSS variables)
+       ============================================ */
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: safe center;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      padding: 20px;
+      overflow-y: auto;
+      transition: background 0.6s ease;
+    }
+
+    /* === THEME SWITCHER === */
+    .theme-switcher {
+      display: flex;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 20px 20px 0 0;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      justify-content: center;
+    }
+
+    .theme-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .theme-dot:hover { transform: scale(1.2); }
+    .theme-dot.active {
+      border-color: #fff;
+      transform: scale(1.15);
+      box-shadow: 0 2px 12px rgba(255,255,255,0.2);
+    }
+    .theme-dot.active::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px; height: 8px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    .theme-dot[data-t="wood"]     { background: linear-gradient(135deg, #3a2a1a, #d4a862); }
+    .theme-dot[data-t="cream"]    { background: linear-gradient(135deg, #f5e6c8, #8b4513); }
+    .theme-dot[data-t="black"]    { background: linear-gradient(135deg, #222, #000); }
+    .theme-dot[data-t="military"] { background: linear-gradient(135deg, #4a5540, #c8b400); }
+    .theme-dot[data-t="silver"]   { background: linear-gradient(135deg, #c0c0cc, #5a5a6a); }
+    .theme-dot[data-t="cyber"]    { background: linear-gradient(135deg, #101025, #00e5ff); }
+    .theme-dot[data-t="rose"]     { background: linear-gradient(135deg, #8a6070, #ffc8d0); }
+
+    .theme-name {
+      font-size: 10px;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      margin-bottom: 4px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Outfit', sans-serif;
+      transition: color 0.3s;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+
+    /* === RADIO BODY === */
+    .radio {
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
+      border-radius: 24px;
+      padding: 0;
+      border: 2px solid var(--neon-border);
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.6),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      position: relative;
+      transition: all 0.6s ease;
+      overflow: hidden;
+    }
+
+    .radio-inner {
+      background: linear-gradient(180deg, var(--body-in1), var(--body-in2));
+      border-radius: 0;
+      padding: 20px 20px 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.6s ease;
+    }
+    .radio-inner::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.15) 100%);
+      pointer-events: none; z-index: 0;
+      border-radius: inherit;
+    }
+
+    .radio-inner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        90deg, transparent, transparent 3px,
+        var(--texture-color) 3px, var(--texture-color) 6px
+      );
+      pointer-events: none;
+    }
+
+    /* === BRAND & POWER === */
+    .radio-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; position: relative; z-index: 1;
+    }
+    .brand {
+      font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800;
+      color: var(--accent); letter-spacing: 3px;
+      text-shadow: 0 -1px 0 rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.4);
+      transition: color 0.6s;
+    }
+    .radio-top::after {
+      content: ''; display: block; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent);
+    }
+    .power-area { display: flex; align-items: center; gap: 10px; }
+    .power-led {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #333; border: 1px solid #111;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+      transition: all 0.5s ease;
+    }
+    .power-led.on {
+      background: var(--led-on);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 0 8px var(--led-on), 0 0 20px var(--led-glow);
+      animation: ledPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes ledPulse {
+      0%,100%{box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 0 8px var(--led-on), 0 0 20px var(--led-glow);}
+      50%{box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 0 12px var(--led-on), 0 0 30px var(--led-glow);}
+    }
+    .power-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--btn-hi1), var(--btn-hi2));
+      border: 1px solid var(--neon-light); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--power-icon);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 4px var(--neon-light-glow), inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: all 0.15s ease;
+    }
+    .power-btn:active {
+      transform: scale(0.92);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    /* === ANTENNA === */
+    .antenna {
+      position: absolute; top: -40px; right: 50px;
+      width: 3px; height: 44px;
+      background: linear-gradient(to top, var(--antenna1), var(--antenna2), var(--antenna1));
+      border-radius: 2px; transform-origin: bottom center;
+      transition: transform 0.5s ease, background 0.6s;
+    }
+    .antenna::after {
+      content: ''; position: absolute; top: -4px; left: -2px;
+      width: 7px; height: 7px;
+      background: radial-gradient(circle, #ddd, #999);
+      border-radius: 50%;
+    }
+    .antenna.active { transform: rotate(-15deg); }
+
+    /* === SPEAKER GRILLE === */
+    .speaker-grille {
+      background: var(--speaker-bg); border-radius: 14px; padding: 16px;
+      margin-bottom: 16px; border: 1px solid var(--neon-light);
+      box-shadow: inset 0 4px 12px rgba(0,0,0,0.6), inset 0 -2px 6px rgba(0,0,0,0.3), 0 0 6px var(--neon-light-glow), 0 1px 0 rgba(255,255,255,0.04);
+      position: relative; z-index: 1; overflow: hidden;
+      transition: all 0.6s;
+    }
+    .speaker-label {
+      position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+      font-family: 'Orbitron', monospace; font-size: 6px; letter-spacing: 4px;
+      color: var(--mesh-color); text-transform: uppercase; z-index: 2;
+      opacity: 0.7; pointer-events: none;
+    }
+    .speaker-mesh {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 3px),
+        radial-gradient(circle, var(--mesh-color) 1px, transparent 1px);
+      background-size: 100% 5px, 6px 6px;
+      pointer-events: none;
+    }
+    .eq-container {
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 3px; height: 50px; position: relative; z-index: 1;
+    }
+    .eq-bar {
+      width: 5px; height: 6px; background: var(--accent);
+      border-radius: 2px; transition: height 0.15s ease, background 0.6s; opacity: 0.3;
+    }
+    .eq-bar.playing {
+      opacity: 1; animation: eqBounce 0.6s ease-in-out infinite alternate;
+      box-shadow: 0 0 6px var(--accent-glow);
+    }
+    @keyframes eqBounce { 0%{height:6px} 50%{height:40px} 100%{height:12px} }
+    .eq-bar:nth-child(1).playing{animation-duration:.52s;animation-delay:0s}
+    .eq-bar:nth-child(2).playing{animation-duration:.63s;animation-delay:.08s}
+    .eq-bar:nth-child(3).playing{animation-duration:.48s;animation-delay:.03s}
+    .eq-bar:nth-child(4).playing{animation-duration:.57s;animation-delay:.12s}
+    .eq-bar:nth-child(5).playing{animation-duration:.65s;animation-delay:.05s}
+    .eq-bar:nth-child(6).playing{animation-duration:.5s;animation-delay:.1s}
+    .eq-bar:nth-child(7).playing{animation-duration:.6s;animation-delay:.02s}
+    .eq-bar:nth-child(8).playing{animation-duration:.53s;animation-delay:.14s}
+    .eq-bar:nth-child(9).playing{animation-duration:.62s;animation-delay:.07s}
+    .eq-bar:nth-child(10).playing{animation-duration:.47s;animation-delay:.11s}
+    .eq-bar:nth-child(11).playing{animation-duration:.58s;animation-delay:.04s}
+    .eq-bar:nth-child(12).playing{animation-duration:.55s;animation-delay:.09s}
+    .eq-bar:nth-child(13).playing{animation-duration:.61s;animation-delay:.01s}
+    .eq-bar:nth-child(14).playing{animation-duration:.49s;animation-delay:.13s}
+    .eq-bar:nth-child(15).playing{animation-duration:.56s;animation-delay:.06s}
+    .eq-bar:nth-child(16).playing{animation-duration:.64s;animation-delay:.08s}
+
+    /* === LCD DISPLAY === */
+    .lcd-display {
+      background: var(--lcd-bg); border-radius: 10px; padding: 14px 18px;
+      margin-bottom: 16px;
+      border: 1px solid var(--neon-light);
+      box-shadow: inset 0 3px 10px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.4), 0 0 6px var(--neon-light-glow), 0 1px 0 rgba(255,255,255,0.06);
+      position: relative; z-index: 1; min-height: 90px;
+      display: flex; flex-direction: column; justify-content: center;
+      transition: all 0.6s;
+    }
+    .lcd-display::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 30%, transparent 80%, rgba(0,0,0,0.1) 100%);
+      pointer-events: none; border-radius: 7px; z-index: 2;
+    }
+    .lcd-display::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.08) 1px, rgba(0,0,0,0.08) 2px);
+      pointer-events: none; border-radius: 7px;
+    }
+    .on-air-dot {
+      display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: #ff3333; margin-right: 6px; vertical-align: middle;
+      animation: onAirPulse 1s ease-in-out infinite;
+      box-shadow: 0 0 4px #ff3333, 0 0 8px rgba(255,51,51,0.4);
+    }
+    @keyframes onAirPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .lcd-idle {
+      text-align: center; color: var(--lcd-idle);
+      font-family: 'Orbitron', monospace; font-size: 14px;
+      letter-spacing: 2px; position: relative; z-index: 1;
+      transition: color 0.6s;
+      text-shadow: 0 0 8px var(--lcd-glow);
+    }
+    .lcd-active { position: relative; z-index: 1; display: none; }
+    .lcd-active.visible { display: block; }
+    .lcd-idle.hidden { display: none; }
+    .lcd-provider {
+      font-family: 'Orbitron', monospace; font-size: 9px;
+      color: var(--lcd-dim); letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 4px; transition: color 0.6s;
+    }
+    .lcd-name {
+      font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700;
+      color: var(--lcd-text); text-shadow: 0 0 10px var(--lcd-glow);
+      margin-bottom: 2px; white-space: nowrap; overflow: hidden; transition: color 0.6s;
+    }
+    .lcd-freq {
+      font-family: 'Orbitron', monospace; font-size: 26px; font-weight: 900;
+      color: var(--lcd-text); text-shadow: 0 0 15px var(--lcd-glow);
+      letter-spacing: 2px; transition: color 0.6s;
+    }
+    .lcd-status {
+      font-family: 'Orbitron', monospace; font-size: 8px;
+      color: var(--lcd-dim); letter-spacing: 2px; margin-top: 4px;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: color 0.6s;
+    }
+    .lcd-signal { display: flex; gap: 2px; align-items: flex-end; }
+    .lcd-signal-bar {
+      width: 3px; background: var(--lcd-dim);
+      border-radius: 1px; transition: all 0.5s ease;
+    }
+    .lcd-signal-bar.active { background: var(--lcd-text); }
+
+    /* === TUNING DIAL === */
+    .tuning-section {
+      background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+      border-radius: 10px; padding: 12px 16px; margin-bottom: 16px;
+      border: 1px solid var(--neon-light);
+      box-shadow: 0 0 6px var(--neon-light-glow);
+      position: relative; z-index: 1;
+    }
+    .tuning-label {
+      font-size: 8px; color: var(--label-color); letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 8px; font-weight: 600;
+      transition: color 0.6s;
+    }
+    .freq-band {
+      position: relative; height: 28px; background: var(--speaker-bg);
+      border-radius: 4px; overflow: hidden;
+      border: 1px solid var(--speaker-border);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+      transition: all 0.6s;
+    }
+    .freq-band::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent);
+      pointer-events: none; z-index: 1;
+    }
+    .freq-ticks {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+    }
+    .freq-tick {
+      position: absolute; bottom: 0; width: 1px; background: var(--tick-color); opacity: 0.4;
+    }
+    .freq-tick.major { height: 10px; opacity: 0.7; }
+    .freq-tick.minor { height: 5px; }
+    .freq-marks {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      display: flex; justify-content: space-between; align-items: center; padding: 0 8px;
+    }
+    .freq-mark {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--freq-mark); position: relative; transition: color 0.6s;
+    }
+    .freq-mark::before {
+      content: ''; position: absolute; top: -8px; left: 50%;
+      width: 1px; height: 5px; background: var(--tick-color);
+    }
+    .tuning-needle {
+      position: absolute; top: 2px; width: 2px; height: 24px;
+      background: var(--needle); box-shadow: 0 0 6px var(--needle-glow), 0 0 12px var(--needle-glow);
+      border-radius: 1px; left: 20%;
+      transition: left 0.6s cubic-bezier(0.34,1.56,0.64,1), background 0.6s;
+      z-index: 2;
+    }
+    .tuning-needle::after {
+      content: ''; position: absolute; top: -2px; left: -2px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--needle); box-shadow: 0 0 4px var(--needle-glow);
+    }
+
+    /* === PRESET BUTTONS === */
+    .preset-section { margin-bottom: 16px; position: relative; z-index: 1; }
+    .preset-label {
+      font-size: 8px; color: var(--label-color); letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 8px; font-weight: 600;
+      transition: color 0.6s;
+    }
+    .preset-scroll {
+      overflow-y: auto; overflow-x: hidden;
+      max-height: 200px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--btn-border) transparent;
+      padding-right: 2px;
+    }
+    .preset-scroll::-webkit-scrollbar { width: 3px; }
+    .preset-scroll::-webkit-scrollbar-track { background: transparent; }
+    .preset-scroll::-webkit-scrollbar-thumb { background: var(--btn-border); border-radius: 2px; }
+    .preset-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+    }
+    .preset-btn {
+      background: linear-gradient(180deg, var(--btn-bg1), var(--btn-bg2));
+      border: 1px solid var(--neon-light); border-radius: 8px;
+      padding: 8px 6px; cursor: pointer; text-align: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3), 0 0 4px var(--neon-light-glow), inset 0 1px 0 rgba(255,255,255,0.06);
+      transition: all 0.15s ease;
+    }
+    .preset-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .preset-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .preset-btn.active {
+      background: linear-gradient(180deg, var(--btn-active1), var(--btn-active2));
+      border-color: var(--accent);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3), 0 0 12px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.1);
+      animation: presetPulse 2s ease-in-out infinite;
+    }
+    @keyframes presetPulse {
+      0%,100%{box-shadow: 0 3px 8px rgba(0,0,0,0.3), 0 0 12px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.1);}
+      50%{box-shadow: 0 3px 8px rgba(0,0,0,0.3), 0 0 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.1);}
+    }
+    .preset-btn.active .preset-num { color: var(--accent); }
+    .preset-btn.active .preset-name { color: var(--accent); }
+    .preset-num {
+      font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700;
+      color: var(--preset-num); display: block; margin-bottom: 1px; transition: color 0.3s;
+    }
+    .preset-name {
+      font-size: 7px; font-weight: 600; color: var(--preset-name);
+      letter-spacing: 0.3px; white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; transition: color 0.6s;
+    }
+
+    /* === CONTROL PANEL === */
+    .control-panel {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; position: relative; z-index: 1;
+    }
+    .knob-area { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .knob-label {
+      font-size: 7px; color: var(--preset-num); letter-spacing: 2px;
+      text-transform: uppercase; font-weight: 600; transition: color 0.6s;
+    }
+    .knob-container { position: relative; width: 56px; height: 56px; }
+    .knob-marks { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+    .knob-tick {
+      position: absolute; width: 1px; height: 5px;
+      background: var(--tick-color); top: 2px; left: 50%;
+      transform-origin: 0 26px; transition: background 0.6s;
+    }
+    .knob {
+      width: 48px; height: 48px; border-radius: 50%;
+      background:
+        repeating-conic-gradient(from 0deg, rgba(255,255,255,0.03) 0deg 6deg, transparent 6deg 12deg),
+        linear-gradient(145deg, var(--btn-hi1), var(--btn-hi2));
+      border: 1px solid var(--neon-light);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4), 0 0 4px var(--neon-light-glow), inset 0 2px 0 rgba(255,255,255,0.06), inset 0 -2px 4px rgba(0,0,0,0.3);
+      position: absolute; top: 4px; left: 4px;
+      cursor: pointer; transition: transform 0.1s ease;
+    }
+    .knob-indicator {
+      position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+      width: 2px; height: 10px; background: var(--knob-ind);
+      border-radius: 1px; transition: background 0.6s;
+    }
+
+    /* Play Button */
+    .play-btn-container { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .play-btn {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--btn-active1), var(--btn-bg2));
+      border: 2px solid var(--neon-light);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.5), 0 0 8px var(--neon-light-glow), inset 0 2px 0 rgba(255,255,255,0.08), inset 0 -2px 4px rgba(0,0,0,0.3);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--accent); transition: all 0.15s ease;
+    }
+    .play-btn:active {
+      transform: scale(0.93);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .play-btn.playing {
+      box-shadow: 0 6px 12px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow), inset 0 2px 0 rgba(255,255,255,0.08);
+    }
+    .play-btn svg { fill: var(--accent); transition: fill 0.6s; }
+
+    @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+    .spin { animation: spin 1s linear infinite; }
+
+    /* === EQ PANEL === */
+    .eq-toggle-btn {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--btn-hi1), var(--btn-hi2));
+      border: 1px solid var(--neon-light); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent); font-family: 'Orbitron', monospace; font-size: 8px; font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 4px var(--neon-light-glow);
+      transition: all 0.2s ease;
+    }
+    .eq-toggle-btn:active { transform: scale(0.92); }
+    .eq-toggle-btn.active {
+      background: linear-gradient(145deg, var(--btn-active1), var(--btn-active2));
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 8px var(--accent-glow);
+    }
+
+    .eq-panel {
+      background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.15));
+      border: 1px solid var(--neon-light);
+      border-radius: 12px; padding: 14px 16px; margin-bottom: 12px;
+      position: relative; z-index: 1;
+      box-shadow: 0 0 6px var(--neon-light-glow), inset 0 2px 6px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+    .eq-panel-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .eq-panel-title {
+      font-family: 'Orbitron', monospace; font-size: 8px; font-weight: 700;
+      color: var(--label-color); letter-spacing: 3px; text-transform: uppercase;
+    }
+    .eq-reset-btn {
+      font-family: 'Orbitron', monospace; font-size: 7px; font-weight: 600;
+      color: var(--accent); background: transparent;
+      border: 1px solid var(--neon-light); border-radius: 4px;
+      padding: 3px 8px; cursor: pointer; letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    .eq-reset-btn:hover { background: rgba(255,255,255,0.05); }
+
+    /* EQ Vertical Sliders */
+    .eq-sliders {
+      display: flex; justify-content: space-around; align-items: flex-end;
+      gap: 4px; margin-bottom: 14px; padding: 0 8px;
+    }
+    .eq-slider-group {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .eq-slider-wrap {
+      width: 28px; height: 100px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .eq-slider-wrap input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 90px; height: 4px;
+      background: linear-gradient(90deg, var(--neon-light-glow), var(--accent), var(--neon-light-glow));
+      border-radius: 2px; outline: none;
+      transform: rotate(-90deg);
+      transform-origin: center center;
+    }
+    .eq-slider-wrap input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 16px; height: 16px;
+      background: var(--accent); border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 6px var(--accent-glow), 0 2px 4px rgba(0,0,0,0.4);
+    }
+    .eq-freq-label {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--freq-mark); letter-spacing: 0.5px;
+    }
+    .eq-db-label {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--lcd-dim); min-width: 30px; text-align: center;
+    }
+
+    /* Horizontal Controls (Woofer, Virtualizer) */
+    .eq-extra-controls {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .eq-control-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .eq-control-label {
+      font-family: 'Orbitron', monospace; font-size: 7px; font-weight: 600;
+      color: var(--label-color); letter-spacing: 2px;
+      min-width: 72px; text-transform: uppercase;
+    }
+    .eq-h-slider {
+      -webkit-appearance: none; appearance: none;
+      flex: 1; height: 4px;
+      background: linear-gradient(90deg, var(--speaker-border), var(--accent));
+      border-radius: 2px; outline: none;
+    }
+    .eq-h-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 14px; height: 14px;
+      background: var(--accent); border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 6px var(--accent-glow), 0 2px 4px rgba(0,0,0,0.4);
+    }
+    .eq-h-value {
+      font-family: 'Orbitron', monospace; font-size: 8px;
+      color: var(--lcd-text); min-width: 28px; text-align: right;
+      text-shadow: 0 0 4px var(--lcd-glow);
+    }
+
+    /* === SCREWS === */
+    .screw {
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--screw1), var(--screw2));
+      border: 1px solid var(--btn-border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1); z-index: 2;
+      transition: all 0.6s;
+    }
+    .screw::after {
+      content: ''; position: absolute; top: 4px; left: 1px;
+      width: 8px; height: 1px; background: var(--screw-line);
+      transition: background 0.6s;
+    }
+    .screw-tl{top:12px;left:12px} .screw-tr{top:12px;right:12px}
+    .screw-bl{bottom:12px;left:12px} .screw-br{bottom:12px;right:12px}
+
+    /* === FOOTER === */
+    .radio-footer {
+      text-align: center; margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative; z-index: 1;
+    }
+    .footer-text {
+      font-size: 9px; color: var(--footer-color);
+      letter-spacing: 1px; transition: color 0.6s;
+      font-weight: 500;
+    }
+    .footer-text a { color: var(--footer-link); text-decoration: none; transition: color 0.6s; }
+    .footer-text a:hover { color: var(--accent); }
+
+    /* === ERROR === */
+    .error-msg {
+      font-family: 'Orbitron', monospace; font-size: 9px;
+      color: #ff4b4b; text-align: center; margin-top: 8px;
+      display: none; position: relative; z-index: 1;
+    }
+    .error-msg.visible { display: block; }
+
+    /* ============================================
+       RESPONSIVE - MOBILE FIRST
+       ============================================ */
+
+    /* Desktop: 라디오 body 둥글게 */
+    @media (min-width: 481px) {
+      .radio { padding: 6px; border-radius: 24px; }
+      .radio-inner { border-radius: 20px; padding: 24px 20px 20px; }
+      .radio-inner::before { border-radius: 20px; }
+      .theme-switcher { border-radius: 20px 20px 0 0; }
+      .theme-name { margin-bottom: 6px; }
+    }
+
+    /* Tablet */
+    @media (max-width: 540px) {
+      body { padding: 10px; }
+      .radio { max-width: 100%; }
+    }
+
+    /* === Mobile (phones) === */
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        justify-content: flex-start;
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+
+      /* Theme switcher: 라디오 안에 붙이기 */
+      .theme-name { font-size: 0; height: 0; margin: 0; overflow: hidden; }
+      .theme-switcher {
+        margin: 0;
+        padding: 8px 12px;
+        border-radius: 0;
+        background: rgba(0,0,0,0.25);
+        border: none;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+      }
+      .theme-dot {
+        width: 32px; height: 32px;
+        flex-shrink: 0;
+      }
+
+      /* Radio body: 풀 화면 */
+      .radio {
+        max-width: 100%;
+        border-radius: 0;
+        padding: 0;
+        border-width: 2px 0;
+        box-shadow:
+          0 0 8px var(--neon-glow),
+          inset 0 0 8px var(--neon-glow);
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+      .radio-inner {
+        border-radius: 0;
+        padding: 14px 16px 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .radio-inner::before { border-radius: 0; }
+
+      /* Antenna 숨김 */
+      .antenna { display: none; }
+
+      /* Screws 숨김 */
+      .screw { display: none; }
+
+      /* Brand */
+      .radio-top { margin-bottom: 10px; }
+      .brand { font-size: 18px; letter-spacing: 2px; }
+      .power-btn { width: 38px; height: 38px; }
+
+      /* Speaker: 컴팩트 */
+      .speaker-grille {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+      }
+      .eq-container { height: 36px; gap: 2px; }
+      .eq-bar { width: 4px; }
+
+      /* LCD: 컴팩트 */
+      .lcd-display {
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        min-height: 74px;
+        border-radius: 8px;
+      }
+      .lcd-name { font-size: 13px; }
+      .lcd-freq { font-size: 22px; }
+      .lcd-provider { font-size: 8px; margin-bottom: 2px; }
+      .lcd-status { font-size: 7px; margin-top: 3px; }
+
+      /* Tuning: 컴팩트 */
+      .tuning-section {
+        padding: 8px 14px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+      }
+      .tuning-label { margin-bottom: 6px; }
+      .freq-band { height: 22px; }
+      .tuning-needle { height: 18px; top: 2px; }
+      .freq-mark { font-size: 6px; }
+
+      /* Preset: flex-grow로 남은 공간 활용 */
+      .preset-section {
+        margin-bottom: 10px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      .preset-label { margin-bottom: 6px; }
+      .preset-scroll { flex: 1; min-height: 0; }
+      .preset-buttons {
+        gap: 4px;
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .preset-btn {
+        padding: 7px 4px;
+        border-radius: 6px;
+        min-width: auto;
+      }
+      .eq-panel { padding: 10px 12px; margin-bottom: 8px; }
+      .eq-slider-wrap { height: 80px; }
+      .eq-slider-wrap input[type="range"] { width: 70px; }
+      .preset-num { font-size: 10px; }
+      .preset-name { font-size: 6.5px; }
+
+      /* Controls: 컴팩트 */
+      .control-panel { gap: 8px; }
+      .knob-container { width: 50px; height: 50px; }
+      .knob { width: 42px; height: 42px; top: 4px; left: 4px; }
+      .knob-indicator { top: 5px; height: 9px; }
+      .knob-tick { height: 4px; }
+      .knob-label { font-size: 6px; }
+      .play-btn { width: 58px; height: 58px; border-width: 2px; }
+      .play-btn svg { width: 24px; height: 24px; }
+
+      /* Footer: 컴팩트 */
+      .radio-footer { margin-top: 8px; padding-top: 8px; }
+      .footer-text { font-size: 8px; }
+    }
+
+    /* === Small phones (SE, mini 등) === */
+    @media (max-width: 380px) {
+      .radio-inner { padding: 10px 12px 12px; }
+      .brand { font-size: 16px; }
+      .speaker-grille { padding: 8px; margin-bottom: 8px; }
+      .eq-container { height: 30px; }
+      .lcd-display { padding: 8px 12px; margin-bottom: 8px; min-height: 66px; }
+      .lcd-freq { font-size: 19px; }
+      .lcd-name { font-size: 11px; }
+      .tuning-section { padding: 6px 12px; margin-bottom: 8px; }
+      .freq-band { height: 20px; }
+      .tuning-needle { height: 16px; }
+      .preset-section { margin-bottom: 8px; }
+      .preset-buttons { gap: 3px; grid-template-columns: repeat(5, 1fr); }
+      .preset-btn { padding: 5px 3px; min-width: auto; }
+      .preset-num { font-size: 9px; }
+      .preset-name { font-size: 5.5px; }
+      .control-panel { gap: 6px; }
+      .knob-container { width: 44px; height: 44px; }
+      .knob { width: 38px; height: 38px; top: 3px; left: 3px; }
+      .play-btn { width: 52px; height: 52px; }
+      .theme-dot { width: 28px; height: 28px; }
+      .theme-switcher { gap: 6px; padding: 6px 8px; }
+    }
+
+    /* === Very small phones === */
+    @media (max-width: 340px) {
+      .theme-dot { width: 24px; height: 24px; }
+      .theme-switcher { gap: 5px; }
+      .brand { font-size: 14px; }
+      .lcd-freq { font-size: 17px; }
+      .play-btn { width: 48px; height: 48px; }
+      .knob-container { width: 40px; height: 40px; }
+      .knob { width: 34px; height: 34px; top: 3px; left: 3px; }
+      .preset-buttons { grid-template-columns: repeat(5, 1fr); }
+      .preset-btn { min-width: auto; padding: 4px 2px; }
+    }
+
+    /* Landscape phone */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body { justify-content: flex-start; }
+      .radio { min-height: auto; }
+      .radio-inner { min-height: auto; flex: none; }
+      .speaker-grille { padding: 6px; margin-bottom: 6px; }
+      .eq-container { height: 24px; }
+      .lcd-display { min-height: 58px; padding: 6px 12px; margin-bottom: 6px; }
+      .lcd-freq { font-size: 18px; }
+      .tuning-section { padding: 4px 12px; margin-bottom: 6px; }
+      .preset-section { margin-bottom: 6px; }
+      .eq-panel { padding: 8px 10px; margin-bottom: 4px; }
+      .eq-slider-wrap { height: 60px; }
+      .eq-slider-wrap input[type="range"] { width: 50px; }
+      .eq-extra-controls { gap: 4px; }
+      .control-panel { gap: 6px; }
+      .knob-container { width: 40px; height: 40px; }
+      .knob { width: 34px; height: 34px; top: 3px; left: 3px; }
+      .play-btn { width: 48px; height: 48px; }
+      .radio-footer { display: none; }
+    }
+
+    /* Touch: 터치 타겟 최소 크기 보장 */
+    @media (pointer: coarse) {
+      .preset-btn { min-height: 40px; }
+      .power-btn { width: 40px; height: 40px; }
+      .play-btn { min-width: 52px; min-height: 52px; }
+      .theme-dot { min-width: 28px; min-height: 28px; }
+    }
+  </style>
 </head>
+<body>
 
-<body class="dark">
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+<!-- Theme Name (desktop only) -->
+<div class="theme-name" id="themeName">WOOD CLASSIC</div>
+
+<div class="radio" id="radioBody">
+  <div class="antenna" id="antenna"></div>
+
+  <!-- Theme Switcher: 라디오 본체 안 상단 -->
+  <div class="theme-switcher" id="themeSwitcher">
+    <div class="theme-dot active" data-t="wood" title="우드 클래식 · 나무결" onclick="setTheme('wood')"></div>
+    <div class="theme-dot" data-t="cream" title="레트로 크림 · 가죽" onclick="setTheme('cream')"></div>
+    <div class="theme-dot" data-t="black" title="미드나잇 블랙 · 카본파이버" onclick="setTheme('black')"></div>
+    <div class="theme-dot" data-t="military" title="밀리터리 · 캔버스" onclick="setTheme('military')"></div>
+    <div class="theme-dot" data-t="silver" title="크롬 실버 · 브러시드메탈" onclick="setTheme('silver')"></div>
+    <div class="theme-dot" data-t="cyber" title="네온 사이버 · 회로기판" onclick="setTheme('cyber')"></div>
+    <div class="theme-dot" data-t="rose" title="로즈 골드 · 대리석" onclick="setTheme('rose')"></div>
+  </div>
+
+  <div class="radio-inner">
+    <div class="screw screw-tl"></div>
+    <div class="screw screw-tr"></div>
+    <div class="screw screw-bl"></div>
+    <div class="screw screw-br"></div>
+
+    <!-- Brand & Power -->
+    <div class="radio-top">
+      <div class="brand">라디오카페</div>
+      <div class="power-area">
+        <div class="power-led" id="powerLed"></div>
+        <button class="power-btn" id="powerBtn" title="전원">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Speaker Grille -->
+    <div class="speaker-grille">
+      <div class="speaker-label">STEREO</div>
+      <div class="speaker-mesh"></div>
+      <div class="eq-container" id="equalizer"></div>
+    </div>
+
+    <!-- LCD Display -->
+    <div class="lcd-display">
+      <div class="lcd-idle" id="lcdIdle"><span id="lcdClock" style="font-size:22px;font-weight:700;display:block;margin-bottom:4px"></span><span style="font-size:9px;opacity:0.6;letter-spacing:3px">SELECT STATION</span></div>
+      <div class="lcd-active" id="lcdActive">
+        <div class="lcd-provider" id="lcdProvider"></div>
+        <div class="lcd-name" id="lcdName"></div>
+        <div class="lcd-freq" id="lcdFreq"></div>
+        <div class="lcd-status">
+          <span id="lcdStatusText"><span class="on-air-dot" id="onAirDot" style="display:none"></span>PLAYING</span>
+          <div class="lcd-signal" id="lcdSignal">
+            <div class="lcd-signal-bar" style="height:4px"></div>
+            <div class="lcd-signal-bar" style="height:7px"></div>
+            <div class="lcd-signal-bar" style="height:10px"></div>
+            <div class="lcd-signal-bar" style="height:13px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tuning Dial -->
+    <div class="tuning-section">
+      <div class="tuning-label">FM TUNING</div>
+      <div class="freq-band">
+        <div class="freq-ticks" id="freqTicks"></div>
+        <div class="freq-marks">
+          <span class="freq-mark">88</span><span class="freq-mark">92</span>
+          <span class="freq-mark">96</span><span class="freq-mark">100</span>
+          <span class="freq-mark">104</span><span class="freq-mark">108</span>
+        </div>
+        <div class="tuning-needle" id="tuningNeedle"></div>
+      </div>
+    </div>
+
+    <!-- Preset Station Buttons -->
+    <div class="preset-section">
+      <div class="preset-label">PRESET STATIONS</div>
+      <div class="preset-scroll">
+        <div class="preset-buttons" id="presetButtons"></div>
+      </div>
+    </div>
+
+    <!-- EQ Panel -->
+    <div class="eq-panel" id="eqPanel" style="display:none">
+      <div class="eq-panel-header">
+        <span class="eq-panel-title">EQUALIZER</span>
+        <button class="eq-reset-btn" onclick="resetEQ()">RESET</button>
+      </div>
+      <div class="eq-sliders">
+        <div class="eq-slider-group">
+          <div class="eq-db-label" id="eqDb0">0</div>
+          <div class="eq-slider-wrap"><input type="range" min="-12" max="12" value="0" data-eq="0" oninput="updateEQ(0,this.value)"></div>
+          <span class="eq-freq-label">60</span>
+        </div>
+        <div class="eq-slider-group">
+          <div class="eq-db-label" id="eqDb1">0</div>
+          <div class="eq-slider-wrap"><input type="range" min="-12" max="12" value="0" data-eq="1" oninput="updateEQ(1,this.value)"></div>
+          <span class="eq-freq-label">230</span>
+        </div>
+        <div class="eq-slider-group">
+          <div class="eq-db-label" id="eqDb2">0</div>
+          <div class="eq-slider-wrap"><input type="range" min="-12" max="12" value="0" data-eq="2" oninput="updateEQ(2,this.value)"></div>
+          <span class="eq-freq-label">910</span>
+        </div>
+        <div class="eq-slider-group">
+          <div class="eq-db-label" id="eqDb3">0</div>
+          <div class="eq-slider-wrap"><input type="range" min="-12" max="12" value="0" data-eq="3" oninput="updateEQ(3,this.value)"></div>
+          <span class="eq-freq-label">3.6k</span>
+        </div>
+        <div class="eq-slider-group">
+          <div class="eq-db-label" id="eqDb4">0</div>
+          <div class="eq-slider-wrap"><input type="range" min="-12" max="12" value="0" data-eq="4" oninput="updateEQ(4,this.value)"></div>
+          <span class="eq-freq-label">14k</span>
+        </div>
+      </div>
+      <div class="eq-extra-controls">
+        <div class="eq-control-row">
+          <span class="eq-control-label">BASS BOOST</span>
+          <input type="range" class="eq-h-slider" id="wooferSlider" min="0" max="12" value="0" step="0.5" oninput="updateWoofer(this.value)">
+          <span class="eq-h-value" id="wooferValue">0</span>
+        </div>
+        <div class="eq-control-row">
+          <span class="eq-control-label">VIRTUAL</span>
+          <input type="range" class="eq-h-slider" id="virtualizerSlider" min="0" max="100" value="0" oninput="updateVirtualizer(this.value)">
+          <span class="eq-h-value" id="virtualizerValue">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+      <div class="knob-area">
+        <div class="knob-container" id="knobContainer">
+          <div class="knob-marks" id="knobMarks"></div>
+          <div class="knob" id="volumeKnob" title="볼륨 조절"><div class="knob-indicator"></div></div>
+        </div>
+        <div class="knob-label">VOLUME</div>
+      </div>
+      <div class="play-btn-container">
+        <button class="play-btn" id="playBtn" onclick="togglePlay()">
+          <svg id="playIcon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="7,3 21,12 7,21"/></svg>
+          <svg id="pauseIcon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          <svg id="loaderIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:none" class="spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        </button>
+      </div>
+      <div class="knob-area">
+        <button class="eq-toggle-btn" id="eqToggleBtn" onclick="toggleEqPanel()" title="이퀄라이저">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        </button>
+        <div class="knob-label">EQ</div>
+      </div>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="radio-footer">
+      <div class="footer-text">&copy; 2026 <a href="mailto:jaiwshim@gmail.com"><strong>Jaiwoo Shim</strong></a></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // === Station Data ===
+  var STATIONS = [
+    // === 공영방송 ===
+    {id:'kbs-1fm',name:'KBS 클래식FM',url:'https://1fm.gscdn.kbs.co.kr/1fm_192_2.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly8xZm0uZ3NjZG4ua2JzLmNvLmtyLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3Njc4Mjc3NjB9fX1dfQ__&Key-Pair-Id=APKAICDSGT3Y7IXGJ3TA&Signature=mXsMdZtv5pVJjKsZawW0ms8KkzrfYXBgWpi4HtpZO9TKLhUg22n6XIZkLrz2C4HftzhtPbG1vyByHlwHMzMlwXeXwjaxMkU4PNj2Wy-ubyRr8uP2zw41~8ZSCCGF5EV2OFhG1XH-88dD0nWrbSaUsij0SgZREDvrofiA6ip4xha4ZUAwH4vhP7GenNaJXu99DlZYuMfx5o7errctTKY-U6gppCruRl00NCpaOwJTVrwKVc5RnZSs2goGc~uqY8OQZuRwcp1cFTkqCt83FMlIiMKXItPvj8S8x2knhY4cXv1uAyTdKbmHEKTU-lfZVXzmq~NNf5Z0XUC7kLSe90dY3Q__',freq:'93.1 MHz',freqNum:93.1,logoText:'1FM',provider:'KBS'},
+    {id:'ebs-fm',name:'EBS FM',url:'https://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8',freq:'104.5 MHz',freqNum:104.5,logoText:'EBS',provider:'EBS'},
+    // === 지상파 ===
+    {id:'gwangju-mbc-fm',name:'광주MBC FM',url:'https://media.kjmbc.co.kr/hls/fmlive/GWANGJU-MBC-FM/playlist.m3u8',freq:'93.9 MHz',freqNum:93.9,logoText:'MBC',provider:'MBC'},
+    {id:'sbs-powerfm',name:'SBS 파워FM',url:'https://radiolive.sbs.co.kr/powerpc/powerfm.stream/playlist.m3u8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3Njc2OTc5ODksInBhdGgiOiIvcG93ZXJmbS5zdHJlYW0iLCJkdXJhdGlvbiI6LTEsInVubyI6IjNlZjRmZDA1LTZiYWQtNGYwOC1hMzYzLTBjNjkxMjUyZTEyNiIsImlhdCI6MTc2NzY1NDc4OX0.R-HyadR3JwB4rXJwXBqP33GX4RslvtM0dHb92hBHjo4',freq:'107.7 MHz',freqNum:107.7,logoText:'SBS',provider:'SBS'},
+    // === 보도/뉴스 ===
+    {id:'ytn-radio',name:'YTN 라디오',url:'https://radiolive.ytn.co.kr/radio/_definst_/20211118_fmlive/playlist.m3u8',freq:'94.5 MHz',freqNum:94.5,logoText:'YTN',provider:'YTN'},
+    {id:'tbs-fm',name:'TBS FM',url:'https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8',freq:'95.1 MHz',freqNum:95.1,logoText:'TBS',provider:'TBS'},
+    // === 종교방송 ===
+    {id:'cbs-music',name:'CBS 음악FM',url:'https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8',freq:'93.9 MHz',freqNum:93.9,logoText:'M',provider:'CBS'},
+    {id:'cbs-std',name:'CBS 표준FM',url:'https://aac.cbs.co.kr/cbs981/_definst_/cbs981.stream/playlist.m3u8',freq:'98.1 MHz',freqNum:98.1,logoText:'CBS',provider:'CBS'},
+    {id:'febc',name:'극동방송',url:'http://mlive2.febc.net:1935/live/seoulfm/playlist.m3u8',freq:'106.9 MHz',freqNum:106.9,logoText:'극동',provider:'FEBC'},
+    {id:'bbs',name:'BBS 불교방송',url:'https://bbslive.clouducs.com/bbsradio-live/livestream/playlist.m3u8',freq:'101.9 MHz',freqNum:101.9,logoText:'BBS',provider:'BBS'},
+    {id:'cpbc',name:'CPBC 평화방송',url:'https://stream.cpbc.co.kr/cpbc_live/live/playlist.m3u8',freq:'105.3 MHz',freqNum:105.3,logoText:'평화',provider:'CPBC'},
+    // === 교통/지역 ===
+    {id:'tbn',name:'TBN 교통방송',url:'http://radio2.tbn.or.kr:1935/gyeongin/myStream/playlist.m3u8',freq:'95.1 MHz',freqNum:95.1,logoText:'TBN',provider:'TBN'},
+    {id:'obs',name:'OBS 라디오',url:'https://vod3.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8',freq:'90.3 MHz',freqNum:90.3,logoText:'OBS',provider:'OBS'},
+    {id:'knn',name:'KNN 러브FM',url:'https://stream1.knn.co.kr/hls/b3y26uu6471k8tes9w7h_lfm/index.m3u8',freq:'99.9 MHz',freqNum:99.9,logoText:'KNN',provider:'KNN'},
+    // === 국제 ===
+    {id:'arirang',name:'Arirang Radio',url:'http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8',freq:'101.3 MHz',freqNum:101.3,logoText:'ARI',provider:'아리랑'}
+  ];
+
+  // === Theme Names ===
+  var THEME_NAMES = {
+    wood: 'WOOD CLASSIC \u00b7 \ub098\ubb34\uacb0',
+    cream: 'RETRO CREAM \u00b7 \uac00\uc8fd',
+    black: 'MIDNIGHT BLACK \u00b7 \uce74\ubcf8\ud30c\uc774\ubc84',
+    military: 'MILITARY \u00b7 \uce94\ubc84\uc2a4',
+    silver: 'CHROME SILVER \u00b7 \ube0c\ub7ec\uc2dc\ub4dc\uba54\ud0c8',
+    cyber: 'NEON CYBER \u00b7 \ud68c\ub85c\uae30\ud310',
+    rose: 'ROSE GOLD \u00b7 \ub300\ub9ac\uc11d'
+  };
+
+  // === State ===
+  var currentStation = null;
+  var audio = null;
+  var hlsInstance = null;
+  var isPlaying = false;
+  var isLoading = false;
+  var volume = 0.8;
+  var knobAngle = -135 + (0.8 * 270);
+  var isPowered = false;
+  var currentTheme = 'wood';
+
+  // === Theme ===
+  function setTheme(name) {
+    currentTheme = name;
+    document.getElementById('radioBody').setAttribute('data-theme', name);
+    document.body.setAttribute('data-theme', name);
+    document.getElementById('themeName').textContent = THEME_NAMES[name] || name.toUpperCase();
+    document.querySelectorAll('.theme-dot').forEach(function(d) {
+      d.classList.toggle('active', d.getAttribute('data-t') === name);
+    });
+    try { localStorage.setItem('k-radio-theme', name); } catch(e) {}
+  }
+
+  // === Init ===
+  function init() {
+    // Restore saved theme
+    try {
+      var saved = localStorage.getItem('k-radio-theme');
+      if (saved && THEME_NAMES[saved]) setTheme(saved);
+    } catch(e) {}
+
+    renderPresets();
+    renderEqualizer();
+    renderKnobMarks();
+    renderFreqTicks();
+    updateKnobVisual();
+    setupKnobDrag();
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
+
+  // === Render ===
+  function renderPresets() {
+    var c = document.getElementById('presetButtons');
+    c.innerHTML = STATIONS.map(function(s,i) {
+      return '<button class="preset-btn" data-id="'+s.id+'" onclick="selectStation(\''+s.id+'\')">' +
+        '<span class="preset-num">'+s.logoText+'</span>' +
+        '<span class="preset-name">'+s.name.replace(/\s+/g,' ').split(' ')[0]+'</span></button>';
+    }).join('');
+  }
+  function renderEqualizer() {
+    var h=''; for(var i=0;i<16;i++) h+='<div class="eq-bar"></div>';
+    document.getElementById('equalizer').innerHTML=h;
+  }
+  function renderKnobMarks() {
+    var h=''; for(var i=0;i<11;i++){var a=-135+(i*27);
+    h+='<div class="knob-tick" style="transform:rotate('+a+'deg)"></div>';}
+    document.getElementById('knobMarks').innerHTML=h;
+  }
+
+  // === Freq Ticks ===
+  function renderFreqTicks(){
+    var el=document.getElementById('freqTicks');if(!el)return;
+    var h='';
+    for(var f=88;f<=108;f+=0.5){
+      var pct=((f-88)/20)*90+5;
+      var cls=f%2===0?'freq-tick major':'freq-tick minor';
+      h+='<div class="'+cls+'" style="left:'+pct+'%"></div>';
+    }
+    el.innerHTML=h;
+  }
+
+  // === Clock ===
+  function updateClock(){
+    var now=new Date();
+    var h=String(now.getHours()).padStart(2,'0');
+    var m=String(now.getMinutes()).padStart(2,'0');
+    var s=String(now.getSeconds()).padStart(2,'0');
+    var el=document.getElementById('lcdClock');
+    if(el) el.textContent=h+':'+m+':'+s;
+  }
+
+  // === Power ===
+  document.getElementById('powerBtn').addEventListener('click',function(){
+    isPowered=!isPowered;
+    document.getElementById('powerLed').classList.toggle('on',isPowered);
+    if(!isPowered&&audio){
+      audio.pause(); setPlayState(false); currentStation=null;
+      document.getElementById('lcdIdle').classList.remove('hidden');
+      document.getElementById('lcdActive').classList.remove('visible');
+      document.getElementById('antenna').classList.remove('active');
+      document.querySelectorAll('.preset-btn').forEach(function(b){b.classList.remove('active');});
+      updateSignalBars(false);
+    }
+  });
+
+  // === Select Station ===
+  function selectStation(id){
+    if(!isPowered){isPowered=true;document.getElementById('powerLed').classList.add('on');}
+    var station=STATIONS.find(function(s){return s.id===id;});
+    if(!station)return;
+    currentStation=station;
+    document.querySelectorAll('.preset-btn').forEach(function(b){b.classList.toggle('active',b.dataset.id===id);});
+    document.getElementById('lcdIdle').classList.add('hidden');
+    document.getElementById('lcdActive').classList.add('visible');
+    document.getElementById('lcdProvider').textContent=station.provider;
+    document.getElementById('lcdName').textContent=station.name;
+    document.getElementById('lcdFreq').textContent=station.freq;
+    document.getElementById('lcdStatusText').innerHTML='LOADING...';
+    document.getElementById('antenna').classList.add('active');
+    var pos=((station.freqNum-88)/20)*90+5;
+    document.getElementById('tuningNeedle').style.left=pos+'%';
+    updateSignalBars(true);
+    loadStream(station.url);
+  }
+
+  function updateSignalBars(active){
+    document.querySelectorAll('.lcd-signal-bar').forEach(function(bar,i){
+      if(active) setTimeout(function(){bar.classList.add('active');},i*150);
+      else bar.classList.remove('active');
+    });
+  }
+
+  // === Audio ===
+  function loadStream(url){
+    setError(null); setLoadingState(true);
+    if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
+    if(!audio) audio=new Audio();
+    initAudioContext();
+    connectAudioSource();
+    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    audio.pause(); audio.src=''; audio.volume=volume;
+    if(Hls.isSupported()&&url.includes('.m3u8')){
+      hlsInstance=new Hls(); hlsInstance.loadSource(url); hlsInstance.attachMedia(audio);
+      hlsInstance.on(Hls.Events.MANIFEST_PARSED,function(){
+        audio.play().catch(function(e){console.error('Playback failed:',e);setPlayState(false);});
+        setPlayState(true);setLoadingState(false);
+        document.getElementById('lcdStatusText').innerHTML='<span class=\"on-air-dot\"></span>ON AIR';
+      });
+      hlsInstance.on(Hls.Events.ERROR,function(_,data){
+        if(data.fatal){setError('방송을 불러올 수 없습니다');setLoadingState(false);setPlayState(false);
+        document.getElementById('lcdStatusText').innerHTML='ERROR';updateSignalBars(false);}
+      });
+    } else if(audio.canPlayType&&audio.canPlayType('application/vnd.apple.mpegurl')){
+      audio.src=url;
+      audio.addEventListener('loadedmetadata',function h(){audio.removeEventListener('loadedmetadata',h);
+        audio.play().catch(function(e){console.error('Playback failed:',e);setPlayState(false);});
+        setPlayState(true);setLoadingState(false);
+        document.getElementById('lcdStatusText').innerHTML='<span class=\"on-air-dot\"></span>ON AIR';
+      });
+    } else {
+      audio.src=url;audio.play().catch(function(e){console.error('Playback failed:',e);setPlayState(false);});
+      setPlayState(true);setLoadingState(false);
+      document.getElementById('lcdStatusText').innerHTML='<span class=\"on-air-dot\"></span>ON AIR';
+    }
+  }
+
+  function togglePlay(){
+    if(!audio||!currentStation)return;
+    if(isPlaying){audio.pause();setPlayState(false);document.getElementById('lcdStatusText').innerHTML='PAUSED';}
+    else{audio.play().catch(console.error);setPlayState(true);document.getElementById('lcdStatusText').innerHTML='<span class=\"on-air-dot\"></span>ON AIR';}
+  }
+
+  function setPlayState(playing){
+    isPlaying=playing;
+    document.getElementById('playIcon').style.display=(!playing&&!isLoading)?'block':'none';
+    document.getElementById('pauseIcon').style.display=(playing&&!isLoading)?'block':'none';
+    document.getElementById('loaderIcon').style.display=isLoading?'block':'none';
+    document.getElementById('playBtn').classList.toggle('playing',playing);
+    document.querySelectorAll('.eq-bar').forEach(function(b){b.classList.toggle('playing',playing);});
+  }
+
+  function setLoadingState(loading){
+    isLoading=loading;
+    document.getElementById('playIcon').style.display=(!isPlaying&&!loading)?'block':'none';
+    document.getElementById('pauseIcon').style.display=(isPlaying&&!loading)?'block':'none';
+    document.getElementById('loaderIcon').style.display=loading?'block':'none';
+    document.getElementById('playBtn').disabled=loading;
+  }
+
+  function setError(msg){
+    var el=document.getElementById('errorMsg');
+    if(msg){el.textContent=msg;el.classList.add('visible');}
+    else{el.textContent='';el.classList.remove('visible');}
+  }
+
+  // === Web Audio API - EQ / Woofer / Virtualizer ===
+  var audioCtx = null;
+  var sourceNode = null;
+  var eqFilters = [];
+  var bassBoostFilter = null;
+  var virtualizerGain = null;
+  var virtualizerDelay = null;
+  var masterGain = null;
+  var EQ_FREQS = [60, 230, 910, 3600, 14000];
+  var eqValues = [0,0,0,0,0];
+  var wooferValue = 0;
+  var virtualizerValue = 0;
+
+  function initAudioContext(){
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Create 5-band EQ filters
+    EQ_FREQS.forEach(function(freq, i){
+      var filter = audioCtx.createBiquadFilter();
+      filter.type = 'peaking';
+      filter.frequency.value = freq;
+      filter.Q.value = 1.4;
+      filter.gain.value = 0;
+      eqFilters.push(filter);
+    });
+
+    // Bass boost (lowshelf)
+    bassBoostFilter = audioCtx.createBiquadFilter();
+    bassBoostFilter.type = 'lowshelf';
+    bassBoostFilter.frequency.value = 100;
+    bassBoostFilter.gain.value = 0;
+
+    // Virtualizer (delay-based stereo widening)
+    virtualizerDelay = audioCtx.createDelay(0.05);
+    virtualizerDelay.delayTime.value = 0;
+    virtualizerGain = audioCtx.createGain();
+    virtualizerGain.gain.value = 0;
+
+    // Master gain
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 1;
+
+    // Chain: EQ[0] → EQ[1] → ... → EQ[4] → bassBoost → masterGain → destination
+    for(var i=0; i<eqFilters.length-1; i++){
+      eqFilters[i].connect(eqFilters[i+1]);
+    }
+    eqFilters[eqFilters.length-1].connect(bassBoostFilter);
+    bassBoostFilter.connect(masterGain);
+
+    // Virtualizer: parallel path with delay
+    bassBoostFilter.connect(virtualizerDelay);
+    virtualizerDelay.connect(virtualizerGain);
+    virtualizerGain.connect(masterGain);
+
+    masterGain.connect(audioCtx.destination);
+
+    // Restore saved settings
+    restoreEQSettings();
+  }
+
+  function connectAudioSource(){
+    if(!audio || !audioCtx || sourceNode) return;
+    try {
+      sourceNode = audioCtx.createMediaElementSource(audio);
+      sourceNode.connect(eqFilters[0]);
+    } catch(e) { console.log('Audio source already connected'); }
+  }
+
+  function updateEQ(band, val){
+    val = parseFloat(val);
+    eqValues[band] = val;
+    if(eqFilters[band]) eqFilters[band].gain.value = val;
+    var label = document.getElementById('eqDb'+band);
+    if(label) label.textContent = (val>0?'+':'')+val;
+    saveEQSettings();
+  }
+
+  function updateWoofer(val){
+    wooferValue = parseFloat(val);
+    if(bassBoostFilter) bassBoostFilter.gain.value = wooferValue;
+    document.getElementById('wooferValue').textContent = val;
+    saveEQSettings();
+  }
+
+  function updateVirtualizer(val){
+    virtualizerValue = parseFloat(val);
+    if(virtualizerDelay) virtualizerDelay.delayTime.value = (virtualizerValue / 100) * 0.025;
+    if(virtualizerGain) virtualizerGain.gain.value = virtualizerValue / 100 * 0.6;
+    document.getElementById('virtualizerValue').textContent = val;
+    saveEQSettings();
+  }
+
+  function resetEQ(){
+    eqValues = [0,0,0,0,0];
+    wooferValue = 0; virtualizerValue = 0;
+    eqFilters.forEach(function(f,i){ f.gain.value = 0; });
+    if(bassBoostFilter) bassBoostFilter.gain.value = 0;
+    if(virtualizerDelay) virtualizerDelay.delayTime.value = 0;
+    if(virtualizerGain) virtualizerGain.gain.value = 0;
+    // Reset UI
+    document.querySelectorAll('.eq-slider-wrap input').forEach(function(s){ s.value = 0; });
+    for(var i=0;i<5;i++){ var l=document.getElementById('eqDb'+i); if(l) l.textContent='0'; }
+    document.getElementById('wooferSlider').value = 0;
+    document.getElementById('wooferValue').textContent = '0';
+    document.getElementById('virtualizerSlider').value = 0;
+    document.getElementById('virtualizerValue').textContent = '0';
+    saveEQSettings();
+  }
+
+  function toggleEqPanel(){
+    var panel = document.getElementById('eqPanel');
+    var btn = document.getElementById('eqToggleBtn');
+    var visible = panel.style.display !== 'none';
+    panel.style.display = visible ? 'none' : 'block';
+    btn.classList.toggle('active', !visible);
+  }
+
+  function saveEQSettings(){
+    try {
+      localStorage.setItem('radio-eq', JSON.stringify({
+        eq: eqValues, woofer: wooferValue, virtualizer: virtualizerValue
+      }));
+    } catch(e){}
+  }
+
+  function restoreEQSettings(){
+    try {
+      var saved = JSON.parse(localStorage.getItem('radio-eq'));
+      if(!saved) return;
+      if(saved.eq){
+        saved.eq.forEach(function(v,i){
+          eqValues[i] = v;
+          if(eqFilters[i]) eqFilters[i].gain.value = v;
+          var slider = document.querySelector('.eq-slider-wrap input[data-eq="'+i+'"]');
+          if(slider) slider.value = v;
+          var label = document.getElementById('eqDb'+i);
+          if(label) label.textContent = (v>0?'+':'')+v;
+        });
+      }
+      if(saved.woofer !== undefined){
+        wooferValue = saved.woofer;
+        if(bassBoostFilter) bassBoostFilter.gain.value = wooferValue;
+        document.getElementById('wooferSlider').value = wooferValue;
+        document.getElementById('wooferValue').textContent = wooferValue;
+      }
+      if(saved.virtualizer !== undefined){
+        virtualizerValue = saved.virtualizer;
+        updateVirtualizer(virtualizerValue);
+        document.getElementById('virtualizerSlider').value = virtualizerValue;
+      }
+    } catch(e){}
+  }
+
+  // === Volume Knob ===
+  function setupKnobDrag(){
+    var knob=document.getElementById('volumeKnob');
+    var container=document.getElementById('knobContainer');
+    var isDragging=false;
+    function getAngle(e){
+      var r=container.getBoundingClientRect();
+      var cx=r.left+r.width/2, cy=r.top+r.height/2;
+      var x=e.touches?e.touches[0].clientX:e.clientX;
+      var y=e.touches?e.touches[0].clientY:e.clientY;
+      return Math.atan2(y-cy,x-cx)*(180/Math.PI)+90;
+    }
+    function handleMove(e){
+      if(!isDragging)return; e.preventDefault();
+      var a=getAngle(e); if(a>180)a-=360;
+      knobAngle=Math.max(-135,Math.min(135,a));
+      volume=(knobAngle+135)/270;
+      if(audio)audio.volume=volume;
+      updateKnobVisual();
+    }
+    knob.addEventListener('mousedown',function(e){isDragging=true;e.preventDefault();});
+    knob.addEventListener('touchstart',function(){isDragging=true;},{passive:true});
+    document.addEventListener('mousemove',handleMove);
+    document.addEventListener('touchmove',handleMove,{passive:false});
+    document.addEventListener('mouseup',function(){isDragging=false;});
+    document.addEventListener('touchend',function(){isDragging=false;});
+    container.addEventListener('wheel',function(e){
+      e.preventDefault();
+      volume=Math.max(0,Math.min(1,volume+(e.deltaY>0?-0.05:0.05)));
+      knobAngle=-135+(volume*270);
+      if(audio)audio.volume=volume;
+      updateKnobVisual();
+    },{passive:false});
+  }
+
+  function updateKnobVisual(){
+    document.getElementById('volumeKnob').style.transform='rotate('+knobAngle+'deg)';
+  }
+
+  document.addEventListener('DOMContentLoaded',init);
+</script>
 </body>
-
 </html>
