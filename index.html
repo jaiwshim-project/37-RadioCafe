@@ -1848,6 +1848,21 @@
       box-shadow: 0 6px 24px rgba(80,184,122,0.4);
     }
     .photo-save-btn.ready:active, .photo-load-btn:active { transform: scale(0.97); }
+    .photo-reset-btn {
+      background: linear-gradient(135deg, #888, #666);
+      color: #fff; border: 2px solid rgba(150,150,150,0.6);
+      padding: 8px 20px; border-radius: 16px;
+      font-size: 12px; font-weight: 600; font-family: 'Outfit', sans-serif;
+      cursor: pointer; letter-spacing: 1px;
+      box-shadow: 0 3px 12px rgba(100,100,100,0.3);
+      transition: all 0.3s ease; margin-top: 8px;
+    }
+    .photo-reset-btn:hover {
+      background: linear-gradient(135deg, #999, #777);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 18px rgba(100,100,100,0.4);
+    }
+    .photo-reset-btn:active { transform: scale(0.97); }
     .album-list-popup {
       display: none; position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -2398,6 +2413,7 @@
           <button class="photo-save-btn" id="photoSaveBtn" onclick="savePhotosToAlbum()">새 사진첩 저장</button>
           <button class="photo-load-btn" id="photoLoadBtn" onclick="showAlbumList()">사진첩 불러오기</button>
         </div>
+        <button class="photo-reset-btn" onclick="resetPhotos()">초기화</button>
         <div class="album-list-popup" id="albumListPopup">
           <div class="album-list-header">
             <span>📚 사진첩 목록</span>
@@ -3036,6 +3052,14 @@
       });
     };
     inp.click();
+  }
+
+  function resetPhotos(){
+    for(var i=0; i<6; i++){
+      slotPhotos[i] = null;
+      updateSlotUI(i);
+    }
+    updatePhotoCount();
   }
 
   function updatePhotoCount(){
