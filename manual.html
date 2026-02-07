@@ -202,8 +202,11 @@
     }
 
     /* 스크린샷 */
-    .screenshot-box {
+    .screenshot-container {
       margin-bottom: 24px;
+    }
+    .screenshot-box {
+      position: relative;
       border-radius: 12px;
       overflow: hidden;
       border: 2px solid rgba(212,175,105,0.2);
@@ -218,7 +221,38 @@
       font-size: 11px;
       color: rgba(212,175,105,0.5);
       margin-top: 8px;
-      margin-bottom: 16px;
+    }
+    /* 번호 마커 */
+    .marker {
+      position: absolute;
+      width: 22px; height: 22px;
+      background: #ff69b4;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 700;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(255,105,180,0.5);
+      border: 2px solid #fff;
+    }
+    /* 번호별 설명 */
+    .marker-desc {
+      margin-top: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .marker-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 12px; color: rgba(255,255,255,0.8);
+      line-height: 1.5;
+    }
+    .marker-num {
+      width: 20px; height: 20px; flex-shrink: 0;
+      background: #ff69b4;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px; font-weight: 700;
+      color: #fff;
     }
   </style>
 </head>
@@ -240,15 +274,45 @@
         <div class="manual-subtitle">라디오카페 이용 가이드</div>
       </div>
 
-      <div class="screenshot-box">
-        <img src="login-screen.png" alt="로그인 화면">
+      <div class="screenshot-container">
+        <div class="screenshot-box">
+          <img src="login-screen.png" alt="로그인 화면">
+          <div class="marker" style="top: 28%; left: 50%; transform: translateX(-50%);">1</div>
+          <div class="marker" style="top: 48%; left: 12%;">2</div>
+          <div class="marker" style="top: 62%; left: 50%; transform: translateX(-50%);">3</div>
+          <div class="marker" style="top: 78%; left: 50%; transform: translateX(-50%);">4</div>
+        </div>
+        <div class="screenshot-caption">로그인 화면</div>
+        <div class="marker-desc">
+          <div class="marker-item"><div class="marker-num">1</div><span>사용자 선택 영역 - 등록된 사용자 목록이 표시됩니다</span></div>
+          <div class="marker-item"><div class="marker-num">2</div><span>사용자 검색 - 이름으로 사용자를 검색할 수 있습니다</span></div>
+          <div class="marker-item"><div class="marker-num">3</div><span>사용자 목록 - 클릭하여 사용자를 선택합니다</span></div>
+          <div class="marker-item"><div class="marker-num">4</div><span>새 사용자 등록 - 새로운 사용자로 등록합니다</span></div>
+        </div>
       </div>
-      <div class="screenshot-caption">로그인 화면</div>
 
-      <div class="screenshot-box">
-        <img src="radio-screen.png" alt="라디오카페 화면">
+      <div class="screenshot-container">
+        <div class="screenshot-box">
+          <img src="radio-screen.png" alt="라디오카페 화면">
+          <div class="marker" style="top: 5%; left: 50%; transform: translateX(-50%);">1</div>
+          <div class="marker" style="top: 13%; left: 70%;">2</div>
+          <div class="marker" style="top: 13%; left: 90%;">3</div>
+          <div class="marker" style="top: 35%; left: 50%; transform: translateX(-50%);">4</div>
+          <div class="marker" style="top: 52%; left: 50%; transform: translateX(-50%);">5</div>
+          <div class="marker" style="top: 68%; left: 50%; transform: translateX(-50%);">6</div>
+          <div class="marker" style="top: 88%; left: 50%; transform: translateX(-50%);">7</div>
+        </div>
+        <div class="screenshot-caption">라디오카페 메인 화면</div>
+        <div class="marker-desc">
+          <div class="marker-item"><div class="marker-num">1</div><span>배경색 선택 - 원하는 배경 테마 색상을 선택합니다</span></div>
+          <div class="marker-item"><div class="marker-num">2</div><span>사진 슬롯 - 선택한 6장의 사진이 표시됩니다 (클릭하면 크게 보기)</span></div>
+          <div class="marker-item"><div class="marker-num">3</div><span>전원 버튼 - 로그아웃합니다</span></div>
+          <div class="marker-item"><div class="marker-num">4</div><span>LCD 디스플레이 - 현재 시간과 선택한 방송국이 표시됩니다</span></div>
+          <div class="marker-item"><div class="marker-num">5</div><span>FM 튜닝 다이얼 - 드래그하여 주파수를 조절합니다</span></div>
+          <div class="marker-item"><div class="marker-num">6</div><span>프리셋 방송국 - 원하는 라디오 방송국을 선택합니다</span></div>
+          <div class="marker-item"><div class="marker-num">7</div><span>컨트롤 - 볼륨 조절, 재생/정지, EQ 설정</span></div>
+        </div>
       </div>
-      <div class="screenshot-caption">라디오카페 메인 화면</div>
 
       <div class="section">
         <div class="section-title">시작하기</div>
@@ -273,10 +337,26 @@
       <div class="section">
         <div class="section-title">사진첩 기능</div>
 
-        <div class="screenshot-box">
-          <img src="photo-select-screen.png" alt="사진 선택 화면">
+        <div class="screenshot-container">
+          <div class="screenshot-box">
+            <img src="photo-select-screen.png" alt="사진 선택 화면">
+            <div class="marker" style="top: 18%; left: 50%; transform: translateX(-50%);">1</div>
+            <div class="marker" style="top: 45%; left: 50%; transform: translateX(-50%);">2</div>
+            <div class="marker" style="top: 68%; left: 50%; transform: translateX(-50%);">3</div>
+            <div class="marker" style="top: 78%; left: 30%;">4</div>
+            <div class="marker" style="top: 78%; left: 70%;">5</div>
+            <div class="marker" style="top: 90%; left: 50%; transform: translateX(-50%);">6</div>
+          </div>
+          <div class="screenshot-caption">사진 선택 화면</div>
+          <div class="marker-desc">
+            <div class="marker-item"><div class="marker-num">1</div><span>안내 영역 - 사진 선택 방법을 안내합니다 (상단 4장 + 하단 2장)</span></div>
+            <div class="marker-item"><div class="marker-num">2</div><span>사진 슬롯 - 선택한 6장의 사진 미리보기가 표시됩니다</span></div>
+            <div class="marker-item"><div class="marker-num">3</div><span>갤러리에서 6장 한번에 선택 - 한번에 여러 장을 선택할 수 있습니다</span></div>
+            <div class="marker-item"><div class="marker-num">4</div><span>새 사진첩 저장 - 현재 사진들을 새 사진첩으로 저장합니다</span></div>
+            <div class="marker-item"><div class="marker-num">5</div><span>사진첩 불러오기 - 저장된 사진첩을 불러옵니다</span></div>
+            <div class="marker-item"><div class="marker-num">6</div><span>PLAY 버튼 - 사진 선택을 완료하고 라디오 화면으로 돌아갑니다</span></div>
+          </div>
         </div>
-        <div class="screenshot-caption">사진 선택 화면 - 갤러리에서 6장의 사진을 선택하여 나만의 사진첩을 만들 수 있습니다</div>
 
         <div class="step-list">
           <div class="step-item">
