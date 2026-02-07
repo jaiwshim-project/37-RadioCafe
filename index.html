@@ -232,38 +232,7 @@
       --neon-light: rgba(255,130,200,0.3); --neon-light-glow: rgba(255,130,200,0.12);
     }
 
-    /* 8. Kitty (키티) */
-    [data-theme="kitty"] {
-      --bg: #ffe0ec;
-      --body-out1: #ffb6d0; --body-out2: #ff8eb8;
-      --body-in1: #ffc8da; --body-in2: #ffaac8;
-      --texture-color: rgba(255,255,255,0.04);
-      --accent: #ff1493;
-      --accent-glow: rgba(255,20,147,0.5);
-      --btn-bg1: #ffb0cc; --btn-bg2: #ff90b8;
-      --btn-hi1: #ffc8dd; --btn-hi2: #ff9ec5;
-      --btn-active1: #ff70a0; --btn-active2: #ff5090;
-      --btn-border: #e878a0;
-      --speaker-bg: #e890aa; --speaker-border: #d07090;
-      --mesh-color: rgba(255,255,255,0.12);
-      --lcd-bg: #3a0020;
-      --lcd-text: #ff66aa; --lcd-dim: #cc3388; --lcd-idle: #aa2266;
-      --lcd-glow: rgba(255,102,170,0.6);
-      --screw1: #ffb8cc; --screw2: #ff90b0; --screw-line: #e070a0;
-      --label-color: #cc4488; --freq-mark: #dd6699;
-      --tick-color: #cc5588;
-      --needle: #ff1493; --needle-glow: rgba(255,20,147,0.7);
-      --led-on: #ff1493; --led-glow: rgba(255,20,147,0.4);
-      --knob-ind: #fff;
-      --footer-color: #cc5588; --footer-link: #ff1493;
-      --antenna1: #ff90b0; --antenna2: #ffb8d0;
-      --preset-num: #cc3377; --preset-name: #dd5599;
-      --power-icon: #cc4488;
-      --neon-border: #ff69b4; --neon-glow: rgba(255,105,180,0.6);
-      --neon-light: rgba(255,150,200,0.35); --neon-light-glow: rgba(255,150,200,0.15);
-    }
-
-    /* 9. Maltese (말티즈) */
+    /* 8. Maltese (말티즈) */
     [data-theme="maltese"] {
       --bg: #f0ebe5;
       --body-out1: #faf8f5; --body-out2: #f0ece6;
@@ -626,51 +595,7 @@
       border-radius: 16px;
     }
 
-    /* 8. Kitty - 리본 & 폴카도트 (Ribbon & Polka Dots) */
-    [data-theme="kitty"] .radio-inner::before {
-      background:
-        /* polka dots */
-        radial-gradient(circle 4px at 15px 15px, rgba(255,255,255,0.08), transparent 5px),
-        radial-gradient(circle 3px at 35px 35px, rgba(255,255,255,0.06), transparent 4px),
-        radial-gradient(circle 4px at 55px 10px, rgba(255,255,255,0.07), transparent 5px),
-        /* tiny hearts pattern (diamond shapes) */
-        linear-gradient(45deg, rgba(255,20,147,0.03) 25%, transparent 25%),
-        linear-gradient(-45deg, rgba(255,20,147,0.03) 25%, transparent 25%);
-      background-size: 60px 60px, 60px 60px, 60px 60px, 20px 20px, 20px 20px;
-    }
-    [data-theme="kitty"] .radio {
-      border-radius: 28px;
-      box-shadow:
-        0 30px 60px rgba(200,50,100,0.3),
-        0 0 10px var(--neon-glow),
-        0 0 25px var(--neon-glow),
-        inset 0 0 10px var(--neon-glow),
-        inset 0 1px 0 rgba(255,255,255,0.3);
-    }
-    [data-theme="kitty"] .speaker-mesh {
-      background-image:
-        radial-gradient(circle, rgba(255,20,147,0.06) 1px, transparent 1px);
-      background-size: 5px 5px;
-    }
-    [data-theme="kitty"] .speaker-grille {
-      border-radius: 18px;
-    }
-    [data-theme="kitty"] .screw {
-      background: linear-gradient(145deg, #ffb8d0, #ff90b8);
-      border-color: #e080a0;
-    }
-    /* Kitty face silhouette background */
-    [data-theme="kitty"] .radio-inner::after {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='rgba(255,20,147,0.06)' stroke-width='1.5'%3E%3C!-- head --%3E%3Cellipse cx='100' cy='115' rx='55' ry='50'/%3E%3C!-- left ear --%3E%3Cpath d='M55 80 L35 30 L70 65' fill='rgba(255,20,147,0.03)'/%3E%3C!-- right ear --%3E%3Cpath d='M145 80 L165 30 L130 65' fill='rgba(255,20,147,0.03)'/%3E%3C!-- inner ears --%3E%3Cpath d='M58 75 L45 40 L68 63' stroke='rgba(255,105,180,0.04)'/%3E%3Cpath d='M142 75 L155 40 L132 63' stroke='rgba(255,105,180,0.04)'/%3E%3C!-- eyes --%3E%3Cellipse cx='80' cy='105' rx='8' ry='9' fill='rgba(255,20,147,0.05)'/%3E%3Cellipse cx='120' cy='105' rx='8' ry='9' fill='rgba(255,20,147,0.05)'/%3E%3C!-- eye highlights --%3E%3Ccircle cx='83' cy='102' r='3' fill='rgba(255,255,255,0.04)'/%3E%3Ccircle cx='123' cy='102' r='3' fill='rgba(255,255,255,0.04)'/%3E%3C!-- nose --%3E%3Cellipse cx='100' cy='120' rx='5' ry='3.5' fill='rgba(255,20,147,0.06)'/%3E%3C!-- mouth --%3E%3Cpath d='M100 123 Q95 132 88 128' stroke='rgba(255,20,147,0.05)'/%3E%3Cpath d='M100 123 Q105 132 112 128' stroke='rgba(255,20,147,0.05)'/%3E%3C!-- whiskers --%3E%3Cline x1='70' y1='115' x2='35' y2='108' stroke='rgba(255,20,147,0.04)'/%3E%3Cline x1='70' y1='120' x2='33' y2='120' stroke='rgba(255,20,147,0.04)'/%3E%3Cline x1='70' y1='125' x2='35' y2='132' stroke='rgba(255,20,147,0.04)'/%3E%3Cline x1='130' y1='115' x2='165' y2='108' stroke='rgba(255,20,147,0.04)'/%3E%3Cline x1='130' y1='120' x2='167' y2='120' stroke='rgba(255,20,147,0.04)'/%3E%3Cline x1='130' y1='125' x2='165' y2='132' stroke='rgba(255,20,147,0.04)'/%3E%3C!-- bow --%3E%3Cpath d='M85 75 Q72 60 85 55 Q92 60 92 68' fill='rgba(255,0,80,0.05)' stroke='rgba(255,0,80,0.06)'/%3E%3Cpath d='M92 68 Q92 60 99 55 Q112 60 99 75' fill='rgba(255,0,80,0.05)' stroke='rgba(255,0,80,0.06)'/%3E%3Ccircle cx='92' cy='68' r='4' fill='rgba(255,0,80,0.06)'/%3E%3C/g%3E%3C/svg%3E") no-repeat center center,
-        radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 50%),
-        radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.1) 100%);
-      background-size: 70% auto, 100% 100%, 100% 100%;
-      pointer-events: none; z-index: 0; border-radius: inherit;
-    }
-
-    /* 9. Maltese - 부드러운 털 결 (Soft Fur Texture) */
+    /* 8. Maltese - 부드러운 털 결 (Soft Fur Texture) */
     [data-theme="maltese"] .radio-inner::before {
       background:
         /* soft wavy fur lines */
@@ -789,14 +714,6 @@
       --lcd-text: #ff99bb; --lcd-dim: #cc5588; --lcd-idle: #aa3366;
       --lcd-glow: rgba(255,153,187,0.6);
     }
-    [data-theme="kitty"] {
-      --label-color: #dd3388; --freq-mark: #cc4488; --tick-color: #bb3377;
-      --preset-num: #ff1493; --preset-name: #dd4499;
-      --footer-color: #cc4488; --footer-link: #ff1493;
-      --power-icon: #dd3388;
-      --lcd-text: #ff77bb; --lcd-dim: #dd4499; --lcd-idle: #bb2277;
-      --lcd-glow: rgba(255,119,187,0.7);
-    }
     [data-theme="maltese"] {
       --label-color: #8a7060; --freq-mark: #9a8070; --tick-color: #b0a090;
       --preset-num: #6a5040; --preset-name: #8a7060;
@@ -868,7 +785,6 @@
     .theme-dot[data-t="silver"]   { background: linear-gradient(135deg, #c0c0cc, #5a5a6a); }
     .theme-dot[data-t="cyber"]    { background: linear-gradient(135deg, #101025, #00e5ff); }
     .theme-dot[data-t="rose"]     { background: linear-gradient(135deg, #8a6070, #ffc8d0); }
-    .theme-dot[data-t="kitty"]    { background: linear-gradient(135deg, #ff69b4, #ff1493); }
     .theme-dot[data-t="maltese"]  { background: linear-gradient(135deg, #faf8f5, #DEB887); }
 
     .theme-name {
@@ -967,8 +883,6 @@
       flex-shrink: 0;
       align-self: center;
     }
-    [data-theme="kitty"] .mascot-kitty { display: block; }
-    [data-theme="maltese"] .mascot-maltese { display: block; }
 
     .radio-top::after {
       content: ''; display: block; position: absolute; bottom: 0; left: 0; right: 0;
@@ -1420,6 +1334,129 @@
       text-shadow: 0 0 4px var(--lcd-glow);
     }
 
+    /* === PHOTO SELECTION SCREEN === */
+    .photo-select-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #FFFAF0 0%, #FFF0F5 50%, #F0F8FF 100%);
+      z-index: 10000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .photo-select-screen.hiding {
+      opacity: 0; transform: scale(1.05); pointer-events: none;
+    }
+    .photo-select-screen.hidden { display: none; }
+    .photo-select-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px; font-weight: 800;
+      color: #333; margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .photo-select-sub {
+      font-size: 13px; color: #888; margin-bottom: 24px;
+      text-align: center; line-height: 1.5;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%; max-width: 340px;
+      margin-bottom: 24px;
+    }
+    .photo-slot {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 16px;
+      border: 2px dashed #ccc;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .photo-slot:hover { border-color: #FF85A2; box-shadow: 0 4px 16px rgba(255,133,162,0.2); }
+    .photo-slot.filled { border: 2px solid #FF85A2; }
+    .photo-slot.filled img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 14px;
+    }
+    .photo-slot .slot-label {
+      position: absolute; bottom: 6px; left: 0; right: 0;
+      text-align: center; font-size: 10px; color: #aaa;
+      font-weight: 600; letter-spacing: 0.5px;
+    }
+    .photo-slot.filled .slot-label {
+      background: rgba(0,0,0,0.5); color: #fff;
+      border-radius: 0 0 14px 14px;
+      padding: 3px 0; bottom: 0;
+    }
+    .photo-slot .slot-icon {
+      font-size: 28px; color: #ddd; transition: color 0.3s;
+    }
+    .photo-slot:hover .slot-icon { color: #FF85A2; }
+    .photo-slot .remove-photo {
+      position: absolute; top: 4px; right: 4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(0,0,0,0.6); color: #fff;
+      border: none; font-size: 13px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+    }
+    .photo-done-btn {
+      background: linear-gradient(135deg, #FF85A2, #FF6B8A);
+      color: #fff; border: none;
+      padding: 14px 48px; border-radius: 30px;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer; letter-spacing: 1px;
+      box-shadow: 0 6px 20px rgba(255,107,138,0.4);
+      transition: all 0.3s ease;
+      opacity: 0.4; pointer-events: none;
+    }
+    .photo-done-btn.ready {
+      opacity: 1; pointer-events: auto;
+    }
+    .photo-done-btn.ready:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(255,107,138,0.5);
+    }
+    .photo-done-btn.ready:active { transform: scale(0.96); }
+    .photo-select-skip {
+      margin-top: 12px; background: none; border: none;
+      color: #aaa; font-size: 13px; cursor: pointer;
+      text-decoration: underline;
+    }
+    .photo-select-skip:hover { color: #666; }
+    .photo-select-count {
+      font-size: 14px; font-weight: 700; color: #FF6B8A;
+      margin-bottom: 16px;
+    }
+
+    /* === PHOTO UPLOAD (in-radio) === */
+    .photo-upload-btn {
+      display: none;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--accent-muted);
+      border: 2px dashed var(--neon-light);
+      color: var(--text-dim);
+      font-size: 18px; line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+      align-self: center;
+      margin-left: 3px;
+      transition: all 0.3s ease;
+    }
+    .photo-upload-btn:hover {
+      background: var(--neon-light);
+      color: var(--player-bg);
+      box-shadow: 0 0 8px var(--neon-light-glow);
+    }
+    .photo-upload-btn.has-photos { display: flex; align-items: center; justify-content: center; }
+    .brand-photos { display: contents; }
+    .ctrl-photos { display: contents; }
+
     /* === PHOTO LIGHTBOX === */
     .photo-lightbox {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -1701,6 +1738,42 @@
 </head>
 <body>
 
+<!-- Photo Selection Screen -->
+<div class="photo-select-screen" id="photoSelectScreen">
+  <div class="photo-select-title">라디오카페</div>
+  <div class="photo-select-sub">갤러리에서 사진을 선택하세요<br>6장의 사진이 라디오에 배치됩니다 (상단 4장 + 하단 2장)</div>
+  <div class="photo-select-count" id="photoCount">0 / 6</div>
+  <div class="photo-grid" id="photoGrid">
+    <div class="photo-slot" data-idx="0" onclick="pickSlotPhoto(0)">
+      <span class="slot-icon">+</span>
+      <div class="slot-label">상단 1</div>
+    </div>
+    <div class="photo-slot" data-idx="1" onclick="pickSlotPhoto(1)">
+      <span class="slot-icon">+</span>
+      <div class="slot-label">상단 2</div>
+    </div>
+    <div class="photo-slot" data-idx="2" onclick="pickSlotPhoto(2)">
+      <span class="slot-icon">+</span>
+      <div class="slot-label">상단 3</div>
+    </div>
+    <div class="photo-slot" data-idx="3" onclick="pickSlotPhoto(3)">
+      <span class="slot-icon">+</span>
+      <div class="slot-label">상단 4</div>
+    </div>
+    <div class="photo-slot" data-idx="4" onclick="pickSlotPhoto(4)">
+      <span class="slot-icon">+</span>
+      <div class="slot-label">하단 좌</div>
+    </div>
+    <div class="photo-slot" data-idx="5" onclick="pickSlotPhoto(5)">
+      <span class="slot-icon">+</span>
+      <div class="slot-label">하단 우</div>
+    </div>
+  </div>
+  <button class="photo-done-btn" id="photoDoneBtn" onclick="completePhotoSelect()">완료</button>
+  <button class="photo-select-skip" onclick="skipPhotoSelect()">기본 사진으로 시작</button>
+  <input type="file" id="slotFileInput" accept="image/*" style="display:none">
+</div>
+
 <!-- Theme Name (desktop only) -->
 <div class="theme-name" id="themeName">WOOD CLASSIC</div>
 
@@ -1716,7 +1789,6 @@
     <div class="theme-dot" data-t="silver" title="크롬 실버 · 브러시드메탈" onclick="setTheme('silver')"></div>
     <div class="theme-dot" data-t="cyber" title="네온 사이버 · 회로기판" onclick="setTheme('cyber')"></div>
     <div class="theme-dot" data-t="rose" title="로즈 골드 · 대리석" onclick="setTheme('rose')"></div>
-    <div class="theme-dot" data-t="kitty" title="키티 · 폴카도트" onclick="setTheme('kitty')"></div>
     <div class="theme-dot" data-t="maltese" title="말티즈 · 털 결" onclick="setTheme('maltese')"></div>
   </div>
 
@@ -1729,44 +1801,9 @@
     <!-- Brand & Power -->
     <div class="radio-top">
       <div class="brand">라디오카페</div>
-      <!-- Kitty mascot -->
-      <svg class="brand-mascot mascot-kitty" width="36" height="36" viewBox="0 0 100 100">
-        <g transform="translate(50,52)">
-          <!-- ears -->
-          <path d="M-25-15 L-30-42 L-10-22Z" fill="#ff69b4" stroke="#ff1493" stroke-width="1.5"/>
-          <path d="M25-15 L30-42 L10-22Z" fill="#ff69b4" stroke="#ff1493" stroke-width="1.5"/>
-          <path d="M-22-18 L-26-36 L-12-22Z" fill="#ffb0cc"/>
-          <path d="M22-18 L26-36 L12-22Z" fill="#ffb0cc"/>
-          <!-- head -->
-          <ellipse cx="0" cy="0" rx="28" ry="25" fill="#ffb6d0" stroke="#ff69b4" stroke-width="1.5"/>
-          <!-- eyes -->
-          <ellipse cx="-10" cy="-4" rx="5" ry="5.5" fill="#333"/>
-          <ellipse cx="10" cy="-4" rx="5" ry="5.5" fill="#333"/>
-          <circle cx="-8" cy="-6" r="2" fill="#fff"/>
-          <circle cx="12" cy="-6" r="2" fill="#fff"/>
-          <!-- nose -->
-          <ellipse cx="0" cy="6" rx="3" ry="2" fill="#ff1493"/>
-          <!-- mouth -->
-          <path d="M0 8 Q-4 14 -8 11" fill="none" stroke="#ff1493" stroke-width="1.2" stroke-linecap="round"/>
-          <path d="M0 8 Q4 14 8 11" fill="none" stroke="#ff1493" stroke-width="1.2" stroke-linecap="round"/>
-          <!-- whiskers -->
-          <line x1="-14" y1="4" x2="-35" y2="0" stroke="#ff69b4" stroke-width="1"/>
-          <line x1="-14" y1="8" x2="-35" y2="8" stroke="#ff69b4" stroke-width="1"/>
-          <line x1="-14" y1="12" x2="-35" y2="16" stroke="#ff69b4" stroke-width="1"/>
-          <line x1="14" y1="4" x2="35" y2="0" stroke="#ff69b4" stroke-width="1"/>
-          <line x1="14" y1="8" x2="35" y2="8" stroke="#ff69b4" stroke-width="1"/>
-          <line x1="14" y1="12" x2="35" y2="16" stroke="#ff69b4" stroke-width="1"/>
-          <!-- bow -->
-          <path d="M-8-20 Q-18-30 -8-35 Q-3-30 -3-24" fill="#ff0055" stroke="#cc0044" stroke-width="0.8"/>
-          <path d="M-3-24 Q-3-30 2-35 Q12-30 2-20" fill="#ff0055" stroke="#cc0044" stroke-width="0.8"/>
-          <circle cx="-3" cy="-24" r="2.5" fill="#ff3366"/>
-        </g>
-      </svg>
-      <!-- Maltese mascots (실제 사진) -->
-      <img class="brand-mascot mascot-maltese" src="maltese.jpg" alt="말티즈" width="34" height="34" onclick="openLightbox(this.src)" style="cursor:pointer">
-      <img class="brand-mascot mascot-maltese" src="photo1.jpg" alt="말티즈" width="34" height="34" onclick="openLightbox(this.src)" style="cursor:pointer">
-      <img class="brand-mascot mascot-maltese" src="photo2.jpg" alt="말티즈" width="34" height="34" onclick="openLightbox(this.src)" style="cursor:pointer">
-      <img class="brand-mascot mascot-maltese" src="photo5.jpg" alt="커플" width="34" height="34" onclick="openLightbox(this.src)" style="cursor:pointer">
+      <!-- Maltese photos (동적) -->
+      <span class="brand-photos" id="brandPhotos"></span>
+      <button class="photo-upload-btn" id="photoUploadBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
       <div class="power-area">
         <div class="power-led" id="powerLed"></div>
         <button class="power-btn" id="powerBtn" title="전원">
@@ -1879,7 +1916,7 @@
         </div>
         <div class="knob-label">VOLUME</div>
       </div>
-      <img class="ctrl-mascot mascot-maltese" src="photo3.jpg" alt="말티즈" onclick="openLightbox(this.src)" style="cursor:pointer">
+      <span class="ctrl-photos" id="ctrlPhotoLeft"></span>
       <div class="play-btn-container">
         <button class="play-btn" id="playBtn" onclick="togglePlay()">
           <svg id="playIcon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="7,3 21,12 7,21"/></svg>
@@ -1887,7 +1924,7 @@
           <svg id="loaderIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:none" class="spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
         </button>
       </div>
-      <img class="ctrl-mascot mascot-maltese" src="photo4.jpg" alt="말티즈" onclick="openLightbox(this.src)" style="cursor:pointer">
+      <span class="ctrl-photos" id="ctrlPhotoRight"></span>
       <div class="knob-area">
         <button class="eq-toggle-btn" id="eqToggleBtn" onclick="toggleEqPanel()" title="이퀄라이저">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
@@ -1944,7 +1981,6 @@
     silver: 'CHROME SILVER \u00b7 \ube0c\ub7ec\uc2dc\ub4dc\uba54\ud0c8',
     cyber: 'NEON CYBER \u00b7 \ud68c\ub85c\uae30\ud310',
     rose: 'ROSE GOLD \u00b7 \ub300\ub9ac\uc11d',
-    kitty: 'KITTY \u00b7 \ud3f4\uce74\ub3c4\ud2b8',
     maltese: 'MALTESE \u00b7 \ud138 \uacb0'
   };
 
@@ -1987,6 +2023,7 @@
     setupKnobDrag();
     updateClock();
     setInterval(updateClock, 1000);
+    loadSavedPhotos();
   }
 
   // === Render ===
@@ -2286,6 +2323,144 @@
         document.getElementById('virtualizerSlider').value = virtualizerValue;
       }
     } catch(e){}
+  }
+
+  // === Photo Selection Screen & Placement ===
+  var DEFAULT_PHOTOS = ['maltese.jpg','photo1.jpg','photo2.jpg','photo5.jpg','photo3.jpg','photo4.jpg'];
+  var slotPhotos = [null,null,null,null,null,null];
+  var activeSlotIdx = -1;
+
+  function pickSlotPhoto(idx){
+    activeSlotIdx = idx;
+    var inp = document.getElementById('slotFileInput');
+    inp.value = '';
+    inp.onchange = function(){
+      if(!this.files||!this.files[0]) return;
+      var reader = new FileReader();
+      reader.onload = function(e){
+        slotPhotos[activeSlotIdx] = e.target.result;
+        updateSlotUI(activeSlotIdx);
+        updatePhotoCount();
+      };
+      reader.readAsDataURL(this.files[0]);
+    };
+    inp.click();
+  }
+
+  function removeSlotPhoto(idx, evt){
+    evt.stopPropagation();
+    slotPhotos[idx] = null;
+    updateSlotUI(idx);
+    updatePhotoCount();
+  }
+
+  function updateSlotUI(idx){
+    var slot = document.querySelectorAll('.photo-slot')[idx];
+    if(!slot) return;
+    if(slotPhotos[idx]){
+      slot.classList.add('filled');
+      var labels = ['상단 1','상단 2','상단 3','상단 4','하단 좌','하단 우'];
+      slot.innerHTML = '<img src="'+slotPhotos[idx]+'" alt="사진'+(idx+1)+'">' +
+        '<button class="remove-photo" onclick="removeSlotPhoto('+idx+',event)">&times;</button>' +
+        '<div class="slot-label">'+labels[idx]+'</div>';
+    } else {
+      slot.classList.remove('filled');
+      var labels = ['상단 1','상단 2','상단 3','상단 4','하단 좌','하단 우'];
+      slot.innerHTML = '<span class="slot-icon">+</span><div class="slot-label">'+labels[idx]+'</div>';
+    }
+  }
+
+  function updatePhotoCount(){
+    var count = slotPhotos.filter(function(p){return p!==null;}).length;
+    document.getElementById('photoCount').textContent = count + ' / 6';
+    var btn = document.getElementById('photoDoneBtn');
+    if(count === 6) btn.classList.add('ready');
+    else btn.classList.remove('ready');
+  }
+
+  function completePhotoSelect(){
+    var count = slotPhotos.filter(function(p){return p!==null;}).length;
+    if(count < 6) return;
+    try{ localStorage.setItem('radioUserPhotos', JSON.stringify(slotPhotos)); }catch(e){}
+    showRadioScreen(slotPhotos);
+  }
+
+  function skipPhotoSelect(){
+    showRadioScreen(DEFAULT_PHOTOS);
+  }
+
+  function showRadioScreen(photos){
+    var screen = document.getElementById('photoSelectScreen');
+    screen.classList.add('hiding');
+    setTimeout(function(){
+      screen.classList.add('hidden');
+    }, 500);
+    renderUserPhotos(photos);
+    // [+] 버튼 표시
+    document.getElementById('photoUploadBtn').classList.add('has-photos');
+  }
+
+  function reopenPhotoSelect(){
+    // 사진 선택 화면 다시 열기
+    slotPhotos = [null,null,null,null,null,null];
+    var screen = document.getElementById('photoSelectScreen');
+    screen.classList.remove('hidden','hiding');
+    // 슬롯 UI 초기화
+    for(var i=0;i<6;i++) updateSlotUI(i);
+    updatePhotoCount();
+  }
+
+  function renderUserPhotos(photos){
+    var bp=document.getElementById('brandPhotos');
+    bp.innerHTML='';
+    for(var i=0;i<4&&i<photos.length;i++){
+      var img=document.createElement('img');
+      img.className='brand-mascot';
+      img.style.display='block';
+      img.src=photos[i]; img.alt='사진'+(i+1);
+      img.width=34; img.height=34;
+      img.style.cursor='pointer';
+      img.onclick=(function(s){return function(){openLightbox(s)}})(photos[i]);
+      bp.appendChild(img);
+    }
+    var cl=document.getElementById('ctrlPhotoLeft');
+    cl.innerHTML='';
+    if(photos.length>4){
+      var il=document.createElement('img');
+      il.className='ctrl-mascot';
+      il.style.display='block';
+      il.src=photos[4]; il.alt='사진5';
+      il.style.cursor='pointer';
+      il.onclick=(function(s){return function(){openLightbox(s)}})(photos[4]);
+      cl.appendChild(il);
+    }
+    var cr=document.getElementById('ctrlPhotoRight');
+    cr.innerHTML='';
+    if(photos.length>5){
+      var ir=document.createElement('img');
+      ir.className='ctrl-mascot';
+      ir.style.display='block';
+      ir.src=photos[5]; ir.alt='사진6';
+      ir.style.cursor='pointer';
+      ir.onclick=(function(s){return function(){openLightbox(s)}})(photos[5]);
+      cr.appendChild(ir);
+    }
+  }
+
+  function loadSavedPhotos(){
+    // 항상 사진 선택 화면을 먼저 표시
+    // 저장된 사진이 있으면 슬롯에 미리 채워둠
+    try{
+      var saved=localStorage.getItem('radioUserPhotos');
+      if(saved){
+        var photos = JSON.parse(saved);
+        slotPhotos = photos.slice();
+        for(var i=0;i<6;i++) updateSlotUI(i);
+        updatePhotoCount();
+      }
+    }catch(e){}
+    renderUserPhotos(DEFAULT_PHOTOS);
+    document.getElementById('photoUploadBtn').classList.add('has-photos');
   }
 
   // === Photo Lightbox ===
