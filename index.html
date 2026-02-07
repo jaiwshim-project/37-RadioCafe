@@ -3206,6 +3206,22 @@
     renderUserList();
   });
 
+  // === 한글을 안전한 경로로 변환 ===
+  function toSafePath(str){
+    return str.split('').map(function(c){
+      var code = c.charCodeAt(0);
+      if((code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122) || c === '-' || c === '_'){
+        return c;
+      }
+      return '_' + code.toString(16) + '_';
+    }).join('');
+  }
+  function fromSafePath(str){
+    return str.replace(/_([0-9a-f]+)_/gi, function(m, hex){
+      return String.fromCharCode(parseInt(hex, 16));
+    });
+  }
+
   // === Supabase 설정 ===
   var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
@@ -3246,7 +3262,7 @@
           else if(mime === 'image/gif') ext = 'gif';
           else if(mime === 'image/webp') ext = 'webp';
         }
-        var fileName = encodeURIComponent(currentUsername) + '/' + encodeURIComponent(albumName) + '/photo_' + (i + 1) + '.' + ext;
+        var fileName = toSafePath(currentUsername) + '/' + toSafePath(albumName) + '/photo_' + (i + 1) + '.' + ext;
         var blob = dataURLtoBlob(dataUrl);
 
         var { error } = await supabase.storage
@@ -3266,7 +3282,7 @@
   async function showAlbumList(){
     try {
       // 현재 사용자의 폴더에서 사진첩 목록 가져오기
-      var encodedUser = encodeURIComponent(currentUsername);
+      var encodedUser = toSafePath(currentUsername);
       var { data, error } = await supabase.storage
         .from(BUCKET_NAME)
         .list(encodedUser, { limit: 100 });
@@ -3279,7 +3295,7 @@
         var item = data[i];
         if(item.name && !item.id) {
           // 폴더인 경우 - 디코딩해서 표시
-          var decodedName = decodeURIComponent(item.name);
+          var decodedName = fromSafePath(item.name);
           albumMap[item.name] = { name: item.name, displayName: decodedName, count: 0 };
         }
       }
@@ -3327,7 +3343,7 @@
 
   async function loadAlbum(albumName){
     try {
-      var userAlbumPath = encodeURIComponent(currentUsername) + '/' + albumName;
+      var userAlbumPath = toSafePath(currentUsername) + '/' + albumName;
       var { data: files, error } = await supabase.storage
         .from(BUCKET_NAME)
         .list(userAlbumPath, { limit: 10 });
