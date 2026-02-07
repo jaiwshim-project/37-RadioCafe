@@ -1298,6 +1298,11 @@
       renderUserList(filtered);
     }
 
+    function getUserEmail(userData) {
+      if (userData && typeof userData === 'object' && userData.email) return userData.email;
+      return '';
+    }
+
     function renderUserList(userNames) {
       var container = document.getElementById('userList');
       if (userNames.length === 0) {
@@ -1308,11 +1313,14 @@
       var html = '';
       for (var i = 0; i < userNames.length; i++) {
         var name = userNames[i];
+        var email = getUserEmail(allUsers[name]);
+        var emailHtml = email ? '<div style="font-size:11px;color:rgba(212,175,105,0.5);margin-top:1px;">' + escapeHtml(email) + '</div>' : '';
         html += '<div class="user-item" id="user-' + i + '">'
           + '<div class="user-row" onclick="toggleUserDetail(' + i + ',\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">'
           + '<div class="user-info">'
           + '<div class="user-avatar">' + escapeHtml(name.charAt(0)) + '</div>'
           + '<div><div class="user-name">' + escapeHtml(name) + '</div>'
+          + emailHtml
           + '<div class="user-meta" id="userMeta-' + i + '">불러오는 중...</div></div>'
           + '</div>'
           + '<div class="user-actions">'

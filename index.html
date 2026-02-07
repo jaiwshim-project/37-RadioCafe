@@ -2313,9 +2313,10 @@
       <div class="login-box hidden" id="newUserBox">
         <div class="login-lcd">
           <div class="login-lcd-title">NEW USER</div>
-          <div class="login-lcd-sub">이름과 비밀번호를 입력하세요</div>
+          <div class="login-lcd-sub">이름, 이메일, 비밀번호를 입력하세요</div>
         </div>
         <input type="text" id="newUsernameInput" class="username-input" placeholder="이름 입력..." maxlength="20">
+        <input type="email" id="newEmailInput" class="username-input" placeholder="이메일 입력..." style="margin-top:8px;">
         <input type="password" id="newPasswordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
         <button class="login-btn" onclick="registerNewUser()">등록하기</button>
         <button class="back-btn" onclick="showUserSelect()">← 돌아가기</button>
@@ -3189,8 +3190,15 @@
     document.getElementById('userSelectBox').classList.add('hidden');
     document.getElementById('newUserBox').classList.remove('hidden');
     document.getElementById('newUsernameInput').value = '';
+    document.getElementById('newEmailInput').value = '';
     document.getElementById('newPasswordInput').value = '';
     document.getElementById('newUsernameInput').focus();
+  }
+
+  function getUserPassword(userData){
+    if(typeof userData === 'string') return userData;
+    if(userData && userData.password) return userData.password;
+    return '';
   }
 
   function submitPassword(){
@@ -3204,7 +3212,7 @@
     }
 
     var users = getUsers();
-    if(users[selectedUser] !== pass){
+    if(getUserPassword(users[selectedUser]) !== pass){
       alert('비밀번호가 일치하지 않습니다.');
       passInput.value = '';
       passInput.focus();
@@ -3219,13 +3227,20 @@
 
   async function registerNewUser(){
     var nameInput = document.getElementById('newUsernameInput');
+    var emailInput = document.getElementById('newEmailInput');
     var passInput = document.getElementById('newPasswordInput');
     var name = nameInput.value.trim();
+    var email = emailInput.value.trim();
     var pass = passInput.value.trim();
 
     if(!name){
       alert('이름을 입력해주세요.');
       nameInput.focus();
+      return;
+    }
+    if(!email){
+      alert('이메일을 입력해주세요.');
+      emailInput.focus();
       return;
     }
     if(!pass || pass.length !== 4 || !/^\d{4}$/.test(pass)){
@@ -3240,7 +3255,7 @@
       return;
     }
 
-    users[name] = pass;
+    users[name] = { password: pass, email: email };
     cachedUsers = users;
     localStorage.setItem('radioUsers', JSON.stringify(users));
     await saveUsersToCloud(users);
