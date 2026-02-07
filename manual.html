@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>라디오카페 | 사용법</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(212,175,105,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(212,175,105,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .manual-card {
+      width: 100%; max-width: 520px;
+      background: linear-gradient(145deg, #3a2e28, #2a201a);
+      border-radius: 28px; padding: 3px;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.5),
+        0 0 40px rgba(212,175,105,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      position: relative; z-index: 1;
+    }
+
+    .manual-inner {
+      background: linear-gradient(145deg, #2a2018, #1e1610);
+      border-radius: 25px; padding: 40px 30px;
+      position: relative;
+    }
+
+    /* 나사 장식 */
+    .screw {
+      position: absolute; width: 10px; height: 10px;
+      background: linear-gradient(145deg, #4a3a28, #2a1c10);
+      border-radius: 50%;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .screw::after {
+      content: ''; position: absolute;
+      top: 50%; left: 50%; width: 60%; height: 1px;
+      background: #1a120a; transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .screw-tl { top: 12px; left: 12px; }
+    .screw-tr { top: 12px; right: 12px; }
+    .screw-bl { bottom: 12px; left: 12px; }
+    .screw-br { bottom: 12px; right: 12px; }
+
+    /* 스피커 */
+    .speaker {
+      background: linear-gradient(145deg, #1a120a, #0e0a06);
+      border-radius: 8px; padding: 8px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(212,175,105,0.1);
+    }
+    .speaker-label {
+      text-align: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 10px; letter-spacing: 4px;
+      color: rgba(212,175,105,0.4);
+    }
+
+    /* 헤더 */
+    .manual-header {
+      text-align: center; margin-bottom: 30px;
+    }
+
+    .manual-icon {
+      width: 80px; height: 80px; margin: 0 auto 20px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 10px 30px rgba(212,175,105,0.3);
+    }
+
+    .manual-title {
+      font-family: 'Outfit', sans-serif; font-size: 24px;
+      font-weight: 800; color: #d4af69;
+      letter-spacing: 2px; margin-bottom: 8px;
+    }
+
+    .manual-subtitle {
+      font-size: 13px; color: rgba(212,175,105,0.6);
+    }
+
+    /* 섹션 */
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif; font-size: 14px;
+      color: #d4af69; letter-spacing: 1px;
+      margin-bottom: 12px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .section-title::before {
+      content: ''; width: 4px; height: 16px;
+      background: #d4af69; border-radius: 2px;
+    }
+
+    .step-list {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .step-item {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(212,175,105,0.15);
+      border-radius: 12px; padding: 14px 16px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+
+    .step-number {
+      width: 24px; height: 24px; flex-shrink: 0;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-size: 12px;
+      font-weight: 700; color: #1a1410;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 14px; color: rgba(255,255,255,0.9);
+      font-weight: 600; margin-bottom: 4px;
+    }
+
+    .step-desc {
+      font-size: 12px; color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+
+    /* LCD 팁 박스 */
+    .tip-box {
+      background: linear-gradient(180deg, #0a1a0a, #081408);
+      border-radius: 12px; padding: 16px;
+      margin-bottom: 24px;
+      border: 2px solid rgba(212,175,105,0.15);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .tip-title {
+      font-family: 'Orbitron', monospace; font-size: 11px;
+      color: #55ff55; letter-spacing: 3px; font-weight: 700;
+      text-shadow: 0 0 10px rgba(85,255,85,0.6);
+      margin-bottom: 10px; text-align: center;
+    }
+
+    .tip-text {
+      font-size: 12px; color: #3abf3a;
+      line-height: 1.7; text-align: center;
+    }
+
+    /* 링크 버튼 */
+    .link-section {
+      display: flex; justify-content: center; gap: 12px;
+      flex-wrap: wrap; margin-bottom: 24px;
+    }
+
+    .link-btn {
+      padding: 12px 28px; border-radius: 24px;
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      color: #1a1410; text-decoration: none;
+      font-family: 'Outfit', sans-serif; font-size: 14px;
+      font-weight: 700; letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+
+    .link-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(212,175,105,0.4);
+    }
+
+    /* 푸터 */
+    .manual-footer {
+      padding-top: 20px;
+      border-top: 1px solid rgba(212,175,105,0.15);
+      text-align: center;
+    }
+
+    .copyright {
+      font-size: 11px; color: rgba(212,175,105,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="manual-card">
+    <div class="manual-inner">
+      <div class="screw screw-tl"></div>
+      <div class="screw screw-tr"></div>
+      <div class="screw screw-bl"></div>
+      <div class="screw screw-br"></div>
+
+      <div class="speaker">
+        <div class="speaker-label">USER MANUAL</div>
+      </div>
+
+      <div class="manual-header">
+        <div class="manual-icon">📻</div>
+        <div class="manual-title">사용법</div>
+        <div class="manual-subtitle">라디오카페 이용 가이드</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">시작하기</div>
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">로그인</div>
+              <div class="step-desc">기존 사용자를 선택하거나 새 사용자로 등록하세요. 비밀번호는 숫자 4자리입니다.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">라디오 선택</div>
+              <div class="step-desc">다이얼을 돌려 원하는 라디오 채널을 선택하세요. 재생 버튼을 누르면 방송이 시작됩니다.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">사진첩 기능</div>
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">사진 선택</div>
+              <div class="step-desc">"사진 선택" 버튼을 눌러 추억의 사진 6장을 선택하세요.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">사진첩 저장</div>
+              <div class="step-desc">"사진첩 저장" 버튼을 눌러 이름을 입력하면 클라우드에 저장됩니다.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <div class="step-title">사진첩 불러오기</div>
+              <div class="step-desc">"사진첩 열기" 버튼으로 저장된 사진첩을 언제든 불러올 수 있습니다.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">TIP</div>
+        <div class="tip-text">
+          사진을 클릭하면 크게 볼 수 있어요.<br>
+          라디오를 들으며 추억의 사진과 함께<br>
+          그 시절로 돌아가 보세요.
+        </div>
+      </div>
+
+      <div class="link-section">
+        <a href="index.html" class="link-btn">← 라디오카페</a>
+      </div>
+
+      <div class="manual-footer">
+        <div class="copyright">© 2026 Hyein Cho. All rights reserved.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
