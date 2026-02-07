@@ -3318,7 +3318,9 @@
   // === Supabase 설정 ===
   var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
-  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    global: { fetch: function(url, opts) { opts = opts || {}; opts.cache = 'no-store'; return fetch(url, opts); } }
+  });
   var BUCKET_NAME = 'photo-albums';
 
   // base64를 Blob으로 변환
