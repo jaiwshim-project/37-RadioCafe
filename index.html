@@ -1432,6 +1432,24 @@
       font-size: 14px; font-weight: 700; color: #FF6B8A;
       margin-bottom: 16px;
     }
+    .photo-batch-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff; border: none;
+      padding: 14px 28px; border-radius: 30px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+    .photo-batch-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102,126,234,0.5);
+    }
+    .photo-batch-btn:active { transform: scale(0.96); }
+    .photo-select-or {
+      font-size: 12px; color: #bbb; margin-bottom: 12px;
+    }
 
     /* === PHOTO UPLOAD (in-radio) === */
     .photo-upload-btn {
@@ -1743,6 +1761,9 @@
   <div class="photo-select-title">라디오카페</div>
   <div class="photo-select-sub">갤러리에서 사진을 선택하세요<br>6장의 사진이 라디오에 배치됩니다 (상단 4장 + 하단 2장)</div>
   <div class="photo-select-count" id="photoCount">0 / 6</div>
+  <button class="photo-batch-btn" onclick="pickAllPhotos()">갤러리에서 6장 한번에 선택</button>
+  <input type="file" id="batchFileInput" accept="image/*" multiple style="display:none">
+  <div class="photo-select-or">또는 아래에서 한 장씩 선택</div>
   <div class="photo-grid" id="photoGrid">
     <div class="photo-slot" data-idx="0" onclick="pickSlotPhoto(0)">
       <span class="slot-icon">+</span>
@@ -2368,6 +2389,34 @@
       var labels = ['상단 1','상단 2','상단 3','상단 4','하단 좌','하단 우'];
       slot.innerHTML = '<span class="slot-icon">+</span><div class="slot-label">'+labels[idx]+'</div>';
     }
+  }
+
+  function pickAllPhotos(){
+    var inp = document.getElementById('batchFileInput');
+    inp.value = '';
+    inp.onchange = function(){
+      if(!this.files||this.files.length===0) return;
+      var files = Array.from(this.files).slice(0,6);
+      var loaded = 0;
+      files.forEach(function(file, i){
+        var reader = new FileReader();
+        reader.onload = function(e){
+          slotPhotos[i] = e.target.result;
+          updateSlotUI(i);
+          loaded++;
+          if(loaded === files.length){
+            // 6장 미만이면 나머지 슬롯 비움
+            for(var j=files.length; j<6; j++){
+              slotPhotos[j] = null;
+              updateSlotUI(j);
+            }
+            updatePhotoCount();
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    };
+    inp.click();
   }
 
   function updatePhotoCount(){
