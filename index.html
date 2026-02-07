@@ -1335,13 +1335,32 @@
     }
 
     /* === PHOTO SELECTION SCREEN (Radio Style) === */
+    @keyframes landingShimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes landingPulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    @keyframes landingFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
     .photo-select-screen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: #f0ebe5;
+      background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
       z-index: 10000;
       display: flex; align-items: center; justify-content: center;
       padding: 16px;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .photo-select-screen::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(212,175,105,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(212,175,105,0.04) 0%, transparent 50%);
+      pointer-events: none;
     }
     .photo-select-screen.hiding {
       opacity: 0; transform: scale(1.05); pointer-events: none;
@@ -1349,211 +1368,262 @@
     .photo-select-screen.hidden { display: none; }
     .photo-radio-body {
       width: 100%; max-width: 420px;
-      background: linear-gradient(145deg, #e8ddd0, #d8ccc0);
-      border-radius: 24px;
+      background: linear-gradient(145deg, #3a2e28, #2a201a);
+      border-radius: 28px;
       padding: 3px;
       box-shadow:
-        0 30px 60px rgba(100,70,40,0.25),
-        0 0 10px rgba(222,184,135,0.4),
-        0 0 25px rgba(222,184,135,0.2),
-        inset 0 1px 0 rgba(255,255,255,0.5);
-      border: 2px solid rgba(222,184,135,0.6);
+        0 40px 80px rgba(0,0,0,0.5),
+        0 0 40px rgba(212,175,105,0.08),
+        0 0 80px rgba(212,175,105,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      border: 2px solid rgba(212,175,105,0.6);
+      position: relative;
+    }
+    .photo-radio-body::before {
+      content: ''; position: absolute; top: -2px; left: 15%; right: 15%; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,105,0.8), transparent);
+      z-index: 3;
     }
     .photo-radio-inner {
-      background: linear-gradient(145deg, #faf8f5, #f0ebe5);
-      border-radius: 21px;
-      padding: 20px 16px;
+      background: linear-gradient(160deg, #2e2420 0%, #241c18 50%, #1e1614 100%);
+      border-radius: 25px;
+      padding: 24px 18px;
       position: relative;
       overflow: hidden;
     }
     .photo-radio-inner::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       background:
-        repeating-linear-gradient(90deg, rgba(139,94,60,0.02) 0px, transparent 1px, transparent 4px),
-        repeating-linear-gradient(0deg, rgba(139,94,60,0.015) 0px, transparent 1px, transparent 4px);
+        repeating-linear-gradient(90deg, rgba(212,175,105,0.01) 0px, transparent 1px, transparent 3px),
+        repeating-linear-gradient(0deg, rgba(212,175,105,0.008) 0px, transparent 1px, transparent 3px);
       pointer-events: none; border-radius: inherit;
+    }
+    /* Gold trim line */
+    .photo-radio-inner::after {
+      content: ''; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px;
+      border: 1px solid rgba(212,175,105,0.2);
+      border-radius: 16px; pointer-events: none;
     }
     /* Speaker grille top */
     .photo-speaker {
-      background: #e0d5ca;
-      border-radius: 12px;
-      padding: 8px;
-      margin-bottom: 14px;
-      border: 1px solid #c8b8a5;
+      background: linear-gradient(180deg, #1e1814, #2a221c);
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      border: 2px solid rgba(212,175,105,0.45);
       position: relative;
       overflow: hidden;
     }
     .photo-speaker::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       background-image:
-        radial-gradient(circle, rgba(139,94,60,0.1) 1px, transparent 1px),
-        radial-gradient(circle, rgba(139,94,60,0.06) 1px, transparent 1px);
-      background-size: 4px 4px, 4px 4px;
-      background-position: 0 0, 2px 2px;
+        radial-gradient(circle, rgba(212,175,105,0.08) 0.8px, transparent 0.8px),
+        radial-gradient(circle, rgba(212,175,105,0.04) 0.8px, transparent 0.8px);
+      background-size: 5px 5px, 5px 5px;
+      background-position: 0 0, 2.5px 2.5px;
     }
     .photo-speaker-label {
       text-align: center;
       font-family: 'Orbitron', monospace;
-      font-size: 10px; letter-spacing: 4px;
+      font-size: 9px; letter-spacing: 5px;
       font-weight: 900;
-      color: #6a4830;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+      color: #d4af69;
+      text-shadow: 0 0 10px rgba(212,175,105,0.5), 0 0 4px rgba(212,175,105,0.3);
       position: relative; z-index: 1;
     }
     /* Brand */
     .photo-brand {
-      text-align: center; margin-bottom: 12px; position: relative; z-index: 1;
+      text-align: center; margin-bottom: 16px; position: relative; z-index: 1;
     }
     .photo-brand-text {
       font-family: 'Outfit', sans-serif;
-      font-size: 24px; font-weight: 800;
-      color: #6a4830; letter-spacing: 3px;
-      text-shadow: 0 1px 0 rgba(255,255,255,0.5), 0 2px 4px rgba(0,0,0,0.15);
+      font-size: 22px; font-weight: 800;
+      background: linear-gradient(135deg, #d4af69, #f0d890, #d4af69, #c49a50);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: landingShimmer 4s linear infinite;
+      letter-spacing: 2px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+    .photo-brand-sub {
+      display: block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 500;
+      color: rgba(212,175,105,0.8);
+      margin-top: 6px;
+      letter-spacing: 1.5px;
+    }
+    /* Decorative divider */
+    .photo-brand::after {
+      content: ''; display: block;
+      width: 80px; height: 1px; margin: 12px auto 0;
+      background: linear-gradient(90deg, transparent, rgba(212,175,105,0.6), transparent);
     }
     /* LCD area - instructions */
     .photo-lcd {
-      background: #1a120a;
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 14px;
-      border: 1px solid #0e0a06;
+      background: linear-gradient(180deg, #0a0806, #12100c);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      border: 2px solid rgba(212,175,105,0.4);
       text-align: center;
       position: relative; z-index: 1;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.3);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.8), 0 0 8px rgba(212,175,105,0.1);
+    }
+    .photo-lcd::before {
+      content: ''; position: absolute; top: -1px; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,105,0.6), transparent);
     }
     .photo-lcd-title {
       font-family: 'Orbitron', monospace;
-      font-size: 14px; color: #ffdd88; letter-spacing: 2px;
-      text-shadow: 0 0 12px rgba(255,221,136,0.8), 0 0 4px rgba(255,221,136,0.5);
-      margin-bottom: 6px; font-weight: 700;
+      font-size: 14px; color: #f0d890; letter-spacing: 3px;
+      text-shadow: 0 0 16px rgba(240,216,144,0.7), 0 0 6px rgba(240,216,144,0.4);
+      margin-bottom: 8px; font-weight: 700;
     }
     .photo-lcd-sub {
       font-family: 'Inter', sans-serif;
-      font-size: 13px; color: #ccaa55; line-height: 1.6;
-      text-shadow: 0 0 6px rgba(204,170,85,0.5);
+      font-size: 13px; color: rgba(212,175,105,0.8); line-height: 1.7; font-weight: 500;
+      letter-spacing: 0.5px;
     }
     .photo-lcd-count {
       font-family: 'Orbitron', monospace;
-      font-size: 22px; font-weight: 900;
-      color: #ffdd88; margin-top: 8px;
-      text-shadow: 0 0 14px rgba(255,221,136,0.9), 0 0 6px rgba(255,221,136,0.5);
+      font-size: 24px; font-weight: 900;
+      color: #f0d890; margin-top: 10px;
+      text-shadow: 0 0 20px rgba(240,216,144,0.8), 0 0 8px rgba(240,216,144,0.5);
+      animation: landingPulse 2s ease-in-out infinite;
     }
     /* Photo grid */
     .photo-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 10px;
       width: 100%;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       position: relative; z-index: 1;
     }
     .photo-slot {
       position: relative;
       aspect-ratio: 1;
-      border-radius: 10px;
-      border: 2px dashed #c8b8a5;
-      background: #fff;
+      border-radius: 12px;
+      border: 2px dashed rgba(212,175,105,0.5);
+      background: rgba(255,255,255,0.03);
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       overflow: hidden;
       transition: all 0.3s ease;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.06);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
     }
-    .photo-slot:hover { border-color: #8B5E3C; box-shadow: 0 4px 12px rgba(139,94,60,0.2); }
-    .photo-slot.filled { border: 2px solid #8B5E3C; box-shadow: 0 4px 12px rgba(139,94,60,0.2); }
+    .photo-slot:hover {
+      border-color: rgba(212,175,105,0.8);
+      background: rgba(212,175,105,0.05);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3), 0 0 16px rgba(212,175,105,0.15);
+    }
+    .photo-slot.filled {
+      border: 2px solid rgba(212,175,105,0.7);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 12px rgba(212,175,105,0.15);
+    }
     .photo-slot.filled img {
       width: 100%; height: 100%; object-fit: cover;
-      border-radius: 8px;
+      border-radius: 10px;
     }
     .photo-slot .slot-label {
       position: absolute; bottom: 4px; left: 0; right: 0;
-      text-align: center; font-size: 10px; color: #6a4830;
+      text-align: center; font-size: 9px;
+      color: rgba(212,175,105,0.7);
       font-family: 'Orbitron', monospace;
       font-weight: 700; letter-spacing: 0.5px;
     }
     .photo-slot.filled .slot-label {
-      background: rgba(0,0,0,0.65); color: #fff;
-      border-radius: 0 0 8px 8px;
-      padding: 3px 0; bottom: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: rgba(255,255,255,0.85);
+      border-radius: 0 0 10px 10px;
+      padding: 8px 0 4px; bottom: 0;
     }
     .photo-slot .slot-icon {
-      font-size: 28px; color: #c8b8a5; transition: color 0.3s;
+      font-size: 26px; color: rgba(212,175,105,0.4); transition: all 0.3s;
     }
-    .photo-slot:hover .slot-icon { color: #8B5E3C; }
+    .photo-slot:hover .slot-icon { color: rgba(212,175,105,0.8); }
     .photo-slot .remove-photo {
-      position: absolute; top: 3px; right: 3px;
+      position: absolute; top: 4px; right: 4px;
       width: 22px; height: 22px; border-radius: 50%;
-      background: #cc3333; color: #fff;
-      border: none;
-      font-size: 14px; font-weight: 700; line-height: 1;
+      background: rgba(180,60,60,0.85); color: #fff;
+      border: 1px solid rgba(255,255,255,0.15);
+      font-size: 13px; font-weight: 700; line-height: 1;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
     }
     /* Control area */
     .photo-controls {
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
       position: relative; z-index: 1;
     }
     .photo-batch-btn {
-      background: #8B5E3C;
-      color: #fff; border: none;
-      padding: 12px 26px; border-radius: 20px;
-      font-size: 14px; font-weight: 800; font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, rgba(212,175,105,0.15), rgba(212,175,105,0.08));
+      color: rgba(212,175,105,0.9); border: 2px solid rgba(212,175,105,0.5);
+      padding: 12px 28px; border-radius: 24px;
+      font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif;
       cursor: pointer; letter-spacing: 0.5px;
-      box-shadow: 0 4px 12px rgba(139,94,60,0.4);
       transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
     }
     .photo-batch-btn:hover {
-      background: #6a4830;
-      box-shadow: 0 6px 16px rgba(139,94,60,0.5);
+      background: linear-gradient(135deg, rgba(212,175,105,0.25), rgba(212,175,105,0.12));
+      border-color: rgba(212,175,105,0.7);
+      color: #d4af69;
+      box-shadow: 0 4px 20px rgba(212,175,105,0.2);
     }
-    .photo-batch-btn:active { transform: scale(0.96); }
+    .photo-batch-btn:active { transform: scale(0.97); }
     .photo-select-or {
-      font-size: 11px; color: #8a7060;
-      font-family: 'Inter', sans-serif; letter-spacing: 1px; font-weight: 600;
+      font-size: 10px; color: rgba(212,175,105,0.45);
+      font-family: 'Orbitron', monospace; letter-spacing: 3px; font-weight: 600;
     }
     .photo-done-btn {
-      background: #6a4830;
-      color: #fff; border: none;
-      padding: 14px 44px; border-radius: 24px;
-      font-size: 17px; font-weight: 900; font-family: 'Outfit', sans-serif;
-      cursor: pointer; letter-spacing: 2px;
-      box-shadow: 0 6px 20px rgba(106,72,48,0.4);
+      background: linear-gradient(135deg, #d4af69, #c49a50);
+      color: #1a1410; border: 2px solid rgba(240,216,144,0.6);
+      padding: 14px 50px; border-radius: 28px;
+      font-size: 16px; font-weight: 900; font-family: 'Outfit', sans-serif;
+      cursor: pointer; letter-spacing: 3px;
+      box-shadow: 0 6px 24px rgba(212,175,105,0.3);
       transition: all 0.3s ease;
-      opacity: 0.3; pointer-events: none;
+      opacity: 0.2; pointer-events: none;
     }
     .photo-done-btn.ready {
       opacity: 1; pointer-events: auto;
+      animation: landingFloat 3s ease-in-out infinite;
     }
     .photo-done-btn.ready:hover {
       transform: translateY(-2px);
-      background: #5a3820;
-      box-shadow: 0 8px 28px rgba(106,72,48,0.5);
+      background: linear-gradient(135deg, #e0c080, #d4af69);
+      box-shadow: 0 8px 32px rgba(212,175,105,0.4), 0 0 20px rgba(212,175,105,0.15);
     }
-    .photo-done-btn.ready:active { transform: scale(0.96); }
+    .photo-done-btn.ready:active { transform: scale(0.97); animation: none; }
     .photo-select-skip {
       margin-top: 4px; background: none; border: none;
-      color: #8a7060; font-size: 12px; cursor: pointer;
+      color: rgba(212,175,105,0.55); font-size: 11px; cursor: pointer;
       font-family: 'Inter', sans-serif;
-      text-decoration: underline; font-weight: 600;
+      text-decoration: none; font-weight: 500; letter-spacing: 0.5px;
+      transition: color 0.3s;
     }
-    .photo-select-skip:hover { color: #5a3820; }
+    .photo-select-skip:hover { color: rgba(212,175,105,0.8); }
     /* Screws */
     .photo-screw {
-      position: absolute; width: 10px; height: 10px;
-      background: linear-gradient(145deg, #d8ccc0, #bfb0a0);
-      border-radius: 50%; border: 1px solid #a09080;
+      position: absolute; width: 8px; height: 8px;
+      background: linear-gradient(145deg, #3a3028, #2a2018);
+      border-radius: 50%; border: 1px solid rgba(212,175,105,0.15);
       z-index: 2;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
     }
     .photo-screw::after {
       content: ''; position: absolute; top: 50%; left: 50%;
       transform: translate(-50%,-50%) rotate(35deg);
-      width: 6px; height: 1px; background: #a09080;
+      width: 4px; height: 0.5px; background: rgba(212,175,105,0.3);
     }
-    .photo-screw-tl { top: 8px; left: 8px; }
-    .photo-screw-tr { top: 8px; right: 8px; }
-    .photo-screw-bl { bottom: 8px; left: 8px; }
-    .photo-screw-br { bottom: 8px; right: 8px; }
+    .photo-screw-tl { top: 10px; left: 10px; }
+    .photo-screw-tr { top: 10px; right: 10px; }
+    .photo-screw-bl { bottom: 10px; left: 10px; }
+    .photo-screw-br { bottom: 10px; right: 10px; }
 
     /* === PHOTO UPLOAD (in-radio) === */
     .photo-upload-btn {
@@ -1874,7 +1944,8 @@
       </div>
 
       <div class="photo-brand">
-        <span class="photo-brand-text">라디오카페</span>
+        <span class="photo-brand-text">라디오카페 - 15개 방송듣기</span>
+        <span class="photo-brand-sub">나만의 추억 사진을 보면서 라디오 방송을 들으세요!</span>
       </div>
 
       <div class="photo-lcd">
