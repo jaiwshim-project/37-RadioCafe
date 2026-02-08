@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" style="background:#1a1a2e">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
   <title>클라라 라디오카페 | 디지털 라디오</title>
-  <style>html,body{background:#1a1a2e;}</style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2285,8 +2281,7 @@
 
   </style>
 </head>
-<body style="opacity:0;transition:opacity 0.15s">
-<script>document.addEventListener('DOMContentLoaded',function(){document.body.style.opacity='1';});</script>
+<body>
 
 <!-- Theme Name (desktop only) -->
 <div class="theme-name" id="themeName">WOOD CLASSIC</div>
@@ -2328,7 +2323,7 @@
     <div class="radio-top-row2">
       <button class="photo-upload-btn" id="photoUploadBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
       <span class="brand-photos" id="brandPhotos"></span>
-      <button class="digital-to-analog-btn" onclick="location.href='analog.html?t='+Date.now()" title="아날로그 모드">ANALOG ▸</button>
+      <button class="digital-to-analog-btn" onclick="location.href='analog.html'" title="아날로그 모드">ANALOG ▸</button>
     </div>
 
     <!-- Speaker Grille -->

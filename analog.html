@@ -1,17 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko" style="background:#1a1a2e">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
   <title>클라라 라디오카페 | 아날로그 라디오</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
-  <style>html,body{background:#1a1a2e;}</style>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1614,7 +1610,7 @@
       <button class="photo-upload-btn has-photos" id="analogPhotoBtn" onclick="document.getElementById('analogPhotoInput').click()">+</button>
       <input type="file" id="analogPhotoInput" accept="image/*" multiple style="display:none" onchange="handleAnalogPhotoUpload(event)">
       <span class="analog-photos" id="analogBrandPhotos"></span>
-      <button class="digital-to-analog-btn" onclick="goToDigital()">DIGITAL &#9654;</button>
+      <button class="digital-to-analog-btn" onclick="location.href='digital.html'">DIGITAL &#9654;</button>
     </div>
 
     <!-- Speaker Grille -->
@@ -1763,20 +1759,6 @@
     btn.textContent = hidden ? '▶' : '◀';
     btn.title = hidden ? '테마 보이기' : '테마 감추기';
   }
-  function goToDigital() {
-    // 화면을 즉시 검은색으로 덮기
-    var overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:999999';
-    document.body.appendChild(overlay);
-    document.documentElement.style.background = '#000';
-    // 브라우저가 검은 화면을 확실히 렌더링한 후 이동
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        location.replace('digital.html');
-      });
-    });
-  }
-
   function setTheme(name) {
     currentTheme = name;
     var analogEl = document.getElementById('analogRadio');
