@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>라디오카페 | 아날로그 라디오</title>
+  <title>클라라 라디오카페 | 아날로그 라디오</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
@@ -943,10 +943,12 @@
     }
     .brand {
       font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800;
-      color: var(--accent); letter-spacing: 3px;
+      letter-spacing: 3px;
       text-shadow: 0 -1px 0 rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.4);
       transition: color 0.6s;
     }
+    .brand-clara { color: var(--needle, #ff6b6b); }
+    .brand-cafe { color: var(--accent); }
     /* Brand Mascots - hidden by default */
     .brand-mascot {
       display: none;
@@ -1376,6 +1378,38 @@
       border-radius: 2px;
       box-shadow: 0 0 6px var(--needle-glow);
     }
+    .analog-dial-hub {
+      position: absolute; top: 50%; left: 50%;
+      width: 36px; height: 36px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background:
+        repeating-conic-gradient(
+          rgba(255,255,255,0.04) 0deg, rgba(0,0,0,0.06) 3deg,
+          rgba(255,255,255,0.04) 6deg
+        ),
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(0,0,0,0.3), transparent 50%),
+        radial-gradient(circle, rgba(255,255,255,0.08) 40%, transparent 42%,
+          transparent 58%, rgba(255,255,255,0.06) 60%, transparent 62%),
+        linear-gradient(145deg, var(--knob-from), var(--knob-to));
+      border: 1.5px solid var(--btn-border);
+      box-shadow:
+        inset 0 2px 4px rgba(255,255,255,0.25),
+        inset 0 -2px 4px rgba(0,0,0,0.4),
+        inset 1px 0 2px rgba(255,255,255,0.1),
+        inset -1px 0 2px rgba(0,0,0,0.15),
+        0 2px 6px rgba(0,0,0,0.5),
+        0 0 1px rgba(0,0,0,0.3);
+    }
+    .analog-dial-hub::before {
+      content: ''; position: absolute;
+      top: 20%; left: 20%; width: 60%; height: 60%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%,
+        rgba(255,255,255,0.3), transparent 70%);
+      border: 0.5px solid rgba(255,255,255,0.08);
+    }
     .analog-dial-label {
       font-family: 'Orbitron', monospace; font-size: 9px;
       color: var(--accent); letter-spacing: 2px;
@@ -1426,6 +1460,38 @@
       border-radius: 2px;
       box-shadow: 0 0 6px var(--needle-glow);
     }
+    .analog-vol-hub {
+      position: absolute; top: 50%; left: 50%;
+      width: 36px; height: 36px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background:
+        repeating-conic-gradient(
+          rgba(255,255,255,0.04) 0deg, rgba(0,0,0,0.06) 3deg,
+          rgba(255,255,255,0.04) 6deg
+        ),
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(0,0,0,0.3), transparent 50%),
+        radial-gradient(circle, rgba(255,255,255,0.08) 40%, transparent 42%,
+          transparent 58%, rgba(255,255,255,0.06) 60%, transparent 62%),
+        linear-gradient(145deg, var(--knob-from), var(--knob-to));
+      border: 1.5px solid var(--btn-border);
+      box-shadow:
+        inset 0 2px 4px rgba(255,255,255,0.25),
+        inset 0 -2px 4px rgba(0,0,0,0.4),
+        inset 1px 0 2px rgba(255,255,255,0.1),
+        inset -1px 0 2px rgba(0,0,0,0.15),
+        0 2px 6px rgba(0,0,0,0.5),
+        0 0 1px rgba(0,0,0,0.3);
+    }
+    .analog-vol-hub::before {
+      content: ''; position: absolute;
+      top: 20%; left: 20%; width: 60%; height: 60%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%,
+        rgba(255,255,255,0.3), transparent 70%);
+      border: 0.5px solid rgba(255,255,255,0.08);
+    }
     .analog-vol-label {
       font-family: 'Orbitron', monospace; font-size: 9px;
       color: var(--accent); letter-spacing: 2px;
@@ -1470,6 +1536,7 @@
       .analog-dial-container { width: 110px; height: 110px; }
       .analog-dial-knob { top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 20px); }
       .analog-dial-indicator { height: 20px; }
+      .analog-dial-hub { width: 32px; height: 32px; }
       .analog-dial-tick { transform-origin: 50% 49px; }
       .analog-freq-display { font-size: 28px; }
       .analog-freq-band { height: 30px; }
@@ -1480,6 +1547,7 @@
       .analog-vol-container { width: 110px; height: 110px; }
       .analog-vol-knob { top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 20px); }
       .analog-vol-indicator { height: 20px; }
+      .analog-vol-hub { width: 32px; height: 32px; }
       .analog-vol-tick { transform-origin: 50% 49px; }
       .analog-ctrl-photos img { width: 32px; height: 32px; }
       .analog-footer { margin-top: 4px; padding-top: 4px; }
@@ -1489,8 +1557,10 @@
       .analog-dial-container { width: 96px; height: 96px; }
       .analog-vol-container { width: 96px; height: 96px; }
       .analog-dial-indicator { height: 16px; }
+      .analog-dial-hub { width: 28px; height: 28px; }
       .analog-dial-tick { transform-origin: 50% 42px; }
       .analog-vol-indicator { height: 16px; }
+      .analog-vol-hub { width: 28px; height: 28px; }
       .analog-vol-tick { transform-origin: 50% 42px; }
       .analog-freq-display { font-size: 24px; }
       .analog-freq-band { height: 26px; }
@@ -1527,7 +1597,7 @@
 
     <!-- Brand & Power (1줄) -->
     <div class="radio-top-row1">
-      <div class="brand">라디오카페</div>
+      <div class="brand"><span class="brand-clara">클라라</span> <span class="brand-cafe">라디오카페</span></div>
       <button class="power-btn" id="analogPowerBtn" onclick="toggleAnalogPower()" title="전원">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
       </button>
@@ -1579,6 +1649,7 @@
           <div class="analog-dial-marks" id="analogDialMarks"></div>
           <div class="analog-dial-knob" id="analogDialKnob">
             <div class="analog-dial-indicator"></div>
+            <div class="analog-dial-hub"></div>
           </div>
         </div>
         <div class="analog-dial-label">TUNING</div>
@@ -1593,6 +1664,7 @@
           <div class="analog-vol-marks" id="analogVolMarks"></div>
           <div class="analog-vol-knob" id="analogVolKnob">
             <div class="analog-vol-indicator"></div>
+            <div class="analog-vol-hub"></div>
           </div>
         </div>
         <div class="analog-vol-label">VOLUME</div>
@@ -1751,7 +1823,15 @@
   function loadStream(url){
     isLoading = true;
     if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
-    if(!audio) audio=new Audio();
+    if(!audio) {
+      audio=new Audio();
+      // Prevent browser from killing background audio
+      audio.addEventListener('pause', function() {
+        if (isPlaying && isPowered && analogSnappedStation) {
+          audio.play().catch(function(){});
+        }
+      });
+    }
     initAudioContext();
     connectAudioSource();
     if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
@@ -1774,6 +1854,59 @@
     } else {
       audio.src=url;audio.play().catch(function(e){console.error('Playback failed:',e);isPlaying=false;});
       isPlaying=true;isLoading=false;
+    }
+    updateMediaSession();
+    requestWakeLock();
+  }
+
+  // === Background Playback Support ===
+  var wakeLockSentinel = null;
+
+  function updateMediaSession() {
+    if (!('mediaSession' in navigator)) return;
+    var stName = analogSnappedStation ? analogSnappedStation.name : '클라라 라디오카페';
+    var stProvider = analogSnappedStation ? analogSnappedStation.provider : '';
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: stName,
+      artist: stProvider || '클라라 라디오카페',
+      album: '클라라 라디오카페',
+      artwork: [
+        { src: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="20" fill="%23333"/><text x="64" y="72" text-anchor="middle" font-size="48" fill="%23ffd700">📻</text></svg>'), sizes: '128x128', type: 'image/svg+xml' }
+      ]
+    });
+    navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+    navigator.mediaSession.setActionHandler('play', function() {
+      if (analogSnappedStation && isPowered) {
+        loadStream(analogSnappedStation.url);
+      }
+    });
+    navigator.mediaSession.setActionHandler('pause', function() {
+      if (audio) { audio.pause(); }
+      isPlaying = false;
+      updateMediaSession();
+    });
+    navigator.mediaSession.setActionHandler('stop', function() {
+      if (audio) { audio.pause(); audio.src = ''; }
+      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+      isPlaying = false;
+      updateMediaSession();
+    });
+  }
+
+  async function requestWakeLock() {
+    if (!('wakeLock' in navigator)) return;
+    try {
+      wakeLockSentinel = await navigator.wakeLock.request('screen');
+      wakeLockSentinel.addEventListener('release', function() {
+        wakeLockSentinel = null;
+      });
+    } catch(e) {}
+  }
+
+  function releaseWakeLock() {
+    if (wakeLockSentinel) {
+      wakeLockSentinel.release();
+      wakeLockSentinel = null;
     }
   }
 
@@ -2061,6 +2194,8 @@
         isPowered=false;
         document.getElementById('analogPowerBtn').classList.remove('on');
         stopAnalogEqAnimation();
+        releaseWakeLock();
+        updateMediaSession();
         playStaticNoise();
       }
     }
@@ -2179,6 +2314,8 @@
       inner.classList.add('power-off');
       stopAnalogEqAnimation();
       stopStaticNoise();
+      releaseWakeLock();
+      updateMediaSession();
       var status=document.getElementById('analogStatus');
       status.textContent='OFF';
       status.className='analog-tuning-status tuning';
@@ -2234,6 +2371,22 @@
     if (volKnob) {
       volKnob.style.transform = 'rotate(' + analogVolAngle + 'deg)';
     }
+
+    // Background playback: resume audio context when returning from background
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') {
+        // Returning to foreground — resume suspended audio context
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        if (analogAudioCtx && analogAudioCtx.state === 'suspended') {
+          analogAudioCtx.resume();
+        }
+        // Re-acquire wake lock (released on screen off)
+        if (isPlaying) requestWakeLock();
+      }
+    });
+
   });
 </script>
 </body>

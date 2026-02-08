@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>라디오카페 | 디지털 라디오</title>
+  <title>클라라 라디오카페 | 디지털 라디오</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
@@ -997,10 +997,12 @@
     }
     .brand {
       font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800;
-      color: var(--accent); letter-spacing: 3px;
+      letter-spacing: 3px;
       text-shadow: 0 -1px 0 rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.4);
       transition: color 0.6s;
     }
+    .brand-clara { color: var(--needle, #ff6b6b); }
+    .brand-cafe { color: var(--accent); }
     /* Brand Mascots - hidden by default */
     .brand-mascot {
       display: none;
@@ -1806,7 +1808,7 @@
 
     <!-- Brand & Power (1줄) -->
     <div class="radio-top-row1">
-      <div class="brand">라디오카페</div>
+      <div class="brand"><span class="brand-clara">클라라</span> <span class="brand-cafe">라디오카페</span></div>
       <button class="power-btn" id="powerBtn" title="전원">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
       </button>
@@ -2051,6 +2053,16 @@
     updateClock();
     setInterval(updateClock, 1000);
     loadSavedPhotos();
+
+    // Background playback: resume audio context when returning from background
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') {
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        if (isPlaying) requestWakeLock();
+      }
+    });
   }
 
   // === Render ===
@@ -2105,6 +2117,8 @@
       document.getElementById('antenna').classList.remove('active');
       document.querySelectorAll('.preset-btn').forEach(function(b){b.classList.remove('active');});
       updateSignalBars(false);
+      releaseWakeLock();
+      updateMediaSession();
     }
   });
 
@@ -2135,11 +2149,70 @@
     });
   }
 
+  // === Background Playback Support ===
+  var wakeLockSentinel = null;
+
+  function updateMediaSession() {
+    if (!('mediaSession' in navigator)) return;
+    var stName = currentStation ? currentStation.name : '클라라 라디오카페';
+    var stProvider = currentStation ? currentStation.provider : '';
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: stName,
+      artist: stProvider || '클라라 라디오카페',
+      album: '클라라 라디오카페',
+      artwork: [
+        { src: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="20" fill="%23333"/><text x="64" y="72" text-anchor="middle" font-size="48" fill="%23ffd700">📻</text></svg>'), sizes: '128x128', type: 'image/svg+xml' }
+      ]
+    });
+    navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+    navigator.mediaSession.setActionHandler('play', function() {
+      if (currentStation && isPowered) {
+        loadStream(currentStation.url);
+      }
+    });
+    navigator.mediaSession.setActionHandler('pause', function() {
+      if (audio) { audio.pause(); }
+      setPlayState(false);
+      updateMediaSession();
+      document.getElementById('lcdStatusText').innerHTML = 'PAUSED';
+    });
+    navigator.mediaSession.setActionHandler('stop', function() {
+      if (audio) { audio.pause(); audio.src = ''; }
+      if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+      setPlayState(false);
+      updateMediaSession();
+    });
+  }
+
+  async function requestWakeLock() {
+    if (!('wakeLock' in navigator)) return;
+    try {
+      wakeLockSentinel = await navigator.wakeLock.request('screen');
+      wakeLockSentinel.addEventListener('release', function() {
+        wakeLockSentinel = null;
+      });
+    } catch(e) {}
+  }
+
+  function releaseWakeLock() {
+    if (wakeLockSentinel) {
+      wakeLockSentinel.release();
+      wakeLockSentinel = null;
+    }
+  }
+
   // === Audio ===
   function loadStream(url){
     setError(null); setLoadingState(true);
     if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
-    if(!audio) audio=new Audio();
+    if(!audio) {
+      audio=new Audio();
+      audio.addEventListener('pause', function() {
+        if (isPlaying && isPowered && currentStation) {
+          audio.play().catch(function(){});
+        }
+      });
+    }
     initAudioContext();
     connectAudioSource();
     if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
@@ -2167,12 +2240,14 @@
       setPlayState(true);setLoadingState(false);
       document.getElementById('lcdStatusText').innerHTML='<span class=\"on-air-dot\"></span>ON AIR';
     }
+    updateMediaSession();
+    requestWakeLock();
   }
 
   function togglePlay(){
     if(!audio||!currentStation)return;
-    if(isPlaying){audio.pause();setPlayState(false);document.getElementById('lcdStatusText').innerHTML='PAUSED';}
-    else{audio.play().catch(console.error);setPlayState(true);document.getElementById('lcdStatusText').innerHTML='<span class=\"on-air-dot\"></span>ON AIR';}
+    if(isPlaying){audio.pause();setPlayState(false);document.getElementById('lcdStatusText').innerHTML='PAUSED';releaseWakeLock();updateMediaSession();}
+    else{audio.play().catch(console.error);setPlayState(true);document.getElementById('lcdStatusText').innerHTML='<span class=\"on-air-dot\"></span>ON AIR';requestWakeLock();updateMediaSession();}
   }
 
   function setPlayState(playing){
