@@ -2025,6 +2025,8 @@
     });
   }
 
+  var DEFAULT_PHOTOS = ['maltese.jpg','photo1.jpg','photo2.jpg','photo5.jpg','photo3.jpg','photo4.jpg'];
+
   function renderAnalogPhotos(photos){
     // Brand photos (top)
     var bp=document.getElementById('analogBrandPhotos');
@@ -2384,16 +2386,16 @@
     isPowered = true;
     document.getElementById('analogPowerBtn').classList.add('on');
 
-    // Load saved photos from localStorage if available
+    // Load saved photos from localStorage or use defaults
+    var photos = DEFAULT_PHOTOS;
     try {
       var savedPhotos = localStorage.getItem('radioUserPhotos');
       if (savedPhotos) {
-        var photos = JSON.parse(savedPhotos);
-        if (photos && photos.length > 0) {
-          renderAnalogPhotos(photos);
-        }
+        var parsed = JSON.parse(savedPhotos);
+        if (parsed && parsed.length > 0) photos = parsed;
       }
     } catch(e) {}
+    renderAnalogPhotos(photos);
 
     // Set initial volume knob position
     var volKnob = document.getElementById('analogVolKnob');
