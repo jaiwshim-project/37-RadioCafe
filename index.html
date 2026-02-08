@@ -2955,7 +2955,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
+<body style="opacity:0">
 
 <!-- User Login Screen -->
 <div class="user-login-screen" id="userLoginScreen">
@@ -3386,6 +3386,7 @@
 </div>
 
 <script>
+  document.body.style.opacity='1';
   // === Station Data ===
   var STATIONS = [
     {id:'kbs-1fm',name:'KBS 클래식FM',url:'',apiUrl:'https://cfpwwwapi.kbs.co.kr/api/v1/landing/live/channel_code/24',freq:'93.1 MHz',freqNum:93.1,logoText:'KBS 클래식',provider:'KBS'},
