@@ -7,8 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2953,6 +2951,8 @@
     }
 
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -3175,7 +3175,7 @@
           <div class="album-list-content" id="albumListContent"></div>
         </div>
         <div class="mode-select-row" id="modeSelectRow">
-          <button class="mode-btn analog-btn" onclick="location.href='analog.html'">ANALOG</button>
+          <button class="mode-btn analog-btn" onclick="document.body.style.visibility='hidden';location.href='analog.html'">ANALOG</button>
           <button class="mode-btn digital-btn" onclick="completePhotoSelect()">DIGITAL</button>
         </div>
       </div>
@@ -3225,7 +3225,7 @@
     <div class="radio-top-row2">
       <button class="photo-upload-btn" id="photoUploadBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
       <span class="brand-photos" id="brandPhotos"></span>
-      <button class="digital-to-analog-btn" onclick="location.href='analog.html'" title="아날로그 모드">ANALOG ▸</button>
+      <button class="digital-to-analog-btn" onclick="document.body.style.visibility='hidden';location.href='analog.html'" title="아날로그 모드">ANALOG ▸</button>
     </div>
 
     <!-- Speaker Grille -->
