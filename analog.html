@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>라디오카페 | 아날로그 라디오</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ============================================
+       7 RADIO DESIGN THEMES
+       ============================================ */
+
+    /* 1. Wood Classic (우드 클래식) */
+    :root, [data-theme="wood"] {
+      --bg: #1a1a2e;
+      --body-out1: #3a2a1a; --body-out2: #2a1c0e;
+      --body-in1: #2c1e10; --body-in2: #1e140a;
+      --texture-color: rgba(255,200,100,0.015);
+      --accent: #d4a862;
+      --accent-glow: rgba(212,168,98,0.5);
+      --btn-bg1: #3a2a1a; --btn-bg2: #2a1c10;
+      --btn-hi1: #4a3a28; --btn-hi2: #2a1c10;
+      --btn-active1: #5a4020; --btn-active2: #3a2a1a;
+      --btn-border: #1a120a;
+      --speaker-bg: #1a120a; --speaker-border: #0e0a06;
+      --mesh-color: rgba(200,180,140,0.12);
+      --lcd-bg: #0a1a0a;
+      --lcd-text: #55ff55; --lcd-dim: #3abf3a; --lcd-idle: #2a8a2a;
+      --lcd-glow: rgba(85,255,85,0.6);
+      --screw1: #5a4a38; --screw2: #3a2a1a; --screw-line: #1a120a;
+      --label-color: #c8b8a0; --freq-mark: #a08868;
+      --tick-color: #8a7a60;
+      --needle: #ff3333; --needle-glow: rgba(255,51,51,0.6);
+      --led-on: #00ff88; --led-glow: rgba(0,255,136,0.3);
+      --knob-ind: #d4a862;
+      --footer-color: #a09080; --footer-link: #c8b8a0;
+      --antenna1: #8a7a6a; --antenna2: #c0b0a0;
+      --preset-num: #c8b8a0; --preset-name: #b0a088;
+      --power-icon: #c8b8a0;
+      --neon-border: #ff9933; --neon-glow: rgba(255,153,51,0.6);
+      --neon-light: rgba(255,180,100,0.35); --neon-light-glow: rgba(255,180,100,0.15);
+    }
+
+    /* 2. Retro Cream (레트로 크림) */
+    [data-theme="cream"] {
+      --bg: #d4c5a9;
+      --body-out1: #f5e6c8; --body-out2: #e8d5b0;
+      --body-in1: #ede0c8; --body-in2: #e2d1b0;
+      --texture-color: rgba(180,140,80,0.03);
+      --accent: #8b4513;
+      --accent-glow: rgba(139,69,19,0.4);
+      --btn-bg1: #e8d5b0; --btn-bg2: #d4c09a;
+      --btn-hi1: #f0e0c0; --btn-hi2: #d4c09a;
+      --btn-active1: #c9a96e; --btn-active2: #b89858;
+      --btn-border: #b89858;
+      --speaker-bg: #c9a96e; --speaker-border: #a88640;
+      --mesh-color: rgba(100,60,20,0.08);
+      --lcd-bg: #2a1a0a;
+      --lcd-text: #ffcc55; --lcd-dim: #cc8833; --lcd-idle: #aa6600;
+      --lcd-glow: rgba(255,204,85,0.6);
+      --screw1: #c9a96e; --screw2: #a88640; --screw-line: #8a6a30;
+      --label-color: #5a3e20; --freq-mark: #6a4e30;
+      --tick-color: #7a5e40;
+      --needle: #cc0000; --needle-glow: rgba(204,0,0,0.5);
+      --led-on: #ff6600; --led-glow: rgba(255,102,0,0.3);
+      --knob-ind: #8b4513;
+      --footer-color: #6a4e30; --footer-link: #5a3e20;
+      --antenna1: #a88640; --antenna2: #c9a96e;
+      --preset-num: #5a3820; --preset-name: #6a4e30;
+      --power-icon: #5a3e20;
+      --neon-border: #ff6600; --neon-glow: rgba(255,102,0,0.5);
+      --neon-light: rgba(255,140,60,0.3); --neon-light-glow: rgba(255,140,60,0.12);
+    }
+
+    /* 3. Midnight Black (미드나잇 블랙) */
+    [data-theme="black"] {
+      --bg: #0a0a0a;
+      --body-out1: #222222; --body-out2: #111111;
+      --body-in1: #1a1a1a; --body-in2: #0e0e0e;
+      --texture-color: rgba(255,255,255,0.008);
+      --accent: #ffffff;
+      --accent-glow: rgba(255,255,255,0.3);
+      --btn-bg1: #1e1e1e; --btn-bg2: #0e0e0e;
+      --btn-hi1: #2a2a2a; --btn-hi2: #151515;
+      --btn-active1: #333333; --btn-active2: #1a1a1a;
+      --btn-border: #080808;
+      --speaker-bg: #0a0a0a; --speaker-border: #050505;
+      --mesh-color: rgba(255,255,255,0.04);
+      --lcd-bg: #000000;
+      --lcd-text: #ffffff; --lcd-dim: #999999; --lcd-idle: #666666;
+      --lcd-glow: rgba(255,255,255,0.4);
+      --screw1: #2a2a2a; --screw2: #1a1a1a; --screw-line: #080808;
+      --label-color: #aaaaaa; --freq-mark: #888888;
+      --tick-color: #777777;
+      --needle: #ff0044; --needle-glow: rgba(255,0,68,0.6);
+      --led-on: #ff0044; --led-glow: rgba(255,0,68,0.3);
+      --knob-ind: #ffffff;
+      --footer-color: #888888; --footer-link: #aaaaaa;
+      --antenna1: #444444; --antenna2: #666666;
+      --preset-num: #bbbbbb; --preset-name: #999999;
+      --power-icon: #aaaaaa;
+      --neon-border: #ff0044; --neon-glow: rgba(255,0,68,0.6);
+      --neon-light: rgba(255,80,120,0.3); --neon-light-glow: rgba(255,80,120,0.12);
+    }
+
+    /* 4. Military (밀리터리) */
+    [data-theme="military"] {
+      --bg: #1a2016;
+      --body-out1: #4a5540; --body-out2: #354030;
+      --body-in1: #3d4a34; --body-in2: #2e3828;
+      --texture-color: rgba(100,120,80,0.02);
+      --accent: #c8b400;
+      --accent-glow: rgba(200,180,0,0.4);
+      --btn-bg1: #3d4a34; --btn-bg2: #2e3828;
+      --btn-hi1: #4a5a40; --btn-hi2: #354530;
+      --btn-active1: #556840; --btn-active2: #3d4a34;
+      --btn-border: #1e2818;
+      --speaker-bg: #222c1e; --speaker-border: #1a2216;
+      --mesh-color: rgba(150,170,120,0.08);
+      --lcd-bg: #0a120a;
+      --lcd-text: #55ff55; --lcd-dim: #33cc33; --lcd-idle: #22aa22;
+      --lcd-glow: rgba(85,255,85,0.6);
+      --screw1: #5a6a4a; --screw2: #3d4a34; --screw-line: #1e2818;
+      --label-color: #b0c090; --freq-mark: #90a870;
+      --tick-color: #80986a;
+      --needle: #ff3300; --needle-glow: rgba(255,51,0,0.6);
+      --led-on: #33ff33; --led-glow: rgba(51,255,51,0.3);
+      --knob-ind: #c8b400;
+      --footer-color: #90a870; --footer-link: #b0c090;
+      --antenna1: #5a6a4a; --antenna2: #8a9a7a;
+      --preset-num: #b8d098; --preset-name: #a0b880;
+      --power-icon: #b0c090;
+      --neon-border: #39ff14; --neon-glow: rgba(57,255,20,0.5);
+      --neon-light: rgba(120,255,80,0.3); --neon-light-glow: rgba(120,255,80,0.12);
+    }
+
+    /* 5. Chrome Silver (크롬 실버) */
+    [data-theme="silver"] {
+      --bg: #2a2a3a;
+      --body-out1: #c0c0cc; --body-out2: #9a9aaa;
+      --body-in1: #b0b0be; --body-in2: #8a8a9a;
+      --texture-color: rgba(255,255,255,0.02);
+      --accent: #1a1a2a;
+      --accent-glow: rgba(26,26,42,0.3);
+      --btn-bg1: #a0a0b0; --btn-bg2: #808090;
+      --btn-hi1: #b8b8c8; --btn-hi2: #909098;
+      --btn-active1: #7070a0; --btn-active2: #5a5a80;
+      --btn-border: #6a6a7a;
+      --speaker-bg: #5a5a6a; --speaker-border: #4a4a5a;
+      --mesh-color: rgba(200,200,220,0.1);
+      --lcd-bg: #0a0a1a;
+      --lcd-text: #66ccff; --lcd-dim: #4499dd; --lcd-idle: #2277bb;
+      --lcd-glow: rgba(102,204,255,0.6);
+      --screw1: #c8c8d8; --screw2: #a0a0b0; --screw-line: #6a6a7a;
+      --label-color: #b0b0c0; --freq-mark: #9090a0;
+      --tick-color: #8888a0;
+      --needle: #ff2222; --needle-glow: rgba(255,34,34,0.6);
+      --led-on: #44aaff; --led-glow: rgba(68,170,255,0.3);
+      --knob-ind: #1a1a2a;
+      --footer-color: #9090a0; --footer-link: #b0b0c0;
+      --antenna1: #9a9aaa; --antenna2: #d0d0dd;
+      --preset-num: #c0c0d0; --preset-name: #a8a8b8;
+      --power-icon: #b0b0c0;
+      --neon-border: #4488ff; --neon-glow: rgba(68,136,255,0.5);
+      --neon-light: rgba(120,170,255,0.3); --neon-light-glow: rgba(120,170,255,0.12);
+    }
+
+    /* 6. Neon Cyber (네온 사이버) */
+    [data-theme="cyber"] {
+      --bg: #05050f;
+      --body-out1: #15152a; --body-out2: #0a0a18;
+      --body-in1: #101025; --body-in2: #08081a;
+      --texture-color: rgba(0,200,255,0.008);
+      --accent: #00e5ff;
+      --accent-glow: rgba(0,229,255,0.5);
+      --btn-bg1: #12122a; --btn-bg2: #0a0a1a;
+      --btn-hi1: #1a1a38; --btn-hi2: #0e0e22;
+      --btn-active1: #1a1a48; --btn-active2: #101030;
+      --btn-border: #0a0a18;
+      --speaker-bg: #08081a; --speaker-border: #050510;
+      --mesh-color: rgba(0,229,255,0.06);
+      --lcd-bg: #020210;
+      --lcd-text: #00ffff; --lcd-dim: #00aacc; --lcd-idle: #0088aa;
+      --lcd-glow: rgba(0,255,255,0.7);
+      --screw1: #1a1a38; --screw2: #101025; --screw-line: #050510;
+      --label-color: #00bbdd; --freq-mark: #0099bb;
+      --tick-color: #0088aa;
+      --needle: #ff00aa; --needle-glow: rgba(255,0,170,0.7);
+      --led-on: #ff00aa; --led-glow: rgba(255,0,170,0.4);
+      --knob-ind: #00e5ff;
+      --footer-color: #0099bb; --footer-link: #00bbdd;
+      --antenna1: #006688; --antenna2: #00aacc;
+      --preset-num: #00ccee; --preset-name: #00aacc;
+      --power-icon: #00bbdd;
+      --neon-border: #00e5ff; --neon-glow: rgba(0,229,255,0.6);
+      --neon-light: rgba(80,230,255,0.3); --neon-light-glow: rgba(80,230,255,0.12);
+    }
+
+    /* 7. Rose Gold (로즈 골드) */
+    [data-theme="rose"] {
+      --bg: #1a1018;
+      --body-out1: #8a6070; --body-out2: #6a4050;
+      --body-in1: #7a5565; --body-in2: #5a3545;
+      --texture-color: rgba(255,180,200,0.015);
+      --accent: #ffc8d0;
+      --accent-glow: rgba(255,200,208,0.4);
+      --btn-bg1: #6a4858; --btn-bg2: #5a3545;
+      --btn-hi1: #7a5565; --btn-hi2: #5a3a4a;
+      --btn-active1: #8a5a6a; --btn-active2: #6a4858;
+      --btn-border: #3a2030;
+      --speaker-bg: #3a2030; --speaker-border: #2a1520;
+      --mesh-color: rgba(255,200,208,0.06);
+      --lcd-bg: #120810;
+      --lcd-text: #ffaacc; --lcd-dim: #cc6699; --lcd-idle: #aa4477;
+      --lcd-glow: rgba(255,170,204,0.6);
+      --screw1: #8a6878; --screw2: #6a4858; --screw-line: #3a2030;
+      --label-color: #d0a8b8; --freq-mark: #bb88a0;
+      --tick-color: #aa7890;
+      --needle: #ff4488; --needle-glow: rgba(255,68,136,0.6);
+      --led-on: #ff88aa; --led-glow: rgba(255,136,170,0.3);
+      --knob-ind: #ffc8d0;
+      --footer-color: #bb88a0; --footer-link: #d0a8b8;
+      --antenna1: #8a6878; --antenna2: #bb99aa;
+      --preset-num: #d8b0c0; --preset-name: #c098a8;
+      --power-icon: #d0a8b8;
+      --neon-border: #ff44aa; --neon-glow: rgba(255,68,170,0.6);
+      --neon-light: rgba(255,130,200,0.3); --neon-light-glow: rgba(255,130,200,0.12);
+    }
+
+    /* 8. Maltese (말티즈) */
+    [data-theme="maltese"] {
+      --bg: #f0ebe5;
+      --body-out1: #faf8f5; --body-out2: #f0ece6;
+      --body-in1: #f8f5f0; --body-in2: #efe8e0;
+      --texture-color: rgba(180,160,140,0.02);
+      --accent: #8B5E3C;
+      --accent-glow: rgba(139,94,60,0.4);
+      --btn-bg1: #f0ebe5; --btn-bg2: #e5ddd5;
+      --btn-hi1: #f8f4ee; --btn-hi2: #eae2da;
+      --btn-active1: #ddd0c0; --btn-active2: #c8b8a5;
+      --btn-border: #c8b8a5;
+      --speaker-bg: #d8ccc0; --speaker-border: #bfb0a0;
+      --mesh-color: rgba(120,90,60,0.06);
+      --lcd-bg: #1a120a;
+      --lcd-text: #ffdd88; --lcd-dim: #ccaa55; --lcd-idle: #aa8833;
+      --lcd-glow: rgba(255,221,136,0.6);
+      --screw1: #d8ccc0; --screw2: #bfb0a0; --screw-line: #a09080;
+      --label-color: #6a5040; --freq-mark: #7a6050;
+      --tick-color: #8a7060;
+      --needle: #cc4422; --needle-glow: rgba(204,68,34,0.5);
+      --led-on: #8B5E3C; --led-glow: rgba(139,94,60,0.3);
+      --knob-ind: #8B5E3C;
+      --footer-color: #7a6050; --footer-link: #5a3e20;
+      --antenna1: #c0b0a0; --antenna2: #e0d5ca;
+      --preset-num: #5a4030; --preset-name: #6a5040;
+      --power-icon: #6a5040;
+      --neon-border: #DEB887; --neon-glow: rgba(222,184,135,0.5);
+      --neon-light: rgba(222,184,135,0.3); --neon-light-glow: rgba(222,184,135,0.12);
+    }
+
+    /* 9. Purple (퍼플 갤럭시) */
+    [data-theme="purple"] {
+      --bg: #0e0a1a;
+      --body-out1: #1e1040; --body-out2: #140a30;
+      --body-in1: #180e38; --body-in2: #100828;
+      --texture-color: rgba(140,80,220,0.015);
+      --accent: #b388ff;
+      --accent-glow: rgba(179,136,255,0.5);
+      --btn-bg1: #2a1858; --btn-bg2: #1e1040;
+      --btn-hi1: #3a2068; --btn-hi2: #2a1858;
+      --btn-active1: #4a2888; --btn-active2: #3a1868;
+      --btn-border: #1a0e30;
+      --speaker-bg: #120a22; --speaker-border: #0a0618;
+      --mesh-color: rgba(160,120,255,0.1);
+      --lcd-bg: #0a0618;
+      --lcd-text: #d0aaff; --lcd-dim: #a880dd; --lcd-idle: #8060bb;
+      --lcd-glow: rgba(208,170,255,0.6);
+      --screw1: #3a2868; --screw2: #2a1848; --screw-line: #1a0e30;
+      --label-color: #c8a8f0; --freq-mark: #a888d0;
+      --tick-color: #8868b0;
+      --needle: #ff44cc; --needle-glow: rgba(255,68,204,0.6);
+      --led-on: #b388ff; --led-glow: rgba(179,136,255,0.3);
+      --knob-ind: #b388ff;
+      --footer-color: #a088c8; --footer-link: #c8a8f0;
+      --antenna1: #6a5888; --antenna2: #9a88b0;
+      --preset-num: #c8a8f0; --preset-name: #b098d8;
+      --power-icon: #c8a8f0;
+      --neon-border: #9c4dff; --neon-glow: rgba(156,77,255,0.6);
+      --neon-light: rgba(179,136,255,0.35); --neon-light-glow: rgba(179,136,255,0.15);
+      --text-dim: #a088c8; --player-bg: #140a30;
+      --knob-from: #2a1858; --knob-to: #1e1040;
+      --body-from: #180e38; --body-to: #100828;
+    }
+
+    /* 10. Hot Pink (핫핑크 네온) */
+    [data-theme="hotpink"] {
+      --bg: #1a0a18;
+      --body-out1: #3a1038; --body-out2: #2a0828;
+      --body-in1: #2e0c2e; --body-in2: #200820;
+      --texture-color: rgba(255,80,180,0.015);
+      --accent: #ff69b4;
+      --accent-glow: rgba(255,105,180,0.5);
+      --btn-bg1: #3a1038; --btn-bg2: #2a0828;
+      --btn-hi1: #4a1848; --btn-hi2: #3a1038;
+      --btn-active1: #5a2058; --btn-active2: #4a1848;
+      --btn-border: #1a0818;
+      --speaker-bg: #140810; --speaker-border: #0e060a;
+      --mesh-color: rgba(255,100,180,0.1);
+      --lcd-bg: #0a0608;
+      --lcd-text: #ff88cc; --lcd-dim: #dd66aa; --lcd-idle: #bb4488;
+      --lcd-glow: rgba(255,136,204,0.6);
+      --screw1: #4a2040; --screw2: #2a1020; --screw-line: #1a0818;
+      --label-color: #f0a8d0; --freq-mark: #d888b8;
+      --tick-color: #b868a0;
+      --needle: #ff1493; --needle-glow: rgba(255,20,147,0.6);
+      --led-on: #ff69b4; --led-glow: rgba(255,105,180,0.3);
+      --knob-ind: #ff69b4;
+      --footer-color: #d888b8; --footer-link: #f0a8d0;
+      --antenna1: #8a5878; --antenna2: #b088a0;
+      --preset-num: #f0a8d0; --preset-name: #d898c0;
+      --power-icon: #f0a8d0;
+      --neon-border: #ff1493; --neon-glow: rgba(255,20,147,0.6);
+      --neon-light: rgba(255,105,180,0.35); --neon-light-glow: rgba(255,105,180,0.15);
+      --text-dim: #d888b8; --player-bg: #2a0828;
+      --knob-from: #3a1038; --knob-to: #2a0828;
+      --body-from: #2e0c2e; --body-to: #200820;
+    }
+
+    /* ============================================
+       MATERIAL TEXTURES per theme
+       ============================================ */
+
+    /* 1. Wood - 나무결 (Woodgrain) */
+    [data-theme="wood"] .radio-inner::before {
+      background:
+        /* knot */
+        radial-gradient(ellipse 18px 30px at 25% 40%, rgba(180,120,50,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 14px 22px at 72% 65%, rgba(180,120,50,0.05) 0%, transparent 70%),
+        /* grain lines */
+        repeating-linear-gradient(92deg, transparent, transparent 2px, rgba(255,200,100,0.025) 2px, rgba(255,200,100,0.025) 4px),
+        repeating-linear-gradient(88deg, transparent, transparent 5px, rgba(200,150,60,0.018) 5px, rgba(200,150,60,0.018) 7px),
+        repeating-linear-gradient(90deg, transparent, transparent 11px, rgba(160,100,30,0.02) 11px, rgba(160,100,30,0.02) 12px);
+    }
+    [data-theme="wood"] .radio {
+      border-radius: 24px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.6),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* 2. Cream - 가죽 (Leather) */
+    [data-theme="cream"] .radio-inner::before {
+      background:
+        /* leather pebble bumps */
+        radial-gradient(circle 2px at 30% 30%, rgba(120,70,20,0.06), transparent 50%),
+        radial-gradient(circle 3px at 70% 60%, rgba(120,70,20,0.05), transparent 50%),
+        radial-gradient(circle 2px at 50% 80%, rgba(120,70,20,0.04), transparent 50%),
+        /* pebble pattern */
+        radial-gradient(ellipse 4px 3px at 20% 20%, rgba(100,50,10,0.04), transparent 70%),
+        radial-gradient(ellipse 3px 4px at 60% 40%, rgba(100,50,10,0.035), transparent 70%),
+        radial-gradient(ellipse 4px 3px at 80% 70%, rgba(100,50,10,0.04), transparent 70%),
+        radial-gradient(ellipse 3px 4px at 40% 90%, rgba(100,50,10,0.03), transparent 70%),
+        /* fine grain */
+        repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(80,40,10,0.012) 1px, rgba(80,40,10,0.012) 2px),
+        repeating-linear-gradient(-45deg, transparent, transparent 1px, rgba(80,40,10,0.01) 1px, rgba(80,40,10,0.01) 2px);
+    }
+    [data-theme="cream"] .radio {
+      border-radius: 28px;
+      box-shadow:
+        0 30px 60px rgba(80,50,20,0.3),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    /* Stitching effect */
+    [data-theme="cream"] .radio-inner {
+      border: 2px solid rgba(139,69,19,0.15);
+      outline: 2px dashed rgba(139,69,19,0.12);
+      outline-offset: 4px;
+    }
+
+    /* 3. Black - 카본 파이버 (Carbon Fiber) */
+    [data-theme="black"] .radio-inner::before {
+      background:
+        /* carbon weave */
+        repeating-linear-gradient(
+          45deg,
+          transparent, transparent 4px,
+          rgba(255,255,255,0.02) 4px, rgba(255,255,255,0.02) 5px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          transparent, transparent 4px,
+          rgba(255,255,255,0.015) 4px, rgba(255,255,255,0.015) 5px
+        ),
+        /* cross-fiber shimmer */
+        repeating-linear-gradient(
+          45deg,
+          rgba(255,255,255,0.01) 0px, transparent 1px,
+          transparent 3px, rgba(255,255,255,0.008) 4px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(255,255,255,0.01) 0px, transparent 1px,
+          transparent 3px, rgba(255,255,255,0.008) 4px
+        );
+      background-size: 8px 8px, 8px 8px, 8px 8px, 8px 8px;
+    }
+    [data-theme="black"] .radio {
+      border-radius: 18px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.8),
+        0 0 10px var(--neon-glow),
+        0 0 25px var(--neon-glow),
+        inset 0 0 10px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    [data-theme="black"] .screw {
+      background: linear-gradient(145deg, #333, #111);
+      border-color: #080808;
+    }
+    [data-theme="black"] .screw::after { background: #050505; }
+
+    /* 4. Military - 캔버스 (Canvas Fabric) */
+    [data-theme="military"] .radio-inner::before {
+      background:
+        /* canvas weave horizontal */
+        repeating-linear-gradient(
+          0deg,
+          transparent, transparent 2px,
+          rgba(150,170,120,0.025) 2px, rgba(150,170,120,0.025) 3px,
+          transparent 3px, transparent 5px
+        ),
+        /* canvas weave vertical */
+        repeating-linear-gradient(
+          90deg,
+          transparent, transparent 2px,
+          rgba(140,160,110,0.02) 2px, rgba(140,160,110,0.02) 3px,
+          transparent 3px, transparent 5px
+        ),
+        /* coarser fabric overlay */
+        repeating-linear-gradient(
+          0deg,
+          transparent, transparent 8px,
+          rgba(100,130,70,0.015) 8px, rgba(100,130,70,0.015) 9px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent, transparent 8px,
+          rgba(100,130,70,0.012) 8px, rgba(100,130,70,0.012) 9px
+        );
+    }
+    [data-theme="military"] .radio {
+      border-radius: 12px;
+      box-shadow:
+        0 25px 50px rgba(0,0,0,0.5),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    [data-theme="military"] .radio-inner { border-radius: 10px; }
+
+    /* 5. Silver - 브러시드 메탈 (Brushed Aluminum) */
+    [data-theme="silver"] .radio-inner::before {
+      background:
+        /* fine brush strokes horizontal */
+        repeating-linear-gradient(
+          0deg,
+          transparent, transparent 1px,
+          rgba(255,255,255,0.015) 1px, rgba(255,255,255,0.015) 2px
+        ),
+        /* slightly thicker brush strokes */
+        repeating-linear-gradient(
+          2deg,
+          transparent, transparent 3px,
+          rgba(255,255,255,0.02) 3px, rgba(255,255,255,0.02) 4px
+        ),
+        /* highlight sheen */
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,0.06) 0%,
+          transparent 15%,
+          transparent 60%,
+          rgba(255,255,255,0.03) 100%
+        ),
+        /* subtle color variation */
+        radial-gradient(ellipse at 30% 0%, rgba(255,255,255,0.04), transparent 50%);
+    }
+    [data-theme="silver"] .radio {
+      border-radius: 20px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.4),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    [data-theme="silver"] .radio-inner {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    /* 6. Cyber - 회로기판 (Circuit Board) */
+    [data-theme="cyber"] .radio-inner::before {
+      background:
+        /* circuit grid */
+        repeating-linear-gradient(
+          0deg,
+          transparent, transparent 19px,
+          rgba(0,229,255,0.03) 19px, rgba(0,229,255,0.03) 20px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent, transparent 19px,
+          rgba(0,229,255,0.03) 19px, rgba(0,229,255,0.03) 20px
+        ),
+        /* circuit traces */
+        linear-gradient(0deg, transparent 48%, rgba(0,229,255,0.015) 49%, rgba(0,229,255,0.015) 51%, transparent 52%),
+        linear-gradient(90deg, transparent 28%, rgba(0,229,255,0.01) 29%, rgba(0,229,255,0.01) 31%, transparent 32%),
+        linear-gradient(90deg, transparent 68%, rgba(0,229,255,0.012) 69%, rgba(0,229,255,0.012) 71%, transparent 72%),
+        /* solder point dots */
+        radial-gradient(circle 1px at 20px 20px, rgba(0,229,255,0.04), transparent 2px),
+        radial-gradient(circle 1px at 40px 40px, rgba(0,229,255,0.03), transparent 2px);
+      background-size: 20px 20px, 20px 20px, 100% 100%, 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+    }
+    [data-theme="cyber"] .radio {
+      border-radius: 16px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.7),
+        0 0 12px var(--neon-glow),
+        0 0 30px var(--neon-glow),
+        0 0 60px rgba(0,229,255,0.15),
+        inset 0 0 12px var(--neon-glow);
+    }
+    /* Neon border glow */
+    [data-theme="cyber"] .radio-inner::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(0,229,255,0.06);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 7. Rose - 대리석 (Marble) */
+    [data-theme="rose"] .radio-inner::before {
+      background:
+        /* marble veins - primary */
+        linear-gradient(
+          137deg,
+          transparent 20%,
+          rgba(255,220,230,0.04) 22%, rgba(255,220,230,0.04) 23%,
+          transparent 25%,
+          transparent 45%,
+          rgba(255,200,210,0.035) 47%, rgba(255,200,210,0.035) 48%,
+          transparent 50%,
+          transparent 70%,
+          rgba(255,210,220,0.03) 72%, rgba(255,210,220,0.03) 73%,
+          transparent 75%
+        ),
+        /* marble veins - secondary */
+        linear-gradient(
+          52deg,
+          transparent 10%,
+          rgba(255,180,200,0.025) 12%, rgba(255,180,200,0.025) 13%,
+          transparent 15%,
+          transparent 35%,
+          rgba(255,190,210,0.03) 37%, rgba(255,190,210,0.03) 38%,
+          transparent 40%,
+          transparent 55%,
+          rgba(255,200,220,0.02) 57%, rgba(255,200,220,0.02) 58%,
+          transparent 60%,
+          transparent 80%,
+          rgba(255,180,200,0.025) 82%, rgba(255,180,200,0.025) 83%,
+          transparent 85%
+        ),
+        /* fine veins */
+        linear-gradient(
+          165deg,
+          transparent 30%,
+          rgba(255,220,230,0.02) 31%, rgba(255,220,230,0.02) 31.5%,
+          transparent 32%,
+          transparent 60%,
+          rgba(255,220,230,0.018) 61%, rgba(255,220,230,0.018) 61.5%,
+          transparent 62%
+        ),
+        /* polished sheen */
+        radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.04), transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(255,255,255,0.03), transparent 40%);
+    }
+    [data-theme="rose"] .radio {
+      border-radius: 26px;
+      box-shadow:
+        0 30px 60px rgba(40,10,20,0.5),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    /* Polished marble sheen overlay */
+    [data-theme="rose"] .radio-inner {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* 8. Maltese - 부드러운 털 결 (Soft Fur Texture) */
+    [data-theme="maltese"] .radio-inner::before {
+      background:
+        /* soft wavy fur lines */
+        repeating-linear-gradient(
+          170deg,
+          transparent, transparent 4px,
+          rgba(200,180,160,0.025) 4px, rgba(200,180,160,0.025) 5px
+        ),
+        repeating-linear-gradient(
+          175deg,
+          transparent, transparent 6px,
+          rgba(220,200,180,0.02) 6px, rgba(220,200,180,0.02) 7px
+        ),
+        repeating-linear-gradient(
+          168deg,
+          transparent, transparent 8px,
+          rgba(180,160,140,0.018) 8px, rgba(180,160,140,0.018) 9px
+        ),
+        /* fluffy dot highlights */
+        radial-gradient(circle 2px at 10px 12px, rgba(255,255,255,0.04), transparent 3px),
+        radial-gradient(circle 2px at 30px 25px, rgba(255,255,255,0.03), transparent 3px),
+        radial-gradient(circle 2px at 50px 8px, rgba(255,255,255,0.035), transparent 3px);
+      background-size: 10px 10px, 14px 14px, 18px 18px, 60px 40px, 60px 40px, 60px 40px;
+    }
+    [data-theme="maltese"] .radio {
+      border-radius: 30px;
+      box-shadow:
+        0 30px 60px rgba(80,60,40,0.2),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+    [data-theme="maltese"] .radio-inner {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    [data-theme="maltese"] .screw {
+      background: linear-gradient(145deg, #e8ddd0, #c8b8a5);
+      border-color: #b0a090;
+    }
+    /* Maltese face silhouette background */
+    [data-theme="maltese"] .radio-inner::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='rgba(139,94,60,0.05)' stroke-width='1.5'%3E%3C!-- fluffy head outline --%3E%3Cpath d='M60 95 Q50 70 60 55 Q70 40 85 45 Q95 35 105 35 Q115 35 125 45 Q140 40 150 55 Q160 70 150 95' fill='rgba(139,94,60,0.02)'/%3E%3C!-- face --%3E%3Cellipse cx='105' cy='110' rx='42' ry='38' fill='rgba(139,94,60,0.015)'/%3E%3C!-- fluffy cheeks --%3E%3Cpath d='M63 100 Q50 110 55 125 Q60 135 75 130' stroke='rgba(139,94,60,0.04)' fill='rgba(139,94,60,0.015)'/%3E%3Cpath d='M147 100 Q160 110 155 125 Q150 135 135 130' stroke='rgba(139,94,60,0.04)' fill='rgba(139,94,60,0.015)'/%3E%3C!-- floppy ears --%3E%3Cpath d='M65 85 Q40 90 35 115 Q32 140 50 155 Q60 145 68 125' fill='rgba(139,94,60,0.025)' stroke='rgba(139,94,60,0.04)'/%3E%3Cpath d='M145 85 Q170 90 175 115 Q178 140 160 155 Q150 145 142 125' fill='rgba(139,94,60,0.025)' stroke='rgba(139,94,60,0.04)'/%3E%3C!-- eyes --%3E%3Ccircle cx='88' cy='105' r='6' fill='rgba(60,35,15,0.06)'/%3E%3Ccircle cx='122' cy='105' r='6' fill='rgba(60,35,15,0.06)'/%3E%3C!-- eye highlights --%3E%3Ccircle cx='90' cy='103' r='2.5' fill='rgba(255,255,255,0.04)'/%3E%3Ccircle cx='124' cy='103' r='2.5' fill='rgba(255,255,255,0.04)'/%3E%3C!-- nose --%3E%3Cellipse cx='105' cy='118' rx='6' ry='5' fill='rgba(60,35,15,0.06)'/%3E%3C!-- nose highlight --%3E%3Cellipse cx='104' cy='116' rx='2' ry='1.5' fill='rgba(255,255,255,0.03)'/%3E%3C!-- mouth --%3E%3Cpath d='M105 123 Q100 130 93 127' stroke='rgba(139,94,60,0.04)'/%3E%3Cpath d='M105 123 Q110 130 117 127' stroke='rgba(139,94,60,0.04)'/%3E%3C!-- tongue --%3E%3Cellipse cx='105' cy='132' rx='5' ry='6' fill='rgba(255,120,120,0.04)' stroke='rgba(200,80,80,0.04)'/%3E%3C!-- fluffy body tuft --%3E%3Cpath d='M75 145 Q80 160 90 168 Q100 172 110 172 Q120 168 130 160 Q135 145 130 140' stroke='rgba(139,94,60,0.03)' fill='rgba(139,94,60,0.01)'/%3E%3C!-- fur texture lines --%3E%3Cpath d='M70 60 Q68 50 72 48' stroke='rgba(139,94,60,0.03)'/%3E%3Cpath d='M90 42 Q92 34 95 36' stroke='rgba(139,94,60,0.03)'/%3E%3Cpath d='M115 38 Q118 30 120 34' stroke='rgba(139,94,60,0.03)'/%3E%3Cpath d='M140 55 Q143 47 140 45' stroke='rgba(139,94,60,0.03)'/%3E%3C/g%3E%3C/svg%3E") no-repeat center center,
+        radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.08) 100%);
+      background-size: 65% auto, 100% 100%, 100% 100%;
+      pointer-events: none; z-index: 0; border-radius: inherit;
+    }
+
+    /* 9. Purple - 은하 성운 (Galaxy Nebula) */
+    [data-theme="purple"] .radio-inner::before {
+      background:
+        radial-gradient(ellipse 40px 40px at 20% 30%, rgba(156,77,255,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 30px 50px at 75% 60%, rgba(100,60,200,0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 50px 30px at 50% 80%, rgba(180,100,255,0.04) 0%, transparent 70%),
+        repeating-linear-gradient(135deg, transparent, transparent 3px, rgba(140,80,220,0.02) 3px, rgba(140,80,220,0.02) 4px);
+    }
+    [data-theme="purple"] .radio {
+      border-radius: 24px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.7),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    [data-theme="purple"] .radio-inner::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(156,77,255,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 70%, rgba(100,60,200,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.15) 100%);
+      pointer-events: none; z-index: 0; border-radius: inherit;
+    }
+
+    /* 10. Hot Pink - 네온 글로우 (Neon Glow) */
+    [data-theme="hotpink"] .radio-inner::before {
+      background:
+        radial-gradient(ellipse 35px 45px at 25% 35%, rgba(255,20,147,0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 45px 35px at 70% 55%, rgba(255,80,180,0.04) 0%, transparent 70%),
+        repeating-linear-gradient(160deg, transparent, transparent 4px, rgba(255,80,180,0.015) 4px, rgba(255,80,180,0.015) 5px),
+        repeating-linear-gradient(110deg, transparent, transparent 6px, rgba(255,20,147,0.01) 6px, rgba(255,20,147,0.01) 7px);
+    }
+    [data-theme="hotpink"] .radio {
+      border-radius: 24px;
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.7),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    [data-theme="hotpink"] .radio-inner::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 40% 25%, rgba(255,20,147,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 65% 75%, rgba(255,105,180,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.15) 100%);
+      pointer-events: none; z-index: 0; border-radius: inherit;
+    }
+
+    /* ============================================
+       TEXT READABILITY & VIVID COLORS
+       ============================================ */
+    :root, [data-theme="wood"] {
+      --label-color: #e8d0a8; --freq-mark: #d4b888; --tick-color: #b89868;
+      --preset-num: #f0d898; --preset-name: #d8c090;
+      --footer-color: #c8b088; --footer-link: #e8c880;
+      --power-icon: #e8d0a8;
+      --lcd-text: #55ff55; --lcd-dim: #44dd44; --lcd-idle: #33bb33;
+      --lcd-glow: rgba(85,255,85,0.7);
+    }
+    [data-theme="cream"] {
+      --label-color: #5a3518; --freq-mark: #704828; --tick-color: #8a5830;
+      --preset-num: #4a2810; --preset-name: #5a3818;
+      --footer-color: #704828; --footer-link: #4a2810;
+      --power-icon: #5a3518;
+      --lcd-text: #ffcc55; --lcd-dim: #ddaa33; --lcd-idle: #bb8800;
+      --lcd-glow: rgba(255,204,85,0.7);
+    }
+    [data-theme="black"] {
+      --label-color: #cccccc; --freq-mark: #aaaaaa; --tick-color: #888888;
+      --preset-num: #dddddd; --preset-name: #bbbbbb;
+      --footer-color: #999999; --footer-link: #cccccc;
+      --power-icon: #cccccc;
+      --lcd-text: #ffffff; --lcd-dim: #bbbbbb; --lcd-idle: #888888;
+      --lcd-glow: rgba(255,255,255,0.5);
+    }
+    [data-theme="military"] {
+      --label-color: #c8e098; --freq-mark: #a8c878; --tick-color: #88aa58;
+      --preset-num: #d8ee98; --preset-name: #b8d080;
+      --footer-color: #a8c878; --footer-link: #c8e098;
+      --power-icon: #c8e098;
+      --lcd-text: #55ff55; --lcd-dim: #44dd44; --lcd-idle: #33bb33;
+      --lcd-glow: rgba(85,255,85,0.7);
+    }
+    [data-theme="silver"] {
+      --label-color: #222238; --freq-mark: #333348; --tick-color: #444458;
+      --preset-num: #1a1a30; --preset-name: #333348;
+      --footer-color: #444458; --footer-link: #222238;
+      --power-icon: #222238;
+      --lcd-text: #77ddff; --lcd-dim: #55bbdd; --lcd-idle: #3399bb;
+      --lcd-glow: rgba(119,221,255,0.7);
+    }
+    [data-theme="cyber"] {
+      --label-color: #00ddff; --freq-mark: #00bbdd; --tick-color: #0099bb;
+      --preset-num: #00eeff; --preset-name: #00ccee;
+      --footer-color: #00bbdd; --footer-link: #00eeff;
+      --power-icon: #00ddff;
+      --lcd-text: #00ffff; --lcd-dim: #00ddee; --lcd-idle: #00bbcc;
+      --lcd-glow: rgba(0,255,255,0.8);
+    }
+    [data-theme="rose"] {
+      --label-color: #eec0d0; --freq-mark: #dda8b8; --tick-color: #cc90a0;
+      --preset-num: #ffd0dd; --preset-name: #eec0d0;
+      --footer-color: #dda8b8; --footer-link: #ffd0dd;
+      --power-icon: #eec0d0;
+      --lcd-text: #ffbbdd; --lcd-dim: #dd88aa; --lcd-idle: #cc6699;
+      --lcd-glow: rgba(255,187,221,0.7);
+    }
+    [data-theme="maltese"] {
+      --label-color: #5a4030; --freq-mark: #6a5040; --tick-color: #7a6050;
+      --preset-num: #4a3020; --preset-name: #5a4030;
+      --footer-color: #6a5040; --footer-link: #4a3020;
+      --power-icon: #5a4030;
+      --lcd-text: #ffdd88; --lcd-dim: #ddbb55; --lcd-idle: #ccaa44;
+      --lcd-glow: rgba(255,221,136,0.7);
+    }
+    [data-theme="purple"] {
+      --label-color: #d0b8f0; --freq-mark: #b898d8; --tick-color: #9878b8;
+      --preset-num: #e0c8ff; --preset-name: #c8a8e8;
+      --footer-color: #b898d8; --footer-link: #d0b8f0;
+      --power-icon: #d0b8f0;
+      --lcd-text: #d0aaff; --lcd-dim: #b088dd; --lcd-idle: #9068bb;
+      --lcd-glow: rgba(208,170,255,0.7);
+    }
+    [data-theme="hotpink"] {
+      --label-color: #f0b8d8; --freq-mark: #d898c0; --tick-color: #c080a8;
+      --preset-num: #ffc8e0; --preset-name: #f0b0d0;
+      --footer-color: #d898c0; --footer-link: #f0b8d8;
+      --power-icon: #f0b8d8;
+      --lcd-text: #ff99cc; --lcd-dim: #dd77aa; --lcd-idle: #cc5588;
+      --lcd-glow: rgba(255,153,204,0.7);
+    }
+
+    /* ============================================
+       CORE STYLES (using CSS variables)
+       ============================================ */
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: safe center;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      padding: 20px;
+      overflow-y: auto;
+      transition: background 0.6s ease;
+    }
+
+    /* === THEME SWITCHER === */
+    .theme-switcher {
+      display: flex;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 20px 20px 0 0;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      justify-content: center;
+    }
+
+    .theme-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .theme-dot:hover { transform: scale(1.2); }
+    .theme-dot.active {
+      border-color: #fff;
+      transform: scale(1.15);
+      box-shadow: 0 2px 12px rgba(255,255,255,0.2);
+    }
+    .theme-dot.active::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px; height: 8px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    .theme-dot[data-t="wood"]     { background: linear-gradient(135deg, #3a2a1a, #d4a862); }
+    .theme-dot[data-t="cream"]    { background: linear-gradient(135deg, #f5e6c8, #8b4513); }
+    .theme-dot[data-t="black"]    { background: linear-gradient(135deg, #222, #000); }
+    .theme-dot[data-t="military"] { background: linear-gradient(135deg, #4a5540, #c8b400); }
+    .theme-dot[data-t="silver"]   { background: linear-gradient(135deg, #c0c0cc, #5a5a6a); }
+    .theme-dot[data-t="cyber"]    { background: linear-gradient(135deg, #101025, #00e5ff); }
+    .theme-dot[data-t="rose"]     { background: linear-gradient(135deg, #8a6070, #ffc8d0); }
+    .theme-dot[data-t="maltese"]  { background: linear-gradient(135deg, #faf8f5, #DEB887); }
+    .theme-dot[data-t="purple"]   { background: linear-gradient(135deg, #1e1040, #b388ff); }
+    .theme-dot[data-t="hotpink"]  { background: linear-gradient(135deg, #3a1038, #ff69b4); }
+
+    .theme-name {
+      font-size: 10px;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      margin-bottom: 4px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Outfit', sans-serif;
+      transition: color 0.3s;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+
+    /* === RADIO BODY === */
+    .radio {
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
+      border-radius: 24px;
+      padding: 0;
+      border: 2px solid var(--neon-border);
+      box-shadow:
+        0 30px 60px rgba(0,0,0,0.6),
+        0 0 8px var(--neon-glow),
+        0 0 20px var(--neon-glow),
+        inset 0 0 8px var(--neon-glow),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      position: relative;
+      transition: all 0.6s ease;
+      overflow: hidden;
+    }
+
+    .radio-inner {
+      background: linear-gradient(180deg, var(--body-in1), var(--body-in2));
+      border-radius: 0;
+      padding: 20px 20px 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.6s ease;
+    }
+    .radio-inner::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.15) 100%);
+      pointer-events: none; z-index: 0;
+      border-radius: inherit;
+    }
+
+    .radio-inner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        90deg, transparent, transparent 3px,
+        var(--texture-color) 3px, var(--texture-color) 6px
+      );
+      pointer-events: none;
+    }
+
+    /* === BRAND & POWER === */
+    .radio-top-row1 {
+      display: flex; justify-content: center; align-items: center;
+      margin-bottom: 6px; position: relative; z-index: 1;
+    }
+    .radio-top-row1 .power-btn {
+      position: absolute; right: 0;
+    }
+    .radio-top-row2 {
+      display: flex; justify-content: center; align-items: center;
+      gap: 8px;
+      margin-bottom: 12px; position: relative; z-index: 1;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .brand {
+      font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800;
+      color: var(--accent); letter-spacing: 3px;
+      text-shadow: 0 -1px 0 rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.4);
+      transition: color 0.6s;
+    }
+    /* Brand Mascots - hidden by default */
+    .brand-mascot {
+      display: none;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      transition: all 0.4s ease;
+    }
+    img.brand-mascot {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--neon-light);
+      box-shadow: 0 0 6px var(--neon-light-glow);
+      margin-left: 3px;
+    }
+
+    .digital-to-analog-btn {
+      background: var(--btn-bg); color: var(--accent); border: 1px solid var(--btn-border);
+      padding: 5px 10px; border-radius: 12px;
+      font-family: 'Orbitron', monospace; font-size: 7px; font-weight: 700;
+      cursor: pointer; letter-spacing: 1px; transition: all 0.3s;
+    }
+    .digital-to-analog-btn:hover {
+      background: var(--accent); color: var(--inner-bg);
+    }
+    .power-btn.on {
+      border-color: #ff3333;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 8px rgba(255,51,51,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+      color: #ff3333;
+    }
+    .radio-inner.power-off {
+      opacity: 0.3;
+      filter: brightness(0.3) saturate(0.2);
+      transition: opacity 0.5s, filter 0.5s;
+    }
+    .radio-inner.power-off .power-btn {
+      opacity: 1;
+      filter: brightness(3) saturate(1);
+      pointer-events: auto;
+    }
+    .power-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--btn-hi1), var(--btn-hi2));
+      border: 1px solid var(--neon-light); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--power-icon);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4), 0 0 4px var(--neon-light-glow), inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: all 0.15s ease;
+    }
+    .power-btn:active {
+      transform: scale(0.92);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .photo-upload-btn {
+      display: none;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--accent-muted);
+      border: 2px dashed var(--neon-light);
+      color: var(--text-dim);
+      font-size: 18px; line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+      align-self: center;
+      margin-left: 3px;
+      transition: all 0.3s ease;
+    }
+    .photo-upload-btn:hover {
+      background: var(--neon-light);
+      color: var(--player-bg);
+      box-shadow: 0 0 8px var(--neon-light-glow);
+    }
+    .photo-upload-btn.has-photos { display: flex; align-items: center; justify-content: center; }
+    #analogPhotoBtn { color: #ffd700; }
+    .brand-photos { display: contents; }
+
+    @keyframes eqBounce { 0%{height:6px} 50%{height:40px} 100%{height:12px} }
+
+    /* === SCREWS === */
+    .screw {
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--screw1), var(--screw2));
+      border: 1px solid var(--btn-border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1); z-index: 2;
+      transition: all 0.6s;
+    }
+    .screw::after {
+      content: ''; position: absolute; top: 4px; left: 1px;
+      width: 8px; height: 1px; background: var(--screw-line);
+      transition: background 0.6s;
+    }
+    .screw-tl{top:12px;left:12px} .screw-tr{top:12px;right:12px}
+    .screw-bl{bottom:12px;left:12px} .screw-br{bottom:12px;right:12px}
+
+    /* === FOOTER === */
+    .radio-footer {
+      text-align: center; margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative; z-index: 1;
+    }
+    .footer-text {
+      font-size: 9px; color: var(--footer-color);
+      letter-spacing: 1px; transition: color 0.6s;
+      font-weight: 500;
+    }
+    .footer-text a { color: var(--footer-link); text-decoration: none; transition: color 0.6s; }
+    .footer-text a:hover { color: var(--accent); }
+
+    /* === PHOTO LIGHTBOX === */
+    .photo-lightbox {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      z-index: 9999; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .photo-lightbox.visible { display: flex; }
+    .photo-lightbox img {
+      max-width: 85%; max-height: 85%;
+      border-radius: 16px; object-fit: contain;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 12px var(--neon-glow);
+      border: 2px solid var(--neon-border);
+      animation: lightboxIn 0.3s ease;
+    }
+    @keyframes lightboxIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* ============================================
+       RESPONSIVE - MOBILE FIRST
+       ============================================ */
+
+    /* Desktop: 라디오 body 둥글게 */
+    @media (min-width: 481px) {
+      .radio { padding: 6px; border-radius: 24px; }
+      .radio-inner { border-radius: 20px; padding: 24px 20px 20px; }
+      .radio-inner::before { border-radius: 20px; }
+      .theme-switcher { border-radius: 20px 20px 0 0; }
+      .theme-name { margin-bottom: 6px; }
+    }
+
+    /* Tablet */
+    @media (max-width: 540px) {
+      body { padding: 10px; }
+      .radio { max-width: 100%; }
+    }
+
+    /* === Mobile (phones) === */
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        justify-content: flex-start;
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+
+      /* Theme switcher: 라디오 안에 붙이기 */
+      .theme-name { font-size: 0; height: 0; margin: 0; overflow: hidden; }
+      .theme-switcher {
+        margin: 0;
+        padding: 8px 12px;
+        border-radius: 0;
+        background: rgba(0,0,0,0.25);
+        border: none;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+      }
+      .theme-dot {
+        width: 32px; height: 32px;
+        flex-shrink: 0;
+      }
+
+      /* Radio body: 풀 화면 */
+      .radio {
+        max-width: 100%;
+        border-radius: 0;
+        padding: 0;
+        border-width: 2px 0;
+        box-shadow:
+          0 0 8px var(--neon-glow),
+          inset 0 0 8px var(--neon-glow);
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+      .radio-inner {
+        border-radius: 0;
+        padding: 14px 16px 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .radio-inner::before { border-radius: 0; }
+
+      /* Screws 숨김 */
+      .screw { display: none; }
+
+      /* Brand */
+      .radio-top-row1 { margin-bottom: 4px; }
+      .radio-top-row2 { margin-bottom: 8px; padding-bottom: 8px; }
+      .brand { font-size: 18px; letter-spacing: 2px; }
+      .power-btn { width: 38px; height: 38px; }
+
+      /* Footer: 컴팩트 */
+      .radio-footer { margin-top: 8px; padding-top: 8px; }
+      .footer-text { font-size: 8px; }
+    }
+
+    /* === Small phones (SE, mini 등) === */
+    @media (max-width: 380px) {
+      .radio-inner { padding: 10px 12px 12px; }
+      .brand { font-size: 16px; }
+      .theme-dot { width: 28px; height: 28px; }
+      .theme-switcher { gap: 6px; padding: 6px 8px; }
+    }
+
+    /* === Very small phones === */
+    @media (max-width: 340px) {
+      .theme-dot { width: 24px; height: 24px; }
+      .theme-switcher { gap: 5px; }
+      .brand { font-size: 14px; }
+    }
+
+    /* Landscape phone */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body { justify-content: flex-start; }
+      .radio { min-height: auto; }
+      .radio-inner { min-height: auto; flex: none; }
+      .radio-footer { display: none; }
+    }
+
+    /* Touch: 터치 타겟 최소 크기 보장 */
+    @media (pointer: coarse) {
+      .power-btn { width: 40px; height: 40px; }
+      .theme-dot { min-width: 28px; min-height: 28px; }
+    }
+
+    /* ============================================
+       ANALOG RADIO MODE
+       (.radio .radio-inner 클래스를 공유하여 동일 셸 사용)
+       ============================================ */
+
+    /* Analog: Photos (top row2에 들어가는 사진들) */
+    .analog-photos { display: flex; gap: 3px; align-items: center; flex-shrink: 1; min-width: 0; overflow: hidden; }
+    .analog-photos img {
+      width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+      border: 1.5px solid var(--accent); cursor: pointer; flex-shrink: 0;
+    }
+
+    /* Analog: Speaker */
+    .analog-speaker {
+      background: linear-gradient(180deg, var(--speaker-bg), var(--speaker-to));
+      border-radius: 10px; padding: 8px;
+      border: 1px solid var(--speaker-border);
+      margin-bottom: 8px; position: relative; overflow: hidden; z-index: 1;
+    }
+    .analog-speaker-label {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--accent); letter-spacing: 3px; text-align: center;
+      margin-bottom: 4px; opacity: 0.7;
+    }
+    .analog-eq { display: flex; gap: 2px; justify-content: center; height: 28px; align-items: flex-end; }
+    .analog-eq-bar {
+      width: 3px; background: var(--accent); border-radius: 2px;
+      transition: height 0.15s; height: 6px; opacity: 0.6;
+    }
+    .analog-eq-bar.playing {
+      animation: eqBounce 0.6s ease-in-out infinite alternate;
+      opacity: 1;
+    }
+
+    /* Analog: Large FM Band Display */
+    .analog-fm-section {
+      background: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+      border-radius: 10px; padding: 10px 12px; margin-bottom: 8px;
+      border: 1px solid var(--neon-light); position: relative; z-index: 1;
+    }
+    .analog-fm-label {
+      font-family: 'Orbitron', monospace; font-size: 7px;
+      color: var(--accent); letter-spacing: 3px; text-align: center;
+      margin-bottom: 6px; opacity: 0.8;
+    }
+    .analog-freq-band {
+      position: relative; height: 36px;
+      background: var(--speaker-bg);
+      border-radius: 6px; overflow: hidden;
+      border: 1px solid var(--speaker-border);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+      margin-bottom: 4px;
+    }
+    .analog-freq-ticks {
+      position: absolute; top: 0; left: 5%; right: 5%; bottom: 0;
+    }
+    .analog-freq-tick {
+      position: absolute; bottom: 0; width: 1px;
+      background: var(--tick-color); opacity: 0.4;
+    }
+    .analog-freq-tick.major { height: 16px; opacity: 0.7; width: 1.5px; }
+    .analog-freq-tick.minor { height: 8px; }
+    .analog-freq-marks {
+      display: flex; justify-content: space-between;
+      padding: 0 3%; position: absolute; bottom: 2px; left: 0; right: 0;
+    }
+    .analog-freq-mark {
+      font-family: 'Orbitron', monospace; font-size: 9px;
+      color: var(--lcd-idle); opacity: 0.6;
+    }
+    .analog-freq-needle {
+      position: absolute; top: 2px; width: 2px; height: 32px;
+      background: var(--needle);
+      box-shadow: 0 0 8px var(--needle-glow), 0 0 16px var(--needle-glow);
+      border-radius: 1px; left: 5%;
+      transition: left 0.15s ease-out;
+      z-index: 2;
+    }
+    .analog-freq-needle::after {
+      content: ''; position: absolute; top: -2px; left: -3px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--needle); box-shadow: 0 0 6px var(--needle-glow);
+    }
+    /* Station markers on the frequency band */
+    .analog-station-marker {
+      position: absolute; top: 4px; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--accent); opacity: 0.3;
+      transform: translateX(-50%);
+      transition: opacity 0.3s;
+    }
+    .analog-station-marker.active { opacity: 1; box-shadow: 0 0 6px var(--accent-glow); }
+
+    /* Analog: LCD */
+    .analog-lcd {
+      background: var(--lcd-bg);
+      border-radius: 8px; padding: 10px;
+      border: 1px solid var(--lcd-border);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5), 0 1px 0 var(--neon-light);
+      margin-bottom: 10px; text-align: center;
+      position: relative; z-index: 1;
+    }
+    .analog-lcd::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(180deg, var(--lcd-sheen), transparent);
+      border-radius: 8px 8px 0 0; pointer-events: none;
+    }
+    .analog-freq-display {
+      font-family: 'Orbitron', monospace;
+      font-size: 34px; font-weight: 900;
+      color: var(--lcd-text);
+      text-shadow: 0 0 12px var(--lcd-glow);
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .analog-freq-unit {
+      font-family: 'Orbitron', monospace;
+      font-size: 10px; color: var(--lcd-text);
+      opacity: 0.6; letter-spacing: 2px;
+    }
+    .analog-station-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600;
+      color: var(--lcd-text); margin-top: 4px;
+      min-height: 18px;
+      transition: opacity 0.3s;
+    }
+    .analog-station-provider {
+      font-family: 'Orbitron', monospace;
+      font-size: 7px; color: var(--lcd-text);
+      opacity: 0.5; letter-spacing: 2px;
+      margin-top: 1px;
+    }
+    .analog-tuning-status {
+      font-family: 'Orbitron', monospace;
+      font-size: 8px; letter-spacing: 2px;
+      margin-top: 4px;
+    }
+    .analog-tuning-status.tuning { color: var(--lcd-idle); animation: analogPulse 1s ease-in-out infinite; }
+    .analog-tuning-status.locked { color: #4ade80; }
+    @keyframes analogPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* Analog: Tuning Dial */
+    .analog-dial-section {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4px; margin-bottom: 10px; position: relative; z-index: 1;
+    }
+    .analog-dial-container {
+      position: relative; width: 120px; height: 120px;
+    }
+    .analog-dial-bg {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--knob-from), var(--knob-to));
+      border: 3px solid var(--btn-border);
+      box-shadow:
+        0 8px 24px rgba(0,0,0,0.5),
+        inset 0 2px 4px rgba(255,255,255,0.1),
+        0 0 20px var(--neon-glow);
+    }
+    .analog-dial-marks {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .analog-dial-tick {
+      position: absolute; top: 6px; left: 50%; width: 2px;
+      background: var(--accent); opacity: 0.3;
+      transform-origin: 50% 54px;
+      margin-left: -1px;
+    }
+    .analog-dial-tick.major { height: 14px; opacity: 0.7; width: 2px; }
+    .analog-dial-tick.minor { height: 8px; width: 1px; }
+    .analog-dial-knob {
+      position: absolute; top: 15px; left: 15px;
+      width: calc(100% - 30px); height: calc(100% - 30px);
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--body-from), var(--body-to));
+      border: 2px solid var(--btn-border);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.3);
+      cursor: grab; touch-action: none;
+      transition: box-shadow 0.2s;
+    }
+    .analog-dial-knob:active { cursor: grabbing; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 12px var(--accent-glow); }
+    .analog-dial-indicator {
+      position: absolute; top: 6px; left: 50%; width: 3px;
+      height: 22px; margin-left: -1.5px;
+      background: var(--needle);
+      border-radius: 2px;
+      box-shadow: 0 0 6px var(--needle-glow);
+    }
+    .analog-dial-label {
+      font-family: 'Orbitron', monospace; font-size: 9px;
+      color: var(--accent); letter-spacing: 2px;
+      text-align: center; margin-top: 4px; opacity: 0.7;
+      font-weight: 700;
+    }
+
+    /* Analog: Volume section */
+    .analog-vol-area { text-align: center; }
+    .analog-vol-container {
+      position: relative; width: 120px; height: 120px;
+    }
+    .analog-vol-bg {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--knob-from), var(--knob-to));
+      border: 3px solid var(--btn-border);
+      box-shadow:
+        0 8px 24px rgba(0,0,0,0.5),
+        inset 0 2px 4px rgba(255,255,255,0.1),
+        0 0 20px var(--neon-glow);
+    }
+    .analog-vol-marks {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .analog-vol-tick {
+      position: absolute; top: 6px; left: 50%; width: 2px;
+      background: var(--accent); opacity: 0.3;
+      transform-origin: 50% 54px;
+      margin-left: -1px;
+    }
+    .analog-vol-tick.major { height: 14px; opacity: 0.7; width: 2px; }
+    .analog-vol-tick.minor { height: 8px; width: 1px; }
+    .analog-vol-knob {
+      position: absolute; top: 15px; left: 15px;
+      width: calc(100% - 30px); height: calc(100% - 30px); border-radius: 50%;
+      background: linear-gradient(145deg, var(--body-from), var(--body-to));
+      border: 2px solid var(--btn-border);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.3);
+      cursor: grab; touch-action: none;
+      transition: box-shadow 0.2s;
+    }
+    .analog-vol-knob:active { cursor: grabbing; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 12px var(--accent-glow); }
+    .analog-vol-indicator {
+      position: absolute; top: 6px; left: 50%; width: 3px;
+      height: 22px; margin-left: -1.5px;
+      background: var(--needle);
+      border-radius: 2px;
+      box-shadow: 0 0 6px var(--needle-glow);
+    }
+    .analog-vol-label {
+      font-family: 'Orbitron', monospace; font-size: 9px;
+      color: var(--accent); letter-spacing: 2px;
+      margin-top: 4px; opacity: 0.7;
+      font-weight: 700;
+    }
+
+    /* Analog: Photo switch and back button */
+    .analog-bottom-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 12px; position: relative; z-index: 1;
+    }
+    /* Analog: Footer */
+    .analog-footer {
+      text-align: center; margin-top: 6px; padding-top: 6px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative; z-index: 1;
+    }
+    .analog-footer-text {
+      font-size: 9px; color: var(--footer-color);
+      letter-spacing: 1px; font-weight: 500;
+    }
+    .analog-footer-text a { color: var(--footer-link); text-decoration: none; }
+    .analog-footer-text a:hover { color: var(--accent); }
+
+    /* Analog: Center photos (상하 배치) */
+    .analog-ctrl-photos-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .analog-ctrl-photos {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .analog-ctrl-photos img {
+      width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+      border: 1.5px solid var(--accent); cursor: pointer;
+    }
+
+    /* === Analog Responsive (내부 컴포넌트만) === */
+    @media (max-width: 480px) {
+      .analog-speaker { padding: 6px; margin-bottom: 6px; }
+      .analog-eq { height: 24px; }
+      .analog-dial-container { width: 110px; height: 110px; }
+      .analog-dial-knob { top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 20px); }
+      .analog-dial-indicator { height: 20px; }
+      .analog-dial-tick { transform-origin: 50% 49px; }
+      .analog-freq-display { font-size: 28px; }
+      .analog-freq-band { height: 30px; }
+      .analog-freq-needle { height: 26px; }
+      .analog-fm-section { padding: 8px 10px; margin-bottom: 6px; }
+      .analog-lcd { padding: 8px; margin-bottom: 8px; }
+      .analog-dial-section { gap: 10px; margin-bottom: 8px; }
+      .analog-vol-container { width: 110px; height: 110px; }
+      .analog-vol-knob { top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 20px); }
+      .analog-vol-indicator { height: 20px; }
+      .analog-vol-tick { transform-origin: 50% 49px; }
+      .analog-ctrl-photos img { width: 32px; height: 32px; }
+      .analog-footer { margin-top: 4px; padding-top: 4px; }
+      .analog-theme-switcher { padding: 6px 10px; gap: 8px; }
+    }
+    @media (max-width: 380px) {
+      .analog-dial-container { width: 96px; height: 96px; }
+      .analog-vol-container { width: 96px; height: 96px; }
+      .analog-dial-indicator { height: 16px; }
+      .analog-dial-tick { transform-origin: 50% 42px; }
+      .analog-vol-indicator { height: 16px; }
+      .analog-vol-tick { transform-origin: 50% 42px; }
+      .analog-freq-display { font-size: 24px; }
+      .analog-freq-band { height: 26px; }
+      .analog-freq-needle { height: 22px; }
+      .analog-lcd { padding: 6px; margin-bottom: 6px; }
+      .analog-fm-section { padding: 6px 8px; margin-bottom: 5px; }
+      .analog-speaker { padding: 5px; margin-bottom: 5px; }
+      .analog-eq { height: 20px; }
+      .analog-dial-section { gap: 8px; margin-bottom: 6px; }
+      .analog-ctrl-photos img { width: 28px; height: 28px; }
+      .analog-theme-switcher { padding: 5px 8px; gap: 5px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Analog Radio -->
+<div class="radio" id="analogRadio" data-theme="wood">
+  <!-- Theme Switcher -->
+  <div class="theme-switcher analog-theme-switcher" id="analogThemeSwitcher">
+    <div class="theme-dot" data-t="wood" title="우드 클래식 · 나무결" onclick="setTheme('wood')"></div>
+    <div class="theme-dot" data-t="cream" title="레트로 크림 · 가죽" onclick="setTheme('cream')"></div>
+    <div class="theme-dot" data-t="black" title="미드나잇 블랙 · 카본파이버" onclick="setTheme('black')"></div>
+    <div class="theme-dot" data-t="military" title="밀리터리 · 캔버스" onclick="setTheme('military')"></div>
+    <div class="theme-dot" data-t="silver" title="크롬 실버 · 브러시드메탈" onclick="setTheme('silver')"></div>
+    <div class="theme-dot" data-t="cyber" title="네온 사이버 · 회로기판" onclick="setTheme('cyber')"></div>
+    <div class="theme-dot" data-t="rose" title="로즈 골드 · 대리석" onclick="setTheme('rose')"></div>
+    <div class="theme-dot" data-t="maltese" title="말티즈 · 털 결" onclick="setTheme('maltese')"></div>
+    <div class="theme-dot" data-t="purple" title="퍼플 갤럭시 · 성운" onclick="setTheme('purple')"></div>
+    <div class="theme-dot" data-t="hotpink" title="핫핑크 네온 · 글로우" onclick="setTheme('hotpink')"></div>
+  </div>
+
+  <div class="radio-inner">
+
+    <!-- Brand & Power (1줄) -->
+    <div class="radio-top-row1">
+      <div class="brand">라디오카페</div>
+      <button class="power-btn" id="analogPowerBtn" onclick="toggleAnalogPower()" title="전원">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
+      </button>
+    </div>
+    <!-- Mode Switch (2줄) -->
+    <div class="radio-top-row2">
+      <button class="photo-upload-btn has-photos" id="analogPhotoBtn" onclick="document.getElementById('analogPhotoInput').click()">+</button>
+      <input type="file" id="analogPhotoInput" accept="image/*" multiple style="display:none" onchange="handleAnalogPhotoUpload(event)">
+      <span class="analog-photos" id="analogBrandPhotos"></span>
+      <button class="digital-to-analog-btn" onclick="location.href='index.html'">DIGITAL &#9654;</button>
+    </div>
+
+    <!-- Speaker Grille -->
+    <div class="analog-speaker">
+      <div class="analog-eq" id="analogEqualizer"></div>
+    </div>
+
+    <!-- FM Frequency Band -->
+    <div class="analog-fm-section">
+      <div class="analog-fm-label">FM TUNING</div>
+      <div class="analog-freq-band" id="analogFreqBand">
+        <div class="analog-freq-ticks" id="analogFreqTicks"></div>
+        <div class="analog-freq-marks">
+          <span class="analog-freq-mark">88</span>
+          <span class="analog-freq-mark">92</span>
+          <span class="analog-freq-mark">96</span>
+          <span class="analog-freq-mark">100</span>
+          <span class="analog-freq-mark">104</span>
+          <span class="analog-freq-mark">108</span>
+        </div>
+        <div class="analog-freq-needle" id="analogNeedle"></div>
+      </div>
+    </div>
+
+    <!-- LCD Display -->
+    <div class="analog-lcd" id="analogLcd">
+      <div class="analog-freq-display" id="analogFreqNum">88.0</div>
+      <div class="analog-freq-unit">MHz</div>
+      <div class="analog-station-name" id="analogStationName"></div>
+      <div class="analog-station-provider" id="analogStationProvider"></div>
+      <div class="analog-tuning-status tuning" id="analogStatus">TUNING...</div>
+    </div>
+
+    <!-- Tuning Dial + Volume (한 줄) -->
+    <div class="analog-dial-section">
+      <div>
+        <div class="analog-dial-container" id="analogDialContainer">
+          <div class="analog-dial-bg"></div>
+          <div class="analog-dial-marks" id="analogDialMarks"></div>
+          <div class="analog-dial-knob" id="analogDialKnob">
+            <div class="analog-dial-indicator"></div>
+          </div>
+        </div>
+        <div class="analog-dial-label">TUNING</div>
+      </div>
+      <div class="analog-ctrl-photos-wrap">
+        <div class="analog-ctrl-photos" id="analogPhotoLeft"></div>
+        <div class="analog-ctrl-photos" id="analogPhotoRight"></div>
+      </div>
+      <div class="analog-vol-area">
+        <div class="analog-vol-container" id="analogVolContainer">
+          <div class="analog-vol-bg"></div>
+          <div class="analog-vol-marks" id="analogVolMarks"></div>
+          <div class="analog-vol-knob" id="analogVolKnob">
+            <div class="analog-vol-indicator"></div>
+          </div>
+        </div>
+        <div class="analog-vol-label">VOLUME</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="analog-footer">
+      <div class="analog-footer-text">&copy; 2026 <a href="about.html"><strong>Hyein Cho</strong></a></div>
+    </div>
+  </div>
+</div>
+
+<!-- Photo Lightbox -->
+<div class="photo-lightbox" id="photoLightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+  // === Station Data ===
+  var STATIONS = [
+    // === 공영방송 ===
+    {id:'kbs-1fm',name:'KBS 클래식FM',url:'https://1fm.gscdn.kbs.co.kr/1fm_192_2.m3u8?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly8xZm0uZ3NjZG4ua2JzLmNvLmtyLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3Njc4Mjc3NjB9fX1dfQ__&Key-Pair-Id=APKAICDSGT3Y7IXGJ3TA&Signature=mXsMdZtv5pVJjKsZawW0ms8KkzrfYXBgWpi4HtpZO9TKLhUg22n6XIZkLrz2C4HftzhtPbG1vyByHlwHMzMlwXeXwjaxMkU4PNj2Wy-ubyRr8uP2zw41~8ZSCCGF5EV2OFhG1XH-88dD0nWrbSaUsij0SgZREDvrofiA6ip4xha4ZUAwH4vhP7GenNaJXu99DlZYuMfx5o7errctTKY-U6gppCruRl00NCpaOwJTVrwKVc5RnZSs2goGc~uqY8OQZuRwcp1cFTkqCt83FMlIiMKXItPvj8S8x2knhY4cXv1uAyTdKbmHEKTU-lfZVXzmq~NNf5Z0XUC7kLSe90dY3Q__',freq:'93.1 MHz',freqNum:93.1,logoText:'KBS 클래식FM',provider:'KBS'},
+    {id:'ebs-fm',name:'EBS FM',url:'https://ebsonair.ebs.co.kr/fmradiofamilypc/familypc1m/playlist.m3u8',freq:'104.5 MHz',freqNum:104.5,logoText:'EBS',provider:'EBS'},
+    // === 지상파 ===
+    {id:'gwangju-mbc-fm',name:'광주MBC FM',url:'https://media.kjmbc.co.kr/hls/fmlive/GWANGJU-MBC-FM/playlist.m3u8',freq:'93.9 MHz',freqNum:93.9,logoText:'MBC',provider:'MBC'},
+    {id:'sbs-powerfm',name:'SBS 파워FM',url:'https://radiolive.sbs.co.kr/powerpc/powerfm.stream/playlist.m3u8?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3Njc2OTc5ODksInBhdGgiOiIvcG93ZXJmbS5zdHJlYW0iLCJkdXJhdGlvbiI6LTEsInVubyI6IjNlZjRmZDA1LTZiYWQtNGYwOC1hMzYzLTBjNjkxMjUyZTEyNiIsImlhdCI6MTc2NzY1NDc4OX0.R-HyadR3JwB4rXJwXBqP33GX4RslvtM0dHb92hBHjo4',freq:'107.7 MHz',freqNum:107.7,logoText:'SBS',provider:'SBS'},
+    // === 보도/뉴스 ===
+    {id:'ytn-radio',name:'YTN 라디오',url:'https://radiolive.ytn.co.kr/radio/_definst_/20211118_fmlive/playlist.m3u8',freq:'94.5 MHz',freqNum:94.5,logoText:'YTN',provider:'YTN'},
+    {id:'tbs-fm',name:'TBS FM',url:'https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8',freq:'95.1 MHz',freqNum:95.1,logoText:'TBS',provider:'TBS'},
+    // === 종교방송 ===
+    {id:'cbs-music',name:'CBS 음악FM',url:'https://m-aac.cbs.co.kr/mweb_cbs939/_definst_/cbs939.stream/playlist.m3u8',freq:'93.9 MHz',freqNum:93.9,logoText:'CBS 음악FM',provider:'CBS'},
+    {id:'cbs-std',name:'CBS 표준FM',url:'https://aac.cbs.co.kr/cbs981/_definst_/cbs981.stream/playlist.m3u8',freq:'98.1 MHz',freqNum:98.1,logoText:'CBS',provider:'CBS'},
+    {id:'febc',name:'극동방송',url:'http://mlive2.febc.net:1935/live/seoulfm/playlist.m3u8',freq:'106.9 MHz',freqNum:106.9,logoText:'극동',provider:'FEBC'},
+    {id:'bbs',name:'BBS 불교방송',url:'https://bbslive.clouducs.com/bbsradio-live/livestream/playlist.m3u8',freq:'101.9 MHz',freqNum:101.9,logoText:'BBS',provider:'BBS'},
+    {id:'cpbc',name:'CPBC 평화방송',url:'https://stream.cpbc.co.kr/cpbc_live/live/playlist.m3u8',freq:'105.3 MHz',freqNum:105.3,logoText:'평화',provider:'CPBC'},
+    // === 교통/지역 ===
+    {id:'tbn',name:'TBN 교통방송',url:'http://radio2.tbn.or.kr:1935/gyeongin/myStream/playlist.m3u8',freq:'95.1 MHz',freqNum:95.1,logoText:'TBN 교통방송',provider:'TBN'},
+    {id:'obs',name:'OBS 라디오',url:'https://vod3.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8',freq:'90.3 MHz',freqNum:90.3,logoText:'OBS',provider:'OBS'},
+    {id:'knn',name:'KNN 러브FM',url:'https://stream1.knn.co.kr/hls/b3y26uu6471k8tes9w7h_lfm/index.m3u8',freq:'99.9 MHz',freqNum:99.9,logoText:'KNN 러브FM',provider:'KNN'},
+    // === 국제 ===
+    {id:'arirang',name:'Arirang Radio',url:'http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_3ch/smil:arirang_3ch.smil/playlist.m3u8',freq:'101.3 MHz',freqNum:101.3,logoText:'아리랑 라디오',provider:'아리랑'}
+  ];
+
+  // === Theme Names ===
+  var THEME_NAMES = {
+    wood: 'WOOD CLASSIC \u00b7 \ub098\ubb34\uacb0',
+    cream: 'RETRO CREAM \u00b7 \uac00\uc8fd',
+    black: 'MIDNIGHT BLACK \u00b7 \uce74\ubcf8\ud30c\uc774\ubc84',
+    military: 'MILITARY \u00b7 \uce94\ubc84\uc2a4',
+    silver: 'CHROME SILVER \u00b7 \ube0c\ub7ec\uc2dc\ub4dc\uba54\ud0c8',
+    cyber: 'NEON CYBER \u00b7 \ud68c\ub85c\uae30\ud310',
+    rose: 'ROSE GOLD \u00b7 \ub300\ub9ac\uc11d',
+    maltese: 'MALTESE \u00b7 \ud138 \uacb0'
+  };
+
+  // === State ===
+  var currentStation = null;
+  var audio = null;
+  var hlsInstance = null;
+  var isPlaying = false;
+  var isLoading = false;
+  var volume = 0.8;
+  var isPowered = false;
+  var currentTheme = 'wood';
+
+  // === Analog Mode State ===
+  var analogFreq = 88.0;
+  var analogDialAngle = 0;
+  var analogSnappedStation = null;
+  var analogVolAngle = -135 + (0.8 * 270);
+  var staticNoiseNode = null;
+  var staticGainNode = null;
+  var analogAudioCtx = null;
+
+  // === Web Audio API ===
+  var audioCtx = null;
+  var sourceNode = null;
+  var eqFilters = [];
+  var bassBoostFilter = null;
+  var virtualizerGain = null;
+  var virtualizerDelay = null;
+  var masterGain = null;
+  var EQ_FREQS = [60, 230, 910, 3600, 14000];
+  var eqValues = [0,0,0,0,0];
+  var wooferValue = 0;
+  var virtualizerValue = 0;
+
+  // === Theme ===
+  function setTheme(name) {
+    currentTheme = name;
+    var analogEl = document.getElementById('analogRadio');
+    if (analogEl) analogEl.setAttribute('data-theme', name);
+    document.body.setAttribute('data-theme', name);
+    document.querySelectorAll('.theme-dot').forEach(function(d) {
+      d.classList.toggle('active', d.getAttribute('data-t') === name);
+    });
+    try { localStorage.setItem('k-radio-theme', name); } catch(e) {}
+  }
+
+  // === Audio Context ===
+  function initAudioContext(){
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Create 5-band EQ filters
+    EQ_FREQS.forEach(function(freq, i){
+      var filter = audioCtx.createBiquadFilter();
+      filter.type = 'peaking';
+      filter.frequency.value = freq;
+      filter.Q.value = 1.4;
+      filter.gain.value = 0;
+      eqFilters.push(filter);
+    });
+
+    // Bass boost (lowshelf)
+    bassBoostFilter = audioCtx.createBiquadFilter();
+    bassBoostFilter.type = 'lowshelf';
+    bassBoostFilter.frequency.value = 100;
+    bassBoostFilter.gain.value = 0;
+
+    // Virtualizer (delay-based stereo widening)
+    virtualizerDelay = audioCtx.createDelay(0.05);
+    virtualizerDelay.delayTime.value = 0;
+    virtualizerGain = audioCtx.createGain();
+    virtualizerGain.gain.value = 0;
+
+    // Master gain
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 1;
+
+    // Chain: EQ[0] -> EQ[1] -> ... -> EQ[4] -> bassBoost -> masterGain -> destination
+    for(var i=0; i<eqFilters.length-1; i++){
+      eqFilters[i].connect(eqFilters[i+1]);
+    }
+    eqFilters[eqFilters.length-1].connect(bassBoostFilter);
+    bassBoostFilter.connect(masterGain);
+
+    // Virtualizer: parallel path with delay
+    bassBoostFilter.connect(virtualizerDelay);
+    virtualizerDelay.connect(virtualizerGain);
+    virtualizerGain.connect(masterGain);
+
+    masterGain.connect(audioCtx.destination);
+  }
+
+  function connectAudioSource(){
+    if(!audio || !audioCtx || sourceNode) return;
+    try {
+      sourceNode = audioCtx.createMediaElementSource(audio);
+      sourceNode.connect(eqFilters[0]);
+    } catch(e) { console.log('Audio source already connected'); }
+  }
+
+  // === Load Stream ===
+  function loadStream(url){
+    isLoading = true;
+    if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
+    if(!audio) audio=new Audio();
+    initAudioContext();
+    connectAudioSource();
+    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    audio.pause(); audio.src=''; audio.volume=volume;
+    if(Hls.isSupported()&&url.includes('.m3u8')){
+      hlsInstance=new Hls(); hlsInstance.loadSource(url); hlsInstance.attachMedia(audio);
+      hlsInstance.on(Hls.Events.MANIFEST_PARSED,function(){
+        audio.play().catch(function(e){console.error('Playback failed:',e);isPlaying=false;});
+        isPlaying=true;isLoading=false;
+      });
+      hlsInstance.on(Hls.Events.ERROR,function(_,data){
+        if(data.fatal){isLoading=false;isPlaying=false;}
+      });
+    } else if(audio.canPlayType&&audio.canPlayType('application/vnd.apple.mpegurl')){
+      audio.src=url;
+      audio.addEventListener('loadedmetadata',function h(){audio.removeEventListener('loadedmetadata',h);
+        audio.play().catch(function(e){console.error('Playback failed:',e);isPlaying=false;});
+        isPlaying=true;isLoading=false;
+      });
+    } else {
+      audio.src=url;audio.play().catch(function(e){console.error('Playback failed:',e);isPlaying=false;});
+      isPlaying=true;isLoading=false;
+    }
+  }
+
+  // === Photo Lightbox ===
+  function openLightbox(src){
+    var lb=document.getElementById('photoLightbox');
+    document.getElementById('lightboxImg').src=src;
+    lb.classList.add('visible');
+  }
+  function closeLightbox(){
+    document.getElementById('photoLightbox').classList.remove('visible');
+  }
+
+  // ============================================
+  // ANALOG MODE
+  // ============================================
+
+  function initAnalog(){
+    renderAnalogFreqTicks();
+    renderAnalogDialMarks();
+    renderAnalogVolMarks();
+    renderAnalogEqualizer();
+    renderAnalogStationMarkers();
+    setupAnalogDial();
+    setupAnalogVolDrag();
+    updateAnalogFreqDisplay();
+  }
+
+  function renderAnalogFreqTicks(){
+    var el=document.getElementById('analogFreqTicks');
+    if(!el) return;
+    var h='';
+    for(var f=88;f<=108;f+=0.5){
+      var pct=((f-88)/20)*90+5;
+      var cls=(f%2===0)?'analog-freq-tick major':'analog-freq-tick minor';
+      h+='<div class="'+cls+'" style="left:'+pct+'%"></div>';
+    }
+    el.innerHTML=h;
+  }
+
+  function renderAnalogDialMarks(){
+    var el=document.getElementById('analogDialMarks');
+    if(!el) return;
+    var h='';
+    for(var i=0;i<40;i++){
+      var angle=-150+(i*(300/39));
+      var cls=(i%5===0)?'analog-dial-tick major':'analog-dial-tick minor';
+      h+='<div class="'+cls+'" style="transform:rotate('+angle+'deg)"></div>';
+    }
+    el.innerHTML=h;
+  }
+
+  function renderAnalogVolMarks(){
+    var el=document.getElementById('analogVolMarks');
+    if(!el) return;
+    var h='';
+    for(var i=0;i<40;i++){
+      var angle=-150+(i*(300/39));
+      var cls=(i%5===0)?'analog-vol-tick major':'analog-vol-tick minor';
+      h+='<div class="'+cls+'" style="transform:rotate('+angle+'deg)"></div>';
+    }
+    el.innerHTML=h;
+  }
+
+  function renderAnalogEqualizer(){
+    var el=document.getElementById('analogEqualizer');
+    if(!el) return;
+    var h='';
+    for(var i=0;i<24;i++){
+      h+='<div class="analog-eq-bar" id="analogEqBar'+i+'"></div>';
+    }
+    el.innerHTML=h;
+  }
+
+  function renderAnalogStationMarkers(){
+    var band=document.getElementById('analogFreqBand');
+    if(!band) return;
+    // 기존 마커 제거
+    band.querySelectorAll('.analog-station-marker').forEach(function(m){m.remove();});
+    STATIONS.forEach(function(s){
+      var pct=((s.freqNum-88)/20)*90+5;
+      var marker=document.createElement('div');
+      marker.className='analog-station-marker';
+      marker.setAttribute('data-freq',s.freqNum);
+      marker.style.left=pct+'%';
+      marker.title=s.name+' ('+s.freq+')';
+      band.appendChild(marker);
+    });
+  }
+
+  function renderAnalogPhotos(photos){
+    // Brand photos (top)
+    var bp=document.getElementById('analogBrandPhotos');
+    bp.innerHTML='';
+    for(var i=0;i<4&&i<photos.length;i++){
+      var img=document.createElement('img');
+      img.src=photos[i]; img.alt='사진'+(i+1);
+      img.onclick=(function(s){return function(){openLightbox(s)}})(photos[i]);
+      bp.appendChild(img);
+    }
+    // Left photo
+    var cl=document.getElementById('analogPhotoLeft');
+    cl.innerHTML='';
+    if(photos.length>4){
+      var il=document.createElement('img');
+      il.src=photos[4]; il.alt='사진5'; il.style.cursor='pointer';
+      il.onclick=(function(s){return function(){openLightbox(s)}})(photos[4]);
+      cl.appendChild(il);
+    }
+    // Right photo
+    var cr=document.getElementById('analogPhotoRight');
+    cr.innerHTML='';
+    if(photos.length>5){
+      var ir=document.createElement('img');
+      ir.src=photos[5]; ir.alt='사진6'; ir.style.cursor='pointer';
+      ir.onclick=(function(s){return function(){openLightbox(s)}})(photos[5]);
+      cr.appendChild(ir);
+    }
+  }
+
+  function handleAnalogPhotoUpload(event){
+    var files=event.target.files;
+    if(!files||!files.length) return;
+    var saved=[];
+    try {
+      var s=localStorage.getItem('radioUserPhotos');
+      if(s) saved=JSON.parse(s)||[];
+    } catch(e){}
+    var loaded=0, total=files.length;
+    for(var i=0;i<total;i++){
+      (function(file){
+        var reader=new FileReader();
+        reader.onload=function(e){
+          saved.push(e.target.result);
+          loaded++;
+          if(loaded===total){
+            localStorage.setItem('radioUserPhotos',JSON.stringify(saved));
+            renderAnalogPhotos(saved);
+          }
+        };
+        reader.readAsDataURL(file);
+      })(files[i]);
+    }
+    event.target.value='';
+  }
+
+  function setupAnalogDial(){
+    var knob=document.getElementById('analogDialKnob');
+    var container=document.getElementById('analogDialContainer');
+    if(!knob||!container) return;
+    var isDragging=false;
+    var lastAngle=null;
+
+    function getAngle(e){
+      var r=container.getBoundingClientRect();
+      var cx=r.left+r.width/2, cy=r.top+r.height/2;
+      var x=e.touches?e.touches[0].clientX:e.clientX;
+      var y=e.touches?e.touches[0].clientY:e.clientY;
+      return Math.atan2(y-cy,x-cx)*(180/Math.PI)+90;
+    }
+
+    function handleStart(e){
+      isDragging=true;
+      lastAngle=getAngle(e);
+      if(e.preventDefault) e.preventDefault();
+    }
+    function handleMove(e){
+      if(!isDragging) return;
+      e.preventDefault();
+      var a=getAngle(e);
+      var delta=a-lastAngle;
+      // Handle wrap-around
+      if(delta>180) delta-=360;
+      if(delta<-180) delta+=360;
+      lastAngle=a;
+      analogDialAngle+=delta;
+      // Clamp: map -150~150 to 88~108 MHz, but allow free rotation
+      // Each full rotation = 20 MHz range, map 300 degrees = 20 MHz
+      analogFreq+=(delta/300)*20;
+      analogFreq=Math.max(88.0,Math.min(108.0,analogFreq));
+      // Round to 0.1
+      analogFreq=Math.round(analogFreq*10)/10;
+      updateAnalogFreqDisplay();
+      updateAnalogNeedle();
+      updateAnalogDial();
+      checkAnalogStation();
+    }
+    function handleEnd(){
+      isDragging=false;
+      lastAngle=null;
+    }
+
+    knob.addEventListener('mousedown',handleStart);
+    knob.addEventListener('touchstart',handleStart,{passive:false});
+    document.addEventListener('mousemove',handleMove);
+    document.addEventListener('touchmove',handleMove,{passive:false});
+    document.addEventListener('mouseup',handleEnd);
+    document.addEventListener('touchend',handleEnd);
+
+    // Wheel support
+    container.addEventListener('wheel',function(e){
+      e.preventDefault();
+      var delta=e.deltaY>0?-0.2:0.2;
+      analogFreq=Math.max(88.0,Math.min(108.0,analogFreq+delta));
+      analogFreq=Math.round(analogFreq*10)/10;
+      analogDialAngle+=(delta/20)*300;
+      updateAnalogFreqDisplay();
+      updateAnalogNeedle();
+      updateAnalogDial();
+      checkAnalogStation();
+    },{passive:false});
+  }
+
+  function updateAnalogDial(){
+    var knob=document.getElementById('analogDialKnob');
+    if(knob){
+      var angle=((analogFreq-88)/20)*300-150;
+      knob.style.transform='rotate('+angle+'deg)';
+    }
+  }
+
+  function updateAnalogFreqDisplay(){
+    var el=document.getElementById('analogFreqNum');
+    if(el) el.textContent=analogFreq.toFixed(1);
+  }
+
+  function updateAnalogNeedle(){
+    var needle=document.getElementById('analogNeedle');
+    if(needle){
+      var pct=((analogFreq-88)/20)*90+5;
+      needle.style.left=pct+'%';
+    }
+  }
+
+  function checkAnalogStation(){
+    var SNAP_RANGE=0.3;
+    var found=null;
+    for(var i=0;i<STATIONS.length;i++){
+      if(Math.abs(STATIONS[i].freqNum-analogFreq)<=SNAP_RANGE){
+        found=STATIONS[i];
+        break;
+      }
+    }
+
+    // Update station markers
+    document.querySelectorAll('.analog-station-marker').forEach(function(m){
+      var mf=parseFloat(m.getAttribute('data-freq'));
+      m.classList.toggle('active',found&&Math.abs(mf-found.freqNum)<0.01);
+    });
+
+    if(found){
+      if(analogSnappedStation && analogSnappedStation.id===found.id) return;
+      // Snap to station
+      analogSnappedStation=found;
+      analogFreq=found.freqNum;
+      updateAnalogFreqDisplay();
+      updateAnalogNeedle();
+      updateAnalogDial();
+
+      document.getElementById('analogStationName').textContent=found.name;
+      document.getElementById('analogStationProvider').textContent=found.provider;
+      var status=document.getElementById('analogStatus');
+      status.textContent='\u25cf ON AIR';
+      status.className='analog-tuning-status locked';
+
+      stopStaticNoise();
+      isPowered=true;
+      document.getElementById('analogPowerBtn').classList.add('on');
+      currentStation=found;
+      loadStream(found.url);
+      startAnalogEqAnimation();
+    } else {
+      if(analogSnappedStation!==null){
+        analogSnappedStation=null;
+        document.getElementById('analogStationName').textContent='';
+        document.getElementById('analogStationProvider').textContent='';
+        var status=document.getElementById('analogStatus');
+        status.textContent='TUNING...';
+        status.className='analog-tuning-status tuning';
+
+        // Stop current stream
+        if(audio){audio.pause();audio.src='';}
+        if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
+        isPlaying=false;
+        isPowered=false;
+        document.getElementById('analogPowerBtn').classList.remove('on');
+        stopAnalogEqAnimation();
+        playStaticNoise();
+      }
+    }
+  }
+
+  // === Static Noise (White Noise) ===
+  function playStaticNoise(){
+    try{
+      if(!analogAudioCtx) analogAudioCtx=new(window.AudioContext||window.webkitAudioContext)();
+      if(staticNoiseNode) return; // already playing
+
+      var bufferSize=2*analogAudioCtx.sampleRate;
+      var buffer=analogAudioCtx.createBuffer(1,bufferSize,analogAudioCtx.sampleRate);
+      var data=buffer.getChannelData(0);
+      for(var i=0;i<bufferSize;i++){
+        data[i]=Math.random()*2-1;
+      }
+      staticNoiseNode=analogAudioCtx.createBufferSource();
+      staticNoiseNode.buffer=buffer;
+      staticNoiseNode.loop=true;
+
+      staticGainNode=analogAudioCtx.createGain();
+      staticGainNode.gain.value=0.05*volume;
+
+      staticNoiseNode.connect(staticGainNode);
+      staticGainNode.connect(analogAudioCtx.destination);
+      staticNoiseNode.start();
+    }catch(e){console.log('Static noise error:',e);}
+  }
+
+  function stopStaticNoise(){
+    if(staticNoiseNode){
+      try{staticNoiseNode.stop();}catch(e){}
+      staticNoiseNode.disconnect();
+      staticNoiseNode=null;
+    }
+    if(staticGainNode){
+      staticGainNode.disconnect();
+      staticGainNode=null;
+    }
+  }
+
+  // === Analog EQ Animation ===
+  var analogEqInterval=null;
+  function startAnalogEqAnimation(){
+    stopAnalogEqAnimation();
+    analogEqInterval=setInterval(function(){
+      for(var i=0;i<24;i++){
+        var bar=document.getElementById('analogEqBar'+i);
+        if(bar){
+          bar.style.height=(6+Math.random()*30)+'px';
+          bar.classList.add('playing');
+        }
+      }
+    },150);
+  }
+  function stopAnalogEqAnimation(){
+    if(analogEqInterval){clearInterval(analogEqInterval);analogEqInterval=null;}
+    for(var i=0;i<24;i++){
+      var bar=document.getElementById('analogEqBar'+i);
+      if(bar){bar.style.height='6px';bar.classList.remove('playing');}
+    }
+  }
+
+  // === Analog Volume Knob ===
+  function setupAnalogVolDrag(){
+    var knob=document.getElementById('analogVolKnob');
+    var container=document.getElementById('analogVolContainer');
+    if(!knob||!container) return;
+    var isDragging=false;
+
+    function getAngle(e){
+      var r=container.getBoundingClientRect();
+      var cx=r.left+r.width/2, cy=r.top+r.height/2;
+      var x=e.touches?e.touches[0].clientX:e.clientX;
+      var y=e.touches?e.touches[0].clientY:e.clientY;
+      return Math.atan2(y-cy,x-cx)*(180/Math.PI)+90;
+    }
+    function handleMove(e){
+      if(!isDragging) return;
+      e.preventDefault();
+      var a=getAngle(e); if(a>180) a-=360;
+      analogVolAngle=Math.max(-135,Math.min(135,a));
+      volume=(analogVolAngle+135)/270;
+      if(audio) audio.volume=volume;
+      if(staticGainNode) staticGainNode.gain.value=0.05*volume;
+      knob.style.transform='rotate('+analogVolAngle+'deg)';
+    }
+    knob.addEventListener('mousedown',function(e){isDragging=true;e.preventDefault();});
+    knob.addEventListener('touchstart',function(){isDragging=true;},{passive:true});
+    document.addEventListener('mousemove',handleMove);
+    document.addEventListener('touchmove',handleMove,{passive:false});
+    document.addEventListener('mouseup',function(){isDragging=false;});
+    document.addEventListener('touchend',function(){isDragging=false;});
+    container.addEventListener('wheel',function(e){
+      e.preventDefault();
+      volume=Math.max(0,Math.min(1,volume+(e.deltaY>0?-0.05:0.05)));
+      analogVolAngle=-135+(volume*270);
+      if(audio) audio.volume=volume;
+      if(staticGainNode) staticGainNode.gain.value=0.05*volume;
+      knob.style.transform='rotate('+analogVolAngle+'deg)';
+    },{passive:false});
+  }
+
+  // === Analog Power ===
+  function toggleAnalogPower(){
+    var btn = document.getElementById('analogPowerBtn');
+    var inner = document.querySelector('#analogRadio .radio-inner');
+    if(isPowered){
+      // 전원 끄기
+      if(audio){audio.pause();audio.src='';}
+      if(hlsInstance){hlsInstance.destroy();hlsInstance=null;}
+      isPlaying=false;
+      isPowered=false;
+      btn.classList.remove('on');
+      inner.classList.add('power-off');
+      stopAnalogEqAnimation();
+      stopStaticNoise();
+      var status=document.getElementById('analogStatus');
+      status.textContent='OFF';
+      status.className='analog-tuning-status tuning';
+    } else {
+      // 전원 켜기
+      isPowered=true;
+      btn.classList.add('on');
+      inner.classList.remove('power-off');
+      if(analogSnappedStation){
+        loadStream(analogSnappedStation.url);
+        startAnalogEqAnimation();
+        var status=document.getElementById('analogStatus');
+        status.textContent='\u25cf ON AIR';
+        status.className='analog-tuning-status locked';
+      } else {
+        playStaticNoise();
+        var status=document.getElementById('analogStatus');
+        status.textContent='TUNING...';
+        status.className='analog-tuning-status tuning';
+      }
+    }
+  }
+
+  // === Init on Load ===
+  document.addEventListener('DOMContentLoaded', function(){
+    // Restore saved theme or default to wood
+    var savedTheme = 'wood';
+    try {
+      var stored = localStorage.getItem('k-radio-theme');
+      if (stored && THEME_NAMES[stored]) savedTheme = stored;
+    } catch(e) {}
+    setTheme(savedTheme);
+
+    // Initialize analog components
+    initAnalog();
+    // 전원 ON 상태로 시작
+    isPowered = true;
+    document.getElementById('analogPowerBtn').classList.add('on');
+
+    // Load saved photos from localStorage if available
+    try {
+      var savedPhotos = localStorage.getItem('radioUserPhotos');
+      if (savedPhotos) {
+        var photos = JSON.parse(savedPhotos);
+        if (photos && photos.length > 0) {
+          renderAnalogPhotos(photos);
+        }
+      }
+    } catch(e) {}
+
+    // Set initial volume knob position
+    var volKnob = document.getElementById('analogVolKnob');
+    if (volKnob) {
+      volKnob.style.transform = 'rotate(' + analogVolAngle + 'deg)';
+    }
+  });
+</script>
+</body>
+</html>
