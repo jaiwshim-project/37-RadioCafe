@@ -2413,6 +2413,218 @@
       .theme-dot { min-width: 28px; min-height: 28px; }
     }
 
+    /* === ANNIVERSARY SECTION === */
+    .anniversary-section {
+      margin-bottom: 10px; position: relative; z-index: 1;
+    }
+    .anniversary-label {
+      font-family: 'Orbitron', monospace; font-size: 8px; font-weight: 600;
+      color: var(--label-color); letter-spacing: 3px; margin-bottom: 6px;
+      transition: color 0.6s;
+    }
+    .anniversary-panel {
+      background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.15));
+      border: 1px solid var(--neon-light); border-radius: 10px;
+      padding: 10px 12px;
+      box-shadow: 0 0 6px var(--neon-light-glow), inset 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .anniversary-list { display: flex; flex-direction: column; gap: 4px; }
+    .anniversary-item {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 6px; border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .anniversary-item .anniv-name {
+      font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
+      color: var(--lcd-text, #e0e0e0); flex: 1; min-width: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .anniversary-item .anniv-date {
+      font-family: 'Orbitron', monospace; font-size: 8px;
+      color: var(--preset-name, #999); opacity: 0.7; flex-shrink: 0;
+    }
+    .anniversary-item .anniv-dday {
+      font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700;
+      flex-shrink: 0; min-width: 48px; text-align: right;
+    }
+    .anniv-dday.future { color: var(--accent); }
+    .anniv-dday.today { color: var(--needle, #ff6b6b); text-shadow: 0 0 6px var(--needle-glow, rgba(255,100,100,0.5)); }
+    .anniv-dday.past { color: var(--preset-name, #999); opacity: 0.5; }
+    .anniversary-item .anniv-del {
+      background: none; border: none; color: var(--preset-name, #999);
+      font-size: 12px; cursor: pointer; padding: 0 2px; opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .anniversary-item .anniv-del:hover { opacity: 1; color: var(--needle, #ff6b6b); }
+    .anniversary-add-row {
+      display: flex; gap: 4px; margin-top: 6px; align-items: center;
+    }
+    .anniversary-add-row input[type="text"] {
+      flex: 1; min-width: 0; padding: 4px 6px; font-size: 10px;
+      font-family: 'Inter', sans-serif;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--neon-light);
+      border-radius: 4px; color: var(--lcd-text, #e0e0e0); outline: none;
+    }
+    .anniversary-add-row input[type="date"] {
+      padding: 3px 4px; font-size: 9px; font-family: 'Orbitron', monospace;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--neon-light);
+      border-radius: 4px; color: var(--lcd-text, #e0e0e0); outline: none;
+      color-scheme: dark;
+    }
+    .anniversary-add-row button {
+      background: linear-gradient(180deg, var(--btn-bg1), var(--btn-bg2));
+      border: 1px solid var(--neon-light); border-radius: 4px;
+      color: var(--accent); font-size: 14px; font-weight: 700;
+      width: 28px; height: 26px; cursor: pointer; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .anniversary-add-row button:active { transform: scale(0.95); }
+    .anniversary-empty {
+      font-size: 9px; color: var(--preset-name, #999); opacity: 0.5;
+      text-align: center; padding: 4px 0; font-family: 'Inter', sans-serif;
+    }
+    .anniversary-add-row.hidden { display: none; }
+
+    /* Anniversary Login */
+    .anniv-login-row {
+      display: flex; gap: 4px; align-items: center; margin-bottom: 8px;
+    }
+    .anniv-login-row input {
+      padding: 4px 6px; font-size: 10px; font-family: 'Inter', sans-serif;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--neon-light);
+      border-radius: 4px; color: var(--lcd-text, #e0e0e0); outline: none;
+    }
+    .anniv-login-row input[type="text"] { flex: 1; min-width: 0; }
+    .anniv-login-row input[type="password"] { width: 52px; text-align: center; letter-spacing: 2px; }
+    .anniv-login-row button {
+      background: linear-gradient(180deg, var(--btn-bg1), var(--btn-bg2));
+      border: 1px solid var(--neon-light); border-radius: 4px;
+      color: var(--accent); font-size: 9px; font-weight: 700;
+      padding: 4px 8px; cursor: pointer; white-space: nowrap;
+      font-family: 'Orbitron', monospace;
+    }
+    .anniv-login-row button:active { transform: scale(0.95); }
+    .anniv-user-row {
+      display: flex; gap: 6px; align-items: center; margin-bottom: 8px;
+    }
+    .anniv-user-row .anniv-user-name {
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+      color: var(--accent); flex: 1;
+    }
+    .anniv-user-row button {
+      background: linear-gradient(180deg, var(--btn-bg1), var(--btn-bg2));
+      border: 1px solid var(--neon-light); border-radius: 4px;
+      font-size: 8px; font-weight: 700; padding: 3px 7px; cursor: pointer;
+      font-family: 'Orbitron', monospace; white-space: nowrap;
+    }
+    .anniv-user-row button:active { transform: scale(0.95); }
+    .anniv-user-row .anniv-dash-btn { color: var(--needle, #ff6b6b); }
+    .anniv-user-row .anniv-logout-btn { color: var(--preset-name, #999); }
+    .anniv-login-row.hidden, .anniv-user-row.hidden { display: none; }
+
+    /* Dashboard Modal */
+    .dashboard-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); z-index: 9999;
+      justify-content: center; align-items: center;
+    }
+    .dashboard-overlay.visible { display: flex; }
+    .dashboard-modal {
+      background: linear-gradient(160deg, var(--body-from, #2a2218), var(--body-to, #1a150e));
+      border: 2px solid var(--accent); border-radius: 16px;
+      padding: 20px; width: 90%; max-width: 360px; max-height: 80vh;
+      overflow-y: auto; position: relative;
+      box-shadow: 0 0 30px rgba(0,0,0,0.6), 0 0 15px var(--accent-glow);
+    }
+    .dashboard-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .dashboard-title {
+      font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700;
+      color: var(--accent); letter-spacing: 2px;
+    }
+    .dashboard-close {
+      background: none; border: none; color: var(--preset-name, #999);
+      font-size: 20px; cursor: pointer; padding: 0 4px;
+    }
+    .dashboard-close:hover { color: var(--needle, #ff6b6b); }
+    .dashboard-user-info {
+      margin-bottom: 16px; padding: 10px 12px; border-radius: 8px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    }
+    .dashboard-user-name {
+      font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700;
+      color: var(--lcd-text, #e0e0e0); margin-bottom: 2px;
+    }
+    .dashboard-user-email {
+      font-family: 'Inter', sans-serif; font-size: 10px;
+      color: var(--preset-name, #999); opacity: 0.7;
+    }
+    .dashboard-section-title {
+      font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 600;
+      color: var(--label-color); letter-spacing: 2px; margin-bottom: 8px;
+    }
+    .dashboard-anniv-list { display: flex; flex-direction: column; gap: 6px; }
+    .dashboard-anniv-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border-radius: 8px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    }
+    .dashboard-anniv-item.nearest {
+      border-color: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .dashboard-anniv-item .dash-name {
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+      color: var(--lcd-text, #e0e0e0); flex: 1;
+    }
+    .dashboard-anniv-item .dash-date {
+      font-family: 'Orbitron', monospace; font-size: 9px;
+      color: var(--preset-name, #999); opacity: 0.7;
+    }
+    .dashboard-anniv-item .dash-dday {
+      font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
+      min-width: 56px; text-align: right;
+    }
+    .dashboard-empty {
+      font-size: 11px; color: var(--preset-name, #999); opacity: 0.6;
+      text-align: center; padding: 16px 0; font-family: 'Inter', sans-serif;
+    }
+    .dashboard-anniv-item .dash-del {
+      background: none; border: none; color: var(--preset-name, #999);
+      font-size: 14px; cursor: pointer; padding: 0 2px; opacity: 0.4;
+      transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .dashboard-anniv-item .dash-del:hover { opacity: 1; color: var(--needle, #ff6b6b); }
+    .dashboard-add-row {
+      display: flex; gap: 4px; margin-top: 12px; padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.06); align-items: center;
+    }
+    .dashboard-add-row input[type="text"] {
+      flex: 1; min-width: 0; padding: 6px 8px; font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--neon-light);
+      border-radius: 6px; color: var(--lcd-text, #e0e0e0); outline: none;
+    }
+    .dashboard-add-row input[type="date"] {
+      padding: 5px 6px; font-size: 11px; font-family: 'Orbitron', monospace;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--neon-light);
+      border-radius: 6px; color: var(--lcd-text, #e0e0e0); outline: none;
+      color-scheme: dark;
+    }
+    .dashboard-add-row button {
+      background: linear-gradient(180deg, var(--btn-bg1), var(--btn-bg2));
+      border: 1px solid var(--neon-light); border-radius: 6px;
+      color: var(--accent); font-size: 18px; font-weight: 700;
+      width: 34px; height: 34px; cursor: pointer; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dashboard-add-row button:active { transform: scale(0.95); }
+    .dashboard-add-row.hidden { display: none; }
+
     /* ============================================
        ANALOG RADIO MODE
        (.radio .radio-inner 클래스를 공유하여 동일 셸 사용)
@@ -2785,6 +2997,27 @@
   </div>
 </div>
 
+<!-- Dashboard Modal -->
+<div class="dashboard-overlay" id="dashboardOverlay" onclick="if(event.target===this)closeDashboard()">
+  <div class="dashboard-modal">
+    <div class="dashboard-header">
+      <span class="dashboard-title">MY DASHBOARD</span>
+      <button class="dashboard-close" onclick="closeDashboard()">&times;</button>
+    </div>
+    <div class="dashboard-user-info">
+      <div class="dashboard-user-name" id="dashUserName"></div>
+      <div class="dashboard-user-email" id="dashUserEmail"></div>
+    </div>
+    <div class="dashboard-section-title">ANNIVERSARIES</div>
+    <div class="dashboard-anniv-list" id="dashAnnivList"></div>
+    <div class="dashboard-add-row" id="dashAddRow">
+      <input type="text" id="dashAnnivNameInput" placeholder="기념일 이름" maxlength="12" autocomplete="off">
+      <input type="date" id="dashAnnivDateInput">
+      <button onclick="addAnniversaryFromDash()">+</button>
+    </div>
+  </div>
+</div>
+
 <!-- Photo Selection Screen -->
 <div class="photo-select-screen hidden" id="photoSelectScreen">
   <div class="photo-radio-body">
@@ -2950,6 +3183,29 @@
       <div class="preset-label">PRESET STATIONS</div>
       <div class="preset-scroll">
         <div class="preset-buttons" id="presetButtons"></div>
+      </div>
+    </div>
+
+    <!-- Anniversary Section -->
+    <div class="anniversary-section">
+      <div class="anniversary-label">ANNIVERSARY</div>
+      <div class="anniversary-panel">
+        <div class="anniv-login-row" id="annivLoginRow">
+          <input type="text" id="annivNickInput" placeholder="닉네임" autocomplete="off">
+          <input type="password" id="annivPassInput" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+          <button onclick="loginAnniversary()">LOGIN</button>
+        </div>
+        <div class="anniv-user-row hidden" id="annivUserRow">
+          <span class="anniv-user-name" id="annivUserName"></span>
+          <button class="anniv-dash-btn" onclick="openDashboard()">DASHBOARD</button>
+          <button class="anniv-logout-btn" onclick="logoutAnniversary()">LOGOUT</button>
+        </div>
+        <div class="anniversary-list" id="anniversaryList"></div>
+        <div class="anniversary-add-row" id="anniversaryAddRow">
+          <input type="text" id="annivNameInput" placeholder="기념일 이름" maxlength="12" autocomplete="off">
+          <input type="date" id="annivDateInput">
+          <button onclick="addAnniversary()">+</button>
+        </div>
       </div>
     </div>
 
@@ -3236,6 +3492,18 @@
     setInterval(updateClock, 1000);
     initAnalog();
     loadSavedPhotos();
+    loadAnniversaries();
+
+    // Anniversary password: numeric only + Enter key
+    var annivPass = document.getElementById('annivPassInput');
+    if (annivPass) {
+      annivPass.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+      annivPass.addEventListener('keypress', function(e) { if (e.key === 'Enter') loginAnniversary(); });
+    }
+    var annivNick = document.getElementById('annivNickInput');
+    if (annivNick) {
+      annivNick.addEventListener('keypress', function(e) { if (e.key === 'Enter') loginAnniversary(); });
+    }
   }
 
   // === Render ===
@@ -4059,6 +4327,11 @@
     renderUserPhotos(photos);
     // [+] 버튼 표시
     document.getElementById('photoUploadBtn').classList.add('has-photos');
+    // 기념일 로그인: 현재 사용자 닉네임 자동 세팅
+    if (currentUsername && !annivLoggedUser) {
+      var annivNick = document.getElementById('annivNickInput');
+      if (annivNick) annivNick.value = currentUsername;
+    }
   }
 
   function reopenPhotoSelect(){
@@ -4177,6 +4450,227 @@
 
   function updateKnobVisual(){
     document.getElementById('volumeKnob').style.transform='rotate('+knobAngle+'deg)';
+  }
+
+  // === Anniversary ===
+  var anniversaries = [];
+  var annivLoggedUser = null;
+  var annivUsersCache = null;
+
+  async function loadAnnivUsers() {
+    if (annivUsersCache) return annivUsersCache;
+    try {
+      var r = await supabase.storage.from(BUCKET_NAME).download('_system/users.json');
+      if (r.data) {
+        annivUsersCache = JSON.parse(await r.data.text());
+        return annivUsersCache;
+      }
+    } catch(e) {}
+    return {};
+  }
+
+  async function saveAnniversariesToCloud() {
+    if (!annivLoggedUser) return;
+    try {
+      var blob = new Blob([JSON.stringify(anniversaries)], { type: 'application/json' });
+      await supabase.storage.from(BUCKET_NAME).upload(
+        '_system/anniversaries/' + annivLoggedUser + '.json', blob, { upsert: true }
+      );
+    } catch(e) {}
+  }
+
+  async function loadAnniversariesFromCloud(nickname) {
+    try {
+      var r = await supabase.storage.from(BUCKET_NAME).download(
+        '_system/anniversaries/' + nickname + '.json'
+      );
+      if (r.data) {
+        var arr = JSON.parse(await r.data.text());
+        if (Array.isArray(arr)) return arr;
+      }
+    } catch(e) {}
+    return [];
+  }
+
+  async function loginAnniversary() {
+    var nickEl = document.getElementById('annivNickInput');
+    var passEl = document.getElementById('annivPassInput');
+    var nick = nickEl.value.trim();
+    var pass = passEl.value.trim();
+    if (!nick) { alert('닉네임을 입력하세요.'); nickEl.focus(); return; }
+    if (!pass || pass.length !== 4 || !/^\d{4}$/.test(pass)) {
+      alert('비밀번호 4자리 숫자를 입력하세요.'); passEl.focus(); return;
+    }
+    var users = await loadAnnivUsers();
+    var userData = users[nick];
+    if (!userData) { alert('등록되지 않은 사용자입니다.'); nickEl.focus(); return; }
+    var storedPass = typeof userData === 'string' ? userData : (userData.password || '');
+    if (storedPass !== pass) { alert('비밀번호가 일치하지 않습니다.'); passEl.value = ''; passEl.focus(); return; }
+    annivLoggedUser = nick;
+    anniversaries = await loadAnniversariesFromCloud(nick);
+    try { localStorage.setItem('radio-anniversaries', JSON.stringify(anniversaries)); } catch(e) {}
+    updateAnnivUI();
+    renderAnniversaries();
+    openDashboard();
+  }
+
+  function logoutAnniversary() {
+    annivLoggedUser = null;
+    anniversaries = [];
+    try { var saved = JSON.parse(localStorage.getItem('radio-anniversaries'));
+      if (saved && Array.isArray(saved)) anniversaries = saved; } catch(e) {}
+    updateAnnivUI();
+    renderAnniversaries();
+  }
+
+  function updateAnnivUI() {
+    var loginRow = document.getElementById('annivLoginRow');
+    var userRow = document.getElementById('annivUserRow');
+    if (annivLoggedUser) {
+      loginRow.classList.add('hidden');
+      userRow.classList.remove('hidden');
+      document.getElementById('annivUserName').textContent = annivLoggedUser + '님 \u2713';
+    } else {
+      loginRow.classList.remove('hidden');
+      userRow.classList.add('hidden');
+      document.getElementById('annivNickInput').value = '';
+      document.getElementById('annivPassInput').value = '';
+    }
+  }
+
+  function loadAnniversaries() {
+    try {
+      var saved = JSON.parse(localStorage.getItem('radio-anniversaries'));
+      if (saved && Array.isArray(saved)) anniversaries = saved;
+    } catch(e) {}
+    renderAnniversaries();
+  }
+
+  function saveAnniversaries() {
+    try { localStorage.setItem('radio-anniversaries', JSON.stringify(anniversaries)); } catch(e) {}
+    saveAnniversariesToCloud();
+  }
+
+  function addAnniversary() {
+    if (anniversaries.length >= 5) return;
+    var nameEl = document.getElementById('annivNameInput');
+    var dateEl = document.getElementById('annivDateInput');
+    var name = nameEl.value.trim();
+    var date = dateEl.value;
+    if (!name || !date) return;
+    anniversaries.push({ name: name, date: date });
+    saveAnniversaries();
+    renderAnniversaries();
+    nameEl.value = '';
+    dateEl.value = '';
+  }
+
+  function removeAnniversary(idx) {
+    anniversaries.splice(idx, 1);
+    saveAnniversaries();
+    renderAnniversaries();
+  }
+
+  function calcDday(dateStr) {
+    var today = new Date(); today.setHours(0,0,0,0);
+    var target = new Date(dateStr + 'T00:00:00');
+    var diff = Math.round((target - today) / 86400000);
+    var text, cls;
+    if (diff > 0) { text = 'D-' + diff; cls = 'future'; }
+    else if (diff === 0) { text = 'D-DAY'; cls = 'today'; }
+    else { text = 'D+' + Math.abs(diff); cls = 'past'; }
+    return { text: text, cls: cls, diff: diff };
+  }
+
+  function renderAnniversaries() {
+    var list = document.getElementById('anniversaryList');
+    var addRow = document.getElementById('anniversaryAddRow');
+    if (!list) return;
+    if (anniversaries.length === 0) {
+      list.innerHTML = '<div class="anniversary-empty">' +
+        (annivLoggedUser ? '기념일을 추가해보세요 (최대 5개)' : '로그인 후 기념일을 관리하세요') + '</div>';
+    } else {
+      list.innerHTML = anniversaries.map(function(a, i) {
+        var dd = calcDday(a.date);
+        var m = new Date(a.date + 'T00:00:00').getMonth() + 1;
+        var d = new Date(a.date + 'T00:00:00').getDate();
+        return '<div class="anniversary-item">' +
+          '<span class="anniv-name">' + a.name.replace(/</g,'&lt;') + '</span>' +
+          '<span class="anniv-date">' + m + '/' + d + '</span>' +
+          '<span class="anniv-dday ' + dd.cls + '">' + dd.text + '</span>' +
+          '<button class="anniv-del" onclick="removeAnniversary(' + i + ')" title="삭제">&times;</button>' +
+          '</div>';
+      }).join('');
+    }
+    if (addRow) addRow.classList.toggle('hidden', anniversaries.length >= 5);
+  }
+
+  function renderDashboardList() {
+    var dashList = document.getElementById('dashAnnivList');
+    var dashAddRow = document.getElementById('dashAddRow');
+    if (anniversaries.length === 0) {
+      dashList.innerHTML = '<div class="dashboard-empty">기념일을 추가해보세요</div>';
+    } else {
+      var sorted = anniversaries.map(function(a, i) {
+        var dd = calcDday(a.date);
+        return { name: a.name, date: a.date, diff: dd.diff, text: dd.text, cls: dd.cls, idx: i };
+      }).sort(function(a, b) {
+        if (a.diff >= 0 && b.diff >= 0) return a.diff - b.diff;
+        if (a.diff >= 0) return -1;
+        if (b.diff >= 0) return 1;
+        return b.diff - a.diff;
+      });
+      var nearestIdx = sorted[0].idx;
+      dashList.innerHTML = sorted.map(function(s) {
+        var target = new Date(s.date + 'T00:00:00');
+        var dateStr = target.getFullYear() + '.' + (target.getMonth()+1) + '.' + target.getDate();
+        var isNearest = (s.idx === nearestIdx && s.diff >= 0) ? ' nearest' : '';
+        return '<div class="dashboard-anniv-item' + isNearest + '">' +
+          '<span class="dash-name">' + s.name.replace(/</g,'&lt;') + '</span>' +
+          '<span class="dash-date">' + dateStr + '</span>' +
+          '<span class="dash-dday ' + s.cls + '">' + s.text + '</span>' +
+          '<button class="dash-del" onclick="removeAnniversaryFromDash(' + s.idx + ')" title="삭제">&times;</button>' +
+          '</div>';
+      }).join('');
+    }
+    if (dashAddRow) dashAddRow.classList.toggle('hidden', anniversaries.length >= 5);
+  }
+
+  async function openDashboard() {
+    if (!annivLoggedUser) return;
+    var users = await loadAnnivUsers();
+    var userData = users[annivLoggedUser] || {};
+    var email = typeof userData === 'string' ? '' : (userData.email || '');
+    document.getElementById('dashUserName').textContent = annivLoggedUser;
+    document.getElementById('dashUserEmail').textContent = email || '이메일 미등록';
+    renderDashboardList();
+    document.getElementById('dashboardOverlay').classList.add('visible');
+  }
+
+  function closeDashboard() {
+    document.getElementById('dashboardOverlay').classList.remove('visible');
+  }
+
+  function addAnniversaryFromDash() {
+    if (anniversaries.length >= 5) return;
+    var nameEl = document.getElementById('dashAnnivNameInput');
+    var dateEl = document.getElementById('dashAnnivDateInput');
+    var name = nameEl.value.trim();
+    var date = dateEl.value;
+    if (!name || !date) return;
+    anniversaries.push({ name: name, date: date });
+    saveAnniversaries();
+    renderAnniversaries();
+    renderDashboardList();
+    nameEl.value = '';
+    dateEl.value = '';
+  }
+
+  function removeAnniversaryFromDash(idx) {
+    anniversaries.splice(idx, 1);
+    saveAnniversaries();
+    renderAnniversaries();
+    renderDashboardList();
   }
 
   // ============================================
