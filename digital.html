@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>클라라 라디오카페 | 디지털 라디오</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2323,7 +2326,7 @@
     <div class="radio-top-row2">
       <button class="photo-upload-btn" id="photoUploadBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
       <span class="brand-photos" id="brandPhotos"></span>
-      <button class="digital-to-analog-btn" onclick="location.href='analog.html'" title="아날로그 모드">ANALOG ▸</button>
+      <button class="digital-to-analog-btn" onclick="location.href='analog.html?t='+Date.now()" title="아날로그 모드">ANALOG ▸</button>
     </div>
 
     <!-- Speaker Grille -->

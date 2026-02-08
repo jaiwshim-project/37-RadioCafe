@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>클라라 라디오카페 | 아날로그 라디오</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -809,10 +812,10 @@
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      justify-content: safe center;
+      justify-content: flex-start;
       align-items: center;
       font-family: 'Inter', sans-serif;
-      padding: 20px;
+      padding: 0;
       overflow-y: auto;
       transition: background 0.6s ease;
     }
@@ -866,6 +869,21 @@
     .theme-dot[data-t="purple"]   { background: linear-gradient(135deg, #1e1040, #b388ff); }
     .theme-dot[data-t="hotpink"]  { background: linear-gradient(135deg, #3a1038, #ff69b4); }
 
+    .theme-toggle-btn {
+      background: none; border: none; cursor: pointer; padding: 2px;
+      color: var(--label-color, #999); font-size: 14px; line-height: 1;
+      opacity: 0.6; transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .theme-toggle-btn:hover { opacity: 1; }
+    .theme-dots-wrap {
+      display: flex; gap: 8px; justify-content: center; align-items: center;
+      overflow: hidden; transition: max-width 0.3s ease, opacity 0.3s ease;
+      max-width: 500px; opacity: 1;
+    }
+    .theme-dots-wrap.hidden {
+      max-width: 0; opacity: 0; gap: 0;
+    }
+
     .theme-name {
       font-size: 10px;
       color: rgba(255,255,255,0.6);
@@ -883,6 +901,10 @@
     .radio {
       width: 100%;
       max-width: 480px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
       background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
       border-radius: 24px;
       padding: 0;
@@ -905,6 +927,9 @@
       position: relative;
       overflow: hidden;
       transition: all 0.6s ease;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
     .radio-inner::after {
       content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -980,14 +1005,7 @@
       color: #ff3333;
     }
     .radio-inner.power-off {
-      opacity: 0.3;
-      filter: brightness(0.3) saturate(0.2);
-      transition: opacity 0.5s, filter 0.5s;
-    }
-    .radio-inner.power-off .power-btn {
-      opacity: 1;
-      filter: brightness(3) saturate(1);
-      pointer-events: auto;
+      transition: none;
     }
     .power-btn {
       width: 36px; height: 36px; border-radius: 50%;
@@ -1093,19 +1111,11 @@
 
     /* Tablet */
     @media (max-width: 540px) {
-      body { padding: 10px; }
       .radio { max-width: 100%; }
     }
 
     /* === Mobile (phones) === */
     @media (max-width: 480px) {
-      body {
-        padding: 0;
-        justify-content: flex-start;
-        min-height: 100vh;
-        min-height: 100dvh;
-      }
-
       /* Theme switcher: 라디오 안에 붙이기 */
       .theme-name { font-size: 0; height: 0; margin: 0; overflow: hidden; }
       .theme-switcher {
@@ -1133,17 +1143,10 @@
         box-shadow:
           0 0 8px var(--neon-glow),
           inset 0 0 8px var(--neon-glow);
-        min-height: 100vh;
-        min-height: 100dvh;
-        display: flex;
-        flex-direction: column;
       }
       .radio-inner {
         border-radius: 0;
         padding: 14px 16px 16px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
       }
       .radio-inner::before { border-radius: 0; }
 
@@ -1581,16 +1584,19 @@
 <div class="radio" id="analogRadio" data-theme="wood">
   <!-- Theme Switcher -->
   <div class="theme-switcher analog-theme-switcher" id="analogThemeSwitcher">
-    <div class="theme-dot" data-t="wood" title="우드 클래식 · 나무결" onclick="setTheme('wood')"></div>
-    <div class="theme-dot" data-t="cream" title="레트로 크림 · 가죽" onclick="setTheme('cream')"></div>
-    <div class="theme-dot" data-t="black" title="미드나잇 블랙 · 카본파이버" onclick="setTheme('black')"></div>
-    <div class="theme-dot" data-t="military" title="밀리터리 · 캔버스" onclick="setTheme('military')"></div>
-    <div class="theme-dot" data-t="silver" title="크롬 실버 · 브러시드메탈" onclick="setTheme('silver')"></div>
-    <div class="theme-dot" data-t="cyber" title="네온 사이버 · 회로기판" onclick="setTheme('cyber')"></div>
-    <div class="theme-dot" data-t="rose" title="로즈 골드 · 대리석" onclick="setTheme('rose')"></div>
-    <div class="theme-dot" data-t="maltese" title="말티즈 · 털 결" onclick="setTheme('maltese')"></div>
-    <div class="theme-dot" data-t="purple" title="퍼플 갤럭시 · 성운" onclick="setTheme('purple')"></div>
-    <div class="theme-dot" data-t="hotpink" title="핫핑크 네온 · 글로우" onclick="setTheme('hotpink')"></div>
+    <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeDots()" title="테마 감추기">◀</button>
+    <div class="theme-dots-wrap" id="themeDotsWrap">
+      <div class="theme-dot" data-t="wood" title="우드 클래식 · 나무결" onclick="setTheme('wood')"></div>
+      <div class="theme-dot" data-t="cream" title="레트로 크림 · 가죽" onclick="setTheme('cream')"></div>
+      <div class="theme-dot" data-t="black" title="미드나잇 블랙 · 카본파이버" onclick="setTheme('black')"></div>
+      <div class="theme-dot" data-t="military" title="밀리터리 · 캔버스" onclick="setTheme('military')"></div>
+      <div class="theme-dot" data-t="silver" title="크롬 실버 · 브러시드메탈" onclick="setTheme('silver')"></div>
+      <div class="theme-dot" data-t="cyber" title="네온 사이버 · 회로기판" onclick="setTheme('cyber')"></div>
+      <div class="theme-dot" data-t="rose" title="로즈 골드 · 대리석" onclick="setTheme('rose')"></div>
+      <div class="theme-dot" data-t="maltese" title="말티즈 · 털 결" onclick="setTheme('maltese')"></div>
+      <div class="theme-dot" data-t="purple" title="퍼플 갤럭시 · 성운" onclick="setTheme('purple')"></div>
+      <div class="theme-dot" data-t="hotpink" title="핫핑크 네온 · 글로우" onclick="setTheme('hotpink')"></div>
+    </div>
   </div>
 
   <div class="radio-inner">
@@ -1607,7 +1613,7 @@
       <button class="photo-upload-btn has-photos" id="analogPhotoBtn" onclick="document.getElementById('analogPhotoInput').click()">+</button>
       <input type="file" id="analogPhotoInput" accept="image/*" multiple style="display:none" onchange="handleAnalogPhotoUpload(event)">
       <span class="analog-photos" id="analogBrandPhotos"></span>
-      <button class="digital-to-analog-btn" onclick="location.href='index.html'">DIGITAL &#9654;</button>
+      <button class="digital-to-analog-btn" onclick="goToDigital()">DIGITAL &#9654;</button>
     </div>
 
     <!-- Speaker Grille -->
@@ -1748,6 +1754,32 @@
   var virtualizerValue = 0;
 
   // === Theme ===
+  function toggleThemeDots() {
+    var wrap = document.getElementById('themeDotsWrap');
+    var btn = document.getElementById('themeToggleBtn');
+    wrap.classList.toggle('hidden');
+    var hidden = wrap.classList.contains('hidden');
+    btn.textContent = hidden ? '▶' : '◀';
+    btn.title = hidden ? '테마 보이기' : '테마 감추기';
+  }
+  function goToDigital() {
+    document.body.style.opacity = '0';
+    document.body.style.visibility = 'hidden';
+    location.href = 'digital.html?t=' + Date.now();
+  }
+
+  // bfcache에서 복원될 때 아날로그 화면이 보이지 않도록
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) {
+      document.body.style.opacity = '1';
+      document.body.style.visibility = 'visible';
+    }
+  });
+  window.addEventListener('pagehide', function() {
+    document.body.style.opacity = '0';
+    document.body.style.visibility = 'hidden';
+  });
+
   function setTheme(name) {
     currentTheme = name;
     var analogEl = document.getElementById('analogRadio');
