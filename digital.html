@@ -6,7 +6,8 @@
   <title>클라라 라디오카페 | 디지털 라디오</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap"></noscript>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2278,8 +2279,8 @@
     }
 
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -2601,13 +2602,14 @@
   // === Supabase ===
   var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
-  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-    global: { fetch: function(url, opts) { opts = opts || {}; opts.cache = 'no-store'; return fetch(url, opts); } }
-  });
+  var supabase;
   var BUCKET_NAME = 'photo-albums';
 
   // === Init ===
   async function init() {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      global: { fetch: function(url, opts) { opts = opts || {}; opts.cache = 'no-store'; return fetch(url, opts); } }
+    });
     // Restore saved theme
     try {
       var saved = localStorage.getItem('k-radio-theme');
