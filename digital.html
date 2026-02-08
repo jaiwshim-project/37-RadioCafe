@@ -1456,7 +1456,6 @@
     }
     .anniv-user-row button:active { transform: scale(0.95); }
     .anniv-user-row .anniv-dash-btn { color: var(--needle, #ff6b6b); }
-    .anniv-user-row .anniv-logout-btn { color: var(--preset-name, #999); }
     .anniv-user-row.hidden { display: none; }
 
     /* Birthday Info */
@@ -2437,7 +2436,6 @@
         <div class="anniv-user-row" id="annivUserRow">
           <span class="anniv-user-name" id="annivUserName"></span>
           <button class="anniv-dash-btn" onclick="openDashboard()">DASHBOARD</button>
-          <button class="anniv-logout-btn" onclick="logoutAnniversary()">LOGOUT</button>
         </div>
         <div class="anniv-birthday-info" id="annivBirthdayInfo"></div>
         <div class="anniversary-list" id="anniversaryList"></div>
@@ -2819,15 +2817,6 @@
       }
     } catch(e) {}
     return [];
-  }
-
-  function logoutAnniversary() {
-    annivLoggedUser = null;
-    anniversaries = [];
-    try { var saved = JSON.parse(localStorage.getItem('radio-anniversaries'));
-      if (saved && Array.isArray(saved)) anniversaries = saved; } catch(e) {}
-    updateAnnivUI();
-    renderAnniversaries();
   }
 
   function updateAnnivUI() {
