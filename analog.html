@@ -9,6 +9,8 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap"></noscript>
   <style>
+    body { display: none !important; }
+    body.ready { display: block !important; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     /* ============================================
@@ -1576,7 +1578,7 @@
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
 </head>
-<body style="opacity:0">
+<body>
 
 <!-- Analog Radio -->
 <div class="radio" id="analogRadio" data-theme="wood">
@@ -1688,7 +1690,7 @@
 </div>
 
 <script>
-  document.body.style.opacity='1';
+  document.body.classList.add('ready');
   // === Station Data ===
   var STATIONS = [
     {id:'kbs-1fm',name:'KBS 클래식FM',url:'',apiUrl:'https://cfpwwwapi.kbs.co.kr/api/v1/landing/live/channel_code/24',freq:'93.1 MHz',freqNum:93.1,logoText:'KBS 클래식FM',provider:'KBS'},
