@@ -1763,22 +1763,11 @@
     btn.title = hidden ? '테마 보이기' : '테마 감추기';
   }
   function goToDigital() {
-    document.body.style.opacity = '0';
-    document.body.style.visibility = 'hidden';
-    location.href = 'digital.html?t=' + Date.now();
+    document.documentElement.style.background = '#000';
+    document.body.innerHTML = '';
+    document.body.style.background = '#000';
+    location.replace('digital.html?t=' + Date.now());
   }
-
-  // bfcache에서 복원될 때 아날로그 화면이 보이지 않도록
-  window.addEventListener('pageshow', function(e) {
-    if (e.persisted) {
-      document.body.style.opacity = '1';
-      document.body.style.visibility = 'visible';
-    }
-  });
-  window.addEventListener('pagehide', function() {
-    document.body.style.opacity = '0';
-    document.body.style.visibility = 'hidden';
-  });
 
   function setTheme(name) {
     currentTheme = name;
