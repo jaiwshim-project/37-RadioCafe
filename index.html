@@ -2871,6 +2871,28 @@
       border: 1.5px solid var(--accent); cursor: pointer;
     }
 
+    /* === ANALOG CLOCK SECTION === */
+    .analog-clock-section {
+      margin-bottom: 10px; position: relative; z-index: 1;
+    }
+    .analog-clock-label {
+      font-family: 'Orbitron', monospace; font-size: 8px; font-weight: 600;
+      color: var(--label-color); letter-spacing: 3px; margin-bottom: 6px;
+      transition: color 0.6s;
+    }
+    .analog-clock-panel {
+      background: var(--lcd-bg);
+      border-radius: 8px; padding: 10px;
+      border: 1px solid var(--lcd-border);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5), 0 1px 0 var(--neon-light);
+      text-align: center; position: relative;
+    }
+    .analog-clock-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(180deg, var(--lcd-sheen), transparent);
+      border-radius: 8px 8px 0 0; pointer-events: none;
+    }
+
     /* === Analog Responsive (내부 컴포넌트만) === */
     @media (max-width: 480px) {
       .analog-speaker { padding: 6px; margin-bottom: 6px; }
@@ -3147,7 +3169,7 @@
 
     <!-- LCD Display -->
     <div class="lcd-display">
-      <div class="lcd-idle" id="lcdIdle"><span id="lcdClock" style="font-size:22px;font-weight:700;display:block;margin-bottom:4px"></span><span style="font-size:9px;opacity:0.6;letter-spacing:3px">SELECT STATION</span></div>
+      <div class="lcd-idle" id="lcdIdle"><span style="display:block;margin-bottom:2px"><span id="lcdDate" style="font-size:11px;font-weight:600;color:var(--needle,#ff6b6b);opacity:0.85"></span> <span id="lcdLunar" style="font-size:10px;font-weight:500;color:var(--accent,#d4a574);opacity:0.75"></span></span><span id="lcdClock" style="font-size:22px;font-weight:700;display:block;margin-bottom:4px"></span><span style="font-size:9px;opacity:0.6;letter-spacing:3px">SELECT STATION</span></div>
       <div class="lcd-active" id="lcdActive">
         <div class="lcd-provider" id="lcdProvider"></div>
         <div class="lcd-name" id="lcdName"></div>
@@ -3358,6 +3380,16 @@
       <div class="analog-tuning-status tuning" id="analogStatus">TUNING...</div>
     </div>
 
+    <!-- Clock & Date Display -->
+    <div class="analog-clock-section">
+      <div class="analog-clock-label">DATE &amp; TIME</div>
+      <div class="analog-clock-panel">
+        <span id="analogLcdDate" style="font-size:11px;font-weight:600;color:var(--needle,#ff6b6b);opacity:0.85;position:relative;z-index:1"></span>
+        <span id="analogLcdLunar" style="font-size:10px;font-weight:500;color:var(--accent,#d4a574);opacity:0.75;margin-left:4px;position:relative;z-index:1"></span>
+        <div id="analogLcdClock" style="font-size:22px;font-weight:700;font-family:'Orbitron',monospace;color:var(--lcd-text);text-shadow:0 0 8px var(--lcd-glow);margin-top:2px;position:relative;z-index:1"></div>
+      </div>
+    </div>
+
     <!-- Tuning Dial + Volume (한 줄) -->
     <div class="analog-dial-section">
       <div class="analog-ctrl-photos" id="analogPhotoLeft"></div>
@@ -3380,6 +3412,29 @@
         <div class="analog-vol-label">VOLUME</div>
       </div>
       <div class="analog-ctrl-photos" id="analogPhotoRight"></div>
+    </div>
+
+    <!-- Anniversary Section (Analog) -->
+    <div class="anniversary-section">
+      <div class="anniversary-label">ANNIVERSARY</div>
+      <div class="anniversary-panel">
+        <div class="anniv-login-row" id="analogAnnivLoginRow">
+          <input type="text" id="analogAnnivNickInput" placeholder="닉네임" autocomplete="off">
+          <input type="password" id="analogAnnivPassInput" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+          <button onclick="loginAnniversaryAnalog()">LOGIN</button>
+        </div>
+        <div class="anniv-user-row hidden" id="analogAnnivUserRow">
+          <span class="anniv-user-name" id="analogAnnivUserName"></span>
+          <button class="anniv-dash-btn" onclick="openDashboard()">DASHBOARD</button>
+          <button class="anniv-logout-btn" onclick="logoutAnniversary()">LOGOUT</button>
+        </div>
+        <div class="anniversary-list" id="analogAnniversaryList"></div>
+        <div class="anniversary-add-row" id="analogAnniversaryAddRow">
+          <input type="text" id="analogAnnivNameInput" placeholder="기념일 이름" maxlength="12" autocomplete="off">
+          <input type="date" id="analogAnnivDateInput">
+          <button onclick="addAnniversaryAnalog()">+</button>
+        </div>
+      </div>
     </div>
 
     <!-- Footer -->
@@ -3504,6 +3559,16 @@
     if (annivNick) {
       annivNick.addEventListener('keypress', function(e) { if (e.key === 'Enter') loginAnniversary(); });
     }
+    // Analog anniversary password: numeric only + Enter key
+    var aAnnivPass = document.getElementById('analogAnnivPassInput');
+    if (aAnnivPass) {
+      aAnnivPass.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+      aAnnivPass.addEventListener('keypress', function(e) { if (e.key === 'Enter') loginAnniversaryAnalog(); });
+    }
+    var aAnnivNick = document.getElementById('analogAnnivNickInput');
+    if (aAnnivNick) {
+      aAnnivNick.addEventListener('keypress', function(e) { if (e.key === 'Enter') loginAnniversaryAnalog(); });
+    }
   }
 
   // === Render ===
@@ -3537,14 +3602,100 @@
     el.innerHTML=h;
   }
 
+  // === Lunar Calendar ===
+  var LUNAR_DATA = [
+    0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
+    0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
+    0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,
+    0x06566,0x0d4a0,0x0ea50,0x16a95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,
+    0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,
+    0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,
+    0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,
+    0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,
+    0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,
+    0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x05ac0,0x0ab60,0x096d5,0x092e0,
+    0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,
+    0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,
+    0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
+    0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
+    0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,
+    0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x168a6,0x0ea50,0x06aa0,0x1a6c4,0x0aae0,
+    0x092e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,
+    0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,
+    0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,
+    0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a4d0,0x0d150,0x0f252,
+    0x0d520
+  ];
+  var LUNAR_START_YEAR = 1900;
+  function lunarYearDays(y) {
+    var i, sum = 348;
+    for (i = 0x8000; i > 0x8; i >>= 1) sum += (LUNAR_DATA[y - LUNAR_START_YEAR] & i) ? 1 : 0;
+    return sum + leapDaysInLunarYear(y);
+  }
+  function leapMonthInLunarYear(y) { return LUNAR_DATA[y - LUNAR_START_YEAR] & 0xf; }
+  function leapDaysInLunarYear(y) { return leapMonthInLunarYear(y) ? ((LUNAR_DATA[y - LUNAR_START_YEAR] & 0x10000) ? 30 : 29) : 0; }
+  function lunarMonthDays(y, m) { return (LUNAR_DATA[y - LUNAR_START_YEAR] & (0x10000 >> m)) ? 30 : 29; }
+  function solarToLunar(year, month, day) {
+    var baseDate = new Date(1900, 0, 31);
+    var targetDate = new Date(year, month - 1, day);
+    var offset = Math.floor((targetDate - baseDate) / 86400000);
+    var i, leap, temp, isLeap = false, lunarYear, lunarMonth, lunarDay;
+    for (i = LUNAR_START_YEAR; i < 2101 && offset > 0; i++) {
+      temp = lunarYearDays(i);
+      offset -= temp;
+    }
+    if (offset < 0) { offset += temp; i--; }
+    lunarYear = i;
+    leap = leapMonthInLunarYear(lunarYear);
+    isLeap = false;
+    for (i = 1; i < 13 && offset > 0; i++) {
+      if (leap > 0 && i === (leap + 1) && !isLeap) {
+        --i; isLeap = true;
+        temp = leapDaysInLunarYear(lunarYear);
+      } else { temp = lunarMonthDays(lunarYear, i); }
+      if (isLeap && i === (leap + 1)) isLeap = false;
+      offset -= temp;
+    }
+    if (offset === 0 && leap > 0 && i === leap + 1) {
+      if (isLeap) { isLeap = false; } else { isLeap = true; --i; }
+    }
+    if (offset < 0) { offset += temp; --i; }
+    lunarMonth = i;
+    lunarDay = offset + 1;
+    return { year: lunarYear, month: lunarMonth, day: lunarDay, isLeap: isLeap };
+  }
+
   // === Clock ===
+  var cachedLunarDate = '';
+  var cachedLunarDay = -1;
+
   function updateClock(){
     var now=new Date();
     var h=String(now.getHours()).padStart(2,'0');
     var m=String(now.getMinutes()).padStart(2,'0');
     var s=String(now.getSeconds()).padStart(2,'0');
+    var timeStr=h+':'+m+':'+s;
     var el=document.getElementById('lcdClock');
-    if(el) el.textContent=h+':'+m+':'+s;
+    if(el) el.textContent=timeStr;
+    var el2=document.getElementById('analogLcdClock');
+    if(el2) el2.textContent=timeStr;
+    var dateStr=now.getFullYear()+'년 '+(now.getMonth()+1)+'월 '+now.getDate()+'일';
+    var dateEl=document.getElementById('lcdDate');
+    if(dateEl) dateEl.textContent=dateStr;
+    var dateEl2=document.getElementById('analogLcdDate');
+    if(dateEl2) dateEl2.textContent=dateStr;
+    var today=now.getDate();
+    if(cachedLunarDay!==today){
+      cachedLunarDay=today;
+      try{
+        var l=solarToLunar(now.getFullYear(),now.getMonth()+1,now.getDate());
+        cachedLunarDate='(음력 '+(l.isLeap?'윤':'')+l.month+'월 '+l.day+'일)';
+      }catch(e){cachedLunarDate='';}
+    }
+    var lunarEl=document.getElementById('lcdLunar');
+    if(lunarEl) lunarEl.textContent=cachedLunarDate;
+    var lunarEl2=document.getElementById('analogLcdLunar');
+    if(lunarEl2) lunarEl2.textContent=cachedLunarDate;
   }
 
   // === Power ===
@@ -4526,15 +4677,30 @@
   function updateAnnivUI() {
     var loginRow = document.getElementById('annivLoginRow');
     var userRow = document.getElementById('annivUserRow');
+    var aLoginRow = document.getElementById('analogAnnivLoginRow');
+    var aUserRow = document.getElementById('analogAnnivUserRow');
     if (annivLoggedUser) {
-      loginRow.classList.add('hidden');
-      userRow.classList.remove('hidden');
-      document.getElementById('annivUserName').textContent = annivLoggedUser + '님 \u2713';
+      if(loginRow) loginRow.classList.add('hidden');
+      if(userRow) userRow.classList.remove('hidden');
+      var nameEl = document.getElementById('annivUserName');
+      if(nameEl) nameEl.textContent = annivLoggedUser + '님 \u2713';
+      if(aLoginRow) aLoginRow.classList.add('hidden');
+      if(aUserRow) aUserRow.classList.remove('hidden');
+      var aNameEl = document.getElementById('analogAnnivUserName');
+      if(aNameEl) aNameEl.textContent = annivLoggedUser + '님 \u2713';
     } else {
-      loginRow.classList.remove('hidden');
-      userRow.classList.add('hidden');
-      document.getElementById('annivNickInput').value = '';
-      document.getElementById('annivPassInput').value = '';
+      if(loginRow) loginRow.classList.remove('hidden');
+      if(userRow) userRow.classList.add('hidden');
+      var nickInput = document.getElementById('annivNickInput');
+      var passInput = document.getElementById('annivPassInput');
+      if(nickInput) nickInput.value = '';
+      if(passInput) passInput.value = '';
+      if(aLoginRow) aLoginRow.classList.remove('hidden');
+      if(aUserRow) aUserRow.classList.add('hidden');
+      var aNickInput = document.getElementById('analogAnnivNickInput');
+      var aPassInput = document.getElementById('analogAnnivPassInput');
+      if(aNickInput) aNickInput.value = '';
+      if(aPassInput) aPassInput.value = '';
     }
   }
 
@@ -4571,6 +4737,43 @@
     renderAnniversaries();
   }
 
+  // === Analog Anniversary Functions ===
+  async function loginAnniversaryAnalog() {
+    var nickEl = document.getElementById('analogAnnivNickInput');
+    var passEl = document.getElementById('analogAnnivPassInput');
+    var nick = nickEl.value.trim();
+    var pass = passEl.value.trim();
+    if (!nick) { alert('닉네임을 입력하세요.'); nickEl.focus(); return; }
+    if (!pass || pass.length !== 4 || !/^\d{4}$/.test(pass)) {
+      alert('비밀번호 4자리 숫자를 입력하세요.'); passEl.focus(); return;
+    }
+    var users = await loadAnnivUsers();
+    var userData = users[nick];
+    if (!userData) { alert('등록되지 않은 사용자입니다.'); nickEl.focus(); return; }
+    var storedPass = typeof userData === 'string' ? userData : (userData.password || '');
+    if (storedPass !== pass) { alert('비밀번호가 일치하지 않습니다.'); passEl.value = ''; passEl.focus(); return; }
+    annivLoggedUser = nick;
+    anniversaries = await loadAnniversariesFromCloud(nick);
+    try { localStorage.setItem('radio-anniversaries', JSON.stringify(anniversaries)); } catch(e) {}
+    updateAnnivUI();
+    renderAnniversaries();
+    openDashboard();
+  }
+
+  function addAnniversaryAnalog() {
+    if (anniversaries.length >= 5) return;
+    var nameEl = document.getElementById('analogAnnivNameInput');
+    var dateEl = document.getElementById('analogAnnivDateInput');
+    var name = nameEl.value.trim();
+    var date = dateEl.value;
+    if (!name || !date) return;
+    anniversaries.push({ name: name, date: date });
+    saveAnniversaries();
+    renderAnniversaries();
+    nameEl.value = '';
+    dateEl.value = '';
+  }
+
   function calcDday(dateStr) {
     var today = new Date(); today.setHours(0,0,0,0);
     var target = new Date(dateStr + 'T00:00:00');
@@ -4585,12 +4788,14 @@
   function renderAnniversaries() {
     var list = document.getElementById('anniversaryList');
     var addRow = document.getElementById('anniversaryAddRow');
-    if (!list) return;
+    var aList = document.getElementById('analogAnniversaryList');
+    var aAddRow = document.getElementById('analogAnniversaryAddRow');
+    var html;
     if (anniversaries.length === 0) {
-      list.innerHTML = '<div class="anniversary-empty">' +
+      html = '<div class="anniversary-empty">' +
         (annivLoggedUser ? '기념일을 추가해보세요 (최대 5개)' : '로그인 후 기념일을 관리하세요') + '</div>';
     } else {
-      list.innerHTML = anniversaries.map(function(a, i) {
+      html = anniversaries.map(function(a, i) {
         var dd = calcDday(a.date);
         var m = new Date(a.date + 'T00:00:00').getMonth() + 1;
         var d = new Date(a.date + 'T00:00:00').getDate();
@@ -4602,7 +4807,10 @@
           '</div>';
       }).join('');
     }
+    if (list) list.innerHTML = html;
+    if (aList) aList.innerHTML = html;
     if (addRow) addRow.classList.toggle('hidden', anniversaries.length >= 5);
+    if (aAddRow) aAddRow.classList.toggle('hidden', anniversaries.length >= 5);
   }
 
   function renderDashboardList() {
