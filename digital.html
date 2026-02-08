@@ -1440,25 +1440,7 @@
     }
     .anniversary-add-row.hidden { display: none; }
 
-    /* Anniversary Login */
-    .anniv-login-row {
-      display: flex; gap: 4px; align-items: center; margin-bottom: 8px;
-    }
-    .anniv-login-row input {
-      padding: 4px 6px; font-size: 10px; font-family: 'Inter', sans-serif;
-      background: rgba(0,0,0,0.3); border: 1px solid var(--neon-light);
-      border-radius: 4px; color: var(--lcd-text, #e0e0e0); outline: none;
-    }
-    .anniv-login-row input[type="text"] { flex: 1; min-width: 0; }
-    .anniv-login-row input[type="password"] { width: 52px; text-align: center; letter-spacing: 2px; }
-    .anniv-login-row button {
-      background: linear-gradient(180deg, var(--btn-bg1), var(--btn-bg2));
-      border: 1px solid var(--neon-light); border-radius: 4px;
-      color: var(--accent); font-size: 9px; font-weight: 700;
-      padding: 4px 8px; cursor: pointer; white-space: nowrap;
-      font-family: 'Orbitron', monospace;
-    }
-    .anniv-login-row button:active { transform: scale(0.95); }
+    /* Anniversary User Row */
     .anniv-user-row {
       display: flex; gap: 6px; align-items: center; margin-bottom: 8px;
     }
@@ -1475,7 +1457,7 @@
     .anniv-user-row button:active { transform: scale(0.95); }
     .anniv-user-row .anniv-dash-btn { color: var(--needle, #ff6b6b); }
     .anniv-user-row .anniv-logout-btn { color: var(--preset-name, #999); }
-    .anniv-login-row.hidden, .anniv-user-row.hidden { display: none; }
+    .anniv-user-row.hidden { display: none; }
 
     /* Birthday Info */
     .anniv-birthday-info {
@@ -2452,12 +2434,7 @@
     <div class="anniversary-section">
       <div class="anniversary-label">ANNIVERSARY</div>
       <div class="anniversary-panel">
-        <div class="anniv-login-row" id="annivLoginRow">
-          <input type="text" id="annivNickInput" placeholder="닉네임" autocomplete="off">
-          <input type="password" id="annivPassInput" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
-          <button onclick="loginAnniversary()">LOGIN</button>
-        </div>
-        <div class="anniv-user-row hidden" id="annivUserRow">
+        <div class="anniv-user-row" id="annivUserRow">
           <span class="anniv-user-name" id="annivUserName"></span>
           <button class="anniv-dash-btn" onclick="openDashboard()">DASHBOARD</button>
           <button class="anniv-logout-btn" onclick="logoutAnniversary()">LOGOUT</button>
@@ -2639,16 +2616,18 @@
     loadSavedPhotos();
     loadAnniversaries();
 
-    // Anniversary password: numeric only + Enter key
-    var annivPass = document.getElementById('annivPassInput');
-    if (annivPass) {
-      annivPass.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
-      annivPass.addEventListener('keypress', function(e) { if (e.key === 'Enter') loginAnniversary(); });
+    // 기념일 자동 로그인: sessionStorage에서 사용자명 가져오기
+    var storedUser = sessionStorage.getItem('radioUsername');
+    if (storedUser && !annivLoggedUser) {
+      annivLoggedUser = storedUser;
+      loadAnniversariesFromCloud(storedUser).then(function(data){
+        anniversaries = data;
+        try { localStorage.setItem('radio-anniversaries', JSON.stringify(anniversaries)); } catch(e) {}
+        updateAnnivUI();
+        renderAnniversaries();
+      });
     }
-    var annivNick = document.getElementById('annivNickInput');
-    if (annivNick) {
-      annivNick.addEventListener('keypress', function(e) { if (e.key === 'Enter') loginAnniversary(); });
-    }
+    updateAnnivUI();
 
     // Background playback: resume audio context when returning from background
     document.addEventListener('visibilitychange', function() {
@@ -2842,31 +2821,6 @@
     return [];
   }
 
-  // Login
-  async function loginAnniversary() {
-    var nickEl = document.getElementById('annivNickInput');
-    var passEl = document.getElementById('annivPassInput');
-    var nick = nickEl.value.trim();
-    var pass = passEl.value.trim();
-    if (!nick) { alert('닉네임을 입력하세요.'); nickEl.focus(); return; }
-    if (!pass || pass.length !== 4 || !/^\d{4}$/.test(pass)) {
-      alert('비밀번호 4자리 숫자를 입력하세요.'); passEl.focus(); return;
-    }
-    var users = await loadAnnivUsers();
-    var userData = users[nick];
-    if (!userData) { alert('등록되지 않은 사용자입니다.'); nickEl.focus(); return; }
-    var storedPass = typeof userData === 'string' ? userData : (userData.password || '');
-    if (storedPass !== pass) { alert('비밀번호가 일치하지 않습니다.'); passEl.value = ''; passEl.focus(); return; }
-
-    // Login success
-    annivLoggedUser = nick;
-    anniversaries = await loadAnniversariesFromCloud(nick);
-    try { localStorage.setItem('radio-anniversaries', JSON.stringify(anniversaries)); } catch(e) {}
-    updateAnnivUI();
-    renderAnniversaries();
-    openDashboard();
-  }
-
   function logoutAnniversary() {
     annivLoggedUser = null;
     anniversaries = [];
@@ -2877,19 +2831,13 @@
   }
 
   function updateAnnivUI() {
-    var loginRow = document.getElementById('annivLoginRow');
     var userRow = document.getElementById('annivUserRow');
     var bdayInfo = document.getElementById('annivBirthdayInfo');
     if (annivLoggedUser) {
-      loginRow.classList.add('hidden');
       userRow.classList.remove('hidden');
       document.getElementById('annivUserName').textContent = annivLoggedUser + '님';
       renderBirthdayInfo();
     } else {
-      loginRow.classList.remove('hidden');
-      userRow.classList.add('hidden');
-      document.getElementById('annivNickInput').value = '';
-      document.getElementById('annivPassInput').value = '';
       if(bdayInfo) bdayInfo.classList.remove('visible');
     }
   }
