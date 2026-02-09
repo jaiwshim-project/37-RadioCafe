@@ -397,7 +397,6 @@
 
   // === Audio ===
   function togglePlay(){
-    if(!currentSong) return;
     if(isPlaying){
       stopPlay();
     } else {
@@ -406,23 +405,29 @@
   }
 
   function startPlay(){
-    if(!currentSong) return;
-    var mp3Url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + currentSong.file;
-    if(!audio) audio = new Audio();
-    audio.src = mp3Url;
-    audio.volume = 1;
-    audio.play().then(function(){
-      isPlaying = true;
-      document.getElementById('platter').classList.add('spinning');
-      document.getElementById('tonearm').classList.add('playing');
-      document.getElementById('playBtnText').textContent = '정지';
-      document.getElementById('playBtn').classList.add('playing');
-    }).catch(function(e){
-      console.error('재생 실패:', e);
-    });
-    audio.onended = function(){
-      stopPlay();
-    };
+    // LP 애니메이션 먼저 시작
+    isPlaying = true;
+    document.getElementById('platter').classList.add('spinning');
+    document.getElementById('tonearm').classList.add('playing');
+    document.getElementById('playBtnText').textContent = '정지';
+    document.getElementById('playBtn').classList.add('playing');
+
+    // MP3 재생 시도
+    if(currentSong){
+      var mp3Url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + currentSong.file;
+      if(!audio) audio = new Audio();
+      audio.src = mp3Url;
+      audio.volume = 1;
+      audio.play().catch(function(e){
+        console.log('음악 파일 로드 대기 중...', e);
+      });
+      audio.onended = function(){
+        stopPlay();
+      };
+      audio.onerror = function(){
+        console.log('음악 파일을 찾을 수 없습니다.');
+      };
+    }
   }
 
   function stopPlay(){
