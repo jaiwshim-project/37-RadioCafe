@@ -891,7 +891,7 @@
       audio.play().catch(function(e){
         console.log('음악 파일 로드 대기 중...', e);
       });
-      audio.onended = function(){ stopPlay(); showPromo(); };
+      audio.onended = function(){ stopPlay(); };
       audio.onerror = function(){ console.log('음악 파일을 찾을 수 없습니다.'); };
     }
   }
@@ -905,6 +905,7 @@
     document.getElementById('tonearm').classList.remove('playing');
     document.getElementById('playBtnText').textContent = '재생';
     document.getElementById('playBtn').classList.remove('playing');
+    showPromo();
   }
 
   // === Promo Popup ===
