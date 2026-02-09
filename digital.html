@@ -2305,7 +2305,7 @@
     <div class="radio-top-row2">
       <button class="photo-upload-btn" id="photoUploadBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
       <span class="brand-photos" id="brandPhotos"></span>
-      <button class="digital-to-analog-btn" onclick="document.body.style.visibility='hidden';location.href='analog.html'" title="아날로그 모드">ANALOG ▸</button>
+      <button class="digital-to-analog-btn" onclick="if(currentStation)localStorage.setItem('radio-switch-station',currentStation.id);document.body.style.visibility='hidden';location.href='analog.html'" title="아날로그 모드">ANALOG ▸</button>
     </div>
 
     <!-- Speaker Grille -->
@@ -2521,7 +2521,7 @@
     {id:'tbs-fm',name:'TBS FM',url:'https://cdnfm.tbs.seoul.kr/tbs/_definst_/tbs_fm_web_360.smil/playlist.m3u8',freq:'95.1 MHz',freqNum:95.1,logoText:'TBS',provider:'TBS'},
     {id:'febc',name:'극동방송',url:'http://mlive2.febc.net:1935/live/seoulfm/playlist.m3u8',freq:'106.9 MHz',freqNum:106.9,logoText:'극동',provider:'FEBC'},
     {id:'tbn',name:'TBN 교통방송',url:'http://radio2.tbn.or.kr:1935/gyeongin/myStream/playlist.m3u8',freq:'95.1 MHz',freqNum:95.1,logoText:'TBN 교통방송',provider:'TBN'},
-    {id:'obs',name:'OBS 라디오',url:'https://vod3.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8',freq:'90.3 MHz',freqNum:90.3,logoText:'OBS',provider:'OBS'},
+    {id:'obs',name:'OBS 라디오',url:'https://vod3.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8',freq:'99.9 MHz',freqNum:99.9,logoText:'OBS',provider:'OBS'},
     {id:'tarot',name:'타로 점보기',url:'',freq:'타로',freqNum:0,logoText:'타로 점보기',provider:'CLARA',isTarot:true},
     {id:'fortune',name:'오늘의 운세',url:'',freq:'운세',freqNum:0,logoText:'오늘의 운세',provider:'CLARA',isFortune:true},
     {id:'wqxr',name:'WQXR',url:'https://stream.wqxr.org/wqxr',freq:'미국',freqNum:0,logoText:'WQXR',provider:'WQXR',flag:'us'},
@@ -2636,6 +2636,13 @@
         if (isPlaying) requestWakeLock();
       }
     });
+
+    // 모드 전환 시 이전 채널 자동 재생
+    var switchStation = localStorage.getItem('radio-switch-station');
+    if (switchStation) {
+      localStorage.removeItem('radio-switch-station');
+      selectStation(switchStation);
+    }
   }
 
   // === Render ===
