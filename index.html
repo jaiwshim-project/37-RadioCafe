@@ -4619,17 +4619,22 @@
     // 오래된 localStorage 사용자 캐시 정리
     try { localStorage.removeItem('radioUsers'); } catch(e){}
 
-    // 클라우드에서 사용자 목록 로드 후 렌더링
-    loadUsersFromCloud().then(function(){
-      renderUserList();
-      // 자동 로그인: 저장된 사용자가 있으면 로그인 건너뛰기
-      var savedUser = localStorage.getItem('radioUsername');
-      if(savedUser && cachedUsers && cachedUsers[savedUser]){
-        currentUsername = savedUser;
-        document.getElementById('userLoginScreen').classList.add('hidden');
-        document.getElementById('photoSelectScreen').classList.remove('hidden');
+    // Supabase 초기화 대기 후 사용자 목록 로드
+    var waitInit = setInterval(function(){
+      if(supabase){
+        clearInterval(waitInit);
+        loadUsersFromCloud().then(function(){
+          renderUserList();
+          // 자동 로그인: 저장된 사용자가 있으면 로그인 건너뛰기
+          var savedUser = localStorage.getItem('radioUsername');
+          if(savedUser && cachedUsers && cachedUsers[savedUser]){
+            currentUsername = savedUser;
+            document.getElementById('userLoginScreen').classList.add('hidden');
+            document.getElementById('photoSelectScreen').classList.remove('hidden');
+          }
+        });
       }
-    });
+    }, 100);
   });
 
   // === 한글을 안전한 경로로 변환 ===
