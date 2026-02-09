@@ -4631,13 +4631,6 @@
         clearInterval(waitInit);
         loadUsersFromCloud().then(function(){
           renderUserList();
-          // 자동 로그인: 저장된 사용자가 있으면 로그인 건너뛰기
-          var savedUser = localStorage.getItem('radioUsername');
-          if(savedUser && cachedUsers && cachedUsers[savedUser]){
-            currentUsername = savedUser;
-            document.getElementById('userLoginScreen').classList.add('hidden');
-            document.getElementById('photoSelectScreen').classList.remove('hidden');
-          }
         });
       }
     }, 100);
