@@ -238,6 +238,24 @@
       word-break: break-word;
     }
     .gift-message.hidden { display: none; }
+    .voice-msg-indicator {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 20px;
+      background: rgba(255,107,157,0.1); border: 1px solid rgba(255,107,157,0.2);
+      margin-bottom: 12px; font-family: 'Inter', sans-serif;
+      font-size: 13px; color: rgba(255,255,255,0.7);
+    }
+    .voice-msg-indicator.hidden { display: none; }
+    .voice-msg-icon {
+      font-size: 18px;
+    }
+    .voice-msg-icon.playing {
+      animation: mic-pulse 0.8s ease-in-out infinite;
+    }
+    @keyframes mic-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
 
     /* Play Button */
     .play-btn {
@@ -422,6 +440,10 @@
 <div class="gift-info">
   <div class="gift-song-title" id="songTitle">-</div>
   <div class="gift-song-category" id="songCategory">-</div>
+  <div class="voice-msg-indicator hidden" id="voiceMsgIndicator">
+    <span class="voice-msg-icon" id="voiceMsgIcon">🎙</span>
+    <span id="voiceMsgText">음성 메시지가 있습니다</span>
+  </div>
   <div class="gift-message hidden" id="giftMessage"></div>
   <button class="play-btn" id="playBtn" onclick="togglePlay()">
     <span class="play-icon"></span>
@@ -480,6 +502,8 @@
 
   // === State ===
   var audio = null;
+  var voiceAudio = null;
+  var voiceUrl = null;
   var isPlaying = false;
   var currentSong = null;
   var chatChannel = null;
@@ -509,6 +533,12 @@
       var msgEl = document.getElementById('giftMessage');
       msgEl.textContent = msg;
       msgEl.classList.remove('hidden');
+    }
+    // 음성 메시지 처리
+    var voiceId = urlParams.get('voice');
+    if(voiceId){
+      voiceUrl = SUPABASE_URL + '/storage/v1/object/public/photo-albums/voice-messages/' + voiceId + '.webm';
+      document.getElementById('voiceMsgIndicator').classList.remove('hidden');
     }
     // Supabase 로드 대기 후 채팅 활성화
     if(chatRoomId){
@@ -758,32 +788,66 @@
     // 1단계: 폭죽 먼저 터뜨리기
     openGiftBox();
 
-    // 2단계: 폭죽 종료(~10초) 후 LP 회전 + 음악 시작
+    // 2단계: 폭죽 종료(~10초) 후 음성 → 노래 순서 재생
     lpStartTimer = setTimeout(function(){
-      document.getElementById('platter').classList.add('spinning');
-      document.getElementById('tonearm').classList.add('playing');
-
-      // MP3 재생 시도
-      if(currentSong){
-        var mp3Url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + currentSong.file;
-        if(!audio) audio = new Audio();
-        audio.src = mp3Url;
-        audio.volume = 1;
-        audio.play().catch(function(e){
-          console.log('음악 파일 로드 대기 중...', e);
+      if(voiceUrl){
+        // 음성 메시지 먼저 재생
+        playVoiceMessage(function(){
+          // 음성 끝나면 LP 회전 + 노래 시작
+          startLpAndSong();
         });
-        audio.onended = function(){
-          stopPlay();
-        };
-        audio.onerror = function(){
-          console.log('음악 파일을 찾을 수 없습니다.');
-        };
+      } else {
+        // 음성 없으면 바로 LP + 노래
+        startLpAndSong();
       }
     }, 10000);
   }
 
+  function playVoiceMessage(callback){
+    var icon = document.getElementById('voiceMsgIcon');
+    var text = document.getElementById('voiceMsgText');
+    icon.classList.add('playing');
+    text.textContent = '음성 메시지 재생 중...';
+    if(!voiceAudio) voiceAudio = new Audio();
+    voiceAudio.src = voiceUrl;
+    voiceAudio.volume = 1;
+    voiceAudio.play().catch(function(e){
+      console.log('음성 메시지 로드 실패:', e);
+      icon.classList.remove('playing');
+      text.textContent = '음성 메시지';
+      if(callback) callback();
+    });
+    voiceAudio.onended = function(){
+      icon.classList.remove('playing');
+      text.textContent = '음성 메시지 재생 완료';
+      if(callback) callback();
+    };
+    voiceAudio.onerror = function(){
+      icon.classList.remove('playing');
+      text.textContent = '음성 메시지를 찾을 수 없습니다';
+      if(callback) callback();
+    };
+  }
+
+  function startLpAndSong(){
+    document.getElementById('platter').classList.add('spinning');
+    document.getElementById('tonearm').classList.add('playing');
+    if(currentSong){
+      var mp3Url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + currentSong.file;
+      if(!audio) audio = new Audio();
+      audio.src = mp3Url;
+      audio.volume = 1;
+      audio.play().catch(function(e){
+        console.log('음악 파일 로드 대기 중...', e);
+      });
+      audio.onended = function(){ stopPlay(); };
+      audio.onerror = function(){ console.log('음악 파일을 찾을 수 없습니다.'); };
+    }
+  }
+
   function stopPlay(){
     if(lpStartTimer){ clearTimeout(lpStartTimer); lpStartTimer = null; }
+    if(voiceAudio){ voiceAudio.pause(); voiceAudio.currentTime = 0; }
     if(audio){ audio.pause(); audio.currentTime = 0; }
     isPlaying = false;
     document.getElementById('platter').classList.remove('spinning');

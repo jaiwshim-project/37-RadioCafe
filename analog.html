@@ -1727,6 +1727,59 @@
       font-size: 13px; cursor: pointer; transition: color 0.2s;
     }
     .gift-close:hover { color: #fff; }
+
+    /* Voice Record (음성 선물) */
+    .voice-record-area {
+      text-align: center; margin: 16px 0; padding: 16px;
+      background: rgba(0,0,0,0.2); border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .voice-record-btn {
+      width: 64px; height: 64px; border-radius: 50%;
+      border: 2px solid #ff6b9d; background: rgba(255,107,157,0.15);
+      color: #fff; font-size: 28px; cursor: pointer;
+      transition: all 0.3s; display: inline-flex;
+      align-items: center; justify-content: center;
+    }
+    .voice-record-btn:hover { background: rgba(255,107,157,0.3); }
+    .voice-record-btn.recording {
+      background: #ff4444; border-color: #ff4444;
+      animation: rec-pulse 1s ease-in-out infinite;
+    }
+    @keyframes rec-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
+      50% { transform: scale(1.08); box-shadow: 0 0 20px 6px rgba(255,68,68,0.3); }
+    }
+    .voice-record-time {
+      display: block; margin-top: 10px;
+      font-family: 'Orbitron', monospace; font-size: 18px;
+      color: rgba(255,255,255,0.8); letter-spacing: 2px;
+    }
+    .voice-record-status {
+      display: block; margin-top: 4px;
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+    .voice-preview {
+      margin-top: 12px; display: flex; align-items: center;
+      gap: 10px; justify-content: center;
+    }
+    .voice-preview audio {
+      height: 36px; max-width: 200px;
+    }
+    .voice-preview-rebtn {
+      padding: 6px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent; color: rgba(255,255,255,0.6);
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .voice-preview-rebtn:hover { border-color: #ff6b9d; color: #ff6b9d; }
+    .voice-uploading {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: rgba(255,255,255,0.6); margin: 12px 0;
+    }
+
     /* Chat Panel */
     .chat-panel {
       position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -2012,6 +2065,7 @@
     <div class="analog-listen-together">
       <button class="analog-listen-together-btn" id="listenTogetherBtn" onclick="openListenTogether()">같이듣기 초대</button>
       <button class="analog-listen-together-btn" onclick="openGiftSong()">노래 선물하기</button>
+      <button class="analog-listen-together-btn" onclick="openVoiceGift()">노래+음성 선물하기</button>
     </div>
 
     <!-- Footer -->
@@ -2065,6 +2119,55 @@
       </div>
     </div>
     <button class="gift-close" onclick="closeGiftSong()">닫기</button>
+  </div>
+</div>
+
+<!-- Voice Gift Modal (노래+음성 선물하기) -->
+<div class="gift-modal hidden" id="voiceGiftModal" onclick="if(event.target===this)closeVoiceGift()">
+  <div class="gift-card">
+    <div class="gift-title">노래+음성 선물하기</div>
+    <!-- Step 1: Song Selection -->
+    <div id="vgStep1">
+      <div class="gift-categories" id="vgCategories"></div>
+      <div class="gift-song-list" id="vgSongList"></div>
+      <div class="gift-btn-row">
+        <button class="gift-btn-next" id="vgNextBtn1" disabled onclick="vgGoStep2()">다음</button>
+      </div>
+    </div>
+    <!-- Step 2: Voice Record -->
+    <div class="gift-step2" id="vgStep2">
+      <div class="gift-selected-info" id="vgSelectedInfo"></div>
+      <div class="voice-record-area">
+        <button class="voice-record-btn" id="vgRecordBtn" onclick="toggleVoiceRecord()">🎙</button>
+        <span class="voice-record-time" id="vgRecordTime">0:00</span>
+        <span class="voice-record-status" id="vgRecordStatus">버튼을 눌러 녹음하세요 (최대 30초)</span>
+      </div>
+      <div class="voice-preview" id="vgPreview" style="display:none">
+        <audio id="vgPreviewAudio" controls></audio>
+        <button class="voice-preview-rebtn" onclick="resetVoiceRecord()">다시 녹음</button>
+      </div>
+      <textarea class="gift-msg-input" id="vgMsgInput" placeholder="텍스트 메시지 (선택사항)" maxlength="100"></textarea>
+      <div class="gift-btn-row">
+        <button class="gift-btn-back" onclick="vgGoStep1()">이전</button>
+        <button class="gift-btn-next" id="vgNextBtn2" disabled onclick="vgGoStep3()">다음</button>
+      </div>
+    </div>
+    <!-- Step 3: Share -->
+    <div class="gift-step2" id="vgStep3">
+      <div class="gift-selected-info" id="vgFinalInfo"></div>
+      <div class="voice-uploading" id="vgUploading" style="display:none">음성 파일 업로드 중...</div>
+      <div class="gift-link-box">
+        <input type="text" readonly id="vgLink">
+        <button onclick="copyVoiceGiftLink()">복사</button>
+      </div>
+      <div class="gift-copied hidden" id="vgCopied">링크가 복사되었습니다!</div>
+      <button class="gift-share-btn hidden" id="vgShareBtn" onclick="nativeShareVoiceGift()">공유하기</button>
+      <div class="gift-btn-row">
+        <button class="gift-btn-back" onclick="vgBackToStep2()">이전</button>
+        <button class="gift-btn-next" id="vgSendBtn" onclick="sendVoiceGift()">선물 보내기</button>
+      </div>
+    </div>
+    <button class="gift-close" onclick="closeVoiceGift()">닫기</button>
   </div>
 </div>
 
@@ -2565,6 +2668,253 @@
     currentGiftSong = song;
     var mp3Url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + song.file;
     loadStream(mp3Url);
+  }
+
+  // ============================================
+  // VOICE GIFT FUNCTIONS (노래+음성 선물하기)
+  // ============================================
+  var vgSelectedSong = null;
+  var voiceMediaRecorder = null;
+  var voiceChunks = [];
+  var voiceBlob = null;
+  var voiceRecording = false;
+  var voiceRecordTimer = null;
+  var voiceRecordSec = 0;
+  var voiceRoomId = null;
+  var voiceUploaded = false;
+
+  function openVoiceGift(){
+    vgSelectedSong = null;
+    voiceBlob = null;
+    voiceUploaded = false;
+    voiceRecordSec = 0;
+    voiceRoomId = generateRoomId();
+    document.getElementById('vgStep1').style.display = '';
+    document.getElementById('vgStep2').classList.remove('active');
+    document.getElementById('vgStep3').classList.remove('active');
+    document.getElementById('vgNextBtn1').disabled = true;
+    document.getElementById('vgNextBtn2').disabled = true;
+    document.getElementById('vgMsgInput').value = '';
+    document.getElementById('vgRecordTime').textContent = '0:00';
+    document.getElementById('vgRecordStatus').textContent = '버튼을 눌러 녹음하세요 (최대 30초)';
+    document.getElementById('vgPreview').style.display = 'none';
+    document.getElementById('vgRecordBtn').classList.remove('recording');
+    renderVgCategories();
+    renderVgSongs(GIFT_CATEGORIES[0]);
+    document.getElementById('voiceGiftModal').classList.remove('hidden');
+  }
+
+  function closeVoiceGift(){
+    if(voiceRecording) stopVoiceRecord();
+    document.getElementById('voiceGiftModal').classList.add('hidden');
+  }
+
+  function renderVgCategories(){
+    var box = document.getElementById('vgCategories');
+    box.innerHTML = '';
+    GIFT_CATEGORIES.forEach(function(cat, i){
+      var btn = document.createElement('button');
+      btn.className = 'gift-cat-btn' + (i === 0 ? ' active' : '');
+      btn.textContent = cat;
+      btn.onclick = function(){
+        box.querySelectorAll('.gift-cat-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        renderVgSongs(cat);
+      };
+      box.appendChild(btn);
+    });
+  }
+
+  function renderVgSongs(category){
+    var list = document.getElementById('vgSongList');
+    list.innerHTML = '';
+    var songs = GIFT_SONGS.filter(function(s){ return s.category === category; });
+    songs.forEach(function(song){
+      var item = document.createElement('div');
+      item.className = 'gift-song-item' + (vgSelectedSong && vgSelectedSong.id === song.id ? ' selected' : '');
+      item.innerHTML = '<span class="gift-song-name">' + song.name + '</span>';
+      item.onclick = function(){
+        vgSelectedSong = song;
+        list.querySelectorAll('.gift-song-item').forEach(function(el){ el.classList.remove('selected'); });
+        item.classList.add('selected');
+        document.getElementById('vgNextBtn1').disabled = false;
+      };
+      list.appendChild(item);
+    });
+  }
+
+  function vgGoStep2(){
+    if(!vgSelectedSong) return;
+    document.getElementById('vgStep1').style.display = 'none';
+    document.getElementById('vgStep2').classList.add('active');
+    document.getElementById('vgSelectedInfo').textContent = vgSelectedSong.category + ' - ' + vgSelectedSong.name;
+  }
+
+  function vgGoStep1(){
+    if(voiceRecording) stopVoiceRecord();
+    document.getElementById('vgStep2').classList.remove('active');
+    document.getElementById('vgStep1').style.display = '';
+  }
+
+  function toggleVoiceRecord(){
+    if(voiceRecording){
+      stopVoiceRecord();
+    } else {
+      startVoiceRecord();
+    }
+  }
+
+  function startVoiceRecord(){
+    voiceChunks = [];
+    voiceBlob = null;
+    voiceUploaded = false;
+    document.getElementById('vgNextBtn2').disabled = true;
+    document.getElementById('vgPreview').style.display = 'none';
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream){
+      voiceMediaRecorder = new MediaRecorder(stream);
+      voiceMediaRecorder.ondataavailable = function(e){
+        if(e.data.size > 0) voiceChunks.push(e.data);
+      };
+      voiceMediaRecorder.onstop = function(){
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        voiceBlob = new Blob(voiceChunks, { type: 'audio/webm' });
+        var url = URL.createObjectURL(voiceBlob);
+        document.getElementById('vgPreviewAudio').src = url;
+        document.getElementById('vgPreview').style.display = 'flex';
+        document.getElementById('vgRecordStatus').textContent = '녹음 완료!';
+        document.getElementById('vgNextBtn2').disabled = false;
+      };
+      voiceMediaRecorder.start();
+      voiceRecording = true;
+      voiceRecordSec = 0;
+      document.getElementById('vgRecordBtn').classList.add('recording');
+      document.getElementById('vgRecordBtn').textContent = '⏹';
+      document.getElementById('vgRecordStatus').textContent = '녹음 중...';
+      updateVoiceTimer();
+      voiceRecordTimer = setInterval(function(){
+        voiceRecordSec++;
+        updateVoiceTimer();
+        if(voiceRecordSec >= 30) stopVoiceRecord();
+      }, 1000);
+    }).catch(function(err){
+      document.getElementById('vgRecordStatus').textContent = '마이크 접근이 거부되었습니다.';
+      console.log('마이크 오류:', err);
+    });
+  }
+
+  function stopVoiceRecord(){
+    if(voiceMediaRecorder && voiceMediaRecorder.state === 'recording'){
+      voiceMediaRecorder.stop();
+    }
+    voiceRecording = false;
+    if(voiceRecordTimer){ clearInterval(voiceRecordTimer); voiceRecordTimer = null; }
+    document.getElementById('vgRecordBtn').classList.remove('recording');
+    document.getElementById('vgRecordBtn').textContent = '🎙';
+  }
+
+  function updateVoiceTimer(){
+    var m = Math.floor(voiceRecordSec / 60);
+    var s = voiceRecordSec % 60;
+    document.getElementById('vgRecordTime').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  function resetVoiceRecord(){
+    voiceBlob = null;
+    voiceUploaded = false;
+    voiceRecordSec = 0;
+    document.getElementById('vgPreview').style.display = 'none';
+    document.getElementById('vgRecordTime').textContent = '0:00';
+    document.getElementById('vgRecordStatus').textContent = '버튼을 눌러 녹음하세요 (최대 30초)';
+    document.getElementById('vgNextBtn2').disabled = true;
+  }
+
+  function vgGoStep3(){
+    if(!voiceBlob) return;
+    document.getElementById('vgStep2').classList.remove('active');
+    document.getElementById('vgStep3').classList.add('active');
+    document.getElementById('vgFinalInfo').textContent = vgSelectedSong.category + ' - ' + vgSelectedSong.name + ' + 음성메시지';
+    document.getElementById('vgSendBtn').disabled = true;
+    document.getElementById('vgUploading').style.display = '';
+    document.getElementById('vgLink').value = '';
+    uploadVoiceToSupabase(function(){
+      document.getElementById('vgUploading').style.display = 'none';
+      document.getElementById('vgSendBtn').disabled = false;
+      updateVoiceGiftLink();
+      if(navigator.share){
+        document.getElementById('vgShareBtn').classList.remove('hidden');
+      }
+    });
+  }
+
+  function vgBackToStep2(){
+    document.getElementById('vgStep3').classList.remove('active');
+    document.getElementById('vgStep2').classList.add('active');
+  }
+
+  function uploadVoiceToSupabase(callback){
+    if(!supabase || !voiceBlob){ if(callback) callback(); return; }
+    var filePath = 'voice-messages/' + voiceRoomId + '.webm';
+    supabase.storage.from('photo-albums').upload(filePath, voiceBlob, {
+      contentType: 'audio/webm',
+      upsert: true
+    }).then(function(result){
+      if(result.error){
+        console.log('음성 업로드 오류:', result.error);
+        document.getElementById('vgRecordStatus').textContent = '업로드 실패. 다시 시도하세요.';
+      } else {
+        voiceUploaded = true;
+      }
+      if(callback) callback();
+    }).catch(function(err){
+      console.log('업로드 실패:', err);
+      if(callback) callback();
+    });
+  }
+
+  function updateVoiceGiftLink(){
+    var msg = document.getElementById('vgMsgInput').value.trim();
+    var base = location.pathname.replace(/[^\/]*$/, '') + 'lp-player.html';
+    var url = location.origin + base + '?gift=' + vgSelectedSong.id + '&room=' + voiceRoomId;
+    if(voiceUploaded) url += '&voice=' + voiceRoomId;
+    if(msg) url += '&msg=' + encodeURIComponent(msg);
+    document.getElementById('vgLink').value = url;
+  }
+
+  function copyVoiceGiftLink(){
+    updateVoiceGiftLink();
+    var input = document.getElementById('vgLink');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(function(){
+      document.getElementById('vgCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('vgCopied').classList.add('hidden'); }, 2000);
+    }).catch(function(){
+      document.execCommand('copy');
+      document.getElementById('vgCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('vgCopied').classList.add('hidden'); }, 2000);
+    });
+  }
+
+  function nativeShareVoiceGift(){
+    if(!navigator.share || !vgSelectedSong) return;
+    updateVoiceGiftLink();
+    navigator.share({
+      title: vgSelectedSong.name + ' - 노래+음성 선물',
+      text: vgSelectedSong.name + ' 노래와 음성 메시지를 선물합니다!',
+      url: document.getElementById('vgLink').value
+    }).catch(function(){});
+  }
+
+  function sendVoiceGift(){
+    updateVoiceGiftLink();
+    var url = document.getElementById('vgLink').value;
+    navigator.clipboard.writeText(url).then(function(){}).catch(function(){ document.execCommand('copy'); });
+    closeVoiceGift();
+    // 보내는 사람도 선물곡 재생
+    playGiftSong(vgSelectedSong);
+    // 채팅 패널 오픈
+    if(!chatRoomId) chatRoomId = voiceRoomId;
+    openChatPanel();
   }
 
   // ============================================
