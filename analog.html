@@ -1727,53 +1727,6 @@
       font-size: 13px; cursor: pointer; transition: color 0.2s;
     }
     .gift-close:hover { color: #fff; }
-    /* Gift Receive Card */
-    .gift-receive-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8); z-index: 10002;
-      display: flex; align-items: center; justify-content: center;
-      padding: 16px;
-    }
-    .gift-receive-overlay.hidden { display: none; }
-    .gift-receive-card {
-      background: linear-gradient(145deg, #1a1020, #2a1030);
-      border: 2px solid #ff6b9d;
-      border-radius: 24px; padding: 32px 24px;
-      width: 100%; max-width: 340px;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(255,107,157,0.3), 0 0 80px rgba(255,107,157,0.1);
-      animation: giftAppear 0.6s ease;
-    }
-    @keyframes giftAppear {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .gift-receive-icon { font-size: 48px; margin-bottom: 12px; }
-    .gift-receive-song {
-      font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700;
-      color: #ff6b9d; margin-bottom: 8px;
-    }
-    .gift-receive-category {
-      font-family: 'Inter', sans-serif; font-size: 12px;
-      color: rgba(255,255,255,0.4); margin-bottom: 16px;
-    }
-    .gift-receive-msg {
-      font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6;
-      color: rgba(255,255,255,0.85); margin-bottom: 20px;
-      padding: 12px 16px; border-radius: 12px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,107,157,0.15);
-    }
-    .gift-receive-play {
-      padding: 14px 32px; border-radius: 30px;
-      background: #ff6b9d; border: none;
-      color: #fff; font-family: 'Outfit', sans-serif;
-      font-size: 15px; font-weight: 700; cursor: pointer;
-      box-shadow: 0 0 20px rgba(255,107,157,0.4);
-      transition: all 0.2s;
-    }
-    .gift-receive-play:hover { box-shadow: 0 0 30px rgba(255,107,157,0.6); }
-
     /* Chat Panel */
     .chat-panel {
       position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -2112,17 +2065,6 @@
       </div>
     </div>
     <button class="gift-close" onclick="closeGiftSong()">닫기</button>
-  </div>
-</div>
-
-<!-- Gift Receive Card -->
-<div class="gift-receive-overlay hidden" id="giftReceiveOverlay">
-  <div class="gift-receive-card">
-    <div class="gift-receive-icon">🎁</div>
-    <div class="gift-receive-song" id="giftReceiveSong"></div>
-    <div class="gift-receive-category" id="giftReceiveCategory"></div>
-    <div class="gift-receive-msg" id="giftReceiveMsg"></div>
-    <button class="gift-receive-play" onclick="playGiftAndClose()">듣기</button>
   </div>
 </div>
 
@@ -2577,7 +2519,8 @@
 
   function updateGiftLink(){
     var msg = document.getElementById('giftMsgInput').value.trim();
-    var url = location.origin + location.pathname + '?gift=' + selectedGiftSong.id + '&room=' + chatRoomId;
+    var base = location.pathname.replace(/[^\/]*$/, '') + 'lp-player.html';
+    var url = location.origin + base + '?gift=' + selectedGiftSong.id + '&room=' + chatRoomId;
     if(msg) url += '&msg=' + encodeURIComponent(msg);
     document.getElementById('giftLink').value = url;
   }
@@ -2622,27 +2565,6 @@
     currentGiftSong = song;
     var mp3Url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + song.file;
     loadStream(mp3Url);
-  }
-
-  function showGiftReceiveCard(song, message){
-    document.getElementById('giftReceiveSong').textContent = song.name;
-    document.getElementById('giftReceiveCategory').textContent = song.category;
-    var msgEl = document.getElementById('giftReceiveMsg');
-    if(message){
-      msgEl.textContent = message;
-      msgEl.style.display = '';
-    } else {
-      msgEl.style.display = 'none';
-    }
-    document.getElementById('giftReceiveOverlay').classList.remove('hidden');
-  }
-
-  function playGiftAndClose(){
-    document.getElementById('giftReceiveOverlay').classList.add('hidden');
-    if(currentGiftSong){
-      playGiftSong(currentGiftSong);
-    }
-    if(chatRoomId) openChatPanel();
   }
 
   // ============================================
@@ -3287,7 +3209,6 @@
 
     // 모드 전환 또는 같이 듣기 링크로 채널 자동 재생
     var autoStationId = localStorage.getItem('radio-switch-station');
-    var giftParam = null;
     if (autoStationId) {
       localStorage.removeItem('radio-switch-station');
     } else {
@@ -3309,18 +3230,8 @@
           }
         }, 200);
       }
-      // 노래 선물 파라미터 처리
-      giftParam = urlParams.get('gift');
-      if (giftParam) {
-        var giftSong = GIFT_SONGS.find(function(s){ return s.id === giftParam; });
-        if (giftSong) {
-          currentGiftSong = giftSong;
-          var giftMsg = urlParams.get('msg') ? decodeURIComponent(urlParams.get('msg')) : '';
-          showGiftReceiveCard(giftSong, giftMsg);
-        }
-      }
     }
-    if (autoStationId && !giftParam) {
+    if (autoStationId) {
       var station = STATIONS.find(function(s){ return s.id === autoStationId; });
       if (station && station.freqNum) {
         analogFreq = station.freqNum;

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AI Radio Cafe - LP Player</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(160deg, #0a0a12, #1a0a1e, #0a0a12);
+      min-height: 100vh; overflow-x: hidden;
+      font-family: 'Inter', sans-serif; color: #fff;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: flex-start; padding: 20px 16px 80px;
+    }
+    .hidden { display: none !important; }
+
+    /* ===== LP Turntable ===== */
+    .turntable {
+      position: relative; width: 320px; height: 320px;
+      margin: 20px auto 0;
+    }
+    .turntable-base {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 40% 40%, #2a2028, #1a1018);
+      border-radius: 16px;
+      border: 2px solid rgba(255,107,157,0.2);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,107,157,0.08);
+    }
+    .platter {
+      position: absolute; top: 50%; left: 46%; transform: translate(-50%, -50%);
+      width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, #111 18%, #1a1a1a 19%, #0d0d0d 20%,
+        #1a1a1a 22%, #111 24%, #1a1a1a 26%, #0d0d0d 28%,
+        #1a1a1a 30%, #111 35%, #1a1a1a 37%, #0d0d0d 40%,
+        #1a1a1a 44%, #111 48%, #1a1a1a 50%, #0d0d0d 54%,
+        #1a1a1a 58%, #111 62%, #1a1a1a 66%, #0d0d0d 70%,
+        #1a1a1a 74%, #111 78%, #1a1a1a 82%, #0d0d0d 86%,
+        #1a1a1a 90%, #111 94%, #1a1a1a 97%, #0d0d0d 100%);
+      border: 3px solid #222;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.5);
+    }
+    .platter.spinning {
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .record-label {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 70px; height: 70px; border-radius: 50%;
+      background: radial-gradient(circle, #444 8%, #ff6b9d 10%, #e8557a 45%, #d44a6e 70%, #c43f62 100%);
+      border: 2px solid #b03858;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 12px rgba(255,107,157,0.3);
+    }
+    .record-label-text {
+      font-family: 'Outfit', sans-serif; font-size: 8px; font-weight: 700;
+      color: rgba(255,255,255,0.9); text-align: center;
+      letter-spacing: 1px; line-height: 1.2;
+      max-width: 50px; overflow: hidden;
+    }
+    .record-hole {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #0a0a12; border: 1px solid #333;
+    }
+    /* Tonearm */
+    .tonearm-pivot {
+      position: absolute; top: 28px; right: 28px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #888; border: 2px solid #aaa;
+      z-index: 5;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    }
+    .tonearm {
+      position: absolute; top: 30px; right: 32px;
+      width: 4px; height: 140px;
+      background: linear-gradient(to bottom, #aaa, #888, #777);
+      transform-origin: top center;
+      transform: rotate(-30deg);
+      z-index: 4;
+      border-radius: 2px;
+      transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    }
+    .tonearm.playing { transform: rotate(8deg); }
+    .tonearm-head {
+      position: absolute; bottom: -4px; left: -3px;
+      width: 10px; height: 16px;
+      background: linear-gradient(to bottom, #999, #666);
+      border-radius: 1px 1px 2px 2px;
+    }
+    .tonearm-counter {
+      position: absolute; top: 10px; left: -6px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: radial-gradient(circle, #999, #666);
+      border: 1px solid #aaa;
+    }
+
+    /* ===== Gift Info ===== */
+    .gift-info {
+      text-align: center; margin-top: 24px; width: 100%; max-width: 360px;
+    }
+    .gift-icon { font-size: 36px; margin-bottom: 8px; }
+    .gift-song-title {
+      font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700;
+      color: #ff6b9d; margin-bottom: 4px;
+    }
+    .gift-song-category {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: rgba(255,255,255,0.4); margin-bottom: 16px;
+    }
+    .gift-message {
+      font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.7;
+      color: rgba(255,255,255,0.85); padding: 16px 20px;
+      background: rgba(255,107,157,0.06);
+      border: 1px solid rgba(255,107,157,0.15);
+      border-radius: 16px; margin-bottom: 20px;
+      word-break: break-word;
+    }
+    .gift-message.hidden { display: none; }
+
+    /* Play Button */
+    .play-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 36px; border-radius: 30px;
+      background: #ff6b9d; border: none;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 0 24px rgba(255,107,157,0.4);
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+    .play-btn:hover { box-shadow: 0 0 36px rgba(255,107,157,0.6); transform: scale(1.03); }
+    .play-btn .play-icon {
+      display: inline-block; width: 0; height: 0;
+      border-style: solid; border-width: 7px 0 7px 12px;
+      border-color: transparent transparent transparent #fff;
+    }
+    .play-btn.playing .play-icon {
+      width: 12px; height: 14px; border: none;
+      border-left: 3px solid #fff; border-right: 3px solid #fff;
+    }
+
+    /* ===== Chat Panel ===== */
+    .chat-panel {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 420px; max-height: 50vh;
+      background: linear-gradient(145deg, #1a1020, #2a1030);
+      border: 2px solid #ff6b9d;
+      border-bottom: none;
+      border-radius: 16px 16px 0 0;
+      z-index: 10001;
+      display: flex; flex-direction: column;
+      box-shadow: 0 -4px 30px rgba(0,0,0,0.5), 0 0 15px rgba(255,107,157,0.3);
+      transition: transform 0.3s ease;
+    }
+    .chat-panel.hidden { display: none; }
+    .chat-panel.minimized { transform: translateX(-50%) translateY(calc(100% - 44px)); }
+    .chat-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer; user-select: none;
+    }
+    .chat-header-title {
+      font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+      color: #ff6b9d; letter-spacing: 2px;
+    }
+    .chat-header-info {
+      font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(255,255,255,0.5);
+    }
+    .chat-header-btn {
+      background: none; border: none; color: #ff6b9d;
+      font-size: 16px; cursor: pointer; padding: 0 4px;
+    }
+    .chat-nickname-box {
+      padding: 16px; text-align: center;
+    }
+    .chat-nickname-box input {
+      padding: 10px 16px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      text-align: center; outline: none; width: 70%;
+    }
+    .chat-nickname-box input:focus { border-color: #ff6b9d; }
+    .chat-nickname-box button {
+      margin-left: 8px; padding: 10px 16px; border-radius: 10px;
+      background: #ff6b9d; border: none;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 12px 16px;
+      min-height: 80px;
+      display: flex; flex-direction: column;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+    .chat-msg {
+      margin-bottom: 10px; font-family: 'Inter', sans-serif; font-size: 15px;
+      line-height: 1.5; word-break: break-word;
+      display: flex; flex-direction: column;
+      max-width: 78%;
+    }
+    .chat-msg.me { align-self: flex-end; align-items: flex-end; }
+    .chat-msg.other { align-self: flex-start; align-items: flex-start; }
+    .chat-msg-name {
+      font-weight: 700; color: #ff6b9d; font-size: 13px;
+      margin-bottom: 3px;
+    }
+    .chat-msg.me .chat-msg-name { color: rgba(255,255,255,0.5); }
+    .chat-msg-bubble {
+      padding: 8px 14px; border-radius: 14px;
+      line-height: 1.5; color: rgba(255,255,255,0.9);
+    }
+    .chat-msg.other .chat-msg-bubble {
+      background: rgba(255,255,255,0.08);
+      border-top-left-radius: 4px;
+    }
+    .chat-msg.me .chat-msg-bubble {
+      background: #ff6b9d; color: #fff;
+      border-top-right-radius: 4px;
+    }
+    .chat-msg-system {
+      text-align: center; color: rgba(255,255,255,0.35);
+      font-size: 13px; font-style: italic; margin: 6px 0;
+      align-self: center;
+    }
+    .chat-input-box {
+      display: flex; gap: 8px; padding: 10px 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .chat-input-box input {
+      flex: 1; padding: 10px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 13px; outline: none;
+    }
+    .chat-input-box input:focus { border-color: #ff6b9d; }
+    .chat-input-box button {
+      padding: 10px 16px; border-radius: 10px;
+      background: #ff6b9d; border: none;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Footer */
+    .lp-footer {
+      margin-top: 24px; text-align: center;
+      font-size: 10px; color: rgba(255,255,255,0.2);
+      letter-spacing: 1px;
+    }
+    .lp-footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
+    .lp-footer a:hover { color: #ff6b9d; }
+
+    /* Ambient glow */
+    .ambient-glow {
+      position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(255,107,157,0.03) 0%, transparent 60%);
+      pointer-events: none; z-index: -1;
+    }
+  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="ambient-glow"></div>
+
+<!-- LP Turntable -->
+<div class="turntable">
+  <div class="turntable-base"></div>
+  <div class="platter" id="platter">
+    <div class="record-label">
+      <div class="record-label-text" id="labelText">AI RADIO</div>
+    </div>
+    <div class="record-hole"></div>
+  </div>
+  <div class="tonearm" id="tonearm">
+    <div class="tonearm-head"></div>
+    <div class="tonearm-counter"></div>
+  </div>
+  <div class="tonearm-pivot"></div>
+</div>
+
+<!-- Gift Info -->
+<div class="gift-info">
+  <div class="gift-icon">🎁</div>
+  <div class="gift-song-title" id="songTitle">-</div>
+  <div class="gift-song-category" id="songCategory">-</div>
+  <div class="gift-message hidden" id="giftMessage"></div>
+  <button class="play-btn" id="playBtn" onclick="togglePlay()">
+    <span class="play-icon"></span>
+    <span id="playBtnText">재생</span>
+  </button>
+</div>
+
+<!-- Footer -->
+<div class="lp-footer">
+  &copy; 2026 <a href="about.html"><strong>Hyein Cho</strong></a> &middot; AI Radio Cafe
+</div>
+
+<!-- Chat Panel -->
+<div class="chat-panel minimized" id="chatPanel">
+  <div class="chat-header" onclick="toggleChatMinimize()">
+    <span class="chat-header-title">CHAT</span>
+    <span class="chat-header-info" id="chatHeaderInfo"></span>
+    <div>
+      <button class="chat-header-btn" id="chatMinBtn" title="접기/펼치기">&#9650;</button>
+    </div>
+  </div>
+  <div id="chatBody">
+    <div class="chat-nickname-box" id="chatNicknameBox">
+      <input type="text" id="chatNicknameInput" placeholder="닉네임 입력" maxlength="12"
+        onkeydown="if(event.key==='Enter')joinChat()">
+      <button onclick="joinChat()">입장</button>
+    </div>
+    <div class="chat-messages hidden" id="chatMessages"></div>
+    <div class="chat-input-box hidden" id="chatInputBox">
+      <input type="text" id="chatMsgInput" placeholder="메시지 입력..." maxlength="200"
+        onkeydown="if(event.key==='Enter')sendChatMsg()">
+      <button onclick="sendChatMsg()">전송</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // === Supabase Config ===
+  var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
+  var supabaseClient = null;
+
+  // === Gift Song Data ===
+  var GIFT_SONGS = [
+    { id:'birthday-1', category:'생일축하', name:'생일 축하합니다', file:'gift-songs/birthday-1.mp3' },
+    { id:'birthday-2', category:'생일축하', name:'Happy Birthday To You', file:'gift-songs/birthday-2.mp3' },
+    { id:'wedding-1', category:'결혼축하', name:'결혼 축하합니다', file:'gift-songs/wedding-1.mp3' },
+    { id:'wedding-2', category:'결혼축하', name:'Wedding March', file:'gift-songs/wedding-2.mp3' },
+    { id:'cheer-1', category:'응원', name:'힘내세요', file:'gift-songs/cheer-1.mp3' },
+    { id:'cheer-2', category:'응원', name:'You Can Do It', file:'gift-songs/cheer-2.mp3' },
+    { id:'thanks-1', category:'감사', name:'감사합니다', file:'gift-songs/thanks-1.mp3' },
+    { id:'thanks-2', category:'감사', name:'Thank You', file:'gift-songs/thanks-2.mp3' },
+    { id:'love-1', category:'사랑', name:'사랑합니다', file:'gift-songs/love-1.mp3' },
+    { id:'love-2', category:'사랑', name:'Love Song', file:'gift-songs/love-2.mp3' }
+  ];
+
+  // === State ===
+  var audio = null;
+  var isPlaying = false;
+  var currentSong = null;
+  var chatChannel = null;
+  var chatRoomId = null;
+  var chatNickname = '';
+  var chatActive = false;
+  var chatPeerCount = 0;
+  var chatAutoHidden = false;
+
+  // === Init ===
+  function init(){
+    var urlParams = new URLSearchParams(location.search);
+    var giftId = urlParams.get('gift');
+    chatRoomId = urlParams.get('room');
+    var msg = urlParams.get('msg') ? decodeURIComponent(urlParams.get('msg')) : '';
+
+    if(giftId){
+      currentSong = GIFT_SONGS.find(function(s){ return s.id === giftId; });
+    }
+    if(currentSong){
+      document.getElementById('songTitle').textContent = currentSong.name;
+      document.getElementById('songCategory').textContent = currentSong.category;
+      document.getElementById('labelText').textContent = currentSong.name.length > 8
+        ? currentSong.name.substring(0, 8) : currentSong.name;
+    }
+    if(msg){
+      var msgEl = document.getElementById('giftMessage');
+      msgEl.textContent = msg;
+      msgEl.classList.remove('hidden');
+    }
+    // Supabase 로드 대기 후 채팅 활성화
+    if(chatRoomId){
+      var waitSupabase = setInterval(function(){
+        if(window.supabase){
+          clearInterval(waitSupabase);
+          initSupabase();
+          // 채팅 패널 표시 (접힌 상태)
+          document.getElementById('chatPanel').classList.remove('hidden');
+        }
+      }, 200);
+    }
+  }
+
+  // === Audio ===
+  function togglePlay(){
+    if(!currentSong) return;
+    if(isPlaying){
+      stopPlay();
+    } else {
+      startPlay();
+    }
+  }
+
+  function startPlay(){
+    if(!currentSong) return;
+    var mp3Url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + currentSong.file;
+    if(!audio) audio = new Audio();
+    audio.src = mp3Url;
+    audio.volume = 1;
+    audio.play().then(function(){
+      isPlaying = true;
+      document.getElementById('platter').classList.add('spinning');
+      document.getElementById('tonearm').classList.add('playing');
+      document.getElementById('playBtnText').textContent = '정지';
+      document.getElementById('playBtn').classList.add('playing');
+    }).catch(function(e){
+      console.error('재생 실패:', e);
+    });
+    audio.onended = function(){
+      stopPlay();
+    };
+  }
+
+  function stopPlay(){
+    if(audio){ audio.pause(); audio.currentTime = 0; }
+    isPlaying = false;
+    document.getElementById('platter').classList.remove('spinning');
+    document.getElementById('tonearm').classList.remove('playing');
+    document.getElementById('playBtnText').textContent = '재생';
+    document.getElementById('playBtn').classList.remove('playing');
+  }
+
+  // === Supabase ===
+  function initSupabase(){
+    if(supabaseClient) return;
+    if(!window.supabase) return;
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+
+  // === Chat ===
+  function toggleChatMinimize(){
+    var panel = document.getElementById('chatPanel');
+    var btn = document.getElementById('chatMinBtn');
+    panel.classList.toggle('minimized');
+    btn.innerHTML = panel.classList.contains('minimized') ? '&#9650;' : '&#9660;';
+  }
+
+  function joinChat(){
+    var input = document.getElementById('chatNicknameInput');
+    var name = input.value.trim();
+    if(!name){ input.focus(); return; }
+    chatNickname = name;
+    document.getElementById('chatNicknameBox').classList.add('hidden');
+    document.getElementById('chatMessages').classList.remove('hidden');
+    document.getElementById('chatInputBox').classList.remove('hidden');
+    document.getElementById('chatMsgInput').focus();
+    connectChat();
+  }
+
+  function connectChat(){
+    if(!supabaseClient || !chatRoomId || chatActive) return;
+    chatActive = true;
+    var channelName = 'listen-' + chatRoomId;
+    chatChannel = supabaseClient.channel(channelName, {
+      config: { broadcast: { self: false } }
+    });
+
+    chatChannel.on('broadcast', { event: 'message' }, function(payload){
+      addChatMessage(payload.payload.name, payload.payload.text);
+    });
+
+    chatChannel.on('broadcast', { event: 'join' }, function(payload){
+      chatPeerCount++;
+      addSystemMessage(payload.payload.name + '님이 입장했습니다.');
+      if(chatAutoHidden){
+        chatAutoHidden = false;
+        var panel = document.getElementById('chatPanel');
+        var minBtn = document.getElementById('chatMinBtn');
+        panel.classList.remove('hidden');
+        panel.classList.add('minimized');
+        minBtn.innerHTML = '&#9650;';
+        addSystemMessage('상대방이 다시 접속했습니다.');
+      }
+    });
+
+    chatChannel.on('broadcast', { event: 'leave' }, function(payload){
+      chatPeerCount = Math.max(0, chatPeerCount - 1);
+      addSystemMessage(payload.payload.name + '님이 퇴장했습니다.');
+      if(chatPeerCount <= 0){
+        addSystemMessage('모든 상대방이 퇴장하여 채팅이 닫힙니다.');
+        setTimeout(function(){
+          chatAutoHidden = true;
+          document.getElementById('chatPanel').classList.add('hidden');
+        }, 2000);
+      }
+    });
+
+    chatChannel.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        chatChannel.send({
+          type: 'broadcast',
+          event: 'join',
+          payload: { name: chatNickname }
+        });
+        addSystemMessage('채팅에 연결되었습니다.');
+      }
+    });
+  }
+
+  function disconnectChat(){
+    if(chatChannel && chatActive){
+      chatChannel.send({
+        type: 'broadcast',
+        event: 'leave',
+        payload: { name: chatNickname }
+      });
+      supabaseClient.removeChannel(chatChannel);
+      chatChannel = null;
+      chatActive = false;
+    }
+  }
+
+  function sendChatMsg(){
+    var input = document.getElementById('chatMsgInput');
+    var text = input.value.trim();
+    if(!text || !chatChannel || !chatActive) return;
+    chatChannel.send({
+      type: 'broadcast',
+      event: 'message',
+      payload: { name: chatNickname, text: text }
+    });
+    addChatMessage(chatNickname, text, true);
+    input.value = '';
+    input.focus();
+  }
+
+  function addChatMessage(name, text, isMe){
+    var container = document.getElementById('chatMessages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg ' + (isMe ? 'me' : 'other');
+    var nameSpan = document.createElement('div');
+    nameSpan.className = 'chat-msg-name';
+    nameSpan.textContent = name;
+    var bubble = document.createElement('div');
+    bubble.className = 'chat-msg-bubble';
+    bubble.textContent = text;
+    div.appendChild(nameSpan);
+    div.appendChild(bubble);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function addSystemMessage(text){
+    var container = document.getElementById('chatMessages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg-system';
+    div.textContent = text;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  window.addEventListener('beforeunload', function(){ disconnectChat(); });
+
+  // === Start ===
+  document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
