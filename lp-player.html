@@ -384,6 +384,48 @@
       white-space: nowrap;
     }
 
+    /* Promo Popup */
+    .promo-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; opacity: 0;
+      animation: promo-fade-in 0.5s ease forwards;
+    }
+    .promo-overlay.hidden { display: none; }
+    @keyframes promo-fade-in {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    .promo-card {
+      background: linear-gradient(145deg, #1a1020, #2a1030);
+      border: 1px solid #ff6b9d; border-radius: 20px;
+      padding: 32px 24px; text-align: center;
+      max-width: 320px; width: 100%;
+      box-shadow: 0 0 40px rgba(255,107,157,0.3), 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .promo-msg {
+      font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 600;
+      color: rgba(255,255,255,0.9); line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .promo-link-btn {
+      display: inline-block; padding: 14px 32px;
+      border-radius: 30px; background: #ff6b9d; border: none;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      letter-spacing: 1px; text-decoration: none;
+      box-shadow: 0 0 24px rgba(255,107,157,0.4);
+      transition: all 0.3s;
+    }
+    .promo-link-btn:hover { box-shadow: 0 0 36px rgba(255,107,157,0.6); transform: scale(1.03); }
+    .promo-close {
+      display: block; margin-top: 16px; padding: 8px;
+      background: none; border: none;
+      color: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif;
+      font-size: 13px; cursor: pointer; transition: color 0.2s;
+    }
+    .promo-close:hover { color: #fff; }
+
     /* Footer */
     .lp-footer {
       margin-top: 12px; text-align: center;
@@ -454,6 +496,15 @@
 <!-- Footer -->
 <div class="lp-footer">
   &copy; 2026 <a href="about.html"><strong>Hyein Cho</strong></a> &middot; AI Radio Cafe
+</div>
+
+<!-- Promo Popup -->
+<div class="promo-overlay hidden" id="promoPopup" onclick="if(event.target===this)closePromo()">
+  <div class="promo-card">
+    <div class="promo-msg">클라라 라디오카페를 활용해 보세요</div>
+    <a class="promo-link-btn" href="index.html">라디오 카페 연결</a>
+    <button class="promo-close" onclick="closePromo()">닫기</button>
+  </div>
 </div>
 
 <!-- Chat Panel -->
@@ -840,7 +891,7 @@
       audio.play().catch(function(e){
         console.log('음악 파일 로드 대기 중...', e);
       });
-      audio.onended = function(){ stopPlay(); };
+      audio.onended = function(){ stopPlay(); showPromo(); };
       audio.onerror = function(){ console.log('음악 파일을 찾을 수 없습니다.'); };
     }
   }
@@ -854,6 +905,16 @@
     document.getElementById('tonearm').classList.remove('playing');
     document.getElementById('playBtnText').textContent = '재생';
     document.getElementById('playBtn').classList.remove('playing');
+  }
+
+  // === Promo Popup ===
+  function showPromo(){
+    setTimeout(function(){
+      document.getElementById('promoPopup').classList.remove('hidden');
+    }, 1000);
+  }
+  function closePromo(){
+    document.getElementById('promoPopup').classList.add('hidden');
   }
 
   // === Supabase ===
