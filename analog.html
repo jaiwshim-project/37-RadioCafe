@@ -2165,6 +2165,9 @@
   var chatRoomId = null;
   var chatNickname = '';
   var chatActive = false;
+  var chatPeerCount = 0;
+  var chatAutoHidden = false;
+  var isGuest = false; // 초대받은 사람 = true (조작 불가, 보기만 가능)
 
   // === Gift Song Data ===
   var GIFT_SONGS = [
@@ -2436,6 +2439,7 @@
 
   // === Photo Lightbox ===
   function openLightbox(src){
+    if(isGuest) return;
     var lb=document.getElementById('photoLightbox');
     document.getElementById('lightboxImg').src=src;
     lb.classList.add('visible');
@@ -2653,8 +2657,11 @@
   function openChatPanel(){
     initSupabase();
     var panel = document.getElementById('chatPanel');
+    var btn = document.getElementById('chatMinBtn');
     panel.classList.remove('hidden');
-    panel.classList.remove('minimized');
+    // 디폴트: 접힌 상태로 열기
+    panel.classList.add('minimized');
+    btn.innerHTML = '&#9650;';
     if(chatNickname) {
       // 이미 닉네임 설정됨 - 바로 채팅
       document.getElementById('chatNicknameBox').classList.add('hidden');
@@ -2666,6 +2673,8 @@
 
   function closeChatPanel(){
     document.getElementById('chatPanel').classList.add('hidden');
+    chatAutoHidden = false;
+    chatPeerCount = 0;
     disconnectChat();
   }
 
@@ -2701,13 +2710,33 @@
     });
 
     chatChannel.on('broadcast', { event: 'join' }, function(payload){
+      chatPeerCount++;
       addSystemMessage(payload.payload.name + '님이 입장했습니다.');
       updateChatInfo();
+      // 자동 숨김 상태였으면 채팅 패널 다시 열기 (접힌 상태로)
+      if(chatAutoHidden){
+        chatAutoHidden = false;
+        var panel = document.getElementById('chatPanel');
+        var minBtn = document.getElementById('chatMinBtn');
+        panel.classList.remove('hidden');
+        panel.classList.add('minimized');
+        minBtn.innerHTML = '&#9650;';
+        addSystemMessage('상대방이 다시 접속했습니다.');
+      }
     });
 
     chatChannel.on('broadcast', { event: 'leave' }, function(payload){
+      chatPeerCount = Math.max(0, chatPeerCount - 1);
       addSystemMessage(payload.payload.name + '님이 퇴장했습니다.');
       updateChatInfo();
+      // 모든 상대방이 퇴장하면 채팅 자동 숨김 (채널은 유지)
+      if(chatPeerCount <= 0){
+        addSystemMessage('모든 상대방이 퇴장하여 채팅이 닫힙니다.');
+        setTimeout(function(){
+          chatAutoHidden = true;
+          document.getElementById('chatPanel').classList.add('hidden');
+        }, 2000);
+      }
     });
 
     chatChannel.subscribe(function(status){
@@ -2798,6 +2827,18 @@
     setupAnalogDial();
     setupAnalogVolDrag();
     updateAnalogFreqDisplay();
+  }
+
+  function applyGuestMode(){
+    // 게스트: 튜닝/볼륨 노브 비활성 스타일 + 사진업로드/같이듣기 버튼 숨김
+    document.getElementById('analogDialKnob').style.opacity = '0.4';
+    document.getElementById('analogDialKnob').style.cursor = 'default';
+    document.getElementById('analogVolKnob').style.opacity = '0.4';
+    document.getElementById('analogVolKnob').style.cursor = 'default';
+    var photoBtn = document.getElementById('analogPhotoBtn');
+    if(photoBtn) photoBtn.style.display = 'none';
+    var ltSection = document.querySelector('.analog-listen-together');
+    if(ltSection) ltSection.style.display = 'none';
   }
 
   function renderAnalogFreqTicks(){
@@ -2896,6 +2937,7 @@
   }
 
   function handleAnalogPhotoUpload(event){
+    if(isGuest) return;
     var files=event.target.files;
     if(!files||!files.length) return;
     var saved=[];
@@ -2937,12 +2979,13 @@
     }
 
     function handleStart(e){
+      if(isGuest) return;
       isDragging=true;
       lastAngle=getAngle(e);
       if(e.preventDefault) e.preventDefault();
     }
     function handleMove(e){
-      if(!isDragging) return;
+      if(!isDragging || isGuest) return;
       e.preventDefault();
       var a=getAngle(e);
       var delta=a-lastAngle;
@@ -3144,7 +3187,7 @@
       return Math.atan2(y-cy,x-cx)*(180/Math.PI)+90;
     }
     function handleMove(e){
-      if(!isDragging) return;
+      if(!isDragging || isGuest) return;
       e.preventDefault();
       var a=getAngle(e); if(a>180) a-=360;
       analogVolAngle=Math.max(-135,Math.min(135,a));
@@ -3153,13 +3196,14 @@
       if(staticGainNode) staticGainNode.gain.value=0.05*volume;
       knob.style.transform='rotate('+analogVolAngle+'deg)';
     }
-    knob.addEventListener('mousedown',function(e){isDragging=true;e.preventDefault();});
-    knob.addEventListener('touchstart',function(){isDragging=true;},{passive:true});
+    knob.addEventListener('mousedown',function(e){if(isGuest) return; isDragging=true;e.preventDefault();});
+    knob.addEventListener('touchstart',function(){if(isGuest) return; isDragging=true;},{passive:true});
     document.addEventListener('mousemove',handleMove);
     document.addEventListener('touchmove',handleMove,{passive:false});
     document.addEventListener('mouseup',function(){isDragging=false;});
     document.addEventListener('touchend',function(){isDragging=false;});
     container.addEventListener('wheel',function(e){
+      if(isGuest) return;
       e.preventDefault();
       volume=Math.max(0,Math.min(1,volume+(e.deltaY>0?-0.05:0.05)));
       analogVolAngle=-135+(volume*270);
@@ -3253,6 +3297,9 @@
       var roomParam = urlParams.get('room');
       if (roomParam) {
         chatRoomId = roomParam;
+        // URL에 room 파라미터가 있으면 초대받은 게스트
+        isGuest = true;
+        applyGuestMode();
         // Supabase 로드 대기 후 채팅 패널 오픈
         var waitSupabase = setInterval(function(){
           if(window.supabase){
