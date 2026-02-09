@@ -4525,7 +4525,7 @@
     }
 
     currentUsername = selectedUser;
-    sessionStorage.setItem('radioUsername', selectedUser);
+    localStorage.setItem('radioUsername', selectedUser);
     document.getElementById('userLoginScreen').classList.add('hidden');
     document.getElementById('photoSelectScreen').classList.remove('hidden');
   }
@@ -4587,7 +4587,7 @@
     await saveUsersToCloud(users);
 
     currentUsername = name;
-    sessionStorage.setItem('radioUsername', name);
+    localStorage.setItem('radioUsername', name);
     document.getElementById('userLoginScreen').classList.add('hidden');
     document.getElementById('photoSelectScreen').classList.remove('hidden');
   }
@@ -4617,11 +4617,18 @@
     }
 
     // 오래된 localStorage 사용자 캐시 정리
-    try { localStorage.removeItem('radioUsers'); localStorage.removeItem('radioUsername'); } catch(e){}
+    try { localStorage.removeItem('radioUsers'); } catch(e){}
 
     // 클라우드에서 사용자 목록 로드 후 렌더링
     loadUsersFromCloud().then(function(){
       renderUserList();
+      // 자동 로그인: 저장된 사용자가 있으면 로그인 건너뛰기
+      var savedUser = localStorage.getItem('radioUsername');
+      if(savedUser && cachedUsers && cachedUsers[savedUser]){
+        currentUsername = savedUser;
+        document.getElementById('userLoginScreen').classList.add('hidden');
+        document.getElementById('photoSelectScreen').classList.remove('hidden');
+      }
     });
   });
 
