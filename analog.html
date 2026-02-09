@@ -1504,6 +1504,98 @@
       display: flex; align-items: center; justify-content: space-between;
       margin-top: 12px; position: relative; z-index: 1;
     }
+    /* Analog: Listen Together Button */
+    .analog-listen-together {
+      text-align: center; margin-top: 10px; margin-bottom: 6px; position: relative; z-index: 1;
+    }
+    .analog-listen-together-btn {
+      background: linear-gradient(135deg, var(--btn-bg1), var(--btn-bg2));
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Orbitron', monospace;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2px;
+      padding: 8px 24px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .analog-listen-together-btn:hover {
+      background: var(--accent);
+      color: var(--body-in1);
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    /* Listen Together Modal */
+    .listen-together-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .listen-together-modal.hidden { display: none; }
+    .ltm-card {
+      background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
+      border: 1px solid var(--accent);
+      border-radius: 20px; padding: 24px;
+      width: 100%; max-width: 340px;
+      text-align: center;
+      box-shadow: 0 0 30px var(--accent-glow), 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .ltm-title {
+      font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
+      color: var(--accent); letter-spacing: 3px; margin-bottom: 16px;
+      text-shadow: 0 0 10px var(--accent-glow);
+    }
+    .ltm-station {
+      font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700;
+      color: #fff; margin-bottom: 4px;
+    }
+    .ltm-freq {
+      font-family: 'Orbitron', monospace; font-size: 12px;
+      color: var(--accent); letter-spacing: 2px; margin-bottom: 20px;
+    }
+    .ltm-link-box {
+      display: flex; gap: 8px; margin-bottom: 8px;
+    }
+    .ltm-link-box input {
+      flex: 1; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 11px;
+      outline: none;
+    }
+    .ltm-link-box button {
+      padding: 10px 16px; border-radius: 10px;
+      background: var(--accent); border: none;
+      color: var(--body-in1); font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .ltm-link-box button:hover { box-shadow: 0 0 12px var(--accent-glow); }
+    .ltm-copied {
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .ltm-copied.hidden { display: none; }
+    .ltm-share-btn {
+      width: 100%; padding: 12px;
+      background: transparent; border: 1px solid var(--accent);
+      border-radius: 12px; color: var(--accent);
+      font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; margin-bottom: 8px;
+    }
+    .ltm-share-btn:hover {
+      background: var(--accent); color: var(--body-in1);
+    }
+    .ltm-share-btn.hidden { display: none; }
+    .ltm-close {
+      width: 100%; padding: 10px;
+      background: transparent; border: none;
+      color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif;
+      font-size: 13px; cursor: pointer; transition: color 0.2s;
+    }
+    .ltm-close:hover { color: #fff; }
     /* Analog: Footer */
     .analog-footer {
       text-align: center; margin-top: 6px; padding-top: 6px;
@@ -1675,10 +1767,31 @@
       </div>
     </div>
 
+    <!-- Listen Together -->
+    <div class="analog-listen-together">
+      <button class="analog-listen-together-btn" id="listenTogetherBtn" onclick="openListenTogether()">LISTEN TOGETHER</button>
+    </div>
+
     <!-- Footer -->
     <div class="analog-footer">
       <div class="analog-footer-text">&copy; 2026 <a href="about.html"><strong>Hyein Cho</strong></a></div>
     </div>
+  </div>
+</div>
+
+<!-- Listen Together Modal -->
+<div class="listen-together-modal hidden" id="listenTogetherModal" onclick="if(event.target===this)closeListenTogether()">
+  <div class="ltm-card">
+    <div class="ltm-title">LISTEN TOGETHER</div>
+    <div class="ltm-station" id="ltmStation">-</div>
+    <div class="ltm-freq" id="ltmFreq">-</div>
+    <div class="ltm-link-box">
+      <input type="text" readonly id="ltmLink">
+      <button onclick="copyListenLink()">복사</button>
+    </div>
+    <div class="ltm-copied hidden" id="ltmCopied">링크가 복사되었습니다!</div>
+    <button class="ltm-share-btn" id="ltmShareBtn" onclick="nativeShare()">공유하기</button>
+    <button class="ltm-close" onclick="closeListenTogether()">닫기</button>
   </div>
 </div>
 
@@ -1945,6 +2058,51 @@
   }
   function closeLightbox(){
     document.getElementById('photoLightbox').classList.remove('visible');
+  }
+
+  // ============================================
+  // LISTEN TOGETHER
+  // ============================================
+  function openListenTogether(){
+    if(!currentStation){
+      alert('먼저 채널을 선택해주세요.\n다이얼을 돌려 방송국을 튜닝하세요.');
+      return;
+    }
+    document.getElementById('ltmStation').textContent = currentStation.name;
+    document.getElementById('ltmFreq').textContent = currentStation.freq || '';
+    var url = location.origin + location.pathname + '?station=' + currentStation.id;
+    document.getElementById('ltmLink').value = url;
+    document.getElementById('ltmCopied').classList.add('hidden');
+    // Web Share API 지원 여부
+    if(navigator.share) {
+      document.getElementById('ltmShareBtn').classList.remove('hidden');
+    } else {
+      document.getElementById('ltmShareBtn').classList.add('hidden');
+    }
+    document.getElementById('listenTogetherModal').classList.remove('hidden');
+  }
+  function closeListenTogether(){
+    document.getElementById('listenTogetherModal').classList.add('hidden');
+  }
+  function copyListenLink(){
+    var input = document.getElementById('ltmLink');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(function(){
+      document.getElementById('ltmCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('ltmCopied').classList.add('hidden'); }, 2000);
+    }).catch(function(){
+      document.execCommand('copy');
+      document.getElementById('ltmCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('ltmCopied').classList.add('hidden'); }, 2000);
+    });
+  }
+  function nativeShare(){
+    if(!navigator.share || !currentStation) return;
+    navigator.share({
+      title: currentStation.name + ' - 같이 듣기',
+      text: currentStation.name + ' (' + (currentStation.freq||'') + ') 같이 들어요!',
+      url: document.getElementById('ltmLink').value
+    }).catch(function(){});
   }
 
   // ============================================
@@ -2403,11 +2561,16 @@
       volKnob.style.transform = 'rotate(' + analogVolAngle + 'deg)';
     }
 
-    // 모드 전환 시 이전 채널 자동 재생
-    var switchStation = localStorage.getItem('radio-switch-station');
-    if (switchStation) {
+    // 모드 전환 또는 같이 듣기 링크로 채널 자동 재생
+    var autoStationId = localStorage.getItem('radio-switch-station');
+    if (autoStationId) {
       localStorage.removeItem('radio-switch-station');
-      var station = STATIONS.find(function(s){ return s.id === switchStation; });
+    } else {
+      var urlParams = new URLSearchParams(location.search);
+      autoStationId = urlParams.get('station');
+    }
+    if (autoStationId) {
+      var station = STATIONS.find(function(s){ return s.id === autoStationId; });
       if (station && station.freqNum) {
         analogFreq = station.freqNum;
         updateAnalogFreqDisplay();
