@@ -1507,6 +1507,7 @@
     /* Analog: Listen Together Button */
     .analog-listen-together {
       text-align: center; margin-top: 10px; margin-bottom: 6px; position: relative; z-index: 1;
+      display: flex; gap: 8px; justify-content: center;
     }
     .analog-listen-together-btn {
       background: linear-gradient(135deg, var(--btn-bg1), var(--btn-bg2));
@@ -1596,6 +1597,182 @@
       font-size: 13px; cursor: pointer; transition: color 0.2s;
     }
     .ltm-close:hover { color: #fff; }
+
+    /* Gift Song Modal */
+    .gift-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .gift-modal.hidden { display: none; }
+    .gift-card {
+      background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
+      border: 1px solid #ff6b9d;
+      border-radius: 20px; padding: 24px;
+      width: 100%; max-width: 360px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255,107,157,0.3), 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .gift-title {
+      font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
+      color: #ff6b9d; letter-spacing: 3px; margin-bottom: 16px;
+      text-shadow: 0 0 10px rgba(255,107,157,0.5);
+    }
+    .gift-categories {
+      display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 14px;
+    }
+    .gift-cat-btn {
+      padding: 6px 14px; border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.6);
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .gift-cat-btn.active {
+      border-color: #ff6b9d; color: #ff6b9d;
+      background: rgba(255,107,157,0.1);
+    }
+    .gift-song-list {
+      max-height: 160px; overflow-y: auto; margin-bottom: 14px;
+    }
+    .gift-song-list::-webkit-scrollbar { width: 4px; }
+    .gift-song-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+    .gift-song-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; margin-bottom: 4px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(0,0,0,0.15); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .gift-song-item:hover { border-color: rgba(255,107,157,0.3); }
+    .gift-song-item.selected {
+      border-color: #ff6b9d; background: rgba(255,107,157,0.1);
+    }
+    .gift-song-name {
+      font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(255,255,255,0.85);
+    }
+    .gift-song-item.selected .gift-song-name { color: #ff6b9d; font-weight: 600; }
+    .gift-step2 { display: none; }
+    .gift-step2.active { display: block; }
+    .gift-selected-info {
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600;
+      color: #ff6b9d; margin-bottom: 12px;
+    }
+    .gift-msg-input {
+      width: 100%; padding: 12px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      outline: none; resize: none; min-height: 60px;
+      margin-bottom: 12px;
+    }
+    .gift-msg-input:focus { border-color: #ff6b9d; }
+    .gift-msg-input::placeholder { color: rgba(255,255,255,0.3); }
+    .gift-link-box {
+      display: flex; gap: 8px; margin-bottom: 8px;
+    }
+    .gift-link-box input {
+      flex: 1; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 11px; outline: none;
+    }
+    .gift-link-box button {
+      padding: 10px 16px; border-radius: 10px;
+      background: #ff6b9d; border: none;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .gift-link-box button:hover { box-shadow: 0 0 12px rgba(255,107,157,0.5); }
+    .gift-copied {
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: #ff6b9d; margin-bottom: 12px;
+    }
+    .gift-copied.hidden { display: none; }
+    .gift-share-btn {
+      width: 100%; padding: 12px;
+      background: transparent; border: 1px solid #ff6b9d;
+      border-radius: 12px; color: #ff6b9d;
+      font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; margin-bottom: 8px;
+    }
+    .gift-share-btn:hover { background: #ff6b9d; color: #fff; }
+    .gift-share-btn.hidden { display: none; }
+    .gift-btn-row {
+      display: flex; gap: 8px; margin-top: 6px;
+    }
+    .gift-btn-next {
+      flex: 1; padding: 12px; border-radius: 12px;
+      background: #ff6b9d; border: none;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .gift-btn-next:disabled { opacity: 0.3; cursor: default; }
+    .gift-btn-next:not(:disabled):hover { box-shadow: 0 0 16px rgba(255,107,157,0.5); }
+    .gift-btn-back {
+      padding: 12px 16px; border-radius: 12px;
+      background: transparent; border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.6); font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .gift-btn-back:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+    .gift-close {
+      width: 100%; padding: 10px; margin-top: 4px;
+      background: transparent; border: none;
+      color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif;
+      font-size: 13px; cursor: pointer; transition: color 0.2s;
+    }
+    .gift-close:hover { color: #fff; }
+    /* Gift Receive Card */
+    .gift-receive-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); z-index: 10002;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .gift-receive-overlay.hidden { display: none; }
+    .gift-receive-card {
+      background: linear-gradient(145deg, #1a1020, #2a1030);
+      border: 2px solid #ff6b9d;
+      border-radius: 24px; padding: 32px 24px;
+      width: 100%; max-width: 340px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(255,107,157,0.3), 0 0 80px rgba(255,107,157,0.1);
+      animation: giftAppear 0.6s ease;
+    }
+    @keyframes giftAppear {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .gift-receive-icon { font-size: 48px; margin-bottom: 12px; }
+    .gift-receive-song {
+      font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700;
+      color: #ff6b9d; margin-bottom: 8px;
+    }
+    .gift-receive-category {
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: rgba(255,255,255,0.4); margin-bottom: 16px;
+    }
+    .gift-receive-msg {
+      font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6;
+      color: rgba(255,255,255,0.85); margin-bottom: 20px;
+      padding: 12px 16px; border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,107,157,0.15);
+    }
+    .gift-receive-play {
+      padding: 14px 32px; border-radius: 30px;
+      background: #ff6b9d; border: none;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 0 20px rgba(255,107,157,0.4);
+      transition: all 0.2s;
+    }
+    .gift-receive-play:hover { box-shadow: 0 0 30px rgba(255,107,157,0.6); }
 
     /* Chat Panel */
     .chat-panel {
@@ -1878,9 +2055,10 @@
       </div>
     </div>
 
-    <!-- Listen Together -->
+    <!-- Listen Together & Gift Song -->
     <div class="analog-listen-together">
       <button class="analog-listen-together-btn" id="listenTogetherBtn" onclick="openListenTogether()">같이듣기 초대</button>
+      <button class="analog-listen-together-btn" onclick="openGiftSong()">노래 선물하기</button>
     </div>
 
     <!-- Footer -->
@@ -1903,6 +2081,48 @@
     <div class="ltm-copied hidden" id="ltmCopied">링크가 복사되었습니다!</div>
     <button class="ltm-share-btn" id="ltmShareBtn" onclick="nativeShare()">공유하기</button>
     <button class="ltm-close" onclick="closeListenTogether()">닫기</button>
+  </div>
+</div>
+
+<!-- Gift Song Modal -->
+<div class="gift-modal hidden" id="giftModal" onclick="if(event.target===this)closeGiftSong()">
+  <div class="gift-card">
+    <div class="gift-title">노래 선물하기</div>
+    <!-- Step 1: Song Selection -->
+    <div id="giftStep1">
+      <div class="gift-categories" id="giftCategories"></div>
+      <div class="gift-song-list" id="giftSongList"></div>
+      <div class="gift-btn-row">
+        <button class="gift-btn-next" id="giftNextBtn" disabled onclick="giftGoStep2()">다음</button>
+      </div>
+    </div>
+    <!-- Step 2: Message + Share -->
+    <div class="gift-step2" id="giftStep2">
+      <div class="gift-selected-info" id="giftSelectedInfo"></div>
+      <textarea class="gift-msg-input" id="giftMsgInput" placeholder="선물 메시지를 입력하세요..." maxlength="100" oninput="updateGiftLink()"></textarea>
+      <div class="gift-link-box">
+        <input type="text" readonly id="giftLink">
+        <button onclick="copyGiftLink()">복사</button>
+      </div>
+      <div class="gift-copied hidden" id="giftCopied">링크가 복사되었습니다!</div>
+      <button class="gift-share-btn hidden" id="giftShareBtn" onclick="nativeShareGift()">공유하기</button>
+      <div class="gift-btn-row">
+        <button class="gift-btn-back" onclick="giftGoStep1()">이전</button>
+        <button class="gift-btn-next" onclick="sendGift()">선물 보내기</button>
+      </div>
+    </div>
+    <button class="gift-close" onclick="closeGiftSong()">닫기</button>
+  </div>
+</div>
+
+<!-- Gift Receive Card -->
+<div class="gift-receive-overlay hidden" id="giftReceiveOverlay">
+  <div class="gift-receive-card">
+    <div class="gift-receive-icon">🎁</div>
+    <div class="gift-receive-song" id="giftReceiveSong"></div>
+    <div class="gift-receive-category" id="giftReceiveCategory"></div>
+    <div class="gift-receive-msg" id="giftReceiveMsg"></div>
+    <button class="gift-receive-play" onclick="playGiftAndClose()">듣기</button>
   </div>
 </div>
 
@@ -1945,6 +2165,25 @@
   var chatRoomId = null;
   var chatNickname = '';
   var chatActive = false;
+
+  // === Gift Song Data ===
+  var GIFT_SONGS = [
+    { id:'birthday-1', category:'생일축하', name:'생일 축하합니다', file:'gift-songs/birthday-1.mp3' },
+    { id:'birthday-2', category:'생일축하', name:'Happy Birthday To You', file:'gift-songs/birthday-2.mp3' },
+    { id:'wedding-1', category:'결혼축하', name:'결혼 축하합니다', file:'gift-songs/wedding-1.mp3' },
+    { id:'wedding-2', category:'결혼축하', name:'Wedding March', file:'gift-songs/wedding-2.mp3' },
+    { id:'cheer-1', category:'응원', name:'힘내세요', file:'gift-songs/cheer-1.mp3' },
+    { id:'cheer-2', category:'응원', name:'You Can Do It', file:'gift-songs/cheer-2.mp3' },
+    { id:'thanks-1', category:'감사', name:'감사합니다', file:'gift-songs/thanks-1.mp3' },
+    { id:'thanks-2', category:'감사', name:'Thank You', file:'gift-songs/thanks-2.mp3' },
+    { id:'love-1', category:'사랑', name:'사랑합니다', file:'gift-songs/love-1.mp3' },
+    { id:'love-2', category:'사랑', name:'Love Song', file:'gift-songs/love-2.mp3' }
+  ];
+  var GIFT_CATEGORIES = ['생일축하','결혼축하','응원','감사','사랑'];
+  var giftMode = false;
+  var currentGiftSong = null;
+  var selectedGiftSong = null;
+  var giftStep = 1;
 
   // === Station Data ===
   var STATIONS = [
@@ -2258,6 +2497,148 @@
       text: currentStation.name + ' (' + (currentStation.freq||'') + ') 같이 들어요!',
       url: document.getElementById('ltmLink').value
     }).catch(function(){});
+  }
+
+  // ============================================
+  // GIFT SONG FUNCTIONS
+  // ============================================
+  function openGiftSong(){
+    selectedGiftSong = null;
+    giftStep = 1;
+    document.getElementById('giftStep1').style.display = '';
+    document.getElementById('giftStep2').classList.remove('active');
+    document.getElementById('giftNextBtn').disabled = true;
+    document.getElementById('giftMsgInput').value = '';
+    renderGiftCategories();
+    renderGiftSongs(GIFT_CATEGORIES[0]);
+    document.getElementById('giftModal').classList.remove('hidden');
+  }
+
+  function closeGiftSong(){
+    document.getElementById('giftModal').classList.add('hidden');
+  }
+
+  function renderGiftCategories(){
+    var box = document.getElementById('giftCategories');
+    box.innerHTML = '';
+    GIFT_CATEGORIES.forEach(function(cat, i){
+      var btn = document.createElement('button');
+      btn.className = 'gift-cat-btn' + (i === 0 ? ' active' : '');
+      btn.textContent = cat;
+      btn.onclick = function(){
+        box.querySelectorAll('.gift-cat-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        renderGiftSongs(cat);
+      };
+      box.appendChild(btn);
+    });
+  }
+
+  function renderGiftSongs(category){
+    var list = document.getElementById('giftSongList');
+    list.innerHTML = '';
+    var songs = GIFT_SONGS.filter(function(s){ return s.category === category; });
+    songs.forEach(function(song){
+      var item = document.createElement('div');
+      item.className = 'gift-song-item' + (selectedGiftSong && selectedGiftSong.id === song.id ? ' selected' : '');
+      item.innerHTML = '<span class="gift-song-name">' + song.name + '</span>';
+      item.onclick = function(){
+        selectedGiftSong = song;
+        list.querySelectorAll('.gift-song-item').forEach(function(el){ el.classList.remove('selected'); });
+        item.classList.add('selected');
+        document.getElementById('giftNextBtn').disabled = false;
+      };
+      list.appendChild(item);
+    });
+  }
+
+  function giftGoStep2(){
+    if(!selectedGiftSong) return;
+    if(!chatRoomId) chatRoomId = generateRoomId();
+    document.getElementById('giftStep1').style.display = 'none';
+    document.getElementById('giftStep2').classList.add('active');
+    document.getElementById('giftSelectedInfo').textContent = selectedGiftSong.category + ' - ' + selectedGiftSong.name;
+    updateGiftLink();
+    if(navigator.share){
+      document.getElementById('giftShareBtn').classList.remove('hidden');
+    } else {
+      document.getElementById('giftShareBtn').classList.add('hidden');
+    }
+  }
+
+  function giftGoStep1(){
+    document.getElementById('giftStep2').classList.remove('active');
+    document.getElementById('giftStep1').style.display = '';
+  }
+
+  function updateGiftLink(){
+    var msg = document.getElementById('giftMsgInput').value.trim();
+    var url = location.origin + location.pathname + '?gift=' + selectedGiftSong.id + '&room=' + chatRoomId;
+    if(msg) url += '&msg=' + encodeURIComponent(msg);
+    document.getElementById('giftLink').value = url;
+  }
+
+  function copyGiftLink(){
+    updateGiftLink();
+    var input = document.getElementById('giftLink');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(function(){
+      document.getElementById('giftCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('giftCopied').classList.add('hidden'); }, 2000);
+    }).catch(function(){
+      document.execCommand('copy');
+      document.getElementById('giftCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('giftCopied').classList.add('hidden'); }, 2000);
+    });
+  }
+
+  function nativeShareGift(){
+    if(!navigator.share || !selectedGiftSong) return;
+    updateGiftLink();
+    navigator.share({
+      title: selectedGiftSong.name + ' - 노래 선물',
+      text: selectedGiftSong.name + ' 노래를 선물합니다!',
+      url: document.getElementById('giftLink').value
+    }).catch(function(){});
+  }
+
+  function sendGift(){
+    updateGiftLink();
+    var url = document.getElementById('giftLink').value;
+    navigator.clipboard.writeText(url).then(function(){}).catch(function(){ document.execCommand('copy'); });
+    closeGiftSong();
+    // 보내는 사람도 선물곡 재생
+    playGiftSong(selectedGiftSong);
+    // 채팅 패널 오픈
+    openChatPanel();
+  }
+
+  function playGiftSong(song){
+    giftMode = true;
+    currentGiftSong = song;
+    var mp3Url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + song.file;
+    loadStream(mp3Url);
+  }
+
+  function showGiftReceiveCard(song, message){
+    document.getElementById('giftReceiveSong').textContent = song.name;
+    document.getElementById('giftReceiveCategory').textContent = song.category;
+    var msgEl = document.getElementById('giftReceiveMsg');
+    if(message){
+      msgEl.textContent = message;
+      msgEl.style.display = '';
+    } else {
+      msgEl.style.display = 'none';
+    }
+    document.getElementById('giftReceiveOverlay').classList.remove('hidden');
+  }
+
+  function playGiftAndClose(){
+    document.getElementById('giftReceiveOverlay').classList.add('hidden');
+    if(currentGiftSong){
+      playGiftSong(currentGiftSong);
+    }
+    if(chatRoomId) openChatPanel();
   }
 
   // ============================================
@@ -2862,6 +3243,7 @@
 
     // 모드 전환 또는 같이 듣기 링크로 채널 자동 재생
     var autoStationId = localStorage.getItem('radio-switch-station');
+    var giftParam = null;
     if (autoStationId) {
       localStorage.removeItem('radio-switch-station');
     } else {
@@ -2880,8 +3262,18 @@
           }
         }, 200);
       }
+      // 노래 선물 파라미터 처리
+      giftParam = urlParams.get('gift');
+      if (giftParam) {
+        var giftSong = GIFT_SONGS.find(function(s){ return s.id === giftParam; });
+        if (giftSong) {
+          currentGiftSong = giftSong;
+          var giftMsg = urlParams.get('msg') ? decodeURIComponent(urlParams.get('msg')) : '';
+          showGiftReceiveCard(giftSong, giftMsg);
+        }
+      }
     }
-    if (autoStationId) {
+    if (autoStationId && !giftParam) {
       var station = STATIONS.find(function(s){ return s.id === autoStationId; });
       if (station && station.freqNum) {
         analogFreq = station.freqNum;
