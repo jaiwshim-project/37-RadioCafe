@@ -3495,7 +3495,8 @@
     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
       global: { fetch: function(url, opts) { opts = opts || {}; opts.cache = 'no-store'; return fetch(url, opts); } }
     });
-    // Restore saved theme
+    // Restore saved theme (default: purple)
+    setTheme('purple');
     try {
       var saved = localStorage.getItem('k-radio-theme');
       if (saved && THEME_NAMES[saved]) setTheme(saved);
