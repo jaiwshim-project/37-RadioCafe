@@ -3053,6 +3053,11 @@
             <label class="birth-radio-label"><input type="radio" name="birthCalendar" value="lunar"> 음력</label>
           </div>
         </div>
+        <div class="birth-label" style="margin-top:10px;">성별</div>
+        <div class="birth-calendar-row">
+          <label class="birth-radio-label"><input type="radio" name="userGender" value="male" checked> 남자</label>
+          <label class="birth-radio-label"><input type="radio" name="userGender" value="female"> 여자</label>
+        </div>
         <input type="password" id="newPasswordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
         <button class="login-btn" onclick="registerNewUser()">등록하기</button>
         <button class="back-btn" onclick="showUserSelect()">← 돌아가기</button>
@@ -4544,6 +4549,7 @@
     var birthMonth = parseInt(birthMonthInput.value);
     var birthDay = parseInt(birthDayInput.value);
     var birthCalendar = document.querySelector('input[name="birthCalendar"]:checked').value;
+    var gender = document.querySelector('input[name="userGender"]:checked').value;
 
     if(!name){
       alert('닉네임을 입력해주세요.');
@@ -4582,7 +4588,7 @@
       return;
     }
 
-    users[name] = { password: pass, email: email, birthYear: birthYear, birthMonth: birthMonth, birthDay: birthDay, birthCalendar: birthCalendar };
+    users[name] = { password: pass, email: email, birthYear: birthYear, birthMonth: birthMonth, birthDay: birthDay, birthCalendar: birthCalendar, gender: gender };
     cachedUsers = users;
     await saveUsersToCloud(users);
 
