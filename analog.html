@@ -1596,6 +1596,92 @@
       font-size: 13px; cursor: pointer; transition: color 0.2s;
     }
     .ltm-close:hover { color: #fff; }
+
+    /* Chat Panel */
+    .chat-panel {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 420px;
+      background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
+      border: 1px solid var(--accent);
+      border-bottom: none;
+      border-radius: 16px 16px 0 0;
+      z-index: 10001;
+      display: flex; flex-direction: column;
+      box-shadow: 0 -4px 30px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
+      transition: transform 0.3s ease;
+    }
+    .chat-panel.hidden { display: none; }
+    .chat-panel.minimized { transform: translateX(-50%) translateY(calc(100% - 44px)); }
+    .chat-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer; user-select: none;
+    }
+    .chat-header-title {
+      font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+      color: var(--accent); letter-spacing: 2px;
+    }
+    .chat-header-info {
+      font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(255,255,255,0.5);
+    }
+    .chat-header-btn {
+      background: none; border: none; color: var(--accent);
+      font-size: 16px; cursor: pointer; padding: 0 4px;
+    }
+    .chat-nickname-box {
+      padding: 16px; text-align: center;
+    }
+    .chat-nickname-box input {
+      padding: 10px 16px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      text-align: center; outline: none; width: 70%;
+    }
+    .chat-nickname-box input:focus { border-color: var(--accent); }
+    .chat-nickname-box button {
+      margin-left: 8px; padding: 10px 16px; border-radius: 10px;
+      background: var(--accent); border: none;
+      color: var(--body-in1); font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 12px 16px;
+      max-height: 250px; min-height: 120px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+    .chat-msg {
+      margin-bottom: 8px; font-family: 'Inter', sans-serif; font-size: 13px;
+      line-height: 1.5; word-break: break-word;
+    }
+    .chat-msg-name {
+      font-weight: 700; color: var(--accent); margin-right: 6px; font-size: 12px;
+    }
+    .chat-msg-text { color: rgba(255,255,255,0.85); }
+    .chat-msg-system {
+      text-align: center; color: rgba(255,255,255,0.35);
+      font-size: 11px; font-style: italic; margin: 6px 0;
+    }
+    .chat-input-box {
+      display: flex; gap: 8px; padding: 10px 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .chat-input-box input {
+      flex: 1; padding: 10px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 13px; outline: none;
+    }
+    .chat-input-box input:focus { border-color: var(--accent); }
+    .chat-input-box button {
+      padding: 10px 16px; border-radius: 10px;
+      background: var(--accent); border: none;
+      color: var(--body-in1); font-family: 'Outfit', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      white-space: nowrap;
+    }
     /* Analog: Footer */
     .analog-footer {
       text-align: center; margin-top: 6px; padding-top: 6px;
@@ -1667,6 +1753,7 @@
     }
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1739,21 +1826,6 @@
 
     <!-- Tuning Dial + Volume (한 줄) -->
     <div class="analog-dial-section">
-      <div>
-        <div class="analog-dial-container" id="analogDialContainer">
-          <div class="analog-dial-bg"></div>
-          <div class="analog-dial-marks" id="analogDialMarks"></div>
-          <div class="analog-dial-knob" id="analogDialKnob">
-            <div class="analog-dial-indicator"></div>
-            <div class="analog-dial-hub"></div>
-          </div>
-        </div>
-        <div class="analog-dial-label">TUNING</div>
-      </div>
-      <div class="analog-ctrl-photos-wrap">
-        <div class="analog-ctrl-photos" id="analogPhotoLeft"></div>
-        <div class="analog-ctrl-photos" id="analogPhotoRight"></div>
-      </div>
       <div class="analog-vol-area">
         <div class="analog-vol-container" id="analogVolContainer">
           <div class="analog-vol-bg"></div>
@@ -1764,6 +1836,21 @@
           </div>
         </div>
         <div class="analog-vol-label">VOLUME</div>
+      </div>
+      <div class="analog-ctrl-photos-wrap">
+        <div class="analog-ctrl-photos" id="analogPhotoLeft"></div>
+        <div class="analog-ctrl-photos" id="analogPhotoRight"></div>
+      </div>
+      <div>
+        <div class="analog-dial-container" id="analogDialContainer">
+          <div class="analog-dial-bg"></div>
+          <div class="analog-dial-marks" id="analogDialMarks"></div>
+          <div class="analog-dial-knob" id="analogDialKnob">
+            <div class="analog-dial-indicator"></div>
+            <div class="analog-dial-hub"></div>
+          </div>
+        </div>
+        <div class="analog-dial-label">TUNING</div>
       </div>
     </div>
 
@@ -1795,12 +1882,46 @@
   </div>
 </div>
 
+<!-- Chat Panel -->
+<div class="chat-panel hidden" id="chatPanel">
+  <div class="chat-header" onclick="toggleChatMinimize()">
+    <span class="chat-header-title">CHAT</span>
+    <span class="chat-header-info" id="chatHeaderInfo"></span>
+    <div>
+      <button class="chat-header-btn" id="chatMinBtn" title="접기/펼치기">&#9660;</button>
+      <button class="chat-header-btn" onclick="event.stopPropagation();closeChatPanel()" title="닫기">&times;</button>
+    </div>
+  </div>
+  <div id="chatBody">
+    <div class="chat-nickname-box" id="chatNicknameBox">
+      <input type="text" id="chatNicknameInput" placeholder="닉네임 입력" maxlength="12">
+      <button onclick="joinChat()">입장</button>
+    </div>
+    <div class="chat-messages hidden" id="chatMessages"></div>
+    <div class="chat-input-box hidden" id="chatInputBox">
+      <input type="text" id="chatMsgInput" placeholder="메시지 입력..." maxlength="200" onkeydown="if(event.key==='Enter')sendChatMsg()">
+      <button onclick="sendChatMsg()">전송</button>
+    </div>
+  </div>
+</div>
+
 <!-- Photo Lightbox -->
 <div class="photo-lightbox" id="photoLightbox" onclick="closeLightbox()">
   <img id="lightboxImg" src="" alt="">
 </div>
 
 <script>
+  // === Supabase Config ===
+  var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
+  var supabaseClient = null;
+
+  // === Chat State ===
+  var chatChannel = null;
+  var chatRoomId = null;
+  var chatNickname = '';
+  var chatActive = false;
+
   // === Station Data ===
   var STATIONS = [
     {id:'kbs-1fm',name:'KBS 클래식FM',url:'',apiUrl:'https://cfpwwwapi.kbs.co.kr/api/v1/landing/live/channel_code/24',freq:'93.1 MHz',freqNum:93.1,logoText:'KBS 클래식FM',provider:'KBS'},
@@ -2063,17 +2184,25 @@
   // ============================================
   // LISTEN TOGETHER
   // ============================================
+  function generateRoomId(){
+    var chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    var id = '';
+    for(var i = 0; i < 8; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
+    return id;
+  }
+
   function openListenTogether(){
     if(!currentStation){
       alert('먼저 채널을 선택해주세요.\n다이얼을 돌려 방송국을 튜닝하세요.');
       return;
     }
+    // room ID 생성 (기존 것이 있으면 재사용)
+    if(!chatRoomId) chatRoomId = generateRoomId();
     document.getElementById('ltmStation').textContent = currentStation.name;
     document.getElementById('ltmFreq').textContent = currentStation.freq || '';
-    var url = location.origin + location.pathname + '?station=' + currentStation.id;
+    var url = location.origin + location.pathname + '?station=' + currentStation.id + '&room=' + chatRoomId;
     document.getElementById('ltmLink').value = url;
     document.getElementById('ltmCopied').classList.add('hidden');
-    // Web Share API 지원 여부
     if(navigator.share) {
       document.getElementById('ltmShareBtn').classList.remove('hidden');
     } else {
@@ -2083,6 +2212,8 @@
   }
   function closeListenTogether(){
     document.getElementById('listenTogetherModal').classList.add('hidden');
+    // 채팅 패널 열기 (room이 있으면)
+    if(chatRoomId) openChatPanel();
   }
   function copyListenLink(){
     var input = document.getElementById('ltmLink');
@@ -2104,6 +2235,151 @@
       url: document.getElementById('ltmLink').value
     }).catch(function(){});
   }
+
+  // ============================================
+  // CHAT FUNCTIONS
+  // ============================================
+  function initSupabase(){
+    if(supabaseClient) return;
+    if(!window.supabase) return;
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+
+  function openChatPanel(){
+    initSupabase();
+    var panel = document.getElementById('chatPanel');
+    panel.classList.remove('hidden');
+    panel.classList.remove('minimized');
+    if(chatNickname) {
+      // 이미 닉네임 설정됨 - 바로 채팅
+      document.getElementById('chatNicknameBox').classList.add('hidden');
+      document.getElementById('chatMessages').classList.remove('hidden');
+      document.getElementById('chatInputBox').classList.remove('hidden');
+      if(!chatActive) connectChat();
+    }
+  }
+
+  function closeChatPanel(){
+    document.getElementById('chatPanel').classList.add('hidden');
+    disconnectChat();
+  }
+
+  function toggleChatMinimize(){
+    var panel = document.getElementById('chatPanel');
+    var btn = document.getElementById('chatMinBtn');
+    panel.classList.toggle('minimized');
+    btn.innerHTML = panel.classList.contains('minimized') ? '&#9650;' : '&#9660;';
+  }
+
+  function joinChat(){
+    var input = document.getElementById('chatNicknameInput');
+    var name = input.value.trim();
+    if(!name){ input.focus(); return; }
+    chatNickname = name;
+    document.getElementById('chatNicknameBox').classList.add('hidden');
+    document.getElementById('chatMessages').classList.remove('hidden');
+    document.getElementById('chatInputBox').classList.remove('hidden');
+    document.getElementById('chatMsgInput').focus();
+    connectChat();
+  }
+
+  function connectChat(){
+    if(!supabaseClient || !chatRoomId || chatActive) return;
+    chatActive = true;
+    var channelName = 'listen-' + chatRoomId;
+    chatChannel = supabaseClient.channel(channelName, {
+      config: { broadcast: { self: false } }
+    });
+
+    chatChannel.on('broadcast', { event: 'message' }, function(payload){
+      addChatMessage(payload.payload.name, payload.payload.text);
+    });
+
+    chatChannel.on('broadcast', { event: 'join' }, function(payload){
+      addSystemMessage(payload.payload.name + '님이 입장했습니다.');
+      updateChatInfo();
+    });
+
+    chatChannel.on('broadcast', { event: 'leave' }, function(payload){
+      addSystemMessage(payload.payload.name + '님이 퇴장했습니다.');
+      updateChatInfo();
+    });
+
+    chatChannel.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        chatChannel.send({
+          type: 'broadcast',
+          event: 'join',
+          payload: { name: chatNickname }
+        });
+        addSystemMessage('채팅에 연결되었습니다.');
+        updateChatInfo();
+      }
+    });
+  }
+
+  function disconnectChat(){
+    if(chatChannel && chatActive){
+      chatChannel.send({
+        type: 'broadcast',
+        event: 'leave',
+        payload: { name: chatNickname }
+      });
+      supabaseClient.removeChannel(chatChannel);
+      chatChannel = null;
+      chatActive = false;
+    }
+  }
+
+  function sendChatMsg(){
+    var input = document.getElementById('chatMsgInput');
+    var text = input.value.trim();
+    if(!text || !chatChannel || !chatActive) return;
+    chatChannel.send({
+      type: 'broadcast',
+      event: 'message',
+      payload: { name: chatNickname, text: text }
+    });
+    addChatMessage(chatNickname, text, true);
+    input.value = '';
+    input.focus();
+  }
+
+  function addChatMessage(name, text, isMe){
+    var container = document.getElementById('chatMessages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg';
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'chat-msg-name';
+    nameSpan.textContent = name;
+    if(isMe) nameSpan.style.color = '#fff';
+    var textSpan = document.createElement('span');
+    textSpan.className = 'chat-msg-text';
+    textSpan.textContent = text;
+    div.appendChild(nameSpan);
+    div.appendChild(textSpan);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function addSystemMessage(text){
+    var container = document.getElementById('chatMessages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg-system';
+    div.textContent = text;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function updateChatInfo(){
+    var stationName = currentStation ? currentStation.name : '';
+    document.getElementById('chatHeaderInfo').textContent = stationName;
+  }
+
+  // 페이지 떠날 때 퇴장 알림
+  window.addEventListener('beforeunload', function(){
+    disconnectChat();
+  });
 
   // ============================================
   // ANALOG MODE
@@ -2568,6 +2844,19 @@
     } else {
       var urlParams = new URLSearchParams(location.search);
       autoStationId = urlParams.get('station');
+      // 같이 듣기 room 파라미터 처리
+      var roomParam = urlParams.get('room');
+      if (roomParam) {
+        chatRoomId = roomParam;
+        // Supabase 로드 대기 후 채팅 패널 오픈
+        var waitSupabase = setInterval(function(){
+          if(window.supabase){
+            clearInterval(waitSupabase);
+            initSupabase();
+            openChatPanel();
+          }
+        }, 200);
+      }
     }
     if (autoStationId) {
       var station = STATIONS.find(function(s){ return s.id === autoStationId; });
