@@ -12,7 +12,7 @@
 
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #1a1118 0%, #2a1f28 30%, #1e1520 60%, #15101a 100%);
+      background: linear-gradient(135deg, #1a0e18 0%, #2a1525 30%, #1e1022 60%, #150c1a 100%);
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
       font-family: 'Inter', sans-serif;
@@ -21,24 +21,24 @@
     body::before {
       content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background:
-        radial-gradient(ellipse at 20% 20%, rgba(212,175,105,0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(212,175,105,0.04) 0%, transparent 50%);
+        radial-gradient(ellipse at 20% 20%, rgba(255,105,180,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(255,105,180,0.04) 0%, transparent 50%);
       pointer-events: none;
     }
 
     .manual-card {
       width: 100%; max-width: 520px;
-      background: linear-gradient(145deg, #3a2e28, #2a201a);
+      background: linear-gradient(145deg, #3a2035, #2a1525);
       border-radius: 28px; padding: 3px;
       box-shadow:
         0 40px 80px rgba(0,0,0,0.5),
-        0 0 40px rgba(212,175,105,0.08),
+        0 0 40px rgba(255,105,180,0.08),
         inset 0 1px 0 rgba(255,255,255,0.08);
       position: relative; z-index: 1;
     }
 
     .manual-inner {
-      background: linear-gradient(145deg, #2a2018, #1e1610);
+      background: linear-gradient(145deg, #2a1825, #1e1018);
       border-radius: 25px; padding: 40px 30px;
       position: relative;
     }
@@ -46,14 +46,14 @@
     /* 나사 장식 */
     .screw {
       position: absolute; width: 10px; height: 10px;
-      background: linear-gradient(145deg, #4a3a28, #2a1c10);
+      background: linear-gradient(145deg, #4a2840, #2a1420);
       border-radius: 50%;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
     }
     .screw::after {
       content: ''; position: absolute;
       top: 50%; left: 50%; width: 60%; height: 1px;
-      background: #1a120a; transform: translate(-50%, -50%) rotate(45deg);
+      background: #1a0c14; transform: translate(-50%, -50%) rotate(45deg);
     }
     .screw-tl { top: 12px; left: 12px; }
     .screw-tr { top: 12px; right: 12px; }
@@ -62,16 +62,16 @@
 
     /* 스피커 */
     .speaker {
-      background: linear-gradient(145deg, #1a120a, #0e0a06);
+      background: linear-gradient(145deg, #1a0c14, #0e060a);
       border-radius: 8px; padding: 8px;
       margin-bottom: 24px;
-      border: 1px solid rgba(212,175,105,0.1);
+      border: 1px solid rgba(255,105,180,0.1);
     }
     .speaker-label {
       text-align: center;
       font-family: 'Orbitron', monospace;
       font-size: 10px; letter-spacing: 4px;
-      color: rgba(212,175,105,0.4);
+      color: rgba(255,105,180,0.4);
     }
 
     /* 헤더 */
@@ -81,21 +81,21 @@
 
     .manual-icon {
       width: 80px; height: 80px; margin: 0 auto 20px;
-      background: linear-gradient(135deg, #d4af69, #c49a50);
+      background: linear-gradient(135deg, #ff69b4, #e05a9e);
       border-radius: 50%; display: flex;
       align-items: center; justify-content: center;
       font-size: 36px;
-      box-shadow: 0 10px 30px rgba(212,175,105,0.3);
+      box-shadow: 0 10px 30px rgba(255,105,180,0.3);
     }
 
     .manual-title {
       font-family: 'Outfit', sans-serif; font-size: 24px;
-      font-weight: 800; color: #d4af69;
+      font-weight: 800; color: #ff69b4;
       letter-spacing: 2px; margin-bottom: 8px;
     }
 
     .manual-subtitle {
-      font-size: 13px; color: rgba(212,175,105,0.6);
+      font-size: 13px; color: rgba(255,105,180,0.6);
     }
 
     /* 섹션 */
@@ -105,14 +105,14 @@
 
     .section-title {
       font-family: 'Outfit', sans-serif; font-size: 14px;
-      color: #d4af69; letter-spacing: 1px;
+      color: #ff69b4; letter-spacing: 1px;
       margin-bottom: 12px; font-weight: 600;
       display: flex; align-items: center; gap: 8px;
     }
 
     .section-title::before {
       content: ''; width: 4px; height: 16px;
-      background: #d4af69; border-radius: 2px;
+      background: #ff69b4; border-radius: 2px;
     }
 
     .step-list {
@@ -121,18 +121,18 @@
 
     .step-item {
       background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(212,175,105,0.15);
+      border: 1px solid rgba(255,105,180,0.15);
       border-radius: 12px; padding: 14px 16px;
       display: flex; align-items: flex-start; gap: 12px;
     }
 
     .step-number {
       width: 24px; height: 24px; flex-shrink: 0;
-      background: linear-gradient(135deg, #d4af69, #c49a50);
+      background: linear-gradient(135deg, #ff69b4, #e05a9e);
       border-radius: 50%; display: flex;
       align-items: center; justify-content: center;
       font-family: 'Outfit', sans-serif; font-size: 12px;
-      font-weight: 700; color: #1a1410;
+      font-weight: 700; color: #fff;
     }
 
     .step-content {
@@ -151,22 +151,22 @@
 
     /* LCD 팁 박스 */
     .tip-box {
-      background: linear-gradient(180deg, #0a1a0a, #081408);
+      background: linear-gradient(180deg, #1a0a14, #140610);
       border-radius: 12px; padding: 16px;
       margin-bottom: 24px;
-      border: 2px solid rgba(212,175,105,0.15);
+      border: 2px solid rgba(255,105,180,0.15);
       box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
     }
 
     .tip-title {
       font-family: 'Orbitron', monospace; font-size: 11px;
-      color: #55ff55; letter-spacing: 3px; font-weight: 700;
-      text-shadow: 0 0 10px rgba(85,255,85,0.6);
+      color: #ff69b4; letter-spacing: 3px; font-weight: 700;
+      text-shadow: 0 0 10px rgba(255,105,180,0.6);
       margin-bottom: 10px; text-align: center;
     }
 
     .tip-text {
-      font-size: 12px; color: #3abf3a;
+      font-size: 12px; color: #e8609f;
       line-height: 1.7; text-align: center;
     }
 
@@ -178,8 +178,8 @@
 
     .link-btn {
       padding: 12px 28px; border-radius: 24px;
-      background: linear-gradient(135deg, #d4af69, #c49a50);
-      color: #1a1410; text-decoration: none;
+      background: linear-gradient(135deg, #ff69b4, #e05a9e);
+      color: #fff; text-decoration: none;
       font-family: 'Outfit', sans-serif; font-size: 14px;
       font-weight: 700; letter-spacing: 1px;
       transition: all 0.2s;
@@ -187,18 +187,18 @@
 
     .link-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(212,175,105,0.4);
+      box-shadow: 0 8px 24px rgba(255,105,180,0.4);
     }
 
     /* 푸터 */
     .manual-footer {
       padding-top: 20px;
-      border-top: 1px solid rgba(212,175,105,0.15);
+      border-top: 1px solid rgba(255,105,180,0.15);
       text-align: center;
     }
 
     .copyright {
-      font-size: 11px; color: rgba(212,175,105,0.3);
+      font-size: 11px; color: rgba(255,105,180,0.3);
     }
 
     /* 스크린샷 */
@@ -209,7 +209,7 @@
       position: relative;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid rgba(212,175,105,0.2);
+      border: 2px solid rgba(255,105,180,0.2);
       box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     }
     .screenshot-box img {
@@ -219,7 +219,7 @@
     .screenshot-caption {
       text-align: center;
       font-size: 11px;
-      color: rgba(212,175,105,0.5);
+      color: rgba(255,105,180,0.5);
       margin-top: 8px;
     }
     /* 번호 마커 */
