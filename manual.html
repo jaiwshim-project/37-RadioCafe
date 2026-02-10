@@ -254,9 +254,35 @@
       font-size: 11px; font-weight: 700;
       color: #fff;
     }
+
+    /* PDF 다운로드 버튼 */
+    .pdf-download-btn {
+      position: fixed; top: 16px; right: 16px; z-index: 9999;
+      background: linear-gradient(135deg, #ff69b4, #e05a9e);
+      border: none; border-radius: 12px;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 700;
+      padding: 10px 16px;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(255,105,180,0.4);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .pdf-download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(255,105,180,0.5);
+    }
+    .pdf-download-btn:active { transform: scale(0.95); }
+    .pdf-download-btn.downloading {
+      opacity: 0.7; pointer-events: none;
+    }
+    @media print { .pdf-download-btn { display: none; } }
   </style>
 </head>
 <body>
+  <button class="pdf-download-btn" id="pdfBtn" onclick="downloadPDF()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    PDF
+  </button>
   <div class="manual-card">
     <div class="manual-inner">
       <div class="screw screw-tl"></div>
@@ -519,5 +545,59 @@
       </div>
     </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script>
+  function downloadPDF(){
+    var btn = document.getElementById('pdfBtn');
+    btn.classList.add('downloading');
+    btn.innerHTML = '준비중...';
+    var card = document.querySelector('.manual-card');
+    html2canvas(card, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#1e1018',
+      logging: false
+    }).then(function(canvas){
+      var imgData = canvas.toDataURL('image/jpeg', 0.92);
+      var pdf = new jspdf.jsPDF('p','mm','a4');
+      var pageW = pdf.internal.pageSize.getWidth();
+      var pageH = pdf.internal.pageSize.getHeight();
+      var margin = 8;
+      var contentW = pageW - margin * 2;
+      var imgH = (canvas.height * contentW) / canvas.width;
+      var y = 0;
+      var pageContentH = pageH - margin * 2;
+      // 여러 페이지 처리
+      while(y < imgH) {
+        if(y > 0) pdf.addPage();
+        // 캔버스에서 해당 영역만 잘라서 그리기
+        var srcY = (y / imgH) * canvas.height;
+        var srcH = (pageContentH / imgH) * canvas.height;
+        if(srcY + srcH > canvas.height) srcH = canvas.height - srcY;
+        var sliceCanvas = document.createElement('canvas');
+        sliceCanvas.width = canvas.width;
+        sliceCanvas.height = srcH;
+        var ctx = sliceCanvas.getContext('2d');
+        ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
+        var sliceData = sliceCanvas.toDataURL('image/jpeg', 0.92);
+        var sliceH = (srcH * contentW) / canvas.width;
+        // 페이지 배경색
+        pdf.setFillColor(30, 16, 24);
+        pdf.rect(0, 0, pageW, pageH, 'F');
+        pdf.addImage(sliceData, 'JPEG', margin, margin, contentW, sliceH);
+        y += pageContentH;
+      }
+      pdf.save('라디오카페_사용법.pdf');
+      btn.classList.remove('downloading');
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF';
+    }).catch(function(e){
+      console.error('PDF 생성 오류:', e);
+      btn.classList.remove('downloading');
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF';
+      alert('PDF 생성에 실패했습니다.');
+    });
+  }
+  </script>
 </body>
 </html>
