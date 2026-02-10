@@ -1504,23 +1504,55 @@
       display: flex; align-items: center; justify-content: space-between;
       margin-top: 12px; position: relative; z-index: 1;
     }
+    /* Analog: Divider ruler between controls and buttons */
+    .analog-divider-ruler {
+      position: relative; z-index: 1;
+      margin: 14px 12px 4px;
+      height: 6px;
+      display: flex; align-items: center;
+    }
+    .analog-divider-ruler::before {
+      content: '';
+      display: block; width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent, #d4af69), transparent);
+      opacity: 0.5;
+    }
+    .analog-divider-ticks {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 8px;
+    }
+    .analog-divider-ticks span {
+      width: 1px; background: var(--accent, #d4af69); opacity: 0.35;
+    }
+    .analog-divider-ticks span:nth-child(5n+1) {
+      height: 5px; opacity: 0.5;
+    }
+    .analog-divider-ticks span:nth-child(5n+2),
+    .analog-divider-ticks span:nth-child(5n+3),
+    .analog-divider-ticks span:nth-child(5n+4),
+    .analog-divider-ticks span:nth-child(5n) {
+      height: 3px;
+    }
     /* Analog: Listen Together Button */
     .analog-listen-together {
-      text-align: center; margin-top: 10px; margin-bottom: 6px; position: relative; z-index: 1;
-      display: flex; gap: 8px; justify-content: center;
+      text-align: center; margin-top: 6px; margin-bottom: 6px; position: relative; z-index: 1;
+      display: flex; gap: 6px; justify-content: center;
     }
     .analog-listen-together-btn {
       background: linear-gradient(135deg, var(--btn-bg1), var(--btn-bg2));
       border: 1px solid var(--accent);
       color: var(--accent);
       font-family: 'Orbitron', monospace;
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 2px;
-      padding: 8px 24px;
-      border-radius: 20px;
+      font-size: 7px; font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 5px 10px;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.3s;
       box-shadow: 0 0 8px var(--accent-glow);
+      white-space: nowrap;
     }
     .analog-listen-together-btn:hover {
       background: var(--accent);
@@ -2059,6 +2091,11 @@
         </div>
         <div class="analog-dial-label">TUNING</div>
       </div>
+    </div>
+
+    <!-- Divider ruler -->
+    <div class="analog-divider-ruler">
+      <div class="analog-divider-ticks" id="analogDividerTicks"></div>
     </div>
 
     <!-- Listen Together & Gift Song -->
@@ -3533,6 +3570,12 @@
       if (stored && THEME_NAMES[stored]) savedTheme = stored;
     } catch(e) {}
     setTheme(savedTheme);
+
+    // Generate divider ruler ticks
+    (function(){
+      var box = document.getElementById('analogDividerTicks');
+      if(box){ for(var i=0;i<41;i++){ var s=document.createElement('span'); box.appendChild(s); } }
+    })();
 
     // Initialize analog components
     initAnalog();
