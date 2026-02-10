@@ -549,57 +549,72 @@
       </div>
     </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script>
+  var svgIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+
   function downloadPDF(){
     var btn = document.getElementById('pdfBtn');
+
+    // 라이브러리 로드 확인
+    if(typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
+      // 라이브러리 없으면 브라우저 인쇄(PDF 저장) 사용
+      btn.style.display = 'none';
+      window.print();
+      btn.style.display = '';
+      return;
+    }
+
     btn.classList.add('downloading');
     btn.innerHTML = '준비중...';
+
+    // PDF 버튼 숨기고 캡처
+    btn.style.visibility = 'hidden';
     var card = document.querySelector('.manual-card');
+
     html2canvas(card, {
       scale: 2,
+      allowTaint: true,
       useCORS: true,
       backgroundColor: '#1e1018',
-      logging: false
+      logging: false,
+      imageTimeout: 0
     }).then(function(canvas){
-      var imgData = canvas.toDataURL('image/jpeg', 0.92);
+      btn.style.visibility = '';
       var pdf = new jspdf.jsPDF('p','mm','a4');
       var pageW = pdf.internal.pageSize.getWidth();
       var pageH = pdf.internal.pageSize.getHeight();
-      var margin = 8;
+      var margin = 6;
       var contentW = pageW - margin * 2;
       var imgH = (canvas.height * contentW) / canvas.width;
-      var y = 0;
       var pageContentH = pageH - margin * 2;
-      // 여러 페이지 처리
-      while(y < imgH) {
-        if(y > 0) pdf.addPage();
-        // 캔버스에서 해당 영역만 잘라서 그리기
-        var srcY = (y / imgH) * canvas.height;
-        var srcH = (pageContentH / imgH) * canvas.height;
-        if(srcY + srcH > canvas.height) srcH = canvas.height - srcY;
-        var sliceCanvas = document.createElement('canvas');
-        sliceCanvas.width = canvas.width;
-        sliceCanvas.height = srcH;
-        var ctx = sliceCanvas.getContext('2d');
-        ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
-        var sliceData = sliceCanvas.toDataURL('image/jpeg', 0.92);
-        var sliceH = (srcH * contentW) / canvas.width;
+      var totalPages = Math.ceil(imgH / pageContentH);
+
+      for(var p = 0; p < totalPages; p++) {
+        if(p > 0) pdf.addPage();
         // 페이지 배경색
         pdf.setFillColor(30, 16, 24);
         pdf.rect(0, 0, pageW, pageH, 'F');
-        pdf.addImage(sliceData, 'JPEG', margin, margin, contentW, sliceH);
-        y += pageContentH;
+        // 이미지를 오프셋하여 그리기
+        pdf.addImage(
+          canvas.toDataURL('image/jpeg', 0.95),
+          'JPEG', margin, margin - (p * pageContentH),
+          contentW, imgH
+        );
       }
       pdf.save('라디오카페_사용법.pdf');
       btn.classList.remove('downloading');
-      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF';
+      btn.innerHTML = svgIcon + ' PDF';
     }).catch(function(e){
+      btn.style.visibility = '';
       console.error('PDF 생성 오류:', e);
       btn.classList.remove('downloading');
-      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF';
-      alert('PDF 생성에 실패했습니다.');
+      btn.innerHTML = svgIcon + ' PDF';
+      // 실패 시 브라우저 인쇄로 대체
+      btn.style.display = 'none';
+      window.print();
+      btn.style.display = '';
     });
   }
   </script>
