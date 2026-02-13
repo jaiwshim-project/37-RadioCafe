@@ -2313,6 +2313,21 @@
   }
 
   // === Resolve & Load Stream ===
+  // 모바일 자동재생 차단 시 사용자 터치로 재생
+  function waitUserGestureToPlay(){
+    function tryPlay(){
+      if(audio){
+        audio.play().then(function(){
+          isPlaying=true;
+          document.removeEventListener('click',tryPlay);
+          document.removeEventListener('touchstart',tryPlay);
+        }).catch(function(){});
+      }
+    }
+    document.addEventListener('click',tryPlay,{once:true});
+    document.addEventListener('touchstart',tryPlay,{once:true});
+  }
+
   function resolveAndLoadStream(station){
     if(station.apiUrl){
       fetch(station.apiUrl).then(function(r){return r.json();}).then(function(data){
@@ -2346,8 +2361,10 @@
     if(Hls.isSupported()&&url.includes('.m3u8')){
       hlsInstance=new Hls(); hlsInstance.loadSource(url); hlsInstance.attachMedia(audio);
       hlsInstance.on(Hls.Events.MANIFEST_PARSED,function(){
-        audio.play().catch(function(e){console.error('Playback failed:',e);isPlaying=false;});
-        isPlaying=true;isLoading=false;
+        audio.play().then(function(){ isPlaying=true;isLoading=false; }).catch(function(e){
+          console.error('Playback failed:',e);isPlaying=false;isLoading=false;
+          waitUserGestureToPlay();
+        });
       });
       hlsInstance.on(Hls.Events.ERROR,function(_,data){
         if(data.fatal){isLoading=false;isPlaying=false;}
@@ -2355,14 +2372,18 @@
     } else if(audio.canPlayType&&audio.canPlayType('application/vnd.apple.mpegurl')&&url.includes('.m3u8')){
       audio.src=url;
       audio.addEventListener('loadedmetadata',function h(){audio.removeEventListener('loadedmetadata',h);
-        audio.play().catch(function(e){console.error('Playback failed:',e);isPlaying=false;});
-        isPlaying=true;isLoading=false;
+        audio.play().then(function(){ isPlaying=true;isLoading=false; }).catch(function(e){
+          console.error('Playback failed:',e);isPlaying=false;isLoading=false;
+          waitUserGestureToPlay();
+        });
       });
     } else {
       audio.src=url;
       audio.addEventListener('canplay',function cp(){audio.removeEventListener('canplay',cp);
-        audio.play().catch(function(e){console.error('Playback failed:',e);isPlaying=false;});
-        isPlaying=true;isLoading=false;
+        audio.play().then(function(){ isPlaying=true;isLoading=false; }).catch(function(e){
+          console.error('Playback failed:',e);isPlaying=false;isLoading=false;
+          waitUserGestureToPlay();
+        });
       });
       audio.addEventListener('error',function er(){audio.removeEventListener('error',er);
         isLoading=false;isPlaying=false;
@@ -2908,6 +2929,7 @@
     document.getElementById('chatMessages').classList.remove('hidden');
     document.getElementById('chatInputBox').classList.remove('hidden');
     document.getElementById('chatMsgInput').focus();
+    initSupabase();
     connectChat();
   }
 
