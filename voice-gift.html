@@ -122,8 +122,19 @@
     }
     .gift-share-btn:hover { background: #ff6b9d; color: #fff; }
     .gift-share-btn.hidden { display: none; }
+    .gift-guide {
+      text-align: left; margin-top: 14px; padding: 12px 14px;
+      background: rgba(255,255,255,0.06); border-radius: 10px;
+      border-left: 3px solid #ff6b9d;
+    }
+    .gift-guide p {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: rgba(255,255,255,0.7); line-height: 1.6;
+      margin: 0 0 8px 0;
+    }
+    .gift-guide p:last-child { margin-bottom: 0; }
     .gift-btn-row {
-      display: flex; gap: 8px; margin-top: 6px;
+      display: flex; gap: 8px; margin-top: 10px;
     }
     .gift-btn-next {
       flex: 1; padding: 12px; border-radius: 12px;
@@ -351,9 +362,12 @@
       <button onclick="copyVoiceGiftLink()">복사</button>
     </div>
     <div class="gift-copied hidden" id="vgCopied">링크가 복사되었습니다!</div>
+    <div class="gift-guide">
+      <p>1. 선물 메시지를 입력하세요.</p>
+      <p>2. 복사 버튼을 선택하고 선물하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
+    </div>
     <div class="gift-btn-row">
       <button class="gift-btn-back" onclick="vgBackToStep2()">이전</button>
-      <button class="gift-btn-next" id="vgSendBtn" onclick="sendVoiceGift()">선물 보내기</button>
     </div>
   </div>
 </div>
