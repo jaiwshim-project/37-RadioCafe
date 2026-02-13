@@ -438,6 +438,8 @@
   var voiceRecordSec = 0;
   var voiceRoomId = null;
   var voiceUploaded = false;
+  var voiceMimeType = 'audio/webm';
+  var voiceExtension = '.webm';
 
   // === Audio ===
   var audio = null;
@@ -526,13 +528,29 @@
     document.getElementById('vgPreview').style.display = 'none';
 
     navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream){
-      voiceMediaRecorder = new MediaRecorder(stream);
+      // 크로스 브라우저 호환 포맷 선택 (mp4 > webm)
+      var mimeType = '';
+      if(MediaRecorder.isTypeSupported('audio/mp4')){
+        mimeType = 'audio/mp4';
+        voiceMimeType = 'audio/mp4';
+        voiceExtension = '.mp4';
+      } else if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')){
+        mimeType = 'audio/webm;codecs=opus';
+        voiceMimeType = 'audio/webm';
+        voiceExtension = '.webm';
+      } else if(MediaRecorder.isTypeSupported('audio/webm')){
+        mimeType = 'audio/webm';
+        voiceMimeType = 'audio/webm';
+        voiceExtension = '.webm';
+      }
+      var recOptions = mimeType ? { mimeType: mimeType } : {};
+      voiceMediaRecorder = new MediaRecorder(stream, recOptions);
       voiceMediaRecorder.ondataavailable = function(e){
         if(e.data.size > 0) voiceChunks.push(e.data);
       };
       voiceMediaRecorder.onstop = function(){
         stream.getTracks().forEach(function(t){ t.stop(); });
-        voiceBlob = new Blob(voiceChunks, { type: 'audio/webm' });
+        voiceBlob = new Blob(voiceChunks, { type: voiceMimeType });
         var url = URL.createObjectURL(voiceBlob);
         document.getElementById('vgPreviewAudio').src = url;
         document.getElementById('vgPreview').style.display = 'flex';
@@ -632,9 +650,9 @@
       if(callback) callback(false);
       return;
     }
-    var filePath = 'voice-messages/' + voiceRoomId + '.webm';
+    var filePath = 'voice-messages/' + voiceRoomId + voiceExtension;
     supabaseClient.storage.from('photo-albums').upload(filePath, voiceBlob, {
-      contentType: 'audio/webm',
+      contentType: voiceMimeType,
       upsert: true
     }).then(function(result){
       if(result.error){
@@ -654,7 +672,7 @@
     var msg = document.getElementById('vgMsgInput').value.trim();
     var base = location.pathname.replace(/[^\/]*$/, '') + 'lp-player.html';
     var url = location.origin + base + '?gift=' + vgSelectedSong.id + '&room=' + voiceRoomId;
-    if(voiceUploaded) url += '&voice=' + voiceRoomId;
+    if(voiceUploaded) url += '&voice=' + voiceRoomId + '&vext=' + encodeURIComponent(voiceExtension);
     if(msg) url += '&msg=' + encodeURIComponent(msg);
     document.getElementById('vgLink').value = url;
   }

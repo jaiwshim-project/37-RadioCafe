@@ -600,7 +600,8 @@
     // 음성 메시지 처리
     var voiceId = urlParams.get('voice');
     if(voiceId){
-      voiceUrl = SUPABASE_URL + '/storage/v1/object/public/photo-albums/voice-messages/' + voiceId + '.webm';
+      var vext = urlParams.get('vext') || '.webm';
+      voiceUrl = SUPABASE_URL + '/storage/v1/object/public/photo-albums/voice-messages/' + voiceId + vext;
       document.getElementById('voiceMsgIndicator').classList.remove('hidden');
     }
     // Supabase 로드 대기 후 채팅 활성화
