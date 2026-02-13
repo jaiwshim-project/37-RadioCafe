@@ -585,16 +585,11 @@
     document.getElementById('vgStep2').classList.remove('active');
     document.getElementById('vgStep3').classList.add('active');
     document.getElementById('vgFinalInfo').textContent = vgSelectedSong.category + ' - ' + vgSelectedSong.name + ' + 음성메시지';
-    document.getElementById('vgSendBtn').disabled = true;
     document.getElementById('vgUploading').style.display = '';
     document.getElementById('vgLink').value = '';
     uploadVoiceToSupabase(function(){
       document.getElementById('vgUploading').style.display = 'none';
-      document.getElementById('vgSendBtn').disabled = false;
       updateVoiceGiftLink();
-      if(navigator.share){
-        document.getElementById('vgShareBtn').classList.remove('hidden');
-      }
     });
   }
 
