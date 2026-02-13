@@ -1829,6 +1829,25 @@
     }
     .chat-panel.hidden { display: none; }
     .chat-panel.minimized { transform: translateX(-50%) translateY(calc(100% - 44px)); }
+    /* 인라인 모드 (초대자 복귀 시) */
+    .chat-panel.chat-inline {
+      position: relative; bottom: auto; left: auto; transform: none;
+      width: 100%; max-width: none; max-height: none;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid #ff6b9d;
+      border-radius: 12px;
+      z-index: 1;
+      box-shadow: 0 0 15px rgba(255,107,157,0.2);
+      margin-top: 8px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .chat-panel.chat-inline.minimized {
+      transform: none; max-height: 44px;
+    }
+    .chat-panel.chat-inline .chat-messages {
+      max-height: 176px; min-height: auto; flex: none;
+    }
     .chat-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 10px 16px;
@@ -2107,6 +2126,29 @@
       <a class="analog-listen-together-btn" href="voice-gift.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">노래+음성 선물하기</a>
     </div>
 
+    <!-- Chat Panel (인라인 모드용, radio-inner 안) -->
+    <div class="chat-panel hidden" id="chatPanel">
+      <div class="chat-header" onclick="toggleChatMinimize()">
+        <span class="chat-header-title">CHAT</span>
+        <span class="chat-header-info" id="chatHeaderInfo"></span>
+        <div>
+          <button class="chat-header-btn" id="chatMinBtn" title="접기/펼치기">&#9660;</button>
+          <button class="chat-header-btn" onclick="event.stopPropagation();closeChatPanel()" title="닫기">&times;</button>
+        </div>
+      </div>
+      <div id="chatBody">
+        <div class="chat-nickname-box" id="chatNicknameBox">
+          <input type="text" id="chatNicknameInput" placeholder="닉네임 입력" maxlength="12" onkeydown="if(event.key==='Enter')joinChat()">
+          <button onclick="joinChat()">입장</button>
+        </div>
+        <div class="chat-messages hidden" id="chatMessages"></div>
+        <div class="chat-input-box hidden" id="chatInputBox">
+          <input type="text" id="chatMsgInput" placeholder="메시지 입력..." maxlength="200" onkeydown="if(event.key==='Enter')sendChatMsg()">
+          <button onclick="sendChatMsg()">전송</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer -->
     <div class="analog-footer">
       <div class="analog-footer-text">&copy; 2026 <a href="about.html"><strong>Hyein Cho</strong></a></div>
@@ -2210,28 +2252,6 @@
   </div>
 </div>
 
-<!-- Chat Panel -->
-<div class="chat-panel hidden" id="chatPanel">
-  <div class="chat-header" onclick="toggleChatMinimize()">
-    <span class="chat-header-title">CHAT</span>
-    <span class="chat-header-info" id="chatHeaderInfo"></span>
-    <div>
-      <button class="chat-header-btn" id="chatMinBtn" title="접기/펼치기">&#9660;</button>
-      <button class="chat-header-btn" onclick="event.stopPropagation();closeChatPanel()" title="닫기">&times;</button>
-    </div>
-  </div>
-  <div id="chatBody">
-    <div class="chat-nickname-box" id="chatNicknameBox">
-      <input type="text" id="chatNicknameInput" placeholder="닉네임 입력" maxlength="12">
-      <button onclick="joinChat()">입장</button>
-    </div>
-    <div class="chat-messages hidden" id="chatMessages"></div>
-    <div class="chat-input-box hidden" id="chatInputBox">
-      <input type="text" id="chatMsgInput" placeholder="메시지 입력..." maxlength="200" onkeydown="if(event.key==='Enter')sendChatMsg()">
-      <button onclick="sendChatMsg()">전송</button>
-    </div>
-  </div>
-</div>
 
 <!-- Photo Lightbox -->
 <div class="photo-lightbox" id="photoLightbox" onclick="closeLightbox()">
@@ -2993,7 +3013,9 @@
   }
 
   function closeChatPanel(){
-    document.getElementById('chatPanel').classList.add('hidden');
+    var panel = document.getElementById('chatPanel');
+    panel.classList.add('hidden');
+    panel.classList.remove('chat-inline');
     chatAutoHidden = false;
     chatPeerCount = 0;
     disconnectChat();
@@ -3635,11 +3657,12 @@
             clearInterval(waitSupabase);
             initSupabase();
             openChatPanel();
-            // openchat=1이면 채팅창 펼친 상태로 열기
+            // openchat=1이면 인라인 모드 + 펼친 상태로 열기
             if(openChatParam){
               var panel = document.getElementById('chatPanel');
-              var minBtn = document.getElementById('chatMinBtn');
+              panel.classList.add('chat-inline');
               panel.classList.remove('minimized');
+              var minBtn = document.getElementById('chatMinBtn');
               minBtn.innerHTML = '&#9660;';
             }
             // 채팅 패널로 스크롤
