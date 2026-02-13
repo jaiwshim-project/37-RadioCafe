@@ -317,7 +317,7 @@
 
     if(!chatRoomId) chatRoomId = roomParam || generateRoomId();
 
-    var url = location.origin + location.pathname.replace(/[^\/]*$/, '') + 'guest.html?station=' + (currentStation ? currentStation.id : '') + '&room=' + chatRoomId;
+    var url = location.origin + location.pathname.replace(/[^\/]*$/, '') + 'song-chat.html?station=' + (currentStation ? currentStation.id : '') + '&room=' + chatRoomId;
     document.getElementById('ltmLink').value = url;
 
     if(navigator.share){

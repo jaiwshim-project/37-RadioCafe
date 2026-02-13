@@ -2561,7 +2561,7 @@
     if(!chatRoomId) chatRoomId = generateRoomId();
     document.getElementById('ltmStation').textContent = currentStation.name;
     document.getElementById('ltmFreq').textContent = currentStation.freq || '';
-    var url = location.origin + location.pathname.replace(/[^\/]*$/, '') + 'guest.html?station=' + currentStation.id + '&room=' + chatRoomId;
+    var url = location.origin + location.pathname.replace(/[^\/]*$/, '') + 'song-chat.html?station=' + currentStation.id + '&room=' + chatRoomId;
     document.getElementById('ltmLink').value = url;
     document.getElementById('ltmCopied').classList.add('hidden');
     if(navigator.share) {
