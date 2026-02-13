@@ -72,24 +72,6 @@
       color: var(--accent); margin-bottom: 12px;
     }
     .ltm-copied.hidden { display: none; }
-    .ltm-share-btn {
-      width: 100%; padding: 12px;
-      background: transparent; border: 1px solid var(--accent);
-      border-radius: 12px; color: var(--accent);
-      font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
-      cursor: pointer; transition: all 0.2s; margin-bottom: 8px;
-    }
-    .ltm-share-btn:hover {
-      background: var(--accent); color: var(--body-in1);
-    }
-    .ltm-share-btn.hidden { display: none; }
-    .ltm-close {
-      width: 100%; padding: 10px;
-      background: transparent; border: none;
-      color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif;
-      font-size: 13px; cursor: pointer; transition: color 0.2s;
-    }
-    .ltm-close:hover { color: #fff; }
 
     /* No station warning */
     .no-station {
@@ -100,7 +82,7 @@
 
     /* Back link */
     .back-link {
-      display: inline-block; margin-top: 20px;
+      display: inline-block; margin-top: 12px;
       font-family: 'Outfit', sans-serif; font-size: 14px;
       color: var(--accent); text-decoration: none;
       border: 1px solid var(--accent); border-radius: 12px;
@@ -125,10 +107,8 @@
     <button onclick="copyListenLink()">복사</button>
   </div>
   <div class="ltm-copied hidden" id="ltmCopied">링크가 복사되었습니다!</div>
-  <button class="ltm-share-btn" id="ltmShareBtn" onclick="nativeShare()">공유하기</button>
-  </div>
-
-<a href="#" class="back-link" onclick="event.preventDefault();goBack()">라디오로 돌아가기</a>
+  <a href="#" class="back-link" onclick="event.preventDefault();goBack()">라디오로 돌아가기</a>
+</div>
 
 <script>
   var chatRoomId = null;
@@ -215,14 +195,6 @@
     });
   }
 
-  function nativeShare(){
-    if(!navigator.share || !currentStation) return;
-    navigator.share({
-      title: currentStation.name + ' - 같이 듣기',
-      text: currentStation.name + ' (' + (currentStation.freq||'') + ') 같이 들어요!',
-      url: document.getElementById('ltmLink').value
-    }).catch(function(){});
-  }
 
 </script>
 </body>
