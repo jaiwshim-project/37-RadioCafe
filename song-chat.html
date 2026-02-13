@@ -2929,6 +2929,7 @@
     document.getElementById('chatMessages').classList.remove('hidden');
     document.getElementById('chatInputBox').classList.remove('hidden');
     document.getElementById('chatMsgInput').focus();
+    addSystemMessage(name + '님, 어서 와! 환영해요!');
     initSupabase();
     connectChat();
   }
