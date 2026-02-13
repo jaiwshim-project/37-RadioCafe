@@ -98,103 +98,6 @@
       line-height: 1.6;
     }
 
-    /* Chat Panel */
-    .chat-panel {
-      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 100%; max-width: 420px; max-height: 50vh;
-      background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
-      border: 2px solid #ff6b9d;
-      border-bottom: none;
-      border-radius: 16px 16px 0 0;
-      z-index: 10001;
-      display: flex; flex-direction: column;
-      box-shadow: 0 -4px 30px rgba(0,0,0,0.5), 0 0 15px rgba(255,107,157,0.3);
-      transition: transform 0.3s ease;
-    }
-    .chat-panel.hidden { display: none; }
-    .chat-panel.minimized { max-height: 42px; overflow: hidden; }
-    .chat-header {
-      display: flex; align-items: center; padding: 10px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer;
-      flex-shrink: 0;
-    }
-    .chat-header-title {
-      font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
-      color: #ff6b9d; letter-spacing: 2px;
-    }
-    .chat-header-info {
-      flex: 1; text-align: center;
-      font-family: 'Inter', sans-serif; font-size: 11px;
-      color: rgba(255,255,255,0.5);
-    }
-    .chat-header-btn {
-      background: none; border: none; color: rgba(255,255,255,0.4);
-      cursor: pointer; font-size: 12px; padding: 4px 8px;
-    }
-    .chat-messages {
-      flex: 1; overflow-y: auto; padding: 12px 16px;
-      min-height: 120px; max-height: 300px;
-    }
-    .chat-messages::-webkit-scrollbar { width: 4px; }
-    .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-    .chat-msg { margin-bottom: 10px; }
-    .chat-msg-name {
-      font-family: 'Inter', sans-serif; font-size: 11px;
-      color: rgba(255,255,255,0.4); margin-bottom: 2px;
-    }
-    .chat-msg-bubble {
-      display: inline-block; padding: 8px 12px; border-radius: 12px;
-      font-family: 'Inter', sans-serif; font-size: 13px;
-      max-width: 80%; word-break: break-word;
-    }
-    .chat-msg.other .chat-msg-bubble {
-      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85);
-    }
-    .chat-msg.me { text-align: right; }
-    .chat-msg.me .chat-msg-name { text-align: right; }
-    .chat-msg.me .chat-msg-bubble {
-      background: rgba(255,107,157,0.15); color: #ff6b9d;
-    }
-    .chat-msg-system {
-      text-align: center; font-family: 'Inter', sans-serif;
-      font-size: 11px; color: rgba(255,255,255,0.3);
-      margin: 8px 0;
-    }
-    .chat-nickname-box {
-      padding: 16px; text-align: center;
-    }
-    .chat-nickname-box input {
-      padding: 10px 14px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(0,0,0,0.3); color: #fff;
-      font-family: 'Inter', sans-serif; font-size: 13px;
-      outline: none; width: 60%; margin-right: 8px;
-    }
-    .chat-nickname-box button {
-      padding: 10px 16px; border-radius: 10px;
-      background: #ff6b9d; border: none; color: #fff;
-      font-family: 'Outfit', sans-serif; font-size: 13px;
-      font-weight: 700; cursor: pointer;
-    }
-    .chat-input-box {
-      display: flex; gap: 8px; padding: 10px 16px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      flex-shrink: 0;
-    }
-    .chat-input-box.hidden { display: none; }
-    .chat-input-box input {
-      flex: 1; padding: 10px 14px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(0,0,0,0.2); color: #fff;
-      font-family: 'Inter', sans-serif; font-size: 13px; outline: none;
-    }
-    .chat-input-box button {
-      padding: 10px 16px; border-radius: 10px;
-      background: #ff6b9d; border: none; color: #fff;
-      font-family: 'Outfit', sans-serif; font-size: 13px;
-      font-weight: 700; cursor: pointer;
-    }
-
     /* Back link */
     .back-link {
       display: inline-block; margin-top: 20px;
@@ -223,46 +126,12 @@
   </div>
   <div class="ltm-copied hidden" id="ltmCopied">링크가 복사되었습니다!</div>
   <button class="ltm-share-btn" id="ltmShareBtn" onclick="nativeShare()">공유하기</button>
-  <button class="ltm-close" onclick="goBack()">라디오로 돌아가기</button>
-</div>
-
-<!-- Chat Panel -->
-<div class="chat-panel hidden" id="chatPanel">
-  <div class="chat-header" onclick="toggleChatMinimize()">
-    <span class="chat-header-title">CHAT</span>
-    <span class="chat-header-info" id="chatHeaderInfo"></span>
-    <div>
-      <button class="chat-header-btn" id="chatMinBtn" title="접기/펼치기">&#9660;</button>
-      <button class="chat-header-btn" onclick="event.stopPropagation();closeChatPanel()" title="닫기">&times;</button>
-    </div>
   </div>
-  <div class="chat-nickname-box" id="chatNicknameBox">
-    <input type="text" id="chatNicknameInput" placeholder="닉네임 입력" maxlength="20" onkeydown="if(event.key==='Enter')joinChat()">
-    <button onclick="joinChat()">입장</button>
-  </div>
-  <div class="chat-messages hidden" id="chatMessages"></div>
-  <div class="chat-input-box hidden" id="chatInputBox">
-    <input type="text" id="chatMsgInput" placeholder="메시지 입력..." maxlength="200" onkeydown="if(event.key==='Enter')sendChatMsg()">
-    <button onclick="sendChatMsg()">전송</button>
-  </div>
-</div>
 
 <a href="#" class="back-link" onclick="event.preventDefault();goBack()">라디오로 돌아가기</a>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // === Supabase Config ===
-  var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
-  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
-  var supabaseClient = null;
-
-  // === Chat State ===
-  var chatChannel = null;
   var chatRoomId = null;
-  var chatNickname = '';
-  var chatActive = false;
-  var chatPeerCount = 0;
-  var chatAutoHidden = false;
 
   // === Station Data ===
   var STATIONS = [
@@ -331,16 +200,6 @@
       document.getElementById('ltmShareBtn').classList.add('hidden');
     }
 
-    // room 파라미터가 있으면 채팅 자동 오픈
-    if(roomParam){
-      var waitSupabase = setInterval(function(){
-        if(window.supabase){
-          clearInterval(waitSupabase);
-          initSupabase();
-          openChatPanel();
-        }
-      }, 200);
-    }
   });
 
   function copyListenLink(){
@@ -365,161 +224,6 @@
     }).catch(function(){});
   }
 
-  // === Supabase Init ===
-  function initSupabase(){
-    if(supabaseClient) return;
-    if(!window.supabase) return;
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  }
-
-  // === Chat Functions ===
-  function openChatPanel(){
-    initSupabase();
-    var panel = document.getElementById('chatPanel');
-    var btn = document.getElementById('chatMinBtn');
-    panel.classList.remove('hidden');
-    panel.classList.add('minimized');
-    btn.innerHTML = '&#9650;';
-    if(chatNickname){
-      document.getElementById('chatNicknameBox').classList.add('hidden');
-      document.getElementById('chatMessages').classList.remove('hidden');
-      document.getElementById('chatInputBox').classList.remove('hidden');
-      if(!chatActive) connectChat();
-    }
-  }
-
-  function closeChatPanel(){
-    document.getElementById('chatPanel').classList.add('hidden');
-    chatAutoHidden = false;
-    chatPeerCount = 0;
-    disconnectChat();
-  }
-
-  function toggleChatMinimize(){
-    var panel = document.getElementById('chatPanel');
-    var btn = document.getElementById('chatMinBtn');
-    panel.classList.toggle('minimized');
-    btn.innerHTML = panel.classList.contains('minimized') ? '&#9650;' : '&#9660;';
-  }
-
-  function joinChat(){
-    var input = document.getElementById('chatNicknameInput');
-    var name = input.value.trim();
-    if(!name){ input.focus(); return; }
-    chatNickname = name;
-    document.getElementById('chatNicknameBox').classList.add('hidden');
-    document.getElementById('chatMessages').classList.remove('hidden');
-    document.getElementById('chatInputBox').classList.remove('hidden');
-    document.getElementById('chatMsgInput').focus();
-    connectChat();
-  }
-
-  function connectChat(){
-    if(!supabaseClient || !chatRoomId || chatActive) return;
-    chatActive = true;
-    var channelName = 'listen-' + chatRoomId;
-    chatChannel = supabaseClient.channel(channelName, {
-      config: { broadcast: { self: false } }
-    });
-    chatChannel.on('broadcast', { event: 'message' }, function(payload){
-      addChatMessage(payload.payload.name, payload.payload.text);
-    });
-    chatChannel.on('broadcast', { event: 'join' }, function(payload){
-      chatPeerCount++;
-      addSystemMessage(payload.payload.name + '님이 입장했습니다.');
-      updateChatInfo();
-      if(chatAutoHidden){
-        chatAutoHidden = false;
-        var panel = document.getElementById('chatPanel');
-        var minBtn = document.getElementById('chatMinBtn');
-        panel.classList.remove('hidden');
-        panel.classList.add('minimized');
-        minBtn.innerHTML = '&#9650;';
-        addSystemMessage('상대방이 다시 접속했습니다.');
-      }
-    });
-    chatChannel.on('broadcast', { event: 'leave' }, function(payload){
-      chatPeerCount = Math.max(0, chatPeerCount - 1);
-      addSystemMessage(payload.payload.name + '님이 퇴장했습니다.');
-      updateChatInfo();
-      if(chatPeerCount <= 0){
-        addSystemMessage('모든 상대방이 퇴장하여 채팅이 닫힙니다.');
-        setTimeout(function(){
-          chatAutoHidden = true;
-          document.getElementById('chatPanel').classList.add('hidden');
-        }, 2000);
-      }
-    });
-    chatChannel.subscribe(function(status){
-      if(status === 'SUBSCRIBED'){
-        chatChannel.send({
-          type: 'broadcast', event: 'join',
-          payload: { name: chatNickname }
-        });
-        addSystemMessage('채팅에 연결되었습니다.');
-        updateChatInfo();
-      }
-    });
-  }
-
-  function disconnectChat(){
-    if(chatChannel && chatActive){
-      chatChannel.send({
-        type: 'broadcast', event: 'leave',
-        payload: { name: chatNickname }
-      });
-      supabaseClient.removeChannel(chatChannel);
-      chatChannel = null;
-      chatActive = false;
-    }
-  }
-
-  function sendChatMsg(){
-    var input = document.getElementById('chatMsgInput');
-    var text = input.value.trim();
-    if(!text || !chatChannel || !chatActive) return;
-    chatChannel.send({
-      type: 'broadcast', event: 'message',
-      payload: { name: chatNickname, text: text }
-    });
-    addChatMessage(chatNickname, text, true);
-    input.value = '';
-    input.focus();
-  }
-
-  function addChatMessage(name, text, isMe){
-    var container = document.getElementById('chatMessages');
-    var div = document.createElement('div');
-    div.className = 'chat-msg ' + (isMe ? 'me' : 'other');
-    var nameSpan = document.createElement('div');
-    nameSpan.className = 'chat-msg-name';
-    nameSpan.textContent = name;
-    var bubble = document.createElement('div');
-    bubble.className = 'chat-msg-bubble';
-    bubble.textContent = text;
-    div.appendChild(nameSpan);
-    div.appendChild(bubble);
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-  }
-
-  function addSystemMessage(text){
-    var container = document.getElementById('chatMessages');
-    var div = document.createElement('div');
-    div.className = 'chat-msg-system';
-    div.textContent = text;
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-  }
-
-  function updateChatInfo(){
-    var stationName = currentStation ? currentStation.name : '';
-    document.getElementById('chatHeaderInfo').textContent = stationName;
-  }
-
-  window.addEventListener('beforeunload', function(){
-    disconnectChat();
-  });
 </script>
 </body>
 </html>
