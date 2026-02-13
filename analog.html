@@ -3621,17 +3621,25 @@
       autoStationId = urlParams.get('station');
       // 같이 듣기 room 파라미터 처리
       var roomParam = urlParams.get('room');
+      var openChatParam = urlParams.get('openchat');
       if (roomParam) {
         chatRoomId = roomParam;
-        // URL에 room 파라미터가 있으면 초대받은 게스트
-        isGuest = true;
-        applyGuestMode();
-        // Supabase 로드 대기 후 채팅 패널 오픈
+        if (!openChatParam) {
+          // URL에 room 파라미터만 있으면 초대받은 게스트
+          isGuest = true;
+          applyGuestMode();
+        }
+        // Supabase 로드 대기 후 채팅 패널 오픈 + 스크롤
         var waitSupabase = setInterval(function(){
           if(window.supabase){
             clearInterval(waitSupabase);
             initSupabase();
             openChatPanel();
+            // 채팅 패널로 스크롤
+            setTimeout(function(){
+              var chatEl = document.getElementById('chatPanel');
+              if(chatEl) chatEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 300);
           }
         }, 200);
       }
