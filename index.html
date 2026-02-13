@@ -3220,6 +3220,7 @@
   </style>
   <script defer src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 </head>
 <body>
 
@@ -5670,283 +5671,555 @@
     document.getElementById('songDlScreen').classList.add('hidden');
   }
 
-  // Note frequency lookup
+  // Note frequencies
   var NF = {
-    'C3':130.81,'D3':146.83,'E3':164.81,'F3':174.61,'G3':196.00,'A3':220.00,'B3':246.94,
+    'C2':65.41,'D2':73.42,'E2':82.41,'F2':87.31,'G2':98.00,'A2':110.00,'B2':123.47,
+    'C3':130.81,'D3':146.83,'Eb3':155.56,'E3':164.81,'F3':174.61,'Fs3':185.00,'G3':196.00,'Ab3':207.65,'A3':220.00,'Bb3':233.08,'B3':246.94,
     'C4':261.63,'Cs4':277.18,'D4':293.66,'Eb4':311.13,'E4':329.63,'F4':349.23,'Fs4':369.99,
     'G4':392.00,'Ab4':415.30,'A4':440.00,'Bb4':466.16,'B4':493.88,
     'C5':523.25,'Cs5':554.37,'D5':587.33,'Eb5':622.25,'E5':659.25,'F5':698.46,'Fs5':739.99,
     'G5':783.99,'Ab5':830.61,'A5':880.00,'Bb5':932.33,'B5':987.77,'C6':1046.50
   };
 
-  // Song melody definitions: [note, beats]
+  // Rich song data with melody, chords, bass, and style info
   var SONGS = {
     birthday: {
       kr: {
-        bpm: 108, name: '생일축하_한글판',
+        bpm: 105, name: '생일축하_한글판', style: 'warm',
         melody: [
-          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
-          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
-          ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
-          ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',2],
-          [0,1],
-          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
-          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
-          ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
-          ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',3]
+          ['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
+          ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2],
+          ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+          ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',2],[0,1],
+          ['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
+          ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2],
+          ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+          ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',3]
         ],
         chords: [
-          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],
-          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],
-          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],['C4',4]
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],
+          [['C3','E3','G3'],4],[['G3','B3','D4'],4],
+          [['C3','E3','G3'],4],[['C3','E3','G3'],2],[0,1],
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],
+          [['C3','E3','G3'],4],[['G3','B3','D4'],4],
+          [['C3','E3','G3'],6]
+        ],
+        bass: [
+          ['C2',4],['C2',4],['F2',4],['C2',4],['C2',4],['G2',4],['C2',4],['C2',3],
+          ['C2',4],['C2',4],['F2',4],['C2',4],['C2',4],['G2',4],['C2',6]
         ]
       },
       en: {
-        bpm: 126, name: 'HappyBirthday_English',
+        bpm: 124, name: 'HappyBirthday_English', style: 'bright',
         melody: [
-          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
-          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
-          ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
-          ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',2],
-          [0,1],
-          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
-          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
-          ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
-          ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',3]
+          ['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
+          ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2],
+          ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+          ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',2],[0,1],
+          ['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
+          ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2],
+          ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+          ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',3]
         ],
         chords: [
-          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],
-          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],['C4',4]
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],
+          [['C3','E3','G3'],4],[['G3','B3','D4'],4],
+          [['C3','E3','G3'],4],[['C3','E3','G3'],2],[0,1],
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],
+          [['C3','E3','G3'],4],[['G3','B3','D4'],4],
+          [['C3','E3','G3'],6]
+        ],
+        bass: [
+          ['C2',4],['C2',4],['F2',4],['C2',4],['C2',4],['G2',4],['C2',4],['C2',3],
+          ['C2',4],['C2',4],['F2',4],['C2',4],['C2',4],['G2',4],['C2',6]
         ]
       }
     },
     wedding: {
       kr: {
-        bpm: 92, name: '결혼축하_한글판',
+        bpm: 88, name: '결혼축하_한글판', style: 'elegant',
         melody: [
-          ['C5',2],['F4',1.5],['F4',0.5],['F4',2],[0,0.5],
-          ['F4',0.5],['A4',0.5],['G4',0.5],['F4',2],
-          ['G4',0.5],['F4',0.5],['G4',0.5],['A4',1.5],
-          ['F4',1],['D4',0.5],['D4',0.5],['F4',2],[0,1],
-          ['C5',2],['F4',1.5],['F4',0.5],['F4',2],[0,0.5],
-          ['F4',0.5],['A4',0.5],['C5',0.5],['A4',2],
-          ['Bb4',0.5],['A4',0.5],['G4',0.5],['A4',1.5],
-          ['F4',1],['G4',1],['F4',3]
+          ['C5',2],['F4',1.5],['F4',.5],['F4',2],[0,.5],
+          ['F4',.5],['A4',.5],['G4',.5],['F4',2],
+          ['G4',.5],['F4',.5],['G4',.5],['A4',1.5],
+          ['F4',1],['D4',.5],['D4',.5],['F4',2],[0,1],
+          ['C5',2],['F4',1.5],['F4',.5],['F4',2],[0,.5],
+          ['F4',.5],['A4',.5],['C5',.5],['A4',2],
+          ['Bb4',.5],['A4',.5],['G4',.5],['A4',1.5],
+          ['F4',1],['G4',1],['F4',3],[0,1],
+          ['C5',2],['F4',1.5],['F4',.5],['F4',2],[0,.5],
+          ['F4',.5],['A4',.5],['G4',.5],['F4',2],
+          ['G4',.5],['F4',.5],['G4',.5],['A4',1.5],
+          ['F4',1],['D4',.5],['D4',.5],['F4',3]
         ],
         chords: [
-          ['F3',4],['F3',3],['C4',3],['F3',4],['Bb4',2],['F3',4],
-          ['F3',4],['F3',3],['C4',3],['F3',4],['C4',2],['F3',4]
+          [['F3','A3','C4'],4],[['F3','A3','C4'],4],
+          [['C3','E3','G3'],3],[['F3','A3','C4'],4],
+          [['Bb3','D4','F4'],3],[['F3','A3','C4'],3],[0,1],
+          [['F3','A3','C4'],4],[['F3','A3','C4'],4],
+          [['C3','E3','G3'],3],[['F3','A3','C4'],4],
+          [['C3','E3','G3'],3],[['F3','A3','C4'],4],[0,1],
+          [['F3','A3','C4'],4],[['F3','A3','C4'],4],
+          [['C3','E3','G3'],3],[['F3','A3','C4'],4],
+          [['Bb3','D4','F4'],3],[['F3','A3','C4'],4]
+        ],
+        bass: [
+          ['F2',4],['F2',4],['C2',3],['F2',4],['Bb2',3],['F2',4],
+          ['F2',4],['F2',4],['C2',3],['F2',4],['C2',3],['F2',5],
+          ['F2',4],['F2',4],['C2',3],['F2',4],['Bb2',3],['F2',4]
         ]
       },
       en: {
-        bpm: 100, name: 'Wedding_English',
+        bpm: 96, name: 'Wedding_English', style: 'elegant',
         melody: [
-          ['C5',2],['F4',1.5],['F4',0.5],['F4',2],[0,0.5],
-          ['F4',0.5],['Ab4',0.5],['G4',0.5],['F4',2],
-          ['G4',0.5],['F4',0.5],['G4',0.5],['Ab4',1.5],
-          ['F4',1],['D4',0.5],['D4',0.5],['F4',2],[0,1],
-          ['C5',2],['F4',1.5],['F4',0.5],['F4',2],[0,0.5],
-          ['F4',0.5],['Ab4',0.5],['C5',0.5],['Ab4',2],
-          ['Bb4',0.5],['Ab4',0.5],['G4',0.5],['Ab4',1.5],
-          ['F4',1],['G4',1],['F4',3]
+          ['C5',2],['F4',1.5],['F4',.5],['F4',2],[0,.5],
+          ['F4',.5],['Ab4',.5],['G4',.5],['F4',2],
+          ['G4',.5],['F4',.5],['G4',.5],['Ab4',1.5],
+          ['F4',1],['D4',.5],['D4',.5],['F4',2],[0,1],
+          ['C5',2],['F4',1.5],['F4',.5],['F4',2],[0,.5],
+          ['F4',.5],['Ab4',.5],['C5',.5],['Ab4',2],
+          ['Bb4',.5],['Ab4',.5],['G4',.5],['Ab4',1.5],
+          ['F4',1],['G4',1],['F4',3],[0,1],
+          ['C5',2],['F4',1.5],['F4',.5],['F4',2],[0,.5],
+          ['F4',.5],['Ab4',.5],['G4',.5],['F4',2],
+          ['G4',.5],['F4',.5],['G4',.5],['Ab4',1.5],
+          ['F4',1],['D4',.5],['D4',.5],['F4',3]
         ],
         chords: [
-          ['F3',4],['F3',3],['C4',3],['F3',4],['Bb4',2],['F3',4],
-          ['F3',4],['F3',3],['C4',3],['F3',4],['C4',2],['F3',4]
+          [['F3','Ab3','C4'],4],[['F3','Ab3','C4'],4],
+          [['C3','Eb3','G3'],3],[['F3','Ab3','C4'],4],
+          [['Bb3','D4','F4'],3],[['F3','Ab3','C4'],3],[0,1],
+          [['F3','Ab3','C4'],4],[['F3','Ab3','C4'],4],
+          [['C3','Eb3','G3'],3],[['F3','Ab3','C4'],4],
+          [['C3','Eb3','G3'],3],[['F3','Ab3','C4'],4],[0,1],
+          [['F3','Ab3','C4'],4],[['F3','Ab3','C4'],4],
+          [['C3','Eb3','G3'],3],[['F3','Ab3','C4'],4],
+          [['Bb3','D4','F4'],3],[['F3','Ab3','C4'],4]
+        ],
+        bass: [
+          ['F2',4],['F2',4],['C2',3],['F2',4],['Bb2',3],['F2',4],
+          ['F2',4],['F2',4],['C2',3],['F2',4],['C2',3],['F2',5],
+          ['F2',4],['F2',4],['C2',3],['F2',4],['Bb2',3],['F2',4]
         ]
       }
     },
     cheer: {
       kr: {
-        bpm: 138, name: '응원_한글판',
+        bpm: 132, name: '응원_한글판', style: 'bright',
         melody: [
-          ['E4',0.5],['E4',0.5],['G4',0.5],['A4',0.5],['B4',1],['B4',1],
-          ['A4',0.5],['G4',0.5],['A4',1],['E4',2],
-          ['E4',0.5],['E4',0.5],['G4',0.5],['A4',0.5],['B4',1],['D5',1],
-          ['B4',0.5],['A4',0.5],['G4',1],['E4',2],[0,1],
-          ['D5',1],['D5',0.5],['B4',0.5],['D5',1],['E5',1],
-          ['D5',0.5],['B4',0.5],['A4',1],['G4',2],
-          ['E4',0.5],['G4',0.5],['A4',1],['B4',0.5],['A4',0.5],
-          ['G4',0.5],['A4',0.5],['E4',3]
+          ['E4',.5],['E4',.5],['G4',.5],['A4',.5],['B4',1],['B4',1],
+          ['A4',.5],['G4',.5],['A4',1],['E4',2],
+          ['E4',.5],['E4',.5],['G4',.5],['A4',.5],['B4',1],['D5',1],
+          ['B4',.5],['A4',.5],['G4',1],['E4',2],[0,1],
+          ['D5',1],['D5',.5],['B4',.5],['D5',1],['E5',1],
+          ['D5',.5],['B4',.5],['A4',1],['G4',2],
+          ['E4',.5],['G4',.5],['A4',1],['B4',.5],['A4',.5],
+          ['G4',.5],['A4',.5],['E4',2],[0,1],
+          ['E4',.5],['E4',.5],['G4',.5],['A4',.5],['B4',1],['B4',1],
+          ['A4',.5],['G4',.5],['A4',1],['E4',2],
+          ['D5',1],['D5',.5],['B4',.5],['D5',1],['E5',1],
+          ['D5',.5],['B4',.5],['A4',1],['B4',1],['E4',3]
         ],
         chords: [
-          ['E3',4],['A3',4],['E3',4],['B3',4],
-          ['E3',4],['A3',4],['B3',4],['E3',4]
+          [['E3','G3','B3'],4],[['E3','G3','B3'],4],
+          [['A3','C4','E4'],4],[['E3','G3','B3'],4],[0,1],
+          [['A3','C4','E4'],4],[['E3','G3','B3'],4],
+          [['A3','C4','E4'],4],[['E3','G3','B3'],3],[0,1],
+          [['E3','G3','B3'],4],[['E3','G3','B3'],4],
+          [['A3','C4','E4'],4],[['B3','D4','Fs4'],4],['E3',4]
+        ],
+        bass: [
+          ['E2',4],['E2',4],['A2',4],['E2',5],
+          ['A2',4],['E2',4],['A2',4],['E2',4],
+          ['E2',4],['E2',4],['A2',4],['B2',4],['E2',4]
         ]
       },
       en: {
-        bpm: 150, name: 'Cheering_English',
+        bpm: 144, name: 'Cheering_English', style: 'bright',
         melody: [
-          ['C4',0.5],['E4',0.5],['G4',1],['G4',0.5],['A4',0.5],['G4',1],
-          ['E4',0.5],['G4',0.5],['C5',1],['B4',2],
-          ['A4',0.5],['G4',0.5],['A4',1],['G4',0.5],['E4',0.5],['D4',2],[0,1],
-          ['C4',0.5],['E4',0.5],['G4',1],['A4',0.5],['B4',0.5],['C5',1],
-          ['D5',1],['C5',0.5],['B4',0.5],['A4',2],
-          ['G4',0.5],['A4',0.5],['G4',0.5],['E4',0.5],['D4',0.5],['E4',0.5],['C4',3]
+          ['C4',.5],['E4',.5],['G4',1],['G4',.5],['A4',.5],['G4',1],
+          ['E4',.5],['G4',.5],['C5',1],['B4',2],
+          ['A4',.5],['G4',.5],['A4',1],['G4',.5],['E4',.5],['D4',2],[0,1],
+          ['C4',.5],['E4',.5],['G4',1],['A4',.5],['B4',.5],['C5',1],
+          ['D5',1],['C5',.5],['B4',.5],['A4',2],
+          ['G4',.5],['A4',.5],['G4',.5],['E4',.5],['D4',.5],['E4',.5],['C4',2],[0,1],
+          ['C4',.5],['E4',.5],['G4',1],['G4',.5],['A4',.5],['G4',1],
+          ['E4',.5],['G4',.5],['C5',1],['B4',2],
+          ['D5',1],['C5',.5],['B4',.5],['A4',1],['G4',1],
+          ['E4',.5],['G4',.5],['C4',3]
         ],
         chords: [
-          ['C3',4],['F3',4],['C3',4],['G3',4],
-          ['C3',4],['F3',4],['G3',4],['C3',4]
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],
+          [['F3','A3','C4'],4],[['G3','B3','D4'],3],[0,1],
+          [['C3','E3','G3'],4],[['F3','A3','C4'],4],
+          [['G3','B3','D4'],4],[['C3','E3','G3'],3],[0,1],
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],
+          [['F3','A3','C4'],4],[['G3','B3','D4'],4],['C3',4]
+        ],
+        bass: [
+          ['C2',4],['C2',4],['F2',4],['G2',4],
+          ['C2',4],['F2',4],['G2',4],['C2',4],
+          ['C2',4],['C2',4],['F2',4],['G2',4],['C2',4]
         ]
       }
     },
     thanks: {
       kr: {
-        bpm: 88, name: '감사_한글판',
+        bpm: 84, name: '감사_한글판', style: 'warm',
         melody: [
-          ['E4',1],['G4',1],['A4',1.5],['G4',0.5],['E4',2],[0,1],
-          ['A4',1],['B4',1],['C5',1.5],['B4',0.5],['A4',2],[0,1],
+          ['E4',1],['G4',1],['A4',1.5],['G4',.5],['E4',2],[0,1],
+          ['A4',1],['B4',1],['C5',1.5],['B4',.5],['A4',2],[0,1],
           ['E5',1],['D5',1],['C5',1],['B4',1],['A4',1],['G4',1],
           ['A4',2],['E4',2],[0,1],
-          ['E4',1],['G4',1],['A4',1.5],['B4',0.5],['C5',2],[0,1],
+          ['E4',1],['G4',1],['A4',1.5],['B4',.5],['C5',2],[0,1],
           ['D5',1],['C5',1],['B4',1],['A4',1],
-          ['G4',1],['A4',0.5],['G4',0.5],['E4',3]
+          ['G4',1],['A4',.5],['G4',.5],['E4',2],[0,1],
+          ['E4',1],['G4',1],['A4',1.5],['G4',.5],['E4',2],[0,1],
+          ['A4',1],['B4',1],['C5',1.5],['B4',.5],['A4',2],[0,1],
+          ['D5',1],['C5',1],['B4',1],['A4',1],
+          ['G4',1],['A4',.5],['G4',.5],['E4',3]
         ],
         chords: [
-          ['A3',4],['C4',4],['A3',4],['E3',4],
-          ['A3',4],['F3',4],['E3',4],['A3',4]
+          [['A3','C4','E4'],4],[['A3','C4','E4'],4],[0,1],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],[0,1],
+          [['A3','C4','E4'],4],[['E3','G3','B3'],4],
+          [['A3','C4','E4'],3],[0,1],
+          [['A3','C4','E4'],4],[['F3','A3','C4'],4],[0,1],
+          [['G3','B3','D4'],4],[['A3','C4','E4'],3],[0,1],
+          [['A3','C4','E4'],4],[['A3','C4','E4'],4],[0,1],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],[0,1],
+          [['G3','B3','D4'],4],[['A3','C4','E4'],4]
+        ],
+        bass: [
+          ['A2',4],['A2',5],['F2',4],['C2',5],
+          ['A2',4],['E2',4],['A2',4],
+          ['A2',4],['F2',5],['G2',4],['A2',4],
+          ['A2',4],['A2',5],['F2',4],['C2',5],['G2',4],['A2',4]
         ]
       },
       en: {
-        bpm: 96, name: 'Gratitude_English',
+        bpm: 92, name: 'Gratitude_English', style: 'warm',
         melody: [
-          ['C4',1],['E4',1],['G4',1.5],['E4',0.5],['C4',2],[0,1],
-          ['F4',1],['A4',1],['G4',1.5],['F4',0.5],['E4',2],[0,1],
+          ['C4',1],['E4',1],['G4',1.5],['E4',.5],['C4',2],[0,1],
+          ['F4',1],['A4',1],['G4',1.5],['F4',.5],['E4',2],[0,1],
           ['G4',1],['A4',1],['B4',1],['C5',2],['B4',1],
           ['A4',1],['G4',1],['E4',2],[0,1],
           ['C4',1],['E4',1],['G4',1],['A4',1],['G4',2],[0,1],
-          ['F4',1],['E4',1],['D4',0.5],['E4',0.5],['C4',3]
+          ['F4',1],['E4',1],['D4',.5],['E4',.5],['C4',2],[0,1],
+          ['C4',1],['E4',1],['G4',1.5],['E4',.5],['C4',2],[0,1],
+          ['F4',1],['A4',1],['G4',1.5],['F4',.5],['E4',2],[0,1],
+          ['F4',1],['E4',1],['D4',.5],['E4',.5],['C4',3]
         ],
         chords: [
-          ['C3',4],['F3',4],['C3',4],['G3',4],
-          ['C3',4],['F3',4],['G3',4],['C3',4]
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],[0,1],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],[0,1],
+          [['G3','B3','D4'],4],[['C3','E3','G3'],4],
+          [['C3','E3','G3'],3],[0,1],
+          [['C3','E3','G3'],4],[['F3','A3','C4'],4],[0,1],
+          [['G3','B3','D4'],4],[['C3','E3','G3'],3],[0,1],
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],[0,1],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],[0,1],
+          [['G3','B3','D4'],4],[['C3','E3','G3'],4]
+        ],
+        bass: [
+          ['C2',4],['C2',5],['F2',4],['C2',5],
+          ['G2',4],['C2',4],['C2',4],
+          ['C2',4],['F2',5],['G2',4],['C2',4],
+          ['C2',4],['C2',5],['F2',4],['C2',5],['G2',4],['C2',4]
         ]
       }
     },
     love: {
       kr: {
-        bpm: 78, name: '사랑_한글판',
+        bpm: 74, name: '사랑_한글판', style: 'romantic',
         melody: [
-          ['E4',1.5],['Fs4',0.5],['G4',1],['A4',1],['B4',2],[0,1],
-          ['A4',1],['G4',1],['Fs4',0.5],['G4',0.5],['E4',2],[0,1],
-          ['B4',1.5],['A4',0.5],['G4',1],['Fs4',1],['E4',2],[0,1],
-          ['D4',1],['E4',1],['Fs4',0.5],['G4',0.5],['A4',2],[0,1],
-          ['E4',1.5],['Fs4',0.5],['G4',1],['A4',1],['B4',2],[0,1],
+          ['E4',1.5],['Fs4',.5],['G4',1],['A4',1],['B4',2],[0,1],
+          ['A4',1],['G4',1],['Fs4',.5],['G4',.5],['E4',2],[0,1],
+          ['B4',1.5],['A4',.5],['G4',1],['Fs4',1],['E4',2],[0,1],
+          ['D4',1],['E4',1],['Fs4',.5],['G4',.5],['A4',2],[0,1],
+          ['E4',1.5],['Fs4',.5],['G4',1],['A4',1],['B4',2],[0,1],
           ['D5',1],['C5',1],['B4',1],['A4',1],
-          ['G4',0.5],['A4',0.5],['B4',0.5],['A4',0.5],['G4',3]
+          ['G4',.5],['A4',.5],['B4',.5],['A4',.5],['G4',2],[0,1],
+          ['E4',1.5],['Fs4',.5],['G4',1],['A4',1],['B4',2],[0,1],
+          ['A4',1],['G4',1],['Fs4',.5],['G4',.5],['E4',2],[0,1],
+          ['D5',1],['C5',1],['B4',1],['A4',1],
+          ['G4',.5],['A4',.5],['B4',.5],['A4',.5],['E4',3]
         ],
         chords: [
-          ['E3',4],['A3',4],['E3',4],['B3',4],
-          ['E3',4],['A3',4],['B3',4],['E3',4]
+          [['E3','G3','B3'],4],[['A3','C4','E4'],4],[0,1],
+          [['E3','G3','B3'],4],[['E3','G3','B3'],4],[0,1],
+          [['A3','C4','E4'],4],[['E3','G3','B3'],4],[0,1],
+          [['D3','Fs3','A3'],4],[['A3','C4','E4'],4],[0,1],
+          [['E3','G3','B3'],4],[['A3','C4','E4'],4],[0,1],
+          [['D3','Fs3','A3'],4],[['E3','G3','B3'],3],[0,1],
+          [['E3','G3','B3'],4],[['A3','C4','E4'],4],[0,1],
+          [['E3','G3','B3'],4],[['E3','G3','B3'],4],[0,1],
+          [['D3','Fs3','A3'],4],[['E3','G3','B3'],4]
+        ],
+        bass: [
+          ['E2',4],['A2',5],['E2',4],['E2',5],
+          ['A2',4],['E2',5],['D2',4],['A2',5],
+          ['E2',4],['A2',5],['D2',4],['E2',4],
+          ['E2',4],['A2',5],['E2',4],['E2',5],['D2',4],['E2',4]
         ]
       },
       en: {
-        bpm: 84, name: 'Love_English',
+        bpm: 80, name: 'Love_English', style: 'romantic',
         melody: [
-          ['C4',1.5],['D4',0.5],['E4',1],['G4',1],['A4',2],[0,1],
-          ['G4',1],['E4',1],['D4',0.5],['E4',0.5],['C4',2],[0,1],
-          ['A4',1.5],['G4',0.5],['F4',1],['E4',1],['D4',2],[0,1],
-          ['E4',1],['F4',1],['G4',0.5],['A4',0.5],['G4',2],[0,1],
-          ['C4',1.5],['D4',0.5],['E4',1],['G4',1],['A4',2],[0,1],
+          ['C4',1.5],['D4',.5],['E4',1],['G4',1],['A4',2],[0,1],
+          ['G4',1],['E4',1],['D4',.5],['E4',.5],['C4',2],[0,1],
+          ['A4',1.5],['G4',.5],['F4',1],['E4',1],['D4',2],[0,1],
+          ['E4',1],['F4',1],['G4',.5],['A4',.5],['G4',2],[0,1],
+          ['C4',1.5],['D4',.5],['E4',1],['G4',1],['A4',2],[0,1],
           ['C5',1],['B4',1],['A4',1],['G4',1],
-          ['F4',0.5],['G4',0.5],['E4',0.5],['D4',0.5],['C4',3]
+          ['F4',.5],['G4',.5],['E4',.5],['D4',.5],['C4',2],[0,1],
+          ['C4',1.5],['D4',.5],['E4',1],['G4',1],['A4',2],[0,1],
+          ['G4',1],['E4',1],['D4',.5],['E4',.5],['C4',2],[0,1],
+          ['C5',1],['B4',1],['A4',1],['G4',1],
+          ['F4',.5],['G4',.5],['E4',.5],['D4',.5],['C4',3]
         ],
         chords: [
-          ['C3',4],['F3',4],['C3',4],['G3',4],
-          ['C3',4],['F3',4],['G3',4],['C3',4]
+          [['C3','E3','G3'],4],[['F3','A3','C4'],4],[0,1],
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],[0,1],
+          [['F3','A3','C4'],4],[['C3','E3','G3'],4],[0,1],
+          [['G3','B3','D4'],4],[['C3','E3','G3'],4],[0,1],
+          [['C3','E3','G3'],4],[['F3','A3','C4'],4],[0,1],
+          [['G3','B3','D4'],4],[['C3','E3','G3'],3],[0,1],
+          [['C3','E3','G3'],4],[['F3','A3','C4'],4],[0,1],
+          [['C3','E3','G3'],4],[['C3','E3','G3'],4],[0,1],
+          [['G3','B3','D4'],4],[['C3','E3','G3'],4]
+        ],
+        bass: [
+          ['C2',4],['F2',5],['C2',4],['C2',5],
+          ['F2',4],['C2',5],['G2',4],['C2',5],
+          ['C2',4],['F2',5],['G2',4],['C2',4],
+          ['C2',4],['F2',5],['C2',4],['C2',5],['G2',4],['C2',4]
         ]
       }
     }
   };
 
-  // Generate song audio and trigger WAV download
+  // === Rich Audio Engine ===
   function downloadSong(type, lang, btnEl) {
     var song = SONGS[type] && SONGS[type][lang];
     if (!song) return;
-    if (btnEl) btnEl.classList.add('generating');
+    if (btnEl) {
+      if (btnEl.classList.contains('generating')) return;
+      btnEl.classList.add('generating');
+      btnEl.innerHTML = '<span class="dl-icon">&#x23F3;</span> 생성중...';
+    }
 
-    var bpm = song.bpm;
-    var beatSec = 60 / bpm;
-    // Calculate total duration
+    var bpm = song.bpm, beatSec = 60 / bpm;
     var totalBeats = 0;
     song.melody.forEach(function(n){ totalBeats += n[1]; });
-    var duration = totalBeats * beatSec + 1.5;
+    var duration = totalBeats * beatSec + 2.5;
     var sr = 44100;
-    var ctx = new OfflineAudioContext(1, Math.ceil(sr * duration), sr);
+    var ctx = new OfflineAudioContext(2, Math.ceil(sr * duration), sr);
 
-    // Play melody notes
-    var t = 0.2;
+    // Create master compressor
+    var compressor = ctx.createDynamicsCompressor();
+    compressor.threshold.value = -18;
+    compressor.knee.value = 12;
+    compressor.ratio.value = 4;
+    compressor.connect(ctx.destination);
+
+    // Create reverb using delay lines
+    var reverbGain = ctx.createGain();
+    reverbGain.gain.value = 0.25;
+    var delay1 = ctx.createDelay(); delay1.delayTime.value = 0.03;
+    var delay2 = ctx.createDelay(); delay2.delayTime.value = 0.07;
+    var delay3 = ctx.createDelay(); delay3.delayTime.value = 0.13;
+    var dg1 = ctx.createGain(); dg1.gain.value = 0.3;
+    var dg2 = ctx.createGain(); dg2.gain.value = 0.2;
+    var dg3 = ctx.createGain(); dg3.gain.value = 0.12;
+    reverbGain.connect(delay1); delay1.connect(dg1); dg1.connect(compressor);
+    reverbGain.connect(delay2); delay2.connect(dg2); dg2.connect(compressor);
+    reverbGain.connect(delay3); delay3.connect(dg3); dg3.connect(compressor);
+
+    var isRomantic = song.style === 'romantic';
+    var isElegant = song.style === 'elegant';
+    var isBright = song.style === 'bright';
+
+    // === MELODY: Piano-like multi-harmonic ===
+    var t = 0.5;
     song.melody.forEach(function(n) {
-      var note = n[0], beats = n[1];
-      var dur = beats * beatSec;
+      var note = n[0], beats = n[1], dur = beats * beatSec;
       if (note && NF[note]) {
-        playNote(ctx, NF[note], t, dur * 0.9, 0.35, 'triangle');
-        playNote(ctx, NF[note] * 2, t, dur * 0.85, 0.08, 'sine');
+        var freq = NF[note];
+        // Fundamental - triangle for warmth
+        synthNote(ctx, compressor, reverbGain, freq, t, dur * 0.92, 0.22, 'triangle', isRomantic ? 0.06 : 0.03);
+        // 2nd harmonic - soft sine
+        synthNote(ctx, compressor, reverbGain, freq * 2, t, dur * 0.85, 0.08, 'sine', 0.02);
+        // 3rd harmonic - very subtle
+        synthNote(ctx, compressor, reverbGain, freq * 3, t, dur * 0.7, 0.025, 'sine', 0.01);
+        // Sub octave for body
+        synthNote(ctx, compressor, reverbGain, freq * 0.5, t, dur * 0.6, 0.04, 'sine', 0.01);
+        // Slight detuned for chorus effect
+        synthNote(ctx, compressor, reverbGain, freq * 1.003, t + 0.008, dur * 0.88, 0.06, 'triangle', 0.03);
+        synthNote(ctx, compressor, reverbGain, freq * 0.997, t + 0.005, dur * 0.88, 0.06, 'triangle', 0.03);
       }
       t += dur;
     });
 
-    // Play chord accompaniment
-    var ct = 0.2;
+    // === CHORDS: Pad-like sustained ===
+    var ct = 0.5;
     if (song.chords) {
       song.chords.forEach(function(c) {
-        var note = c[0], beats = c[1];
-        var dur = beats * beatSec;
-        if (note && NF[note]) {
-          playNote(ctx, NF[note], ct, dur * 0.95, 0.1, 'sine');
-          playNote(ctx, NF[note] * 1.5, ct, dur * 0.95, 0.06, 'sine');
-          playNote(ctx, NF[note] * 2, ct, dur * 0.95, 0.04, 'sine');
+        var notes = c[0], beats = c[1], dur = beats * beatSec;
+        if (notes && Array.isArray(notes)) {
+          notes.forEach(function(cn) {
+            if (NF[cn]) {
+              var vol = isElegant ? 0.05 : 0.06;
+              synthNote(ctx, compressor, reverbGain, NF[cn], ct, dur * 0.95, vol, 'sine', 0.08);
+              synthNote(ctx, compressor, reverbGain, NF[cn] * 1.002, ct + 0.01, dur * 0.9, vol * 0.5, 'sine', 0.08);
+            }
+          });
         }
         ct += dur;
       });
     }
 
+    // === BASS: Deep sine bass ===
+    var bt = 0.5;
+    if (song.bass) {
+      song.bass.forEach(function(b) {
+        var note = b[0], beats = b[1], dur = beats * beatSec;
+        if (note && NF[note]) {
+          synthNote(ctx, compressor, reverbGain, NF[note], bt, dur * 0.9, 0.12, 'sine', 0.05);
+          synthNote(ctx, compressor, reverbGain, NF[note] * 2, bt, dur * 0.7, 0.03, 'triangle', 0.03);
+        }
+        bt += dur;
+      });
+    }
+
+    // === RHYTHM: Subtle percussion ===
+    if (isBright) {
+      var rhythmT = 0.5, rhythmEnd = duration - 1;
+      var beatLen = beatSec;
+      while (rhythmT < rhythmEnd) {
+        addPercHit(ctx, compressor, rhythmT, 0.04, 0.05);
+        if (rhythmT + beatLen * 2 < rhythmEnd)
+          addPercHit(ctx, compressor, rhythmT + beatLen * 2, 0.02, 0.04);
+        rhythmT += beatLen * 4;
+      }
+    }
+
     ctx.startRendering().then(function(buffer) {
-      var wav = encodeWAV(buffer);
-      var url = URL.createObjectURL(wav);
+      var mp3Blob;
+      try {
+        mp3Blob = encodeMP3(buffer);
+      } catch(e) {
+        mp3Blob = encodeWAV(buffer);
+        song.name = song.name.replace('.mp3','');
+      }
+      var ext = mp3Blob.type === 'audio/mp3' ? '.mp3' : '.wav';
+      var url = URL.createObjectURL(mp3Blob);
       var a = document.createElement('a');
       a.href = url;
-      a.download = song.name + '.wav';
+      a.download = song.name + ext;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
-      if (btnEl) btnEl.classList.remove('generating');
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 5000);
+      if (btnEl) {
+        btnEl.classList.remove('generating');
+        var isKr = lang === 'kr';
+        btnEl.innerHTML = '<span class="dl-icon">&#x25B6;</span> ' + (isKr ? '한글판' : 'English');
+      }
     }).catch(function(e) {
       console.error('Song generation error:', e);
-      if (btnEl) btnEl.classList.remove('generating');
+      alert('노래 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
+      if (btnEl) {
+        btnEl.classList.remove('generating');
+        var isKr = lang === 'kr';
+        btnEl.innerHTML = '<span class="dl-icon">&#x25B6;</span> ' + (isKr ? '한글판' : 'English');
+      }
     });
   }
 
-  function playNote(ctx, freq, start, dur, vol, wave) {
+  // Synth note with ADSR envelope
+  function synthNote(ctx, dest, reverb, freq, start, dur, vol, wave, attack) {
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
     osc.type = wave || 'triangle';
     osc.frequency.value = freq;
-    // ADSR envelope
-    var att = 0.02, dec = 0.1, sus = vol * 0.7, rel = Math.min(0.15, dur * 0.2);
+    var att = attack || 0.03;
+    var rel = Math.min(0.3, dur * 0.25);
+    var susVol = vol * 0.75;
     gain.gain.setValueAtTime(0, start);
     gain.gain.linearRampToValueAtTime(vol, start + att);
-    gain.gain.linearRampToValueAtTime(sus, start + att + dec);
-    gain.gain.setValueAtTime(sus, start + dur - rel);
-    gain.gain.linearRampToValueAtTime(0, start + dur);
+    gain.gain.exponentialRampToValueAtTime(Math.max(susVol, 0.001), start + att + 0.1);
+    gain.gain.setValueAtTime(Math.max(susVol, 0.001), start + dur - rel);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(dest);
+    if (reverb) gain.connect(reverb);
     osc.start(start);
-    osc.stop(start + dur);
+    osc.stop(start + dur + 0.05);
   }
 
+  // Simple percussion hit (noise burst)
+  function addPercHit(ctx, dest, time, vol, dur) {
+    var bufSize = Math.ceil(ctx.sampleRate * dur);
+    var noiseBuf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    var data = noiseBuf.getChannelData(0);
+    for (var i = 0; i < bufSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.15));
+    }
+    var src = ctx.createBufferSource();
+    src.buffer = noiseBuf;
+    var filt = ctx.createBiquadFilter();
+    filt.type = 'highpass'; filt.frequency.value = 6000;
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(vol, time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + dur);
+    src.connect(filt); filt.connect(g); g.connect(dest);
+    src.start(time); src.stop(time + dur);
+  }
+
+  // MP3 encoding via lamejs
+  function encodeMP3(audioBuffer) {
+    if (typeof lamejs === 'undefined') throw new Error('lamejs not loaded');
+    var sr = audioBuffer.sampleRate;
+    var ch = audioBuffer.numberOfChannels;
+    var len = audioBuffer.length;
+    var left = audioBuffer.getChannelData(0);
+    var right = ch > 1 ? audioBuffer.getChannelData(1) : left;
+    var l16 = new Int16Array(len);
+    var r16 = new Int16Array(len);
+    for (var i = 0; i < len; i++) {
+      l16[i] = Math.max(-32768, Math.min(32767, Math.round(left[i] * 32767)));
+      r16[i] = Math.max(-32768, Math.min(32767, Math.round(right[i] * 32767)));
+    }
+    var enc = new lamejs.Mp3Encoder(2, sr, 192);
+    var mp3 = [];
+    var blockSize = 1152;
+    for (var i = 0; i < len; i += blockSize) {
+      var lChunk = l16.subarray(i, Math.min(i + blockSize, len));
+      var rChunk = r16.subarray(i, Math.min(i + blockSize, len));
+      var buf = enc.encodeBuffer(lChunk, rChunk);
+      if (buf.length > 0) mp3.push(buf);
+    }
+    var end = enc.flush();
+    if (end.length > 0) mp3.push(end);
+    return new Blob(mp3, { type: 'audio/mp3' });
+  }
+
+  // WAV fallback
   function encodeWAV(audioBuffer) {
-    var numCh = 1, sr = audioBuffer.sampleRate, bits = 16;
-    var samples = audioBuffer.getChannelData(0);
-    var len = samples.length;
-    var buffer = new ArrayBuffer(44 + len * 2);
+    var numCh = audioBuffer.numberOfChannels;
+    var sr = audioBuffer.sampleRate, bits = 16;
+    var len = audioBuffer.length;
+    var buffer = new ArrayBuffer(44 + len * numCh * 2);
     var v = new DataView(buffer);
     function writeStr(o, s) { for (var i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); }
     writeStr(0, 'RIFF');
-    v.setUint32(4, 36 + len * 2, true);
-    writeStr(8, 'WAVE');
-    writeStr(12, 'fmt ');
+    v.setUint32(4, 36 + len * numCh * 2, true);
+    writeStr(8, 'WAVE'); writeStr(12, 'fmt ');
     v.setUint32(16, 16, true);
     v.setUint16(20, 1, true);
     v.setUint16(22, numCh, true);
@@ -5955,10 +6228,14 @@
     v.setUint16(32, numCh * bits / 8, true);
     v.setUint16(34, bits, true);
     writeStr(36, 'data');
-    v.setUint32(40, len * 2, true);
+    v.setUint32(40, len * numCh * 2, true);
+    var offset = 44;
     for (var i = 0; i < len; i++) {
-      var s = Math.max(-1, Math.min(1, samples[i]));
-      v.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+      for (var ch = 0; ch < numCh; ch++) {
+        var s = Math.max(-1, Math.min(1, audioBuffer.getChannelData(ch)[i]));
+        v.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        offset += 2;
+      }
     }
     return new Blob([buffer], { type: 'audio/wav' });
   }
