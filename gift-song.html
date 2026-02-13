@@ -122,8 +122,19 @@
     }
     .gift-share-btn:hover { background: #ff6b9d; color: #fff; }
     .gift-share-btn.hidden { display: none; }
+    .gift-guide {
+      text-align: left; margin-top: 14px; padding: 12px 14px;
+      background: rgba(255,255,255,0.06); border-radius: 10px;
+      border-left: 3px solid #ff6b9d;
+    }
+    .gift-guide p {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: rgba(255,255,255,0.7); line-height: 1.6;
+      margin: 0 0 8px 0;
+    }
+    .gift-guide p:last-child { margin-bottom: 0; }
     .gift-btn-row {
-      display: flex; gap: 8px; margin-top: 6px;
+      display: flex; gap: 8px; margin-top: 10px;
     }
     .gift-btn-next {
       flex: 1; padding: 12px; border-radius: 12px;
@@ -268,6 +279,10 @@
   <div id="giftStep1">
     <div class="gift-categories" id="giftCategories"></div>
     <div class="gift-song-list" id="giftSongList"></div>
+    <div class="gift-guide">
+      <p>1. 위 두 개의 버튼 중에서 원하는 버튼을 하나 선택합니다.</p>
+      <p>2. 아래의 '다음' 버튼을 선택합니다.</p>
+    </div>
     <div class="gift-btn-row">
       <button class="gift-btn-next" id="giftNextBtn" disabled onclick="giftGoStep2()">다음</button>
     </div>
