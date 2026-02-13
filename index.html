@@ -3447,7 +3447,7 @@
           </div>
           <div class="album-list-content" id="albumListContent"></div>
         </div>
-        <button class="song-open-btn" onclick="openSongDownload()">축하 노래 MP3 다운로드</button>
+        <a class="song-open-btn" href="song.html" style="display:block;text-align:center;text-decoration:none;">축하 노래 MP3 다운로드</a>
         <div class="mode-select-row" id="modeSelectRow">
           <button class="mode-btn analog-btn" onclick="document.body.style.visibility='hidden';location.href='analog.html'">ANALOG</button>
           <button class="mode-btn digital-btn" onclick="completePhotoSelect()">DIGITAL</button>
@@ -3459,84 +3459,6 @@
   </div>
 </div>
 
-<!-- Song Download Screen -->
-<div class="song-dl-screen hidden" id="songDlScreen">
-  <div class="song-dl-body">
-    <div class="song-dl-inner">
-      <button class="song-dl-close" onclick="closeSongDownload()">&times;</button>
-
-      <div class="song-dl-speaker">
-        <div class="song-dl-speaker-label">MUSIC DOWNLOAD</div>
-      </div>
-
-      <div class="song-dl-header">
-        <div class="song-dl-title">축하 노래 다운로드</div>
-        <div class="song-dl-sub">Celebration Songs MP3</div>
-      </div>
-
-      <div class="song-dl-list">
-        <div class="song-category">
-          <div class="song-cat-header">
-            <div class="song-cat-icon">&#x1F382;</div>
-            <div class="song-cat-title">생일 축하 · Happy Birthday</div>
-          </div>
-          <div class="song-cat-btns">
-            <button class="song-dl-btn kr" onclick="downloadSong('birthday','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
-            <button class="song-dl-btn en" onclick="downloadSong('birthday','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
-          </div>
-        </div>
-
-        <div class="song-category">
-          <div class="song-cat-header">
-            <div class="song-cat-icon">&#x1F492;</div>
-            <div class="song-cat-title">결혼 축하 · Wedding</div>
-          </div>
-          <div class="song-cat-btns">
-            <button class="song-dl-btn kr" onclick="downloadSong('wedding','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
-            <button class="song-dl-btn en" onclick="downloadSong('wedding','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
-          </div>
-        </div>
-
-        <div class="song-category">
-          <div class="song-cat-header">
-            <div class="song-cat-icon">&#x1F4E3;</div>
-            <div class="song-cat-title">응원 · Cheering</div>
-          </div>
-          <div class="song-cat-btns">
-            <button class="song-dl-btn kr" onclick="downloadSong('cheer','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
-            <button class="song-dl-btn en" onclick="downloadSong('cheer','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
-          </div>
-        </div>
-
-        <div class="song-category">
-          <div class="song-cat-header">
-            <div class="song-cat-icon">&#x1F64F;</div>
-            <div class="song-cat-title">감사 · Gratitude</div>
-          </div>
-          <div class="song-cat-btns">
-            <button class="song-dl-btn kr" onclick="downloadSong('thanks','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
-            <button class="song-dl-btn en" onclick="downloadSong('thanks','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
-          </div>
-        </div>
-
-        <div class="song-category">
-          <div class="song-cat-header">
-            <div class="song-cat-icon">&#x2764;&#xFE0F;</div>
-            <div class="song-cat-title">사랑 · Love</div>
-          </div>
-          <div class="song-cat-btns">
-            <button class="song-dl-btn kr" onclick="downloadSong('love','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
-            <button class="song-dl-btn en" onclick="downloadSong('love','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="song-dl-back">
-        <button class="song-dl-back-btn" onclick="closeSongDownload()">돌아가기</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Theme Name (desktop only) -->
 <div class="theme-name" id="themeName">WOOD CLASSIC</div>
