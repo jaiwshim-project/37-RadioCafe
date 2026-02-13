@@ -3635,6 +3635,13 @@
             clearInterval(waitSupabase);
             initSupabase();
             openChatPanel();
+            // openchat=1이면 채팅창 펼친 상태로 열기
+            if(openChatParam){
+              var panel = document.getElementById('chatPanel');
+              var minBtn = document.getElementById('chatMinBtn');
+              panel.classList.remove('minimized');
+              minBtn.innerHTML = '&#9660;';
+            }
             // 채팅 패널로 스크롤
             setTimeout(function(){
               var chatEl = document.getElementById('chatPanel');
