@@ -2221,6 +2221,223 @@
     .photo-screw-bl { bottom: 10px; left: 10px; }
     .photo-screw-br { bottom: 10px; right: 10px; }
 
+    /* === SONG DOWNLOAD BUTTON on Photo Screen === */
+    .song-open-btn {
+      background: linear-gradient(135deg, rgba(100,200,255,0.12), rgba(60,160,255,0.06));
+      color: rgba(100,200,255,0.9); border: 2px solid rgba(100,200,255,0.4);
+      padding: 11px 24px; border-radius: 22px;
+      font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif;
+      cursor: pointer; letter-spacing: 0.5px;
+      transition: all 0.3s ease; width: 100%;
+      backdrop-filter: blur(4px); margin-top: 4px;
+    }
+    .song-open-btn:hover {
+      background: linear-gradient(135deg, rgba(100,200,255,0.22), rgba(60,160,255,0.12));
+      border-color: rgba(100,200,255,0.7); color: #88DDFF;
+      box-shadow: 0 4px 24px rgba(100,200,255,0.25);
+    }
+    .song-open-btn:active { transform: scale(0.97); }
+
+    /* === SONG DOWNLOAD SCREEN === */
+    .song-dl-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #040a18 0%, #081830 30%, #0a2040 60%, #061428 100%);
+      z-index: 10002;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 16px;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
+      transition: opacity 0.5s ease;
+    }
+    .song-dl-screen::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(100,200,255,0.14) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(60,160,255,0.10) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(80,180,255,0.06) 0%, transparent 55%);
+      pointer-events: none;
+      animation: neonBgPulse 6s ease-in-out infinite;
+    }
+    .song-dl-screen.hidden { display: none; }
+    .song-dl-body {
+      width: 100%; max-width: 420px;
+      background: linear-gradient(145deg, #0c1e3a, #081428);
+      border-radius: 28px; padding: 3px;
+      margin: auto 0; flex-shrink: 0;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 50px rgba(100,200,255,0.12),
+        0 0 100px rgba(60,160,255,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      border: 2px solid rgba(100,200,255,0.45);
+      position: relative;
+    }
+    .song-dl-body::before {
+      content: ''; position: absolute; top: -2px; left: 12%; right: 12%; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(100,200,255,0.9), transparent);
+      z-index: 3; box-shadow: 0 0 14px rgba(100,200,255,0.6);
+    }
+    .song-dl-inner {
+      background: linear-gradient(160deg, #0e1e38 0%, #0a1828 50%, #081420 100%);
+      border-radius: 25px; padding: 24px 18px;
+      position: relative; overflow: hidden;
+    }
+    .song-dl-inner::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(90deg, rgba(100,200,255,0.012) 0px, transparent 1px, transparent 3px),
+        repeating-linear-gradient(0deg, rgba(100,200,255,0.008) 0px, transparent 1px, transparent 3px);
+      pointer-events: none; border-radius: inherit;
+    }
+    .song-dl-inner::after {
+      content: ''; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px;
+      border: 1px solid rgba(100,200,255,0.12);
+      border-radius: 16px; pointer-events: none;
+    }
+    .song-dl-close {
+      position: absolute; top: 16px; right: 20px; z-index: 5;
+      background: none; border: none;
+      color: rgba(100,200,255,0.5); font-size: 28px;
+      cursor: pointer; transition: color 0.2s; line-height: 1;
+    }
+    .song-dl-close:hover { color: #88DDFF; text-shadow: 0 0 10px rgba(100,200,255,0.5); }
+    .song-dl-header {
+      text-align: center; margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .song-dl-speaker {
+      background: linear-gradient(180deg, #06101e, #0c1828);
+      border-radius: 14px; padding: 10px 12px; margin-bottom: 16px;
+      border: 2px solid rgba(102,187,255,0.45);
+      position: relative; overflow: hidden;
+      box-shadow: 0 0 10px rgba(102,187,255,0.08);
+    }
+    .song-dl-speaker::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle, rgba(102,187,255,0.08) 0.8px, transparent 0.8px),
+        radial-gradient(circle, rgba(102,187,255,0.04) 0.8px, transparent 0.8px);
+      background-size: 5px 5px, 5px 5px;
+      background-position: 0 0, 2.5px 2.5px;
+    }
+    .song-dl-speaker-label {
+      text-align: center; font-family: 'Orbitron', monospace;
+      font-size: 9px; letter-spacing: 5px; font-weight: 900;
+      color: #66BBFF;
+      text-shadow: 0 0 10px rgba(102,187,255,0.5), 0 0 4px rgba(102,187,255,0.3);
+      position: relative; z-index: 1;
+    }
+    .song-dl-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px; font-weight: 800;
+      background: linear-gradient(135deg, #66BBFF, #99DDFF, #66BBFF, #4499DD);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: landingShimmer 4s linear infinite;
+      letter-spacing: 1px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+    .song-dl-sub {
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: rgba(100,200,255,0.7); margin-top: 6px; letter-spacing: 1px;
+    }
+    .song-dl-header::after {
+      content: ''; display: block;
+      width: 80px; height: 1px; margin: 14px auto 0;
+      background: linear-gradient(90deg, transparent, rgba(100,200,255,0.6), transparent);
+    }
+    .song-dl-list {
+      display: flex; flex-direction: column; gap: 12px;
+      position: relative; z-index: 1;
+    }
+    .song-category {
+      background: linear-gradient(145deg, rgba(100,200,255,0.06), rgba(60,160,255,0.02));
+      border: 1px solid rgba(100,200,255,0.2);
+      border-radius: 16px; padding: 14px 16px;
+      transition: all 0.3s ease;
+    }
+    .song-category:hover {
+      border-color: rgba(100,200,255,0.35);
+      box-shadow: 0 0 20px rgba(100,200,255,0.08);
+    }
+    .song-cat-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+    }
+    .song-cat-icon {
+      font-size: 22px; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(100,200,255,0.08); border-radius: 10px;
+      border: 1px solid rgba(100,200,255,0.15);
+    }
+    .song-cat-title {
+      font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700;
+      color: #AADDFF; letter-spacing: 0.5px;
+    }
+    .song-cat-btns {
+      display: flex; gap: 8px;
+    }
+    .song-dl-btn {
+      flex: 1; padding: 10px 8px; border-radius: 14px;
+      font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: all 0.3s ease;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      letter-spacing: 0.5px; border: none; position: relative;
+      overflow: hidden;
+    }
+    .song-dl-btn::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+    .song-dl-btn:hover::before { left: 100%; }
+    .song-dl-btn.kr {
+      background: linear-gradient(135deg, #1a5a9e, #144a88);
+      color: #BBDDFF;
+      box-shadow: 0 3px 12px rgba(20,74,136,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .song-dl-btn.kr:hover {
+      background: linear-gradient(135deg, #2068b0, #1a5a9e);
+      box-shadow: 0 5px 20px rgba(32,104,176,0.5), 0 0 16px rgba(100,200,255,0.15);
+      transform: translateY(-1px);
+    }
+    .song-dl-btn.en {
+      background: linear-gradient(135deg, #0e4a3a, #0a3a2e);
+      color: #AAEEDD;
+      box-shadow: 0 3px 12px rgba(10,58,46,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .song-dl-btn.en:hover {
+      background: linear-gradient(135deg, #125a48, #0e4a3a);
+      box-shadow: 0 5px 20px rgba(18,90,72,0.5), 0 0 16px rgba(80,220,160,0.15);
+      transform: translateY(-1px);
+    }
+    .song-dl-btn:active { transform: scale(0.96) !important; }
+    .song-dl-btn .dl-icon { font-size: 14px; }
+    .song-dl-btn.generating {
+      opacity: 0.6; pointer-events: none;
+    }
+    .song-dl-btn.generating::after {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; border: 2px solid transparent;
+      border-top-color: currentColor; border-radius: 50%;
+      animation: dlSpin 0.8s linear infinite;
+    }
+    @keyframes dlSpin { to { transform: rotate(360deg); } }
+    .song-dl-back {
+      margin-top: 18px; text-align: center; position: relative; z-index: 1;
+    }
+    .song-dl-back-btn {
+      background: linear-gradient(135deg, rgba(100,200,255,0.1), rgba(60,160,255,0.05));
+      color: rgba(100,200,255,0.8); border: 2px solid rgba(100,200,255,0.3);
+      padding: 12px 36px; border-radius: 24px;
+      font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif;
+      cursor: pointer; letter-spacing: 1px; transition: all 0.3s;
+    }
+    .song-dl-back-btn:hover {
+      background: linear-gradient(135deg, rgba(100,200,255,0.18), rgba(60,160,255,0.1));
+      border-color: rgba(100,200,255,0.6); color: #88DDFF;
+      box-shadow: 0 4px 20px rgba(100,200,255,0.2);
+    }
+    .song-dl-back-btn:active { transform: scale(0.97); }
+
     /* === PHOTO UPLOAD (in-radio) === */
     .photo-upload-btn {
       display: none;
@@ -3229,6 +3446,7 @@
           </div>
           <div class="album-list-content" id="albumListContent"></div>
         </div>
+        <button class="song-open-btn" onclick="openSongDownload()">축하 노래 MP3 다운로드</button>
         <div class="mode-select-row" id="modeSelectRow">
           <button class="mode-btn analog-btn" onclick="document.body.style.visibility='hidden';location.href='analog.html'">ANALOG</button>
           <button class="mode-btn digital-btn" onclick="completePhotoSelect()">DIGITAL</button>
@@ -3236,6 +3454,85 @@
       </div>
 
       <input type="file" id="slotFileInput" accept="image/*" style="display:none">
+    </div>
+  </div>
+</div>
+
+<!-- Song Download Screen -->
+<div class="song-dl-screen hidden" id="songDlScreen">
+  <div class="song-dl-body">
+    <div class="song-dl-inner">
+      <button class="song-dl-close" onclick="closeSongDownload()">&times;</button>
+
+      <div class="song-dl-speaker">
+        <div class="song-dl-speaker-label">MUSIC DOWNLOAD</div>
+      </div>
+
+      <div class="song-dl-header">
+        <div class="song-dl-title">축하 노래 다운로드</div>
+        <div class="song-dl-sub">Celebration Songs MP3</div>
+      </div>
+
+      <div class="song-dl-list">
+        <div class="song-category">
+          <div class="song-cat-header">
+            <div class="song-cat-icon">&#x1F382;</div>
+            <div class="song-cat-title">생일 축하 · Happy Birthday</div>
+          </div>
+          <div class="song-cat-btns">
+            <button class="song-dl-btn kr" onclick="downloadSong('birthday','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
+            <button class="song-dl-btn en" onclick="downloadSong('birthday','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
+          </div>
+        </div>
+
+        <div class="song-category">
+          <div class="song-cat-header">
+            <div class="song-cat-icon">&#x1F492;</div>
+            <div class="song-cat-title">결혼 축하 · Wedding</div>
+          </div>
+          <div class="song-cat-btns">
+            <button class="song-dl-btn kr" onclick="downloadSong('wedding','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
+            <button class="song-dl-btn en" onclick="downloadSong('wedding','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
+          </div>
+        </div>
+
+        <div class="song-category">
+          <div class="song-cat-header">
+            <div class="song-cat-icon">&#x1F4E3;</div>
+            <div class="song-cat-title">응원 · Cheering</div>
+          </div>
+          <div class="song-cat-btns">
+            <button class="song-dl-btn kr" onclick="downloadSong('cheer','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
+            <button class="song-dl-btn en" onclick="downloadSong('cheer','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
+          </div>
+        </div>
+
+        <div class="song-category">
+          <div class="song-cat-header">
+            <div class="song-cat-icon">&#x1F64F;</div>
+            <div class="song-cat-title">감사 · Gratitude</div>
+          </div>
+          <div class="song-cat-btns">
+            <button class="song-dl-btn kr" onclick="downloadSong('thanks','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
+            <button class="song-dl-btn en" onclick="downloadSong('thanks','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
+          </div>
+        </div>
+
+        <div class="song-category">
+          <div class="song-cat-header">
+            <div class="song-cat-icon">&#x2764;&#xFE0F;</div>
+            <div class="song-cat-title">사랑 · Love</div>
+          </div>
+          <div class="song-cat-btns">
+            <button class="song-dl-btn kr" onclick="downloadSong('love','kr',this)"><span class="dl-icon">&#x25B6;</span> 한글판</button>
+            <button class="song-dl-btn en" onclick="downloadSong('love','en',this)"><span class="dl-icon">&#x25B6;</span> English</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="song-dl-back">
+        <button class="song-dl-back-btn" onclick="closeSongDownload()">돌아가기</button>
+      </div>
     </div>
   </div>
 </div>
@@ -5363,6 +5660,307 @@
     saveAnniversaries();
     renderAnniversaries();
     renderDashboardList();
+  }
+
+  // === Song Download Screen ===
+  function openSongDownload() {
+    document.getElementById('songDlScreen').classList.remove('hidden');
+  }
+  function closeSongDownload() {
+    document.getElementById('songDlScreen').classList.add('hidden');
+  }
+
+  // Note frequency lookup
+  var NF = {
+    'C3':130.81,'D3':146.83,'E3':164.81,'F3':174.61,'G3':196.00,'A3':220.00,'B3':246.94,
+    'C4':261.63,'Cs4':277.18,'D4':293.66,'Eb4':311.13,'E4':329.63,'F4':349.23,'Fs4':369.99,
+    'G4':392.00,'Ab4':415.30,'A4':440.00,'Bb4':466.16,'B4':493.88,
+    'C5':523.25,'Cs5':554.37,'D5':587.33,'Eb5':622.25,'E5':659.25,'F5':698.46,'Fs5':739.99,
+    'G5':783.99,'Ab5':830.61,'A5':880.00,'Bb5':932.33,'B5':987.77,'C6':1046.50
+  };
+
+  // Song melody definitions: [note, beats]
+  var SONGS = {
+    birthday: {
+      kr: {
+        bpm: 108, name: '생일축하_한글판',
+        melody: [
+          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
+          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
+          ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+          ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',2],
+          [0,1],
+          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
+          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
+          ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+          ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',3]
+        ],
+        chords: [
+          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],
+          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],
+          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],['C4',4]
+        ]
+      },
+      en: {
+        bpm: 126, name: 'HappyBirthday_English',
+        melody: [
+          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
+          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
+          ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+          ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',2],
+          [0,1],
+          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
+          ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
+          ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+          ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',3]
+        ],
+        chords: [
+          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],
+          ['C4',8],['F4',4],['C4',4],['C4',4],['G4',4],['C4',4]
+        ]
+      }
+    },
+    wedding: {
+      kr: {
+        bpm: 92, name: '결혼축하_한글판',
+        melody: [
+          ['C5',2],['F4',1.5],['F4',0.5],['F4',2],[0,0.5],
+          ['F4',0.5],['A4',0.5],['G4',0.5],['F4',2],
+          ['G4',0.5],['F4',0.5],['G4',0.5],['A4',1.5],
+          ['F4',1],['D4',0.5],['D4',0.5],['F4',2],[0,1],
+          ['C5',2],['F4',1.5],['F4',0.5],['F4',2],[0,0.5],
+          ['F4',0.5],['A4',0.5],['C5',0.5],['A4',2],
+          ['Bb4',0.5],['A4',0.5],['G4',0.5],['A4',1.5],
+          ['F4',1],['G4',1],['F4',3]
+        ],
+        chords: [
+          ['F3',4],['F3',3],['C4',3],['F3',4],['Bb4',2],['F3',4],
+          ['F3',4],['F3',3],['C4',3],['F3',4],['C4',2],['F3',4]
+        ]
+      },
+      en: {
+        bpm: 100, name: 'Wedding_English',
+        melody: [
+          ['C5',2],['F4',1.5],['F4',0.5],['F4',2],[0,0.5],
+          ['F4',0.5],['Ab4',0.5],['G4',0.5],['F4',2],
+          ['G4',0.5],['F4',0.5],['G4',0.5],['Ab4',1.5],
+          ['F4',1],['D4',0.5],['D4',0.5],['F4',2],[0,1],
+          ['C5',2],['F4',1.5],['F4',0.5],['F4',2],[0,0.5],
+          ['F4',0.5],['Ab4',0.5],['C5',0.5],['Ab4',2],
+          ['Bb4',0.5],['Ab4',0.5],['G4',0.5],['Ab4',1.5],
+          ['F4',1],['G4',1],['F4',3]
+        ],
+        chords: [
+          ['F3',4],['F3',3],['C4',3],['F3',4],['Bb4',2],['F3',4],
+          ['F3',4],['F3',3],['C4',3],['F3',4],['C4',2],['F3',4]
+        ]
+      }
+    },
+    cheer: {
+      kr: {
+        bpm: 138, name: '응원_한글판',
+        melody: [
+          ['E4',0.5],['E4',0.5],['G4',0.5],['A4',0.5],['B4',1],['B4',1],
+          ['A4',0.5],['G4',0.5],['A4',1],['E4',2],
+          ['E4',0.5],['E4',0.5],['G4',0.5],['A4',0.5],['B4',1],['D5',1],
+          ['B4',0.5],['A4',0.5],['G4',1],['E4',2],[0,1],
+          ['D5',1],['D5',0.5],['B4',0.5],['D5',1],['E5',1],
+          ['D5',0.5],['B4',0.5],['A4',1],['G4',2],
+          ['E4',0.5],['G4',0.5],['A4',1],['B4',0.5],['A4',0.5],
+          ['G4',0.5],['A4',0.5],['E4',3]
+        ],
+        chords: [
+          ['E3',4],['A3',4],['E3',4],['B3',4],
+          ['E3',4],['A3',4],['B3',4],['E3',4]
+        ]
+      },
+      en: {
+        bpm: 150, name: 'Cheering_English',
+        melody: [
+          ['C4',0.5],['E4',0.5],['G4',1],['G4',0.5],['A4',0.5],['G4',1],
+          ['E4',0.5],['G4',0.5],['C5',1],['B4',2],
+          ['A4',0.5],['G4',0.5],['A4',1],['G4',0.5],['E4',0.5],['D4',2],[0,1],
+          ['C4',0.5],['E4',0.5],['G4',1],['A4',0.5],['B4',0.5],['C5',1],
+          ['D5',1],['C5',0.5],['B4',0.5],['A4',2],
+          ['G4',0.5],['A4',0.5],['G4',0.5],['E4',0.5],['D4',0.5],['E4',0.5],['C4',3]
+        ],
+        chords: [
+          ['C3',4],['F3',4],['C3',4],['G3',4],
+          ['C3',4],['F3',4],['G3',4],['C3',4]
+        ]
+      }
+    },
+    thanks: {
+      kr: {
+        bpm: 88, name: '감사_한글판',
+        melody: [
+          ['E4',1],['G4',1],['A4',1.5],['G4',0.5],['E4',2],[0,1],
+          ['A4',1],['B4',1],['C5',1.5],['B4',0.5],['A4',2],[0,1],
+          ['E5',1],['D5',1],['C5',1],['B4',1],['A4',1],['G4',1],
+          ['A4',2],['E4',2],[0,1],
+          ['E4',1],['G4',1],['A4',1.5],['B4',0.5],['C5',2],[0,1],
+          ['D5',1],['C5',1],['B4',1],['A4',1],
+          ['G4',1],['A4',0.5],['G4',0.5],['E4',3]
+        ],
+        chords: [
+          ['A3',4],['C4',4],['A3',4],['E3',4],
+          ['A3',4],['F3',4],['E3',4],['A3',4]
+        ]
+      },
+      en: {
+        bpm: 96, name: 'Gratitude_English',
+        melody: [
+          ['C4',1],['E4',1],['G4',1.5],['E4',0.5],['C4',2],[0,1],
+          ['F4',1],['A4',1],['G4',1.5],['F4',0.5],['E4',2],[0,1],
+          ['G4',1],['A4',1],['B4',1],['C5',2],['B4',1],
+          ['A4',1],['G4',1],['E4',2],[0,1],
+          ['C4',1],['E4',1],['G4',1],['A4',1],['G4',2],[0,1],
+          ['F4',1],['E4',1],['D4',0.5],['E4',0.5],['C4',3]
+        ],
+        chords: [
+          ['C3',4],['F3',4],['C3',4],['G3',4],
+          ['C3',4],['F3',4],['G3',4],['C3',4]
+        ]
+      }
+    },
+    love: {
+      kr: {
+        bpm: 78, name: '사랑_한글판',
+        melody: [
+          ['E4',1.5],['Fs4',0.5],['G4',1],['A4',1],['B4',2],[0,1],
+          ['A4',1],['G4',1],['Fs4',0.5],['G4',0.5],['E4',2],[0,1],
+          ['B4',1.5],['A4',0.5],['G4',1],['Fs4',1],['E4',2],[0,1],
+          ['D4',1],['E4',1],['Fs4',0.5],['G4',0.5],['A4',2],[0,1],
+          ['E4',1.5],['Fs4',0.5],['G4',1],['A4',1],['B4',2],[0,1],
+          ['D5',1],['C5',1],['B4',1],['A4',1],
+          ['G4',0.5],['A4',0.5],['B4',0.5],['A4',0.5],['G4',3]
+        ],
+        chords: [
+          ['E3',4],['A3',4],['E3',4],['B3',4],
+          ['E3',4],['A3',4],['B3',4],['E3',4]
+        ]
+      },
+      en: {
+        bpm: 84, name: 'Love_English',
+        melody: [
+          ['C4',1.5],['D4',0.5],['E4',1],['G4',1],['A4',2],[0,1],
+          ['G4',1],['E4',1],['D4',0.5],['E4',0.5],['C4',2],[0,1],
+          ['A4',1.5],['G4',0.5],['F4',1],['E4',1],['D4',2],[0,1],
+          ['E4',1],['F4',1],['G4',0.5],['A4',0.5],['G4',2],[0,1],
+          ['C4',1.5],['D4',0.5],['E4',1],['G4',1],['A4',2],[0,1],
+          ['C5',1],['B4',1],['A4',1],['G4',1],
+          ['F4',0.5],['G4',0.5],['E4',0.5],['D4',0.5],['C4',3]
+        ],
+        chords: [
+          ['C3',4],['F3',4],['C3',4],['G3',4],
+          ['C3',4],['F3',4],['G3',4],['C3',4]
+        ]
+      }
+    }
+  };
+
+  // Generate song audio and trigger WAV download
+  function downloadSong(type, lang, btnEl) {
+    var song = SONGS[type] && SONGS[type][lang];
+    if (!song) return;
+    if (btnEl) btnEl.classList.add('generating');
+
+    var bpm = song.bpm;
+    var beatSec = 60 / bpm;
+    // Calculate total duration
+    var totalBeats = 0;
+    song.melody.forEach(function(n){ totalBeats += n[1]; });
+    var duration = totalBeats * beatSec + 1.5;
+    var sr = 44100;
+    var ctx = new OfflineAudioContext(1, Math.ceil(sr * duration), sr);
+
+    // Play melody notes
+    var t = 0.2;
+    song.melody.forEach(function(n) {
+      var note = n[0], beats = n[1];
+      var dur = beats * beatSec;
+      if (note && NF[note]) {
+        playNote(ctx, NF[note], t, dur * 0.9, 0.35, 'triangle');
+        playNote(ctx, NF[note] * 2, t, dur * 0.85, 0.08, 'sine');
+      }
+      t += dur;
+    });
+
+    // Play chord accompaniment
+    var ct = 0.2;
+    if (song.chords) {
+      song.chords.forEach(function(c) {
+        var note = c[0], beats = c[1];
+        var dur = beats * beatSec;
+        if (note && NF[note]) {
+          playNote(ctx, NF[note], ct, dur * 0.95, 0.1, 'sine');
+          playNote(ctx, NF[note] * 1.5, ct, dur * 0.95, 0.06, 'sine');
+          playNote(ctx, NF[note] * 2, ct, dur * 0.95, 0.04, 'sine');
+        }
+        ct += dur;
+      });
+    }
+
+    ctx.startRendering().then(function(buffer) {
+      var wav = encodeWAV(buffer);
+      var url = URL.createObjectURL(wav);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = song.name + '.wav';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
+      if (btnEl) btnEl.classList.remove('generating');
+    }).catch(function(e) {
+      console.error('Song generation error:', e);
+      if (btnEl) btnEl.classList.remove('generating');
+    });
+  }
+
+  function playNote(ctx, freq, start, dur, vol, wave) {
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = wave || 'triangle';
+    osc.frequency.value = freq;
+    // ADSR envelope
+    var att = 0.02, dec = 0.1, sus = vol * 0.7, rel = Math.min(0.15, dur * 0.2);
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(vol, start + att);
+    gain.gain.linearRampToValueAtTime(sus, start + att + dec);
+    gain.gain.setValueAtTime(sus, start + dur - rel);
+    gain.gain.linearRampToValueAtTime(0, start + dur);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(start);
+    osc.stop(start + dur);
+  }
+
+  function encodeWAV(audioBuffer) {
+    var numCh = 1, sr = audioBuffer.sampleRate, bits = 16;
+    var samples = audioBuffer.getChannelData(0);
+    var len = samples.length;
+    var buffer = new ArrayBuffer(44 + len * 2);
+    var v = new DataView(buffer);
+    function writeStr(o, s) { for (var i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); }
+    writeStr(0, 'RIFF');
+    v.setUint32(4, 36 + len * 2, true);
+    writeStr(8, 'WAVE');
+    writeStr(12, 'fmt ');
+    v.setUint32(16, 16, true);
+    v.setUint16(20, 1, true);
+    v.setUint16(22, numCh, true);
+    v.setUint32(24, sr, true);
+    v.setUint32(28, sr * numCh * bits / 8, true);
+    v.setUint16(32, numCh * bits / 8, true);
+    v.setUint16(34, bits, true);
+    writeStr(36, 'data');
+    v.setUint32(40, len * 2, true);
+    for (var i = 0; i < len; i++) {
+      var s = Math.max(-1, Math.min(1, samples[i]));
+      v.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+    }
+    return new Blob([buffer], { type: 'audio/wav' });
   }
 
   document.addEventListener('DOMContentLoaded',init);
