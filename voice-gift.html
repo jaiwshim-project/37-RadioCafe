@@ -358,14 +358,17 @@
   <div class="gift-step2" id="vgStep3">
     <div class="gift-selected-info" id="vgFinalInfo"></div>
     <div class="voice-uploading" id="vgUploading" style="display:none">음성 파일 업로드 중...</div>
-    <div class="gift-link-box">
+    <div class="voice-uploading" id="vgUploadStatus" style="display:none;color:#ff6b9d"></div>
+    <div class="gift-link-box" id="vgLinkBox" style="display:none">
       <input type="text" readonly id="vgLink">
       <button onclick="copyVoiceGiftLink()">복사</button>
     </div>
     <div class="gift-copied hidden" id="vgCopied">링크가 복사되었습니다!</div>
-    <div class="gift-guide">
-      <p>1. 선물 메시지를 입력하세요.</p>
-      <p>2. 복사 버튼을 선택하고 선물하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
+    <div class="gift-btn-row" id="vgRetryRow" style="display:none">
+      <button class="gift-btn-next" onclick="retryUpload()">다시 업로드</button>
+    </div>
+    <div class="gift-guide" id="vgStep3Guide" style="display:none">
+      <p>복사 버튼을 선택하고 선물하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
     </div>
     <div class="gift-btn-row">
       <button class="gift-btn-back" onclick="vgBackToStep2()">이전</button>
@@ -585,12 +588,37 @@
     document.getElementById('vgStep2').classList.remove('active');
     document.getElementById('vgStep3').classList.add('active');
     document.getElementById('vgFinalInfo').textContent = vgSelectedSong.category + ' - ' + vgSelectedSong.name + ' + 음성메시지';
+    doVoiceUpload();
+  }
+
+  function doVoiceUpload(){
     document.getElementById('vgUploading').style.display = '';
+    document.getElementById('vgUploadStatus').style.display = 'none';
+    document.getElementById('vgLinkBox').style.display = 'none';
+    document.getElementById('vgRetryRow').style.display = 'none';
+    document.getElementById('vgStep3Guide').style.display = 'none';
     document.getElementById('vgLink').value = '';
-    uploadVoiceToSupabase(function(){
+    voiceUploaded = false;
+    uploadVoiceToSupabase(function(success){
       document.getElementById('vgUploading').style.display = 'none';
-      updateVoiceGiftLink();
+      var status = document.getElementById('vgUploadStatus');
+      status.style.display = '';
+      if(success){
+        status.style.color = '#76ff03';
+        status.textContent = '음성 파일 업로드 완료!';
+        updateVoiceGiftLink();
+        document.getElementById('vgLinkBox').style.display = 'flex';
+        document.getElementById('vgStep3Guide').style.display = '';
+      } else {
+        status.style.color = '#ff4444';
+        status.textContent = '음성 파일 업로드 실패. 다시 시도해 주세요.';
+        document.getElementById('vgRetryRow').style.display = 'flex';
+      }
     });
+  }
+
+  function retryUpload(){
+    doVoiceUpload();
   }
 
   function vgBackToStep2(){
@@ -600,7 +628,10 @@
 
   function uploadVoiceToSupabase(callback){
     initSupabase();
-    if(!supabaseClient || !voiceBlob){ if(callback) callback(); return; }
+    if(!supabaseClient || !voiceBlob){
+      if(callback) callback(false);
+      return;
+    }
     var filePath = 'voice-messages/' + voiceRoomId + '.webm';
     supabaseClient.storage.from('photo-albums').upload(filePath, voiceBlob, {
       contentType: 'audio/webm',
@@ -608,14 +639,14 @@
     }).then(function(result){
       if(result.error){
         console.log('음성 업로드 오류:', result.error);
-        document.getElementById('vgRecordStatus').textContent = '업로드 실패. 다시 시도하세요.';
+        if(callback) callback(false);
       } else {
         voiceUploaded = true;
+        if(callback) callback(true);
       }
-      if(callback) callback();
     }).catch(function(err){
       console.log('업로드 실패:', err);
-      if(callback) callback();
+      if(callback) callback(false);
     });
   }
 
