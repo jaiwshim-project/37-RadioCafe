@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>클라라 라디오카페 | 아날로그 라디오</title>
+  <title>같이듣기 | 클라라 라디오카페</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -2028,10 +2028,8 @@
     </div>
     <!-- Mode Switch (2줄) -->
     <div class="radio-top-row2">
-      <button class="photo-upload-btn has-photos" id="analogPhotoBtn" onclick="document.getElementById('analogPhotoInput').click()">+</button>
-      <input type="file" id="analogPhotoInput" accept="image/*" multiple style="display:none" onchange="handleAnalogPhotoUpload(event)">
       <span class="analog-photos" id="analogBrandPhotos"></span>
-      <button class="digital-to-analog-btn" onclick="if(currentStation)localStorage.setItem('radio-switch-station',currentStation.id);document.body.style.visibility='hidden';location.href='digital.html'">DIGITAL &#9654;</button>
+      <span style="font-family:'Orbitron',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;opacity:0.7;">GUEST MODE</span>
     </div>
 
     <!-- Speaker Grille -->
@@ -2100,11 +2098,9 @@
       <div class="analog-divider-ticks" id="analogDividerTicks"></div>
     </div>
 
-    <!-- Listen Together & Gift Song -->
+    <!-- Guest: 같이듣기 중 표시 -->
     <div class="analog-listen-together">
-      <a class="analog-listen-together-btn" id="listenTogetherBtn" href="#" onclick="goListenTogether(event)" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">같이듣기 초대</a>
-      <a class="analog-listen-together-btn" href="gift-song.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">노래 선물하기</a>
-      <a class="analog-listen-together-btn" href="voice-gift.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">노래+음성 선물하기</a>
+      <span class="analog-listen-together-btn" style="cursor:default;opacity:0.8;">같이듣기 중</span>
     </div>
 
     <!-- Footer -->
@@ -2114,101 +2110,7 @@
   </div>
 </div>
 
-<!-- Listen Together Modal -->
-<div class="listen-together-modal hidden" id="listenTogetherModal" onclick="if(event.target===this)closeListenTogether()">
-  <div class="ltm-card">
-    <div class="ltm-title">같이듣기 초대</div>
-    <div class="ltm-station" id="ltmStation">-</div>
-    <div class="ltm-freq" id="ltmFreq">-</div>
-    <div class="ltm-link-box">
-      <input type="text" readonly id="ltmLink">
-      <button onclick="copyListenLink()">복사</button>
-    </div>
-    <div class="ltm-copied hidden" id="ltmCopied">링크가 복사되었습니다!</div>
-    <button class="ltm-share-btn" id="ltmShareBtn" onclick="nativeShare()">공유하기</button>
-    <button class="ltm-close" onclick="closeListenTogether()">닫기</button>
-  </div>
-</div>
-
-<!-- Gift Song Modal -->
-<div class="gift-modal hidden" id="giftModal" onclick="if(event.target===this)closeGiftSong()">
-  <div class="gift-card">
-    <div class="gift-title">노래 선물하기</div>
-    <!-- Step 1: Song Selection -->
-    <div id="giftStep1">
-      <div class="gift-categories" id="giftCategories"></div>
-      <div class="gift-song-list" id="giftSongList"></div>
-      <div class="gift-btn-row">
-        <button class="gift-btn-next" id="giftNextBtn" disabled onclick="giftGoStep2()">다음</button>
-      </div>
-    </div>
-    <!-- Step 2: Message + Share -->
-    <div class="gift-step2" id="giftStep2">
-      <div class="gift-selected-info" id="giftSelectedInfo"></div>
-      <textarea class="gift-msg-input" id="giftMsgInput" placeholder="선물 메시지를 입력하세요..." maxlength="100" oninput="updateGiftLink()"></textarea>
-      <div class="gift-link-box">
-        <input type="text" readonly id="giftLink">
-        <button onclick="copyGiftLink()">복사</button>
-      </div>
-      <div class="gift-copied hidden" id="giftCopied">링크가 복사되었습니다!</div>
-      <button class="gift-share-btn hidden" id="giftShareBtn" onclick="nativeShareGift()">공유하기</button>
-      <div class="gift-btn-row">
-        <button class="gift-btn-back" onclick="giftGoStep1()">이전</button>
-        <button class="gift-btn-next" onclick="sendGift()">선물 보내기</button>
-      </div>
-    </div>
-    <button class="gift-close" onclick="closeGiftSong()">닫기</button>
-  </div>
-</div>
-
-<!-- Voice Gift Modal (노래+음성 선물하기) -->
-<div class="gift-modal hidden" id="voiceGiftModal" onclick="if(event.target===this)closeVoiceGift()">
-  <div class="gift-card">
-    <div class="gift-title">노래+음성 선물하기</div>
-    <!-- Step 1: Song Selection -->
-    <div id="vgStep1">
-      <div class="gift-categories" id="vgCategories"></div>
-      <div class="gift-song-list" id="vgSongList"></div>
-      <div class="gift-btn-row">
-        <button class="gift-btn-next" id="vgNextBtn1" disabled onclick="vgGoStep2()">다음</button>
-      </div>
-    </div>
-    <!-- Step 2: Voice Record -->
-    <div class="gift-step2" id="vgStep2">
-      <div class="gift-selected-info" id="vgSelectedInfo"></div>
-      <div class="voice-record-area">
-        <button class="voice-record-btn" id="vgRecordBtn" onclick="toggleVoiceRecord()">🎙</button>
-        <span class="voice-record-time" id="vgRecordTime">0:00</span>
-        <span class="voice-record-status" id="vgRecordStatus">버튼을 눌러 녹음하세요 (최대 30초)</span>
-      </div>
-      <div class="voice-preview" id="vgPreview" style="display:none">
-        <audio id="vgPreviewAudio" controls></audio>
-        <button class="voice-preview-rebtn" onclick="resetVoiceRecord()">다시 녹음</button>
-      </div>
-      <textarea class="gift-msg-input" id="vgMsgInput" placeholder="텍스트 메시지 (선택사항)" maxlength="100"></textarea>
-      <div class="gift-btn-row">
-        <button class="gift-btn-back" onclick="vgGoStep1()">이전</button>
-        <button class="gift-btn-next" id="vgNextBtn2" disabled onclick="vgGoStep3()">다음</button>
-      </div>
-    </div>
-    <!-- Step 3: Share -->
-    <div class="gift-step2" id="vgStep3">
-      <div class="gift-selected-info" id="vgFinalInfo"></div>
-      <div class="voice-uploading" id="vgUploading" style="display:none">음성 파일 업로드 중...</div>
-      <div class="gift-link-box">
-        <input type="text" readonly id="vgLink">
-        <button onclick="copyVoiceGiftLink()">복사</button>
-      </div>
-      <div class="gift-copied hidden" id="vgCopied">링크가 복사되었습니다!</div>
-      <button class="gift-share-btn hidden" id="vgShareBtn" onclick="nativeShareVoiceGift()">공유하기</button>
-      <div class="gift-btn-row">
-        <button class="gift-btn-back" onclick="vgBackToStep2()">이전</button>
-        <button class="gift-btn-next" id="vgSendBtn" onclick="sendVoiceGift()">선물 보내기</button>
-      </div>
-    </div>
-    <button class="gift-close" onclick="closeVoiceGift()">닫기</button>
-  </div>
-</div>
+<!-- Guest: 모달 불필요 -->
 
 <!-- Chat Panel -->
 <div class="chat-panel hidden" id="chatPanel">
@@ -2542,16 +2444,7 @@
     return id;
   }
 
-  function goListenTogether(event){
-    event.preventDefault();
-    if(!currentStation){
-      alert('먼저 채널을 선택해주세요.\n다이얼을 돌려 방송국을 튜닝하세요.');
-      return;
-    }
-    if(!chatRoomId) chatRoomId = generateRoomId();
-    location.href = 'listen-together.html?station=' + currentStation.id + '&room=' + chatRoomId;
-  }
-
+  // Guest mode: 아래 함수들은 게스트에서 사용하지 않음
   function openListenTogether(){
     if(!currentStation){
       alert('먼저 채널을 선택해주세요.\n다이얼을 돌려 방송국을 튜닝하세요.');
@@ -2561,7 +2454,7 @@
     if(!chatRoomId) chatRoomId = generateRoomId();
     document.getElementById('ltmStation').textContent = currentStation.name;
     document.getElementById('ltmFreq').textContent = currentStation.freq || '';
-    var url = location.origin + location.pathname.replace(/[^\/]*$/, '') + 'guest.html?station=' + currentStation.id + '&room=' + chatRoomId;
+    var url = location.origin + location.pathname + '?station=' + currentStation.id + '&room=' + chatRoomId;
     document.getElementById('ltmLink').value = url;
     document.getElementById('ltmCopied').classList.add('hidden');
     if(navigator.share) {
@@ -3573,9 +3466,9 @@
     }
   }
 
-  // === Init on Load ===
+  // === Init on Load (GUEST MODE) ===
   document.addEventListener('DOMContentLoaded', function(){
-    // Restore saved theme or default to wood
+    // Restore saved theme or default to hotpink
     var savedTheme = 'hotpink';
     try {
       var stored = localStorage.getItem('k-radio-theme');
@@ -3612,30 +3505,26 @@
       volKnob.style.transform = 'rotate(' + analogVolAngle + 'deg)';
     }
 
-    // 모드 전환 또는 같이 듣기 링크로 채널 자동 재생
-    var autoStationId = localStorage.getItem('radio-switch-station');
-    if (autoStationId) {
-      localStorage.removeItem('radio-switch-station');
-    } else {
-      var urlParams = new URLSearchParams(location.search);
-      autoStationId = urlParams.get('station');
-      // 같이 듣기 room 파라미터 처리
-      var roomParam = urlParams.get('room');
-      if (roomParam) {
-        chatRoomId = roomParam;
-        // URL에 room 파라미터가 있으면 초대받은 게스트
-        isGuest = true;
-        applyGuestMode();
-        // Supabase 로드 대기 후 채팅 패널 오픈
-        var waitSupabase = setInterval(function(){
-          if(window.supabase){
-            clearInterval(waitSupabase);
-            initSupabase();
-            openChatPanel();
-          }
-        }, 200);
-      }
+    // === GUEST MODE: 항상 게스트로 동작 ===
+    isGuest = true;
+    applyGuestMode();
+
+    var urlParams = new URLSearchParams(location.search);
+    var autoStationId = urlParams.get('station');
+    var roomParam = urlParams.get('room');
+
+    if (roomParam) {
+      chatRoomId = roomParam;
+      // Supabase 로드 대기 후 채팅 패널 오픈
+      var waitSupabase = setInterval(function(){
+        if(window.supabase){
+          clearInterval(waitSupabase);
+          initSupabase();
+          openChatPanel();
+        }
+      }, 200);
     }
+
     if (autoStationId) {
       var station = STATIONS.find(function(s){ return s.id === autoStationId; });
       if (station && station.freqNum) {
@@ -3650,14 +3539,12 @@
     // Background playback: resume audio context when returning from background
     document.addEventListener('visibilitychange', function() {
       if (document.visibilityState === 'visible') {
-        // Returning to foreground — resume suspended audio context
         if (audioCtx && audioCtx.state === 'suspended') {
           audioCtx.resume();
         }
         if (analogAudioCtx && analogAudioCtx.state === 'suspended') {
           analogAudioCtx.resume();
         }
-        // Re-acquire wake lock (released on screen off)
         if (isPlaying) requestWakeLock();
       }
     });
