@@ -869,27 +869,38 @@
   function playVoiceMessage(callback){
     var icon = document.getElementById('voiceMsgIcon');
     var text = document.getElementById('voiceMsgText');
+    var called = false;
+    function done(){
+      if(called) return;
+      called = true;
+      if(callback) callback();
+    }
     icon.classList.add('playing');
     text.textContent = '음성 메시지 재생 중...';
     if(!voiceAudio) voiceAudio = new Audio();
+    voiceAudio.pause();
     voiceAudio.src = voiceUrl;
     voiceAudio.volume = 1;
-    voiceAudio.play().catch(function(e){
-      console.log('음성 메시지 로드 실패:', e);
-      icon.classList.remove('playing');
-      text.textContent = '음성 메시지';
-      if(callback) callback();
-    });
-    voiceAudio.onended = function(){
-      icon.classList.remove('playing');
-      text.textContent = '음성 메시지 재생 완료';
-      if(callback) callback();
-    };
     voiceAudio.onerror = function(){
       icon.classList.remove('playing');
       text.textContent = '음성 메시지를 찾을 수 없습니다';
-      if(callback) callback();
+      done();
     };
+    voiceAudio.onended = function(){
+      icon.classList.remove('playing');
+      text.textContent = '음성 메시지 재생 완료';
+      done();
+    };
+    voiceAudio.addEventListener('canplay', function cp(){
+      voiceAudio.removeEventListener('canplay', cp);
+      voiceAudio.play().catch(function(e){
+        console.log('음성 메시지 재생 실패:', e);
+        icon.classList.remove('playing');
+        text.textContent = '음성 메시지 재생 실패';
+        done();
+      });
+    });
+    voiceAudio.load();
   }
 
   function startLpAndSong(){
