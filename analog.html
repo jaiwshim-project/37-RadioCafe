@@ -2102,9 +2102,9 @@
 
     <!-- Listen Together & Gift Song -->
     <div class="analog-listen-together">
-      <button class="analog-listen-together-btn" id="listenTogetherBtn" onclick="openListenTogether()">같이듣기 초대</button>
-      <button class="analog-listen-together-btn" onclick="openGiftSong()">노래 선물하기</button>
-      <button class="analog-listen-together-btn" onclick="openVoiceGift()">노래+음성 선물하기</button>
+      <a class="analog-listen-together-btn" id="listenTogetherBtn" href="#" onclick="goListenTogether(event)" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">같이듣기 초대</a>
+      <a class="analog-listen-together-btn" href="gift-song.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">노래 선물하기</a>
+      <a class="analog-listen-together-btn" href="voice-gift.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">노래+음성 선물하기</a>
     </div>
 
     <!-- Footer -->
@@ -2540,6 +2540,16 @@
     var id = '';
     for(var i = 0; i < 8; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
     return id;
+  }
+
+  function goListenTogether(event){
+    event.preventDefault();
+    if(!currentStation){
+      alert('먼저 채널을 선택해주세요.\n다이얼을 돌려 방송국을 튜닝하세요.');
+      return;
+    }
+    if(!chatRoomId) chatRoomId = generateRoomId();
+    location.href = 'listen-together.html?station=' + currentStation.id + '&room=' + chatRoomId;
   }
 
   function openListenTogether(){
