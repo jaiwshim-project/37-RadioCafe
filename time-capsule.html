@@ -485,13 +485,13 @@
 
   <!-- Step 1: Date + Message -->
   <div id="senderStep1">
-    <div class="capsule-label">개봉 날짜 선택</div>
-    <input type="date" class="capsule-date-input" id="capsuleDateInput" onchange="validateSenderStep1()">
+    <div class="capsule-label">개봉 날짜 및 시간 선택</div>
+    <input type="datetime-local" class="capsule-date-input" id="capsuleDateInput" step="1" onchange="validateSenderStep1()">
     <div class="capsule-label">메시지 입력</div>
     <textarea class="capsule-msg-input" id="capsuleMsgInput" placeholder="미래의 나에게, 또는 소중한 사람에게 보내는 메시지..." maxlength="150" oninput="updateCharCount(); validateSenderStep1()"></textarea>
     <div class="capsule-char-count"><span id="charCount">0</span> / 150</div>
     <div class="gift-guide">
-      <p>1. 타임캡슐을 열 날짜를 선택하세요.</p>
+      <p>1. 타임캡슐을 열 날짜와 시간을 선택하세요.</p>
       <p>2. 미래에 전하고 싶은 메시지를 입력하세요.</p>
       <p>3. '다음' 버튼을 누르면 공유 링크가 생성됩니다.</p>
     </div>
@@ -717,15 +717,13 @@
   // === SENDER MODE ===
   function initSenderMode(){
     document.getElementById('senderCard').style.display = '';
-    // Set date limits: min = tomorrow, max = +1 year
-    var today = new Date();
-    var tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    var maxDate = new Date(today);
+    // Set date limits: min = now (today), max = +1 year
+    var now = new Date();
+    var maxDate = new Date(now);
     maxDate.setFullYear(maxDate.getFullYear() + 1);
     var dateInput = document.getElementById('capsuleDateInput');
-    dateInput.min = formatDateISO(tomorrow);
-    dateInput.max = formatDateISO(maxDate);
+    dateInput.min = formatDateTimeLocal(now);
+    dateInput.max = formatDateTimeLocal(maxDate);
   }
 
   function formatDateISO(d){
@@ -735,9 +733,28 @@
     return y + '-' + m + '-' + dd;
   }
 
+  function formatDateTimeLocal(d){
+    var y = d.getFullYear();
+    var m = (d.getMonth() + 1); if(m < 10) m = '0' + m;
+    var dd = d.getDate(); if(dd < 10) dd = '0' + dd;
+    var hh = d.getHours(); if(hh < 10) hh = '0' + hh;
+    var mm = d.getMinutes(); if(mm < 10) mm = '0' + mm;
+    var ss = d.getSeconds(); if(ss < 10) ss = '0' + ss;
+    return y + '-' + m + '-' + dd + 'T' + hh + ':' + mm + ':' + ss;
+  }
+
   function formatDateKR(dateStr){
-    var parts = dateStr.split('-');
-    return parts[0] + '년 ' + parseInt(parts[1]) + '월 ' + parseInt(parts[2]) + '일';
+    // Handle both "YYYY-MM-DD" and "YYYY-MM-DDTHH:MM:SS" formats
+    var datePart = dateStr.split('T')[0];
+    var timePart = dateStr.split('T')[1] || '';
+    var parts = datePart.split('-');
+    var result = parts[0] + '년 ' + parseInt(parts[1]) + '월 ' + parseInt(parts[2]) + '일';
+    if(timePart){
+      var tp = timePart.split(':');
+      result += ' ' + parseInt(tp[0]) + '시 ' + parseInt(tp[1]) + '분';
+      if(tp[2]) result += ' ' + parseInt(tp[2]) + '초';
+    }
+    return result;
   }
 
   function updateCharCount(){
@@ -832,7 +849,8 @@
 
   // === RECEIVER MODE ===
   function initReceiverMode(){
-    var target = new Date(capsuleDate + 'T00:00:00');
+    // capsuleDate can be "YYYY-MM-DD" (old) or "YYYY-MM-DDTHH:MM:SS" (new)
+    var target = capsuleDate.indexOf('T') !== -1 ? new Date(capsuleDate) : new Date(capsuleDate + 'T00:00:00');
     var now = new Date();
     if(now >= target){
       showUnlockedCapsule();
@@ -880,7 +898,7 @@
 
   // === Countdown Timer ===
   function startCountdown(targetDateStr){
-    var target = new Date(targetDateStr + 'T00:00:00');
+    var target = targetDateStr.indexOf('T') !== -1 ? new Date(targetDateStr) : new Date(targetDateStr + 'T00:00:00');
     function update(){
       var now = new Date();
       var diff = target - now;
