@@ -279,6 +279,17 @@
       border-left: 3px solid #fff; border-right: 3px solid #fff;
     }
 
+    /* Chat Open Button */
+    .chat-open-btn {
+      display: none; margin-top: 16px;
+      padding: 12px 28px; border-radius: 30px;
+      background: transparent; border: 1.5px solid #ff6b9d;
+      color: #ff6b9d; font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      letter-spacing: 1px; transition: all 0.3s;
+    }
+    .chat-open-btn:hover { background: #ff6b9d; color: #fff; }
+
     /* ===== Chat Panel - 전체 화면 ===== */
     .chat-panel {
       position: fixed; top: 0; left: 0; right: 0;
@@ -534,6 +545,7 @@
     <span class="play-icon"></span>
     <span id="playBtnText">재생</span>
   </button>
+  <button class="chat-open-btn" id="chatOpenBtn" onclick="openChatPanel()">💬 채팅</button>
 </div>
 
 <!-- Footer -->
@@ -643,22 +655,9 @@
       voiceUrl = SUPABASE_URL + '/storage/v1/object/public/photo-albums/voice-messages/' + voiceId + vext;
       document.getElementById('voiceMsgIndicator').classList.remove('hidden');
     }
-    // Supabase 로드 대기 후 채팅 활성화
+    // 채팅 버튼 표시 (chatRoomId가 있을 때만)
     if(chatRoomId){
-      var waitSupabase = setInterval(function(){
-        if(window.supabase){
-          clearInterval(waitSupabase);
-          initSupabase();
-          // 채팅 패널 + 하단 재생 바 표시
-          document.getElementById('chatPanel').style.display = 'flex';
-          document.getElementById('playerBar').style.display = 'flex';
-          // 플레이어 바 제목 설정
-          if(currentSong){
-            document.getElementById('playerBarTitle').textContent = currentSong.name;
-            document.getElementById('playerBarSub').textContent = currentSong.category;
-          }
-        }
-      }, 200);
+      document.getElementById('chatOpenBtn').style.display = 'inline-flex';
     }
   }
 
@@ -1010,6 +1009,31 @@
   }
 
   // === Chat ===
+  function openChatPanel(){
+    function showChat(){
+      initSupabase();
+      document.getElementById('chatPanel').style.display = 'flex';
+      document.getElementById('playerBar').style.display = 'flex';
+      if(currentSong){
+        document.getElementById('playerBarTitle').textContent = currentSong.name;
+        document.getElementById('playerBarSub').textContent = currentSong.category;
+      }
+      if(chatNickname){
+        document.getElementById('chatNicknameBox').classList.add('hidden');
+        document.getElementById('chatMessages').classList.remove('hidden');
+        document.getElementById('chatInputBox').classList.remove('hidden');
+        if(!chatActive) connectChat();
+      }
+    }
+    if(window.supabase){
+      showChat();
+    } else {
+      var wait = setInterval(function(){
+        if(window.supabase){ clearInterval(wait); showChat(); }
+      }, 200);
+    }
+  }
+
   function joinChat(){
     var input = document.getElementById('chatNicknameInput');
     var name = input.value.trim();
