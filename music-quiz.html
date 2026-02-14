@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>음악 퀴즈 | 클라라 라디오카페</title>
+  <title>음악 궁합 | 클라라 라디오카페</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
@@ -20,8 +20,8 @@
       padding: 16px;
     }
 
-    /* Quiz Card */
-    .quiz-card {
+    /* Main Card */
+    .match-card {
       background: linear-gradient(145deg, #FFF8E7, #F5ECD8);
       border: 1px solid rgba(139,105,20,0.15);
       border-radius: 20px; padding: 24px;
@@ -29,16 +29,15 @@
       text-align: center;
       box-shadow: 0 40px 80px rgba(100,70,30,0.15), 0 0 40px rgba(200,169,110,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
     }
-    .quiz-title {
+    .match-title {
       font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
       color: #8B6914; letter-spacing: 3px; margin-bottom: 16px;
-      text-shadow: none;
     }
-    .quiz-subtitle {
+    .match-subtitle {
       font-family: 'Inter', sans-serif; font-size: 14px;
       color: #3a2a10; margin-bottom: 16px; line-height: 1.5;
     }
-    .quiz-label {
+    .match-label {
       font-family: 'Inter', sans-serif; font-size: 13px;
       color: #6a5530; margin-bottom: 8px;
     }
@@ -81,120 +80,135 @@
     }
 
     /* Nickname input */
-    .quiz-nickname-input {
+    .match-nickname-input {
       padding: 12px 16px; border-radius: 10px;
       border: 2px solid rgba(139,105,20,0.2);
       background: rgba(255,255,255,0.7); color: #3a2a10;
       font-family: 'Inter', sans-serif; font-size: 14px;
       text-align: center; outline: none; width: 65%;
     }
-    .quiz-nickname-input:focus { border-color: #C8A96E; }
-    .quiz-nickname-input::placeholder { color: rgba(100,70,30,0.4); }
+    .match-nickname-input:focus { border-color: #C8A96E; }
+    .match-nickname-input::placeholder { color: rgba(100,70,30,0.4); }
 
     /* Buttons */
-    .quiz-btn {
+    .match-btn {
       padding: 12px 24px; border-radius: 12px;
       background: linear-gradient(135deg, #C8A96E, #b89858); border: none; color: #fff;
       font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
       cursor: pointer; transition: all 0.2s; margin-top: 12px;
     }
-    .quiz-btn:hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
-    .quiz-btn:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
-    .quiz-btn-outline {
+    .match-btn:hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
+    .match-btn:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
+    .match-btn-outline {
       padding: 12px 24px; border-radius: 12px;
       background: transparent; border: 1px solid #C8A96E; color: #C8A96E;
       font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
       cursor: pointer; transition: all 0.2s; margin-top: 8px;
     }
-    .quiz-btn-outline:hover { background: rgba(200,169,110,0.1); }
-    .quiz-btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+    .match-btn-outline:hover { background: rgba(200,169,110,0.1); }
+    .match-btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
 
-    /* Timer Bar */
-    .quiz-timer {
-      height: 6px; background: rgba(139,105,20,0.1);
-      border-radius: 3px; margin: 12px 0; overflow: hidden;
-    }
-    .quiz-timer-bar {
-      height: 100%; width: 100%;
-      background: linear-gradient(90deg, #C8A96E, #ef4444);
-      border-radius: 3px;
-      transition: width 0.5s linear;
-    }
-
-    /* Scoreboard */
-    .quiz-scoreboard {
-      display: flex; justify-content: space-between;
-      padding: 10px; margin-bottom: 12px;
-      background: rgba(139,105,20,0.06); border-radius: 12px;
-      border: 1px solid rgba(139,105,20,0.12);
-    }
-    .quiz-player { text-align: center; flex: 1; }
-    .quiz-player-name { font-size: 12px; color: #A08050; }
-    .quiz-player-score {
-      font-family: 'Orbitron', monospace; font-size: 24px;
-      color: #C8A96E; font-weight: 700;
-    }
-    .quiz-vs {
-      font-family: 'Orbitron', monospace; font-size: 11px;
-      color: rgba(139,105,20,0.4); align-self: center;
-      padding: 0 8px;
-    }
-
-    /* Question */
-    .quiz-question-number {
+    /* Question Screen */
+    .question-progress {
       font-family: 'Orbitron', monospace; font-size: 11px;
       color: #C8A96E; letter-spacing: 2px; margin-bottom: 8px;
     }
-    .quiz-question-text {
+    .question-progress-bar {
+      height: 4px; background: rgba(139,105,20,0.1);
+      border-radius: 2px; margin-bottom: 16px; overflow: hidden;
+    }
+    .question-progress-fill {
+      height: 100%; background: linear-gradient(90deg, #C8A96E, #d4af69);
+      border-radius: 2px; transition: width 0.4s ease;
+    }
+    .question-text {
       font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
-      color: #3a2a10; line-height: 1.5; margin-bottom: 4px;
+      color: #3a2a10; line-height: 1.5; margin-bottom: 16px;
       min-height: 48px;
     }
-
-    /* Options */
-    .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-    .quiz-option {
-      padding: 12px 16px; border-radius: 12px;
+    .question-options { display: flex; flex-direction: column; gap: 8px; }
+    .question-option {
+      padding: 14px 16px; border-radius: 12px;
       background: rgba(255,255,255,0.5);
       border: 1px solid rgba(139,105,20,0.2);
       color: #3a2a10; font-family: 'Inter', sans-serif; font-size: 14px;
       cursor: pointer; transition: all 0.2s; text-align: left;
     }
-    .quiz-option:hover { background: rgba(200,169,110,0.2); border-color: #C8A96E; }
-    .quiz-option.correct { background: rgba(34,197,94,0.2); border-color: #22c55e; color: #166534; }
-    .quiz-option.wrong { background: rgba(239,68,68,0.2); border-color: #ef4444; color: #dc2626; }
-    .quiz-option.disabled { pointer-events: none; opacity: 0.5; }
-    .quiz-option.selected-mine {
-      border-width: 2px;
+    .question-option:hover { background: rgba(200,169,110,0.2); border-color: #C8A96E; }
+    .question-option.selected {
+      background: rgba(200,169,110,0.25); border-color: #C8A96E;
+      border-width: 2px; color: #8B6914; font-weight: 600;
+    }
+    .question-option.disabled { pointer-events: none; opacity: 0.5; }
+
+    .waiting-opponent {
+      margin-top: 16px; font-size: 13px; color: #A08050;
     }
 
-    /* Result */
-    .quiz-result-icon {
-      font-size: 48px; margin-bottom: 12px;
+    /* Result Screen */
+    .result-percent-wrap {
+      position: relative; width: 160px; height: 160px;
+      margin: 0 auto 16px;
     }
-    .quiz-result-title {
-      font-family: 'Orbitron', monospace; font-size: 18px; font-weight: 700;
-      letter-spacing: 2px; margin-bottom: 8px;
+    .result-percent-ring {
+      width: 160px; height: 160px; transform: rotate(-90deg);
     }
-    .quiz-result-detail {
-      font-family: 'Inter', sans-serif; font-size: 14px;
-      color: #A08050; line-height: 1.6;
+    .result-percent-bg {
+      fill: none; stroke: rgba(139,105,20,0.1); stroke-width: 8;
     }
-    .quiz-result-scores {
-      display: flex; justify-content: center; gap: 32px;
-      margin: 16px 0;
+    .result-percent-fill {
+      fill: none; stroke: #C8A96E; stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 440; stroke-dashoffset: 440;
+      transition: stroke-dashoffset 1.5s ease-out;
     }
-    .quiz-result-player { text-align: center; }
-    .quiz-result-player-name {
-      font-size: 13px; color: #A08050; margin-bottom: 4px;
+    .result-percent-text {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Orbitron', monospace; font-size: 36px; font-weight: 900;
+      color: #C8A96E;
     }
-    .quiz-result-player-score {
-      font-family: 'Orbitron', monospace; font-size: 28px;
-      color: #C8A96E; font-weight: 700;
+    .result-percent-unit {
+      font-size: 16px; font-weight: 700;
     }
-    .quiz-result-player.winner .quiz-result-player-score { color: #22c55e; }
+    .result-level {
+      font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700;
+      color: #8B6914; margin-bottom: 4px;
+    }
+    .result-message {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: #A08050; line-height: 1.5; margin-bottom: 16px;
+    }
+    .result-names {
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+      color: #3a2a10; margin-bottom: 16px;
+    }
 
-    /* Chat Panel - fullscreen cream/gold theme */
+    /* Comparison List */
+    .compare-list { text-align: left; margin-top: 12px; }
+    .compare-item {
+      padding: 10px 12px; border-radius: 10px;
+      margin-bottom: 6px;
+      background: rgba(255,255,255,0.4);
+      border: 1px solid rgba(139,105,20,0.1);
+    }
+    .compare-question {
+      font-size: 12px; color: #A08050; margin-bottom: 6px;
+    }
+    .compare-answers {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px;
+    }
+    .compare-answer {
+      flex: 1; text-align: center; color: #3a2a10; font-weight: 500;
+    }
+    .compare-icon {
+      width: 28px; text-align: center; font-size: 14px; flex-shrink: 0;
+    }
+    .compare-icon.match { color: #ef4444; }
+    .compare-icon.diff { color: #aaa; }
+
+    /* Chat Panel */
     .chat-panel {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: linear-gradient(145deg, #FFF8E7, #F2E8D0);
@@ -297,26 +311,26 @@
 </head>
 <body>
 
-<div class="quiz-card" id="quizCard">
+<div class="match-card" id="matchCard">
 
   <!-- ========== HOST LOBBY ========== -->
   <div id="hostLobby">
     <div style="text-align:left;margin-bottom:12px;">
       <button onclick="history.back()" style="background:none;border:1px solid rgba(139,105,20,0.3);color:#A08050;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;padding:8px 14px;border-radius:8px;cursor:pointer;">&#9664; 이전</button>
     </div>
-    <div class="quiz-title">MUSIC QUIZ</div>
-    <div class="quiz-subtitle">7080 음악 퀴즈 대결<br>친구에게 링크를 보내고 대결하세요!</div>
+    <div class="match-title">MUSIC MATCH</div>
+    <div class="match-subtitle">음악 궁합 테스트<br>친구에게 링크를 보내고 취향을 비교하세요!</div>
 
-    <div class="quiz-label">초대 링크</div>
+    <div class="match-label">초대 링크</div>
     <div class="gift-link-box">
-      <input type="text" readonly id="quizLink">
-      <button onclick="copyQuizLink()">복사</button>
+      <input type="text" readonly id="matchLink">
+      <button onclick="copyMatchLink()">복사</button>
     </div>
-    <div class="gift-copied hidden" id="quizCopied">링크가 복사되었습니다!</div>
+    <div class="gift-copied hidden" id="matchCopied">링크가 복사되었습니다!</div>
 
     <div style="margin-top:20px;">
-      <div class="quiz-label">닉네임</div>
-      <input type="text" class="quiz-nickname-input" id="hostNicknameInput" placeholder="닉네임 입력" maxlength="12">
+      <div class="match-label">닉네임</div>
+      <input type="text" class="match-nickname-input" id="hostNicknameInput" placeholder="닉네임 입력" maxlength="12">
     </div>
 
     <div class="waiting-text" id="hostWaiting">
@@ -327,74 +341,65 @@
     <div id="hostReadyArea" class="hidden">
       <div style="color:#22c55e;font-size:14px;margin-top:12px;">상대방이 입장했습니다!</div>
       <div style="color:#A08050;font-size:13px;margin-top:4px;" id="guestNameDisplay"></div>
-      <button class="quiz-btn" id="hostStartBtn" onclick="hostStartGame()">게임 시작</button>
+      <button class="match-btn" id="hostStartBtn" onclick="hostStartGame()">테스트 시작</button>
     </div>
   </div>
 
   <!-- ========== GUEST LOBBY ========== -->
   <div id="guestLobby" class="hidden">
-    <div class="quiz-title">MUSIC QUIZ</div>
-    <div class="quiz-subtitle">7080 음악 퀴즈 대결에 초대되었습니다!</div>
+    <div class="match-title">MUSIC MATCH</div>
+    <div class="match-subtitle">음악 궁합 테스트에 초대되었습니다!</div>
 
     <div style="margin-top:16px;">
-      <div class="quiz-label">닉네임을 입력하고 입장하세요</div>
-      <input type="text" class="quiz-nickname-input" id="guestNicknameInput" placeholder="닉네임 입력" maxlength="12" onkeydown="if(event.key==='Enter')guestJoin()">
+      <div class="match-label">닉네임을 입력하고 입장하세요</div>
+      <input type="text" class="match-nickname-input" id="guestNicknameInput" placeholder="닉네임 입력" maxlength="12" onkeydown="if(event.key==='Enter')guestJoin()">
       <br>
-      <button class="quiz-btn" onclick="guestJoin()">입장하기</button>
+      <button class="match-btn" onclick="guestJoin()">입장하기</button>
     </div>
 
     <div id="guestWaiting" class="hidden">
       <div class="waiting-text" style="margin-top:16px;">
-        호스트가 게임을 시작할 때까지 대기 중
+        호스트가 테스트를 시작할 때까지 대기 중
         <span class="waiting-dots"><span></span><span></span><span></span></span>
       </div>
     </div>
   </div>
 
-  <!-- ========== GAME SCREEN ========== -->
-  <div id="gameScreen" class="hidden">
-    <div class="quiz-scoreboard">
-      <div class="quiz-player">
-        <div class="quiz-player-name" id="scoreNameMe">나</div>
-        <div class="quiz-player-score" id="scoreMe">0</div>
-      </div>
-      <div class="quiz-vs">VS</div>
-      <div class="quiz-player">
-        <div class="quiz-player-name" id="scoreNameOpponent">상대</div>
-        <div class="quiz-player-score" id="scoreOpponent">0</div>
-      </div>
+  <!-- ========== QUESTION SCREEN ========== -->
+  <div id="questionScreen" class="hidden">
+    <div class="question-progress" id="questionProgress">Q1 / 10</div>
+    <div class="question-progress-bar">
+      <div class="question-progress-fill" id="progressFill" style="width:10%"></div>
     </div>
-
-    <div class="quiz-question-number" id="questionNumber">Q1 / 10</div>
-    <div class="quiz-question-text" id="questionText"></div>
-
-    <div class="quiz-timer">
-      <div class="quiz-timer-bar" id="timerBar"></div>
+    <div class="question-text" id="questionText"></div>
+    <div class="question-options" id="questionOptions"></div>
+    <div class="waiting-opponent hidden" id="waitingOpponent">
+      상대방 답변 대기 중
+      <span class="waiting-dots"><span></span><span></span><span></span></span>
     </div>
-
-    <div class="quiz-options" id="quizOptions"></div>
   </div>
 
   <!-- ========== RESULT SCREEN ========== -->
   <div id="resultScreen" class="hidden">
-    <div class="quiz-result-icon" id="resultIcon"></div>
-    <div class="quiz-result-title" id="resultTitle"></div>
-    <div class="quiz-result-detail" id="resultDetail"></div>
+    <div class="match-title" style="margin-bottom:12px;">MUSIC MATCH</div>
+    <div class="result-names" id="resultNames"></div>
 
-    <div class="quiz-result-scores">
-      <div class="quiz-result-player" id="resultPlayerMe">
-        <div class="quiz-result-player-name" id="resultNameMe">나</div>
-        <div class="quiz-result-player-score" id="resultScoreMe">0</div>
-      </div>
-      <div class="quiz-result-player" id="resultPlayerOpponent">
-        <div class="quiz-result-player-name" id="resultNameOpponent">상대</div>
-        <div class="quiz-result-player-score" id="resultScoreOpponent">0</div>
-      </div>
+    <div class="result-percent-wrap">
+      <svg class="result-percent-ring" viewBox="0 0 160 160">
+        <circle class="result-percent-bg" cx="80" cy="80" r="70" />
+        <circle class="result-percent-fill" id="percentRing" cx="80" cy="80" r="70" />
+      </svg>
+      <div class="result-percent-text" id="percentText">0<span class="result-percent-unit">%</span></div>
     </div>
 
-    <div class="quiz-btn-row">
-      <button class="quiz-btn" onclick="restartGame()">다시 하기</button>
-      <button class="quiz-btn-outline" onclick="openChatPanel()">채팅하기</button>
+    <div class="result-level" id="resultLevel"></div>
+    <div class="result-message" id="resultMessage"></div>
+
+    <div class="compare-list" id="compareList"></div>
+
+    <div class="match-btn-row">
+      <button class="match-btn" onclick="restartGame()">다시 하기</button>
+      <button class="match-btn-outline" onclick="openChatPanel()">채팅하기</button>
     </div>
   </div>
 
@@ -420,7 +425,6 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // === Supabase Config ===
@@ -428,44 +432,37 @@
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
   var supabaseClient = null;
 
-  // === Quiz Data (20 hardcoded 7080 Korean song questions) ===
-  var QUIZ_DATA = [
-    { q: '"홀로 된다는 것" 을 부른 가수는?', options: ['변진섭','이문세','신승훈','조용필'], answer: 0 },
-    { q: '"상록수" 를 부른 가수는?', options: ['이선희','양희은','심수봉','이미자'], answer: 0 },
-    { q: '"잊혀진 계절" 을 부른 가수는?', options: ['이용','조용필','송골매','들국화'], answer: 0 },
-    { q: '"그대 발길 머무는 곳에" 를 부른 그룹은?', options: ['전영록','봄여름가을겨울','들국화','시나위'], answer: 1 },
-    { q: '"서울의 달" 을 부른 가수는?', options: ['김건모','김광석','신해철','이승환'], answer: 1 },
-    { q: '"나 어떡해" 를 부른 가수는?', options: ['산울림','샌드페블즈','송골매','들국화'], answer: 1 },
-    { q: '"내 마음 갈 곳을 잃어" 를 부른 가수는?', options: ['이승철','김광석','신승훈','조규찬'], answer: 0 },
-    { q: '"사랑하기 때문에" 를 부른 가수는?', options: ['유재하','이문세','변진섭','이승철'], answer: 0 },
-    { q: '"그건 너" 를 부른 가수는?', options: ['이정석','백지영','신효범','전인권'], answer: 0 },
-    { q: '"비와 당신의 이야기" 를 부른 가수는?', options: ['부활','들국화','송골매','산울림'], answer: 0 },
-    { q: '"바람이 불어오는 곳" 을 부른 가수는?', options: ['김광석','이문세','조용필','이승환'], answer: 0 },
-    { q: '"어느 60대 노부부 이야기" 를 부른 가수는?', options: ['김광석','이문세','송창식','한대수'], answer: 0 },
-    { q: '"광화문 연가" 를 부른 가수는?', options: ['이문세','조용필','김광석','유재하'], answer: 0 },
-    { q: '"킬리만자로의 표범" 을 부른 가수는?', options: ['조용필','이문세','송골매','전인권'], answer: 0 },
-    { q: '"아침이슬" 을 부른 가수는?', options: ['양희은','김민기','이선희','한대수'], answer: 0 },
-    { q: '"나의 사랑 나의 신부" 를 부른 가수는?', options: ['서수남·하청일','패티김','이미자','현철'], answer: 0 },
-    { q: '"돌아와요 부산항에" 를 부른 가수는?', options: ['조용필','나훈아','남진','송대관'], answer: 0 },
-    { q: '"잠깐만" 을 부른 가수는?', options: ['서태지와아이들','김건모','신승훈','이현우'], answer: 0 },
-    { q: '"먼지가 되어" 를 부른 가수는?', options: ['김광석','이문세','김현식','유재하'], answer: 2 },
-    { q: '"내 사랑 내 곁에" 를 부른 가수는?', options: ['김현식','이문세','조용필','이승철'], answer: 0 }
+  // === Question Data (15 questions, 10 selected per game) ===
+  var QUESTION_DATA = [
+    { q: '비 오는 날 듣고 싶은 음악은?', options: ['발라드', '재즈', '클래식', '어쿠스틱'] },
+    { q: '드라이브할 때 듣는 음악은?', options: ['팝', '록', '힙합', 'EDM'] },
+    { q: '가장 좋아하는 음악 시대는?', options: ['7080', '9000', '2010s', '최신'] },
+    { q: '노래방에서 주로 부르는 장르는?', options: ['발라드', '댄스', '록', '트로트'] },
+    { q: '새벽에 듣고 싶은 음악은?', options: ['재즈', '발라드', '일렉트로닉', '클래식'] },
+    { q: '운동할 때 듣는 음악은?', options: ['힙합', 'EDM', '록', 'K-POP'] },
+    { q: '카페에서 어울리는 음악은?', options: ['보사노바', '어쿠스틱', '재즈', '인디'] },
+    { q: '여행갈 때 듣고 싶은 음악은?', options: ['팝', '인디', '재즈', '포크'] },
+    { q: '기분이 우울할 때 듣는 음악은?', options: ['발라드', '힙합', '클래식', '록'] },
+    { q: '첫사랑을 떠올리는 음악은?', options: ['발라드', '어쿠스틱', '포크', '인디'] },
+    { q: '집중할 때 듣는 음악은?', options: ['클래식', '로파이', '앰비언트', '재즈'] },
+    { q: '축제 기분에 어울리는 음악은?', options: ['EDM', 'K-POP', '라틴', '록'] },
+    { q: '잠들기 전 듣는 음악은?', options: ['클래식', '앰비언트', '어쿠스틱', '재즈'] },
+    { q: '사랑을 고백할 때 어울리는 음악은?', options: ['발라드', 'R&B', '어쿠스틱', '팝'] },
+    { q: '소풍 갈 때 듣고 싶은 음악은?', options: ['포크', '어쿠스틱', '인디팝', 'K-POP'] }
   ];
 
   // === Game State ===
   var isHost = false;
-  var quizChannel = null;
+  var matchChannel = null;
   var gameQuestions = []; // 10 selected question indices
   var currentQ = 0;
-  var myScore = 0;
-  var opponentScore = 0;
+  var myAnswers = [];
+  var opponentAnswers = [];
   var myName = '';
   var opponentName = '';
-  var questionTimer = null;
-  var timeLeft = 10;
-  var answered = false;
-  var opponentAnswered = false;
   var chatRoomId = null;
+  var myAnswered = false;
+  var opponentAnsweredCurrent = false;
 
   // === Chat State ===
   var chatChannel = null;
@@ -508,12 +505,11 @@
       chatRoomId = roomParam;
       document.getElementById('hostLobby').classList.add('hidden');
       document.getElementById('guestLobby').classList.remove('hidden');
-      subscribeQuizChannel();
+      subscribeMatchChannel();
 
-      /* Log receiver usage */
       try {
         var ruid = localStorage.getItem('radioUsername');
-        if(ruid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:ruid, feature:'music_quiz_received'}).then(function(){});
+        if(ruid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:ruid, feature:'music_match_received'}).then(function(){});
       } catch(e){}
     } else {
       // HOST mode
@@ -521,8 +517,8 @@
       chatRoomId = generateRoomId();
       document.getElementById('hostLobby').classList.remove('hidden');
       document.getElementById('guestLobby').classList.add('hidden');
-      updateQuizLink();
-      subscribeQuizChannel();
+      updateMatchLink();
+      subscribeMatchChannel();
     }
     // 닉네임 자동 채우기 (호스트/발신자만)
     if(isHost){
@@ -533,80 +529,70 @@
       }
     }
     var uid = localStorage.getItem('radioUsername');
-    if(uid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'music_quiz'}).then(function(){});
+    if(uid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'music_match'}).then(function(){});
   });
 
   // === Link ===
-  function updateQuizLink(){
+  function updateMatchLink(){
     var base = location.pathname.replace(/[^\/]*$/, '') + 'music-quiz.html';
     var url = location.origin + base + '?room=' + chatRoomId;
-    document.getElementById('quizLink').value = url;
+    document.getElementById('matchLink').value = url;
   }
 
-  function copyQuizLink(){
-    var input = document.getElementById('quizLink');
+  function copyMatchLink(){
+    var input = document.getElementById('matchLink');
     input.select();
     navigator.clipboard.writeText(input.value).then(function(){
-      document.getElementById('quizCopied').classList.remove('hidden');
-      setTimeout(function(){ document.getElementById('quizCopied').classList.add('hidden'); }, 2000);
+      document.getElementById('matchCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('matchCopied').classList.add('hidden'); }, 2000);
     }).catch(function(){
       document.execCommand('copy');
-      document.getElementById('quizCopied').classList.remove('hidden');
-      setTimeout(function(){ document.getElementById('quizCopied').classList.add('hidden'); }, 2000);
+      document.getElementById('matchCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('matchCopied').classList.add('hidden'); }, 2000);
     });
   }
 
-  // === Quiz Channel ===
-  function subscribeQuizChannel(){
+  // === Match Channel ===
+  function subscribeMatchChannel(){
     if(!supabaseClient || !chatRoomId) return;
-    var channelName = 'quiz-' + chatRoomId;
-    quizChannel = supabaseClient.channel(channelName, {
+    var channelName = 'match-' + chatRoomId;
+    matchChannel = supabaseClient.channel(channelName, {
       config: { broadcast: { self: false } }
     });
 
-    quizChannel.on('broadcast', { event: 'player_join' }, function(payload){
+    matchChannel.on('broadcast', { event: 'player_join' }, function(payload){
       var data = payload.payload;
       if(isHost){
-        // Guest joined
         opponentName = data.name;
         document.getElementById('hostWaiting').classList.add('hidden');
         document.getElementById('hostReadyArea').classList.remove('hidden');
         document.getElementById('guestNameDisplay').textContent = opponentName + '님이 대기 중입니다.';
       } else {
-        // Host response
         opponentName = data.name;
       }
     });
 
-    quizChannel.on('broadcast', { event: 'game_start' }, function(payload){
+    matchChannel.on('broadcast', { event: 'game_start' }, function(payload){
       var data = payload.payload;
       gameQuestions = data.questions;
       if(!isHost){
-        // Guest receives game start from host
         startGameUI();
       }
     });
 
-    quizChannel.on('broadcast', { event: 'answer' }, function(payload){
+    matchChannel.on('broadcast', { event: 'answer' }, function(payload){
       var data = payload.payload;
       handleOpponentAnswer(data);
     });
 
-    quizChannel.on('broadcast', { event: 'next_question' }, function(payload){
+    matchChannel.on('broadcast', { event: 'all_answers' }, function(payload){
       var data = payload.payload;
-      currentQ = data.qIndex;
-      showQuestion();
+      // Receive all opponent answers for result comparison
+      opponentAnswers = data.answers;
+      showResult();
     });
 
-    quizChannel.on('broadcast', { event: 'game_end' }, function(payload){
-      // Both players show results
-    });
-
-    quizChannel.subscribe(function(status){
-      if(status === 'SUBSCRIBED'){
-        // If host, wait. If guest with name already set, send join.
-      }
-    });
+    matchChannel.subscribe(function(status){});
   }
 
   // === Guest Join ===
@@ -616,13 +602,11 @@
     if(!name){ input.focus(); return; }
     myName = name;
 
-    // Send join to host
-    quizChannel.send({
+    matchChannel.send({
       type: 'broadcast', event: 'player_join',
       payload: { name: myName, role: 'guest' }
     });
 
-    // Show waiting
     input.disabled = true;
     document.getElementById('guestWaiting').classList.remove('hidden');
   }
@@ -634,21 +618,19 @@
     if(!name){ input.focus(); input.style.borderColor = '#ef4444'; return; }
     myName = name;
 
-    // Send host name to guest
-    quizChannel.send({
+    matchChannel.send({
       type: 'broadcast', event: 'player_join',
       payload: { name: myName, role: 'host' }
     });
 
     // Select 10 random questions
     var indices = [];
-    for(var i = 0; i < QUIZ_DATA.length; i++) indices.push(i);
+    for(var i = 0; i < QUESTION_DATA.length; i++) indices.push(i);
     indices = shuffleArray(indices);
     gameQuestions = indices.slice(0, 10);
 
-    // Broadcast game start
     setTimeout(function(){
-      quizChannel.send({
+      matchChannel.send({
         type: 'broadcast', event: 'game_start',
         payload: { questions: gameQuestions }
       });
@@ -659,257 +641,213 @@
   // === Game UI ===
   function startGameUI(){
     currentQ = 0;
-    myScore = 0;
-    opponentScore = 0;
+    myAnswers = [];
+    opponentAnswers = [];
 
     document.getElementById('hostLobby').classList.add('hidden');
     document.getElementById('guestLobby').classList.add('hidden');
     document.getElementById('resultScreen').classList.add('hidden');
-    document.getElementById('gameScreen').classList.remove('hidden');
-
-    document.getElementById('scoreNameMe').textContent = myName;
-    document.getElementById('scoreNameOpponent').textContent = opponentName;
-    document.getElementById('scoreMe').textContent = '0';
-    document.getElementById('scoreOpponent').textContent = '0';
+    document.getElementById('questionScreen').classList.remove('hidden');
 
     showQuestion();
   }
 
   function showQuestion(){
     if(currentQ >= gameQuestions.length){
-      endGame();
+      finishAnswering();
       return;
     }
 
-    answered = false;
-    opponentAnswered = false;
+    myAnswered = false;
+    opponentAnsweredCurrent = false;
     var qIdx = gameQuestions[currentQ];
-    var q = QUIZ_DATA[qIdx];
+    var q = QUESTION_DATA[qIdx];
 
-    document.getElementById('questionNumber').textContent = 'Q' + (currentQ + 1) + ' / ' + gameQuestions.length;
+    document.getElementById('questionProgress').textContent = 'Q' + (currentQ + 1) + ' / ' + gameQuestions.length;
+    document.getElementById('progressFill').style.width = ((currentQ + 1) / gameQuestions.length * 100) + '%';
     document.getElementById('questionText').textContent = q.q;
+    document.getElementById('waitingOpponent').classList.add('hidden');
 
-    // Render options
-    var optionsDiv = document.getElementById('quizOptions');
+    var optionsDiv = document.getElementById('questionOptions');
     optionsDiv.innerHTML = '';
     q.options.forEach(function(opt, i){
       var btn = document.createElement('button');
-      btn.className = 'quiz-option';
+      btn.className = 'question-option';
       btn.textContent = opt;
-      btn.setAttribute('data-index', i);
       btn.onclick = function(){ selectAnswer(i, btn); };
       optionsDiv.appendChild(btn);
     });
-
-    // Start timer
-    timeLeft = 10;
-    var bar = document.getElementById('timerBar');
-    bar.style.transition = 'none';
-    bar.style.width = '100%';
-    // Force reflow
-    bar.offsetHeight;
-    bar.style.transition = 'width 0.5s linear';
-
-    clearInterval(questionTimer);
-    questionTimer = setInterval(function(){
-      timeLeft -= 0.5;
-      var pct = Math.max(0, (timeLeft / 10) * 100);
-      bar.style.width = pct + '%';
-      if(timeLeft <= 0){
-        clearInterval(questionTimer);
-        timeUp();
-      }
-    }, 500);
   }
 
   function selectAnswer(index, btnEl){
-    if(answered) return;
-    answered = true;
+    if(myAnswered) return;
+    myAnswered = true;
 
-    var qIdx = gameQuestions[currentQ];
-    var q = QUIZ_DATA[qIdx];
-    var remaining = timeLeft;
+    myAnswers.push(index);
 
     // Mark selected
-    btnEl.classList.add('selected-mine');
-
-    // Disable all options
-    var allBtns = document.querySelectorAll('.quiz-option');
+    var allBtns = document.querySelectorAll('.question-option');
     allBtns.forEach(function(b){ b.classList.add('disabled'); });
+    btnEl.classList.add('selected');
 
-    // Calculate score
-    var isCorrect = (index === q.answer);
-    if(isCorrect){
-      var speedBonus = Math.round((remaining / 10) * 5);
-      myScore += 10 + speedBonus;
-    }
-
-    // Broadcast answer
-    quizChannel.send({
+    // Broadcast my answer
+    matchChannel.send({
       type: 'broadcast', event: 'answer',
-      payload: { name: myName, qIndex: currentQ, selected: index, time: remaining }
+      payload: { name: myName, qIndex: currentQ, selected: index }
     });
 
-    // Update my score display
-    document.getElementById('scoreMe').textContent = myScore;
-
-    // If opponent already answered or timer ended, reveal
-    if(opponentAnswered){
-      revealAnswer();
+    // If opponent already answered, move to next
+    if(opponentAnsweredCurrent){
+      setTimeout(function(){ advanceQuestion(); }, 600);
+    } else {
+      document.getElementById('waitingOpponent').classList.remove('hidden');
     }
   }
 
   function handleOpponentAnswer(data){
-    opponentAnswered = true;
-    var qIdx = gameQuestions[data.qIndex];
-    var q = QUIZ_DATA[qIdx];
-    var isCorrect = (data.selected === q.answer);
-    if(isCorrect){
-      var speedBonus = Math.round((data.time / 10) * 5);
-      opponentScore += 10 + speedBonus;
-    }
-    document.getElementById('scoreOpponent').textContent = opponentScore;
+    opponentAnsweredCurrent = true;
 
-    // If I already answered, reveal
-    if(answered){
-      revealAnswer();
+    if(myAnswered){
+      setTimeout(function(){ advanceQuestion(); }, 600);
     }
   }
 
-  function timeUp(){
-    if(!answered){
-      answered = true;
-      // Disable all
-      var allBtns = document.querySelectorAll('.quiz-option');
-      allBtns.forEach(function(b){ b.classList.add('disabled'); });
-    }
-    revealAnswer();
+  function advanceQuestion(){
+    currentQ++;
+    document.getElementById('waitingOpponent').classList.add('hidden');
+    showQuestion();
   }
 
-  function revealAnswer(){
-    clearInterval(questionTimer);
-    var qIdx = gameQuestions[currentQ];
-    var q = QUIZ_DATA[qIdx];
-
-    var allBtns = document.querySelectorAll('.quiz-option');
-    allBtns.forEach(function(b){
-      b.classList.add('disabled');
-      var idx = parseInt(b.getAttribute('data-index'));
-      if(idx === q.answer){
-        b.classList.add('correct');
-      } else if(b.classList.contains('selected-mine')){
-        b.classList.add('wrong');
-      }
+  function finishAnswering(){
+    // Send all my answers to opponent for comparison
+    matchChannel.send({
+      type: 'broadcast', event: 'all_answers',
+      payload: { name: myName, answers: myAnswers }
     });
 
-    // Advance to next question after delay
-    setTimeout(function(){
-      currentQ++;
-      if(currentQ >= gameQuestions.length){
-        endGame();
-      } else {
-        if(isHost){
-          quizChannel.send({
-            type: 'broadcast', event: 'next_question',
-            payload: { qIndex: currentQ }
-          });
-        }
-        showQuestion();
-      }
-    }, 2000);
+    // If we already have opponent's answers, show result
+    if(opponentAnswers.length > 0){
+      showResult();
+    } else {
+      // Wait for opponent's answers
+      document.getElementById('questionScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
+      document.getElementById('resultNames').textContent = '결과 계산 중...';
+      document.getElementById('percentText').innerHTML = '..';
+      document.getElementById('resultLevel').textContent = '';
+      document.getElementById('resultMessage').textContent = '상대방의 답변을 기다리고 있습니다.';
+      document.getElementById('compareList').innerHTML = '';
+    }
   }
 
-  function saveQuizGame(winner){
-    try {
-      initSupabase();
-      if(!supabaseClient) return;
-      var hostName = isHost ? myName : opponentName;
-      var guestName = isHost ? opponentName : myName;
-      var hostScore = isHost ? myScore : opponentScore;
-      var guestScore = isHost ? opponentScore : myScore;
-      supabaseClient.from('quiz_games').insert({
-        room_id: chatRoomId,
-        host_name: hostName,
-        guest_name: guestName,
-        host_score: hostScore,
-        guest_score: guestScore,
-        winner: winner
-      }).then(function(){});
-    } catch(e){}
-  }
-
-  function endGame(){
-    clearInterval(questionTimer);
-    document.getElementById('gameScreen').classList.add('hidden');
+  function showResult(){
+    document.getElementById('questionScreen').classList.add('hidden');
     document.getElementById('resultScreen').classList.remove('hidden');
 
-    // Broadcast game end
-    if(isHost){
-      quizChannel.send({
-        type: 'broadcast', event: 'game_end',
-        payload: { hostScore: myScore, guestScore: opponentScore }
-      });
+    // Calculate match percentage
+    var matchCount = 0;
+    for(var i = 0; i < gameQuestions.length; i++){
+      if(myAnswers[i] === opponentAnswers[i]) matchCount++;
     }
+    var percent = Math.round((matchCount / gameQuestions.length) * 100);
 
-    // Determine winner
-    var icon, title, titleColor, detail;
-    if(myScore > opponentScore){
-      icon = '&#127942;';
-      title = '승리!';
-      titleColor = '#22c55e';
-      detail = '축하합니다! ' + myName + '님이 이겼습니다!';
-    } else if(myScore < opponentScore){
-      icon = '&#128546;';
-      title = '패배';
-      titleColor = '#ef4444';
-      detail = opponentName + '님이 이겼습니다. 다음엔 꼭 이기세요!';
+    // Determine level
+    var level, message;
+    if(percent <= 30){
+      level = '정반대 취향!';
+      message = '서로 다른 음악 세계를 가지고 있어요.\n새로운 음악을 발견할 수 있는 기회!';
+    } else if(percent <= 60){
+      level = '적당한 차이!';
+      message = '비슷하면서도 다른 취향이에요.\n서로의 플레이리스트를 교환해보세요!';
+    } else if(percent <= 80){
+      level = '잘 맞는 취향!';
+      message = '음악 취향이 꽤 잘 맞아요.\n함께 음악 듣기 딱 좋은 사이!';
     } else {
-      icon = '&#129309;';
-      title = '무승부!';
-      titleColor = '#C8A96E';
-      detail = '실력이 비슷하네요! 한 판 더 해볼까요?';
+      level = '음악 소울메이트!';
+      message = '완벽한 음악 궁합이에요.\n같은 플레이리스트를 공유해도 될 만큼!';
     }
 
-    document.getElementById('resultIcon').innerHTML = icon;
-    document.getElementById('resultTitle').textContent = title;
-    document.getElementById('resultTitle').style.color = titleColor;
-    document.getElementById('resultDetail').textContent = detail;
+    document.getElementById('resultNames').textContent = myName + '  &  ' + opponentName;
+    document.getElementById('resultLevel').textContent = level;
+    document.getElementById('resultMessage').textContent = message;
 
-    document.getElementById('resultNameMe').textContent = myName;
-    document.getElementById('resultScoreMe').textContent = myScore;
-    document.getElementById('resultNameOpponent').textContent = opponentName;
-    document.getElementById('resultScoreOpponent').textContent = opponentScore;
+    // Animate percent ring
+    var ring = document.getElementById('percentRing');
+    var circumference = 2 * Math.PI * 70; // r=70
+    ring.style.strokeDasharray = circumference;
+    ring.style.strokeDashoffset = circumference;
+    setTimeout(function(){
+      var offset = circumference - (percent / 100) * circumference;
+      ring.style.strokeDashoffset = offset;
+    }, 100);
 
-    // Highlight winner
-    var myPlayer = document.getElementById('resultPlayerMe');
-    var oppPlayer = document.getElementById('resultPlayerOpponent');
-    myPlayer.classList.remove('winner');
-    oppPlayer.classList.remove('winner');
-    if(myScore > opponentScore) myPlayer.classList.add('winner');
-    else if(opponentScore > myScore) oppPlayer.classList.add('winner');
+    // Animate percent number
+    animatePercent(percent);
 
-    // Save to Supabase (host only to avoid duplicate)
+    // Build comparison list
+    var listDiv = document.getElementById('compareList');
+    listDiv.innerHTML = '';
+    for(var i = 0; i < gameQuestions.length; i++){
+      var qIdx = gameQuestions[i];
+      var q = QUESTION_DATA[qIdx];
+      var same = myAnswers[i] === opponentAnswers[i];
+
+      var item = document.createElement('div');
+      item.className = 'compare-item';
+      item.innerHTML =
+        '<div class="compare-question">' + q.q + '</div>' +
+        '<div class="compare-answers">' +
+          '<div class="compare-answer">' + q.options[myAnswers[i]] + '</div>' +
+          '<div class="compare-icon ' + (same ? 'match' : 'diff') + '">' + (same ? '\u2665' : '\u2717') + '</div>' +
+          '<div class="compare-answer">' + q.options[opponentAnswers[i]] + '</div>' +
+        '</div>';
+      listDiv.appendChild(item);
+    }
+
+    // Save to Supabase (host only)
     if(isHost){
-      var winner = myScore > opponentScore ? 'host' : (opponentScore > myScore ? 'guest' : 'draw');
-      saveQuizGame(winner);
+      try {
+        if(supabaseClient){
+          supabaseClient.from('quiz_games').insert({
+            room_id: chatRoomId,
+            host_name: myName,
+            guest_name: opponentName,
+            host_score: percent,
+            guest_score: percent,
+            winner: level
+          }).then(function(){});
+        }
+      } catch(e){}
     }
+  }
+
+  function animatePercent(target){
+    var el = document.getElementById('percentText');
+    var current = 0;
+    var step = Math.max(1, Math.round(target / 40));
+    var interval = setInterval(function(){
+      current += step;
+      if(current >= target){
+        current = target;
+        clearInterval(interval);
+      }
+      el.innerHTML = current + '<span class="result-percent-unit">%</span>';
+    }, 30);
   }
 
   function restartGame(){
     if(isHost){
-      // Re-select questions and broadcast
       var indices = [];
-      for(var i = 0; i < QUIZ_DATA.length; i++) indices.push(i);
+      for(var i = 0; i < QUESTION_DATA.length; i++) indices.push(i);
       indices = shuffleArray(indices);
       gameQuestions = indices.slice(0, 10);
 
-      quizChannel.send({
+      matchChannel.send({
         type: 'broadcast', event: 'game_start',
         payload: { questions: gameQuestions }
       });
       startGameUI();
     } else {
-      // Guest waits - show a message
       document.getElementById('resultScreen').classList.add('hidden');
       document.getElementById('guestLobby').classList.remove('hidden');
       document.getElementById('guestNicknameInput').disabled = true;
@@ -920,7 +858,6 @@
   // === Chat Functions ===
   function openChatPanel(){
     initSupabase();
-    // Pre-fill chat nickname from game nickname
     if(myName && !chatNickname){
       document.getElementById('chatNicknameInput').value = myName;
     }
