@@ -5238,7 +5238,7 @@
     try {
       var blob = new Blob([JSON.stringify(anniversaries)], { type: 'application/json' });
       var result = await supabase.storage.from(BUCKET_NAME).upload(
-        '_system/anniversaries/' + annivLoggedUser + '.json', blob, { upsert: true }
+        '_system/anniversaries/' + toSafePath(annivLoggedUser) + '.json', blob, { upsert: true }
       );
       if(result.error) console.log('기념일 클라우드 저장 실패:', result.error.message);
     } catch(e) { console.log('기념일 클라우드 저장 예외:', e); }
@@ -5247,7 +5247,7 @@
   async function loadAnniversariesFromCloud(nickname) {
     try {
       var r = await supabase.storage.from(BUCKET_NAME).download(
-        '_system/anniversaries/' + nickname + '.json'
+        '_system/anniversaries/' + toSafePath(nickname) + '.json'
       );
       if (r.data) {
         var arr = JSON.parse(await r.data.text());
