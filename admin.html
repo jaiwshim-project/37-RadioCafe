@@ -376,7 +376,13 @@
 
     .user-row:hover { background: rgba(200,169,110,0.08); }
 
-    .user-info { display: flex; align-items: center; gap: 12px; }
+    .user-info { display: flex; align-items: center; gap: 10px; }
+
+    .user-serial {
+      font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+      color: #C8A96E; min-width: 36px; text-align: center;
+      letter-spacing: 1px;
+    }
 
     .user-avatar {
       width: 36px; height: 36px;
@@ -1304,6 +1310,14 @@
       return '';
     }
 
+    function getUserSerial(name) {
+      var allKeys = Object.keys(allUsers);
+      var idx = allKeys.indexOf(name);
+      if (idx < 0) return '----';
+      var num = idx + 1;
+      return ('0000' + num).slice(-4);
+    }
+
     function renderUserList(userNames) {
       var container = document.getElementById('userList');
       if (userNames.length === 0) {
@@ -1314,11 +1328,13 @@
       var html = '';
       for (var i = 0; i < userNames.length; i++) {
         var name = userNames[i];
+        var serial = getUserSerial(name);
         var email = getUserEmail(allUsers[name]);
         var emailHtml = email ? '<div style="font-size:11px;color:#A08050;margin-top:1px;">' + escapeHtml(email) + '</div>' : '';
         html += '<div class="user-item" id="user-' + i + '">'
           + '<div class="user-row" onclick="toggleUserDetail(' + i + ',\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">'
           + '<div class="user-info">'
+          + '<span class="user-serial">' + serial + '</span>'
           + '<div class="user-avatar">' + escapeHtml(name.charAt(0)) + '</div>'
           + '<div><div class="user-name">' + escapeHtml(name) + '</div>'
           + emailHtml
