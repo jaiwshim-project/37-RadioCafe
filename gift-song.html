@@ -437,6 +437,20 @@
     document.getElementById('giftLink').value = url;
   }
 
+  function saveSongGift(){
+    try {
+      initSupabase();
+      if(!supabaseClient) return;
+      var msg = document.getElementById('giftMsgInput').value.trim();
+      supabaseClient.from('song_gifts').insert({
+        room_id: chatRoomId,
+        song_id: selectedGiftSong ? selectedGiftSong.id : null,
+        song_name: selectedGiftSong ? selectedGiftSong.name : null,
+        sender_message: msg || null
+      }).then(function(){});
+    } catch(e){}
+  }
+
   function copyGiftLink(){
     updateGiftLink();
     var input = document.getElementById('giftLink');
@@ -444,11 +458,13 @@
     navigator.clipboard.writeText(input.value).then(function(){
       document.getElementById('giftCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('giftCopied').classList.add('hidden'); }, 2000);
+      saveSongGift();
       openChatPanel();
     }).catch(function(){
       document.execCommand('copy');
       document.getElementById('giftCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('giftCopied').classList.add('hidden'); }, 2000);
+      saveSongGift();
       openChatPanel();
     });
   }

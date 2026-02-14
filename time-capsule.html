@@ -50,7 +50,7 @@
     }
     .capsule-subtitle {
       font-family: 'Inter', sans-serif; font-size: 13px;
-      color: #A08050; margin-bottom: 16px;
+      color: #6a5530; margin-bottom: 16px;
     }
 
     /* Sender Mode Styles */
@@ -104,7 +104,7 @@
     .gift-btn-back {
       padding: 12px; border-radius: 12px; flex: 0 0 70px;
       background: transparent; border: 1px solid rgba(139,105,20,0.2);
-      color: #A08050; font-family: 'Outfit', sans-serif;
+      color: #6a5530; font-family: 'Outfit', sans-serif;
       font-size: 14px; font-weight: 700; cursor: pointer;
     }
     .gift-btn-next {
@@ -132,7 +132,7 @@
     }
     .gift-copied { color: #8B6914; font-size: 12px; margin-top: 6px; font-family: 'Inter', sans-serif; }
     .capsule-waiting {
-      color: #A08050; font-size: 12px; margin-top: 10px;
+      color: #6a5530; font-size: 12px; margin-top: 10px;
       font-family: 'Inter', sans-serif; display: flex; align-items: center;
       justify-content: center; gap: 6px;
     }
@@ -151,7 +151,7 @@
     }
     .gift-guide p {
       font-family: 'Inter', sans-serif; font-size: 13px;
-      color: #A08050; line-height: 1.6;
+      color: #6a5530; line-height: 1.6;
       margin: 0 0 8px 0;
     }
     .gift-guide p:last-child { margin-bottom: 0; }
@@ -295,7 +295,7 @@
     }
     .countdown-label {
       font-family: 'Inter', sans-serif; font-size: 12px;
-      color: #A08050; margin-bottom: 10px;
+      color: #6a5530; margin-bottom: 10px;
       letter-spacing: 1px;
     }
     .countdown-boxes {
@@ -314,7 +314,7 @@
     }
     .countdown-unit {
       font-family: 'Inter', sans-serif; font-size: 10px;
-      color: #A08050; margin-top: 2px;
+      color: #6a5530; margin-top: 2px;
     }
 
     /* Chat button */
@@ -448,7 +448,7 @@
       border-bottom: 1px solid rgba(200,169,110,0.25); flex-shrink: 0;
     }
     .chat-header-title { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: #8B6914; letter-spacing: 2px; }
-    .chat-header-info { font-family: 'Inter', sans-serif; font-size: 11px; color: #A08050; }
+    .chat-header-info { font-family: 'Inter', sans-serif; font-size: 11px; color: #6a5530; }
     .chat-back-btn { background: none; border: 1px solid rgba(139,105,20,0.4); color: #8B6914; font-size: 12px; padding: 4px 10px; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; white-space: nowrap; }
     #chatBody { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
     .chat-nickname-box { padding: 24px 16px; text-align: center; }
@@ -462,11 +462,11 @@
     .chat-msg.me { align-self: flex-end; align-items: flex-end; }
     .chat-msg.other { align-self: flex-start; align-items: flex-start; }
     .chat-msg-name { font-weight: 700; color: #8B6914; font-size: 13px; margin-bottom: 3px; }
-    .chat-msg.me .chat-msg-name { color: #A08050; }
+    .chat-msg.me .chat-msg-name { color: #6a5530; }
     .chat-msg-bubble { padding: 8px 14px; border-radius: 14px; line-height: 1.5; color: #3a2a10; }
     .chat-msg.other .chat-msg-bubble { background: rgba(200,169,110,0.15); border: 1px solid rgba(200,169,110,0.2); border-top-left-radius: 4px; }
     .chat-msg.me .chat-msg-bubble { background: #C8A96E; color: #fff; border-top-right-radius: 4px; }
-    .chat-msg-system { text-align: center; color: #A08050; font-size: 13px; font-style: italic; margin: 6px 0; align-self: center; }
+    .chat-msg-system { text-align: center; color: #6a5530; font-size: 13px; font-style: italic; margin: 6px 0; align-self: center; }
     .chat-input-box { display: flex; gap: 8px; padding: 10px 16px; border-top: 1px solid rgba(200,169,110,0.25); }
     .chat-input-box input { flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(139,105,20,0.25); background: rgba(255,255,255,0.7); color: #3a2a10; font-family: 'Inter', sans-serif; font-size: 13px; outline: none; }
     .chat-input-box input:focus { border-color: #C8A96E; }
@@ -770,6 +770,20 @@
     document.getElementById('capsuleLink').value = url;
   }
 
+  function saveCapsule(){
+    try {
+      initSupabase();
+      if(!supabaseClient) return;
+      var msg = document.getElementById('capsuleMsgInput').value.trim();
+      var date = document.getElementById('capsuleDateInput').value;
+      supabaseClient.from('capsules').insert({
+        room_id: chatRoomId,
+        unlock_date: date || null,
+        message: msg || null
+      }).then(function(){});
+    } catch(e){}
+  }
+
   function copyCapsuleLink(){
     updateCapsuleLink();
     var input = document.getElementById('capsuleLink');
@@ -777,11 +791,13 @@
     navigator.clipboard.writeText(input.value).then(function(){
       document.getElementById('capsuleCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('capsuleCopied').classList.add('hidden'); }, 2000);
+      saveCapsule();
       waitForReceiver();
     }).catch(function(){
       document.execCommand('copy');
       document.getElementById('capsuleCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('capsuleCopied').classList.add('hidden'); }, 2000);
+      saveCapsule();
       waitForReceiver();
     });
   }

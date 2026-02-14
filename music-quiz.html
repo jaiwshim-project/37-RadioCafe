@@ -40,7 +40,7 @@
     }
     .quiz-label {
       font-family: 'Inter', sans-serif; font-size: 13px;
-      color: #A08050; margin-bottom: 8px;
+      color: #6a5530; margin-bottom: 8px;
     }
     .hidden { display: none !important; }
 
@@ -803,6 +803,25 @@
     }, 2000);
   }
 
+  function saveQuizGame(winner){
+    try {
+      initSupabase();
+      if(!supabaseClient) return;
+      var hostName = isHost ? myName : opponentName;
+      var guestName = isHost ? opponentName : myName;
+      var hostScore = isHost ? myScore : opponentScore;
+      var guestScore = isHost ? opponentScore : myScore;
+      supabaseClient.from('quiz_games').insert({
+        room_id: chatRoomId,
+        host_name: hostName,
+        guest_name: guestName,
+        host_score: hostScore,
+        guest_score: guestScore,
+        winner: winner
+      }).then(function(){});
+    } catch(e){}
+  }
+
   function endGame(){
     clearInterval(questionTimer);
     document.getElementById('gameScreen').classList.add('hidden');
@@ -852,6 +871,12 @@
     oppPlayer.classList.remove('winner');
     if(myScore > opponentScore) myPlayer.classList.add('winner');
     else if(opponentScore > myScore) oppPlayer.classList.add('winner');
+
+    // Save to Supabase (host only to avoid duplicate)
+    if(isHost){
+      var winner = myScore > opponentScore ? 'host' : (opponentScore > myScore ? 'guest' : 'draw');
+      saveQuizGame(winner);
+    }
   }
 
   function restartGame(){

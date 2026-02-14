@@ -144,6 +144,7 @@
   <a href="#" class="back-link" onclick="event.preventDefault();history.back()">이전</a>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   var chatRoomId = null;
 
@@ -220,16 +221,42 @@
     document.getElementById('ltmLink').value = buildInviteUrl();
   }
 
+  // === Supabase ===
+  var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
+  var supabaseClient = null;
+  function initSupabase(){
+    if(supabaseClient) return;
+    if(!window.supabase) return;
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+
+  function saveListenSession(){
+    try {
+      initSupabase();
+      if(!supabaseClient) return;
+      var greeting = document.getElementById('ltmGreeting').value.trim();
+      supabaseClient.from('listen_sessions').insert({
+        room_id: chatRoomId,
+        station_id: currentStation ? currentStation.id : null,
+        station_name: currentStation ? currentStation.name : null,
+        host_greeting: greeting || null
+      }).then(function(){});
+    } catch(e){}
+  }
+
   function copyListenLink(){
     var input = document.getElementById('ltmLink');
     input.select();
     navigator.clipboard.writeText(input.value).then(function(){
       document.getElementById('ltmCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('ltmCopied').classList.add('hidden'); }, 2000);
+      saveListenSession();
     }).catch(function(){
       document.execCommand('copy');
       document.getElementById('ltmCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('ltmCopied').classList.add('hidden'); }, 2000);
+      saveListenSession();
     });
   }
 
