@@ -463,6 +463,7 @@
   var chatRoomId = null;
   var myAnswered = false;
   var opponentAnsweredCurrent = false;
+  var channelReady = false;
 
   // === Chat State ===
   var chatChannel = null;
@@ -592,7 +593,31 @@
       showResult();
     });
 
-    matchChannel.subscribe(function(status){});
+    matchChannel.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        channelReady = true;
+      }
+    });
+  }
+
+  function sendWhenReady(event, payload, callback){
+    if(channelReady && matchChannel){
+      matchChannel.send({ type: 'broadcast', event: event, payload: payload });
+      if(callback) callback();
+    } else {
+      // 채널 구독 완료 대기 후 재시도
+      var retries = 0;
+      var retryInterval = setInterval(function(){
+        retries++;
+        if(channelReady && matchChannel){
+          clearInterval(retryInterval);
+          matchChannel.send({ type: 'broadcast', event: event, payload: payload });
+          if(callback) callback();
+        } else if(retries > 20){
+          clearInterval(retryInterval);
+        }
+      }, 300);
+    }
   }
 
   // === Guest Join ===
@@ -602,13 +627,10 @@
     if(!name){ input.focus(); return; }
     myName = name;
 
-    matchChannel.send({
-      type: 'broadcast', event: 'player_join',
-      payload: { name: myName, role: 'guest' }
-    });
-
     input.disabled = true;
     document.getElementById('guestWaiting').classList.remove('hidden');
+
+    sendWhenReady('player_join', { name: myName, role: 'guest' });
   }
 
   // === Host Start ===
@@ -618,10 +640,7 @@
     if(!name){ input.focus(); input.style.borderColor = '#ef4444'; return; }
     myName = name;
 
-    matchChannel.send({
-      type: 'broadcast', event: 'player_join',
-      payload: { name: myName, role: 'host' }
-    });
+    sendWhenReady('player_join', { name: myName, role: 'host' });
 
     // Select 10 random questions
     var indices = [];
@@ -630,11 +649,9 @@
     gameQuestions = indices.slice(0, 10);
 
     setTimeout(function(){
-      matchChannel.send({
-        type: 'broadcast', event: 'game_start',
-        payload: { questions: gameQuestions }
+      sendWhenReady('game_start', { questions: gameQuestions }, function(){
+        startGameUI();
       });
-      startGameUI();
     }, 300);
   }
 
@@ -691,10 +708,7 @@
     btnEl.classList.add('selected');
 
     // Broadcast my answer
-    matchChannel.send({
-      type: 'broadcast', event: 'answer',
-      payload: { name: myName, qIndex: currentQ, selected: index }
-    });
+    sendWhenReady('answer', { name: myName, qIndex: currentQ, selected: index });
 
     // If opponent already answered, move to next
     if(opponentAnsweredCurrent){
@@ -720,10 +734,7 @@
 
   function finishAnswering(){
     // Send all my answers to opponent for comparison
-    matchChannel.send({
-      type: 'broadcast', event: 'all_answers',
-      payload: { name: myName, answers: myAnswers }
-    });
+    sendWhenReady('all_answers', { name: myName, answers: myAnswers });
 
     // If we already have opponent's answers, show result
     if(opponentAnswers.length > 0){
@@ -842,11 +853,9 @@
       indices = shuffleArray(indices);
       gameQuestions = indices.slice(0, 10);
 
-      matchChannel.send({
-        type: 'broadcast', event: 'game_start',
-        payload: { questions: gameQuestions }
+      sendWhenReady('game_start', { questions: gameQuestions }, function(){
+        startGameUI();
       });
-      startGameUI();
     } else {
       document.getElementById('resultScreen').classList.add('hidden');
       document.getElementById('guestLobby').classList.remove('hidden');
