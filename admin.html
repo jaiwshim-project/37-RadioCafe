@@ -395,6 +395,9 @@
       margin-top: 2px;
     }
 
+    .user-dash-btn {
+      flex-shrink: 0; margin: 0 4px;
+    }
     .user-actions {
       display: flex; gap: 6px; align-items: center;
     }
@@ -1320,8 +1323,8 @@
           + emailHtml
           + '<div class="user-meta" id="userMeta-' + i + '">불러오는 중...</div></div>'
           + '</div>'
+          + '<button class="btn btn-gold btn-sm user-dash-btn" onclick="event.stopPropagation();viewUserDashboard(\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">대시보드</button>'
           + '<div class="user-actions">'
-          + '<button class="btn btn-gold btn-sm" onclick="event.stopPropagation();viewUserDashboard(\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">대시보드</button>'
           + '<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteUser(\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">삭제</button>'
           + '<span class="expand-arrow">&#9660;</span>'
           + '</div></div>'
