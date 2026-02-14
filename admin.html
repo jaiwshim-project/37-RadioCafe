@@ -1102,8 +1102,11 @@
       if (password === ADMIN_PASSWORD) {
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminPanel').classList.add('active');
+        sessionStorage.setItem('adminLoggedIn', '1');
         var urlTab = new URLSearchParams(location.search).get('tab');
-        if(urlTab) { switchTab(urlTab); } else { loadDashboard(); }
+        var savedTab = sessionStorage.getItem('adminCurrentTab');
+        var targetTab = urlTab || savedTab || 'dashboard';
+        switchTab(targetTab);
       } else {
         messageEl.className = 'message error';
         messageEl.textContent = '비밀번호가 올바르지 않습니다.';
@@ -1115,11 +1118,32 @@
       document.getElementById('adminPanel').classList.remove('active');
       document.getElementById('adminPassword').value = '';
       document.getElementById('loginMessage').className = 'message';
+      sessionStorage.removeItem('adminLoggedIn');
+      sessionStorage.removeItem('adminCurrentTab');
     }
 
     document.getElementById('adminPassword').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') adminLogin();
     });
+
+    // 리프레시 시 자동 복원
+    (function(){
+      var navEntries = performance.getEntriesByType && performance.getEntriesByType('navigation');
+      var isReload = (navEntries && navEntries[0] && navEntries[0].type === 'reload') ||
+                     (performance.navigation && performance.navigation.type === 1);
+      if(isReload && sessionStorage.getItem('adminLoggedIn')){
+        // 비밀번호 로드 후 자동 로그인
+        var waitPw = setInterval(function(){
+          if(ADMIN_PASSWORD){
+            clearInterval(waitPw);
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminPanel').classList.add('active');
+            var savedTab = sessionStorage.getItem('adminCurrentTab') || 'dashboard';
+            switchTab(savedTab);
+          }
+        }, 100);
+      }
+    })();
 
     // === 탭 전환 ===
     function switchTab(tabName) {
@@ -1131,6 +1155,8 @@
       });
       var target = document.getElementById('tab-' + tabName);
       if (target) target.classList.add('active');
+
+      sessionStorage.setItem('adminCurrentTab', tabName);
 
       if (tabName === 'dashboard') loadDashboard();
       if (tabName === 'users') loadUsersTab();
