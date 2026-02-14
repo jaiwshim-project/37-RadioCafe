@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ko" style="background:#f5e6d3">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>일기쓰기 | 클라라 라디오카페</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5e6d3;
+      --body-out1: #e8d5b0; --body-out2: #d4c09a;
+      --body-in1: #FFF8E7; --body-in2: #F5ECD8;
+      --accent: #C8A96E;
+      --accent-glow: rgba(200,169,110,0.5);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d5b7 50%, #f0dcc4 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    body::before {
+      content: '';
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(200,169,110,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(200,169,110,0.04) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
+    .hidden { display: none !important; }
+
+    /* ── Card Container ── */
+    .diary-card {
+      background: linear-gradient(145deg, #e8d5b0, #d4c09a);
+      border: 1px solid rgba(139,105,20,0.15);
+      border-radius: 20px; padding: 24px;
+      width: 100%; max-width: 380px;
+      text-align: center;
+      box-shadow: 0 40px 80px rgba(100,70,30,0.15), 0 0 40px rgba(200,169,110,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
+      position: relative; z-index: 1;
+    }
+    .diary-title {
+      font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
+      color: #8B6914; letter-spacing: 3px; margin-bottom: 16px;
+    }
+
+    /* ── Buttons ── */
+    .diary-btn-row {
+      display: flex; gap: 8px; margin-top: 10px;
+    }
+    .diary-btn {
+      flex: 1; padding: 12px; border-radius: 12px;
+      background: linear-gradient(135deg, #C8A96E, #b89858); border: none;
+      color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .diary-btn:disabled { opacity: 0.3; cursor: default; }
+    .diary-btn:not(:disabled):hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
+    .diary-btn-back {
+      padding: 12px 16px; border-radius: 12px;
+      background: transparent; border: 1px solid rgba(139,105,20,0.2);
+      color: #6a5530; font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .diary-btn-back:hover { border-color: rgba(139,105,20,0.4); color: #8B6914; }
+
+    /* ── Type Selector ── */
+    .diary-type-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 16px; border-radius: 14px;
+      background: rgba(255,255,255,0.4); border: 2px solid rgba(139,105,20,0.15);
+      color: #6a5530; font-family: 'Outfit', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: all 0.3s; margin-bottom: 8px;
+    }
+    .diary-type-btn:hover { border-color: rgba(200,169,110,0.5); background: rgba(255,255,255,0.6); }
+    .diary-type-btn .type-icon { font-size: 22px; }
+
+    /* ── Text Diary ── */
+    .diary-textarea {
+      width: 100%; min-height: 180px; padding: 14px;
+      border-radius: 12px; border: 1px solid rgba(139,105,20,0.2);
+      background: rgba(255,255,255,0.5); resize: vertical;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      color: #4a3d20; line-height: 1.7;
+    }
+    .diary-textarea:focus { outline: none; border-color: #C8A96E; box-shadow: 0 0 8px rgba(200,169,110,0.3); }
+    .diary-char-count {
+      text-align: right; font-size: 11px; color: #9a8a6a; margin-top: 4px;
+    }
+
+    /* ── Voice Recorder ── */
+    .diary-recorder {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      padding: 20px; border-radius: 14px;
+      background: rgba(255,255,255,0.3); border: 1px solid rgba(139,105,20,0.1);
+    }
+    .diary-rec-btn {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, #C8A96E, #b89858);
+      border: 3px solid rgba(255,255,255,0.4);
+      color: #fff; font-size: 28px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+      box-shadow: 0 4px 16px rgba(200,169,110,0.4);
+    }
+    .diary-rec-btn:hover { transform: scale(1.05); }
+    .diary-rec-btn.recording {
+      background: linear-gradient(135deg, #e05050, #c03030);
+      animation: pulse-rec 1.2s infinite;
+    }
+    @keyframes pulse-rec {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(224,80,80,0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(224,80,80,0); }
+    }
+    .diary-rec-time {
+      font-family: 'Orbitron', monospace; font-size: 20px;
+      color: #8B6914; font-weight: 700;
+    }
+    .diary-rec-status {
+      font-family: 'Inter', sans-serif; font-size: 13px; color: #6a5530;
+    }
+    .diary-rec-max {
+      font-size: 11px; color: #9a8a6a;
+    }
+    .diary-preview-audio {
+      width: 100%; margin-top: 8px; border-radius: 8px;
+    }
+
+    /* ── Diary List ── */
+    .diary-list-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 20px; margin-bottom: 10px;
+      padding-bottom: 8px; border-bottom: 1px solid rgba(139,105,20,0.15);
+    }
+    .diary-list-title {
+      font-family: 'Outfit', sans-serif; font-size: 14px;
+      font-weight: 700; color: #8B6914;
+    }
+    .diary-list-count {
+      font-size: 12px; color: #9a8a6a;
+    }
+    .diary-list {
+      max-height: 300px; overflow-y: auto;
+    }
+    .diary-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(139,105,20,0.08);
+      margin-bottom: 6px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .diary-item:hover { background: rgba(255,255,255,0.55); border-color: rgba(200,169,110,0.3); }
+    .diary-item-no {
+      font-family: 'Orbitron', monospace; font-size: 12px;
+      color: #C8A96E; font-weight: 700; min-width: 28px;
+    }
+    .diary-item-info {
+      flex: 1; text-align: left;
+    }
+    .diary-item-date {
+      font-size: 12px; color: #6a5530; font-weight: 600;
+    }
+    .diary-item-type {
+      font-size: 11px; color: #9a8a6a; margin-top: 2px;
+    }
+    .diary-item-icon {
+      font-size: 18px; color: #C8A96E;
+    }
+    .diary-empty {
+      padding: 24px; text-align: center;
+      font-size: 13px; color: #9a8a6a;
+    }
+
+    /* ── Detail View ── */
+    .diary-detail-date {
+      font-size: 12px; color: #9a8a6a; margin-bottom: 12px;
+    }
+    .diary-detail-type-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 600; margin-bottom: 12px;
+    }
+    .badge-text { background: rgba(139,105,20,0.1); color: #8B6914; }
+    .badge-voice { background: rgba(200,80,80,0.1); color: #c05050; }
+    .diary-detail-content {
+      text-align: left; padding: 14px;
+      background: rgba(255,255,255,0.5); border-radius: 12px;
+      border: 1px solid rgba(139,105,20,0.1);
+      font-size: 14px; color: #4a3d20; line-height: 1.7;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 250px; overflow-y: auto;
+    }
+    .diary-detail-audio {
+      width: 100%; margin-top: 12px; border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="diary-card">
+
+  <!-- ── Step 0: Main (선택 + 목록) ── -->
+  <div id="diaryMain">
+    <div class="diary-title">DIARY</div>
+
+    <button class="diary-type-btn" onclick="showTextWrite()">
+      <span class="type-icon">&#9998;</span> 글로 쓰기
+    </button>
+    <button class="diary-type-btn" onclick="showVoiceWrite()">
+      <span class="type-icon">&#127908;</span> 음성 쓰기
+    </button>
+
+    <div class="diary-list-header">
+      <span class="diary-list-title">내 일기 목록</span>
+      <span class="diary-list-count" id="diaryListCount"></span>
+    </div>
+    <div class="diary-list" id="diaryList">
+      <div class="diary-empty" id="diaryEmpty">아직 작성한 일기가 없습니다.</div>
+    </div>
+
+    <div class="diary-btn-row" style="margin-top:16px;">
+      <button class="diary-btn-back" onclick="history.back()">&#9664; 이전</button>
+    </div>
+  </div>
+
+  <!-- ── Step 1: Text Write ── -->
+  <div id="diaryTextWrite" class="hidden">
+    <div class="diary-title">DIARY - TEXT</div>
+    <textarea class="diary-textarea" id="diaryTextarea" placeholder="오늘의 일기를 써보세요..." maxlength="2000" oninput="updateCharCount()"></textarea>
+    <div class="diary-char-count"><span id="diaryCharCount">0</span> / 2,000</div>
+    <div class="diary-btn-row" style="margin-top:12px;">
+      <button class="diary-btn-back" onclick="backToMain()">&#9664; 취소</button>
+      <button class="diary-btn" id="textSaveBtn" onclick="saveTextDiary()" disabled>저장</button>
+    </div>
+  </div>
+
+  <!-- ── Step 2: Voice Write ── -->
+  <div id="diaryVoiceWrite" class="hidden">
+    <div class="diary-title">DIARY - VOICE</div>
+    <div class="diary-recorder">
+      <div class="diary-rec-time" id="diaryRecTime">0:00</div>
+      <button class="diary-rec-btn" id="diaryRecBtn" onclick="toggleRecord()">&#127908;</button>
+      <div class="diary-rec-status" id="diaryRecStatus">버튼을 눌러 녹음을 시작하세요</div>
+      <div class="diary-rec-max">최대 3분</div>
+      <div id="diaryVoicePreview" class="hidden" style="width:100%;">
+        <audio class="diary-preview-audio" id="diaryPreviewAudio" controls></audio>
+      </div>
+    </div>
+    <div class="diary-btn-row" style="margin-top:12px;">
+      <button class="diary-btn-back" onclick="cancelVoice()">&#9664; 취소</button>
+      <button class="diary-btn" id="voiceSaveBtn" onclick="saveVoiceDiary()" disabled>저장</button>
+    </div>
+  </div>
+
+  <!-- ── Step 3: Detail View ── -->
+  <div id="diaryDetail" class="hidden">
+    <div class="diary-title">DIARY</div>
+    <div class="diary-detail-date" id="detailDate"></div>
+    <div id="detailBadge"></div>
+    <div id="detailBody"></div>
+    <div class="diary-btn-row" style="margin-top:14px;">
+      <button class="diary-btn-back" onclick="backToMain()">&#9664; 목록으로</button>
+      <button class="diary-btn" style="background:linear-gradient(135deg,#e05050,#c03030);" onclick="deleteDiary()">삭제</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // === Supabase Config ===
+  var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
+  var supabaseClient = null;
+
+  function initSupabase(){
+    if(supabaseClient) return;
+    if(!window.supabase) return;
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+
+  // === State ===
+  var diaries = [];
+  var currentDetailId = null;
+
+  // Voice recording state
+  var recMediaRecorder = null;
+  var recChunks = [];
+  var recBlob = null;
+  var recRecording = false;
+  var recTimer = null;
+  var recSec = 0;
+  var recMimeType = 'audio/webm';
+  var recExtension = '.webm';
+
+  // === User ID ===
+  function getUserId(){
+    var uid = localStorage.getItem('diary_user_id');
+    if(!uid){
+      var chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+      uid = '';
+      for(var i = 0; i < 12; i++) uid += chars.charAt(Math.floor(Math.random() * chars.length));
+      localStorage.setItem('diary_user_id', uid);
+    }
+    return uid;
+  }
+
+  // === Init ===
+  document.addEventListener('DOMContentLoaded', function(){
+    initSupabase();
+    loadDiaries();
+  });
+
+  // === Navigation ===
+  function showStep(stepId){
+    ['diaryMain','diaryTextWrite','diaryVoiceWrite','diaryDetail'].forEach(function(id){
+      document.getElementById(id).classList.add('hidden');
+    });
+    document.getElementById(stepId).classList.remove('hidden');
+  }
+
+  function backToMain(){
+    resetTextForm();
+    resetVoiceForm();
+    showStep('diaryMain');
+    loadDiaries();
+  }
+
+  function showTextWrite(){
+    resetTextForm();
+    showStep('diaryTextWrite');
+    document.getElementById('diaryTextarea').focus();
+  }
+
+  function showVoiceWrite(){
+    resetVoiceForm();
+    showStep('diaryVoiceWrite');
+  }
+
+  // === Text Diary ===
+  function updateCharCount(){
+    var len = document.getElementById('diaryTextarea').value.length;
+    document.getElementById('diaryCharCount').textContent = len;
+    document.getElementById('textSaveBtn').disabled = len === 0;
+  }
+
+  function resetTextForm(){
+    document.getElementById('diaryTextarea').value = '';
+    document.getElementById('diaryCharCount').textContent = '0';
+    document.getElementById('textSaveBtn').disabled = true;
+  }
+
+  function saveTextDiary(){
+    var content = document.getElementById('diaryTextarea').value.trim();
+    if(!content) return;
+    document.getElementById('textSaveBtn').disabled = true;
+    document.getElementById('textSaveBtn').textContent = '저장 중...';
+
+    initSupabase();
+    supabaseClient.from('diaries').insert({
+      user_id: getUserId(),
+      type: 'text',
+      content: content,
+      audio_url: null
+    }).select().then(function(res){
+      if(res.error){
+        alert('저장 실패: ' + res.error.message);
+        document.getElementById('textSaveBtn').disabled = false;
+        document.getElementById('textSaveBtn').textContent = '저장';
+        return;
+      }
+      document.getElementById('textSaveBtn').textContent = '저장';
+      backToMain();
+    });
+  }
+
+  // === Voice Diary ===
+  function toggleRecord(){
+    if(recRecording){
+      stopRecord();
+    } else {
+      startRecord();
+    }
+  }
+
+  function startRecord(){
+    recChunks = [];
+    recBlob = null;
+    document.getElementById('voiceSaveBtn').disabled = true;
+    document.getElementById('diaryVoicePreview').classList.add('hidden');
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream){
+      var mimeType = '';
+      if(MediaRecorder.isTypeSupported('audio/mp4')){
+        mimeType = 'audio/mp4'; recMimeType = 'audio/mp4'; recExtension = '.mp4';
+      } else if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')){
+        mimeType = 'audio/webm;codecs=opus'; recMimeType = 'audio/webm'; recExtension = '.webm';
+      } else if(MediaRecorder.isTypeSupported('audio/webm')){
+        mimeType = 'audio/webm'; recMimeType = 'audio/webm'; recExtension = '.webm';
+      }
+      var recOptions = mimeType ? { mimeType: mimeType } : {};
+      recMediaRecorder = new MediaRecorder(stream, recOptions);
+      recMediaRecorder.ondataavailable = function(e){
+        if(e.data.size > 0) recChunks.push(e.data);
+      };
+      recMediaRecorder.onstop = function(){
+        stream.getTracks().forEach(function(t){ t.stop(); });
+        recBlob = new Blob(recChunks, { type: recMimeType });
+        var url = URL.createObjectURL(recBlob);
+        document.getElementById('diaryPreviewAudio').src = url;
+        document.getElementById('diaryVoicePreview').classList.remove('hidden');
+        document.getElementById('diaryRecStatus').textContent = '녹음 완료!';
+        document.getElementById('voiceSaveBtn').disabled = false;
+      };
+      recMediaRecorder.start();
+      recRecording = true;
+      recSec = 0;
+      document.getElementById('diaryRecBtn').classList.add('recording');
+      document.getElementById('diaryRecBtn').innerHTML = '&#9209;';
+      document.getElementById('diaryRecStatus').textContent = '녹음 중...';
+      updateRecTimer();
+      recTimer = setInterval(function(){
+        recSec++;
+        updateRecTimer();
+        if(recSec >= 180) stopRecord();
+      }, 1000);
+    }).catch(function(err){
+      document.getElementById('diaryRecStatus').textContent = '마이크 접근이 거부되었습니다.';
+    });
+  }
+
+  function stopRecord(){
+    if(recMediaRecorder && recMediaRecorder.state === 'recording'){
+      recMediaRecorder.stop();
+    }
+    recRecording = false;
+    if(recTimer){ clearInterval(recTimer); recTimer = null; }
+    document.getElementById('diaryRecBtn').classList.remove('recording');
+    document.getElementById('diaryRecBtn').innerHTML = '&#127908;';
+  }
+
+  function updateRecTimer(){
+    var m = Math.floor(recSec / 60);
+    var s = recSec % 60;
+    document.getElementById('diaryRecTime').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  function resetVoiceForm(){
+    if(recRecording) stopRecord();
+    recBlob = null;
+    recChunks = [];
+    recSec = 0;
+    document.getElementById('diaryRecTime').textContent = '0:00';
+    document.getElementById('diaryRecStatus').textContent = '버튼을 눌러 녹음을 시작하세요';
+    document.getElementById('diaryVoicePreview').classList.add('hidden');
+    document.getElementById('voiceSaveBtn').disabled = true;
+    document.getElementById('diaryRecBtn').classList.remove('recording');
+    document.getElementById('diaryRecBtn').innerHTML = '&#127908;';
+  }
+
+  function cancelVoice(){
+    if(recRecording) stopRecord();
+    backToMain();
+  }
+
+  function saveVoiceDiary(){
+    if(!recBlob) return;
+    document.getElementById('voiceSaveBtn').disabled = true;
+    document.getElementById('voiceSaveBtn').textContent = '업로드 중...';
+
+    initSupabase();
+    var fileName = 'diary-voice/' + getUserId() + '_' + Date.now() + recExtension;
+
+    supabaseClient.storage.from('photo-albums').upload(fileName, recBlob, {
+      contentType: recMimeType, upsert: false
+    }).then(function(uploadRes){
+      if(uploadRes.error){
+        alert('업로드 실패: ' + uploadRes.error.message);
+        document.getElementById('voiceSaveBtn').disabled = false;
+        document.getElementById('voiceSaveBtn').textContent = '저장';
+        return;
+      }
+      var audioUrl = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + fileName;
+      return supabaseClient.from('diaries').insert({
+        user_id: getUserId(),
+        type: 'voice',
+        content: null,
+        audio_url: audioUrl
+      }).select();
+    }).then(function(res){
+      if(res && res.error){
+        alert('저장 실패: ' + res.error.message);
+        document.getElementById('voiceSaveBtn').disabled = false;
+        document.getElementById('voiceSaveBtn').textContent = '저장';
+        return;
+      }
+      document.getElementById('voiceSaveBtn').textContent = '저장';
+      backToMain();
+    });
+  }
+
+  // === Load Diary List ===
+  function loadDiaries(){
+    initSupabase();
+    supabaseClient.from('diaries')
+      .select('*')
+      .eq('user_id', getUserId())
+      .order('created_at', { ascending: false })
+      .then(function(res){
+        if(res.error){
+          console.log('일기 로드 오류:', res.error);
+          return;
+        }
+        diaries = res.data || [];
+        renderDiaryList();
+      });
+  }
+
+  function renderDiaryList(){
+    var listEl = document.getElementById('diaryList');
+    var countEl = document.getElementById('diaryListCount');
+    var emptyEl = document.getElementById('diaryEmpty');
+
+    countEl.textContent = diaries.length + '건';
+
+    if(diaries.length === 0){
+      emptyEl.style.display = 'block';
+      listEl.innerHTML = '';
+      listEl.appendChild(emptyEl);
+      return;
+    }
+
+    emptyEl.style.display = 'none';
+    var html = '';
+    diaries.forEach(function(d, idx){
+      var no = diaries.length - idx;
+      var date = new Date(d.created_at);
+      var dateStr = date.getFullYear() + '.' +
+        String(date.getMonth()+1).padStart(2,'0') + '.' +
+        String(date.getDate()).padStart(2,'0') + ' ' +
+        String(date.getHours()).padStart(2,'0') + ':' +
+        String(date.getMinutes()).padStart(2,'0');
+      var typeLabel = d.type === 'text' ? '&#9998; 글' : '&#127908; 음성';
+      var icon = d.type === 'text' ? '&#9658;' : '&#9654;';
+
+      html += '<div class="diary-item" onclick="showDetail(\'' + d.id + '\')">' +
+        '<span class="diary-item-no">#' + no + '</span>' +
+        '<div class="diary-item-info">' +
+          '<div class="diary-item-date">' + dateStr + '</div>' +
+          '<div class="diary-item-type">' + typeLabel + '</div>' +
+        '</div>' +
+        '<span class="diary-item-icon">' + icon + '</span>' +
+      '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  // === Detail View ===
+  function showDetail(id){
+    var diary = diaries.find(function(d){ return String(d.id) === String(id); });
+    if(!diary) return;
+    currentDetailId = id;
+
+    var date = new Date(diary.created_at);
+    var dateStr = date.getFullYear() + '년 ' +
+      (date.getMonth()+1) + '월 ' +
+      date.getDate() + '일 ' +
+      String(date.getHours()).padStart(2,'0') + ':' +
+      String(date.getMinutes()).padStart(2,'0');
+
+    document.getElementById('detailDate').textContent = dateStr;
+
+    if(diary.type === 'text'){
+      document.getElementById('detailBadge').innerHTML = '<span class="diary-detail-type-badge badge-text">&#9998; 글 일기</span>';
+      document.getElementById('detailBody').innerHTML = '<div class="diary-detail-content">' + escapeHtml(diary.content) + '</div>';
+    } else {
+      document.getElementById('detailBadge').innerHTML = '<span class="diary-detail-type-badge badge-voice">&#127908; 음성 일기</span>';
+      document.getElementById('detailBody').innerHTML = '<audio class="diary-detail-audio" controls src="' + diary.audio_url + '"></audio>';
+    }
+
+    showStep('diaryDetail');
+  }
+
+  function deleteDiary(){
+    if(!currentDetailId) return;
+    if(!confirm('이 일기를 삭제하시겠습니까?')) return;
+
+    initSupabase();
+    var diary = diaries.find(function(d){ return String(d.id) === String(currentDetailId); });
+
+    supabaseClient.from('diaries').delete().eq('id', currentDetailId).then(function(res){
+      if(res.error){
+        alert('삭제 실패: ' + res.error.message);
+        return;
+      }
+      // 음성 파일도 스토리지에서 삭제
+      if(diary && diary.type === 'voice' && diary.audio_url){
+        var path = diary.audio_url.split('/photo-albums/')[1];
+        if(path) supabaseClient.storage.from('photo-albums').remove([path]);
+      }
+      backToMain();
+    });
+  }
+
+  // === Utils ===
+  function escapeHtml(text){
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+</script>
+</body>
+</html>
