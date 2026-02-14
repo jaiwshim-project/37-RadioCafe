@@ -13,9 +13,16 @@
     // 페이지 렌더링 전 세션 복원 (깜빡임 방지)
     (function(){
       var urlTab = new URLSearchParams(location.search).get('tab');
+      var savedTab = sessionStorage.getItem('adminCurrentTab');
       if(sessionStorage.getItem('adminLoggedIn') || urlTab){
         sessionStorage.setItem('adminLoggedIn', '1');
-        document.write('<style>#loginSection{display:none!important}.admin-panel{display:block!important}</style>');
+        var activeTab = urlTab || savedTab || 'dashboard';
+        var css = '#loginSection{display:none!important}.admin-panel{display:block!important}'
+          + '.tab-content{display:none!important}'
+          + '#tab-' + activeTab + '{display:block!important}'
+          + '.tab-btn{}'
+          + '.tab-btn[data-tab="' + activeTab + '"]{color:rgba(139,105,20,1)!important;border-bottom:2px solid #8B6914!important}';
+        document.write('<style>' + css + '</style>');
       }
     })();
   </script>
