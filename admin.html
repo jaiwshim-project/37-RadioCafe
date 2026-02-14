@@ -9,6 +9,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 페이지 렌더링 전 세션 복원 (깜빡임 방지)
+    (function(){
+      var urlTab = new URLSearchParams(location.search).get('tab');
+      if(sessionStorage.getItem('adminLoggedIn') || urlTab){
+        sessionStorage.setItem('adminLoggedIn', '1');
+        document.write('<style>#loginSection{display:none!important}.admin-panel{display:block!important}</style>');
+      }
+    })();
+  </script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1785,13 +1795,10 @@
       showToast('비밀번호 변경 완료');
     }
 
-    // === 세션 중 자동 복원 (즉시 실행) ===
+    // 세션 복원 시 탭 전환
     (function(){
       var urlTab = new URLSearchParams(location.search).get('tab');
       if(sessionStorage.getItem('adminLoggedIn') || urlTab){
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('adminPanel').classList.add('active');
-        sessionStorage.setItem('adminLoggedIn', '1');
         var targetTab = urlTab || sessionStorage.getItem('adminCurrentTab') || 'dashboard';
         switchTab(targetTab);
       }
