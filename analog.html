@@ -2050,8 +2050,7 @@
     </div>
     <!-- Mode Switch (2줄) -->
     <div class="radio-top-row2">
-      <button class="photo-upload-btn has-photos" id="analogPhotoBtn" onclick="document.getElementById('analogPhotoInput').click()">+</button>
-      <input type="file" id="analogPhotoInput" accept="image/*" multiple style="display:none" onchange="handleAnalogPhotoUpload(event)">
+      <button class="photo-upload-btn has-photos" id="analogPhotoBtn" onclick="location.href='index.html'" title="사진 변경">+</button>
       <span class="analog-photos" id="analogBrandPhotos"></span>
       <button class="digital-to-analog-btn" onclick="if(currentStation)localStorage.setItem('radio-switch-station',currentStation.id);document.body.style.visibility='hidden';location.href='digital.html'">DIGITAL &#9654;</button>
     </div>
@@ -2163,7 +2162,7 @@
 
     <!-- Footer -->
     <div class="analog-footer">
-      <div class="analog-footer-text">&copy; 2026 <a href="about.html"><strong>Hyein Cho</strong></a></div>
+      <div class="analog-footer-text">&copy; 2026 클라라 라디오카페 <span style="margin:0 4px;opacity:0.5;">|</span> <a href="manual.html">사용법</a> <span style="margin:0 4px;opacity:0.5;">|</span> <a href="admin.html">관리자</a> <span style="margin:0 4px;opacity:0.5;">|</span> <a href="about.html"><strong>Hyein Cho</strong></a></div>
     </div>
   </div>
 </div>
