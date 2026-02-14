@@ -318,46 +318,7 @@
       display: block; margin-bottom: 2px;
     }
 
-    /* PDF 캡처용 축소 스타일 */
-    .pdf-compact .manual-inner { padding: 24px 18px; }
-    .pdf-compact .manual-title { font-size: 20px !important; }
-    .pdf-compact .manual-subtitle { font-size: 10px !important; }
-    .pdf-compact .manual-icon { width: 56px; height: 56px; font-size: 26px; margin-bottom: 12px; }
-    .pdf-compact .manual-header { margin-bottom: 18px; }
-    .pdf-compact .speaker { margin-bottom: 14px; padding: 5px; }
-    .pdf-compact .speaker-label { font-size: 8px !important; letter-spacing: 3px; }
-    .pdf-compact .section { margin-bottom: 12px; }
-    .pdf-compact .section-title { font-size: 10px !important; margin-bottom: 6px; }
-    .pdf-compact .section-title::before { width: 3px; height: 12px; }
-    .pdf-compact .step-list { gap: 4px; }
-    .pdf-compact .step-item { padding: 6px 8px; gap: 6px; border-radius: 8px; }
-    .pdf-compact .step-number { width: 16px; height: 16px; font-size: 8px; }
-    .pdf-compact .step-title { font-size: 9px !important; margin-bottom: 1px; }
-    .pdf-compact .step-desc { font-size: 7.5px !important; line-height: 1.3; }
-    .pdf-compact .screenshot-container { margin-bottom: 12px; }
-    .pdf-compact .screenshot-box { border-width: 1px; width: 50%; margin: 0 auto; }
-    .pdf-compact .screenshot-caption { font-size: 8px !important; margin-top: 4px; }
-    .pdf-compact .marker { width: 16px; height: 16px; font-size: 9px; border-width: 1.5px; }
-    .pdf-compact .marker-desc { margin-top: 8px; gap: 3px; }
-    .pdf-compact .marker-item { font-size: 7.5px !important; gap: 5px; line-height: 1.3; }
-    .pdf-compact .marker-num { width: 14px; height: 14px; font-size: 7px; }
-    .pdf-compact .tip-box { padding: 8px; margin-bottom: 12px; border-width: 1.5px; }
-    .pdf-compact .tip-title { font-size: 8px !important; letter-spacing: 2px; margin-bottom: 4px; }
-    .pdf-compact .tip-text { font-size: 7.5px !important; line-height: 1.4; }
-    .pdf-compact .link-section { margin-bottom: 12px; }
-    .pdf-compact .link-btn { padding: 8px 20px; font-size: 10px !important; border-radius: 16px; }
-    .pdf-compact .manual-footer { padding-top: 8px; }
-    .pdf-compact .copyright { font-size: 8px !important; }
-    .pdf-compact .screw { width: 7px; height: 7px; }
-    .pdf-compact .screw-tl { top: 8px; left: 8px; }
-    .pdf-compact .screw-tr { top: 8px; right: 8px; }
-    .pdf-compact .screw-bl { bottom: 8px; left: 8px; }
-    .pdf-compact .screw-br { bottom: 8px; right: 8px; }
-    .pdf-compact .category-divider { margin: 16px 0 10px; }
-    .pdf-compact .category-label { font-size: 8px !important; letter-spacing: 2px; }
-    .pdf-compact .feature-grid { gap: 3px; }
-    .pdf-compact .feature-chip { padding: 4px 2px; font-size: 7.5px !important; border-radius: 5px; }
-    .pdf-compact .feature-chip-num { font-size: 7px !important; }
+    /* PDF 버튼 숨김 (인쇄/캡처 시) */
   </style>
 </head>
 <body>
@@ -831,96 +792,61 @@
     btn.style.visibility = 'hidden';
 
     var card = document.querySelector('.manual-card');
-    var inner = document.querySelector('.manual-inner');
 
-    card.classList.add('pdf-compact');
+    // WYSIWYG: 화면에 보이는 그대로 캡처
+    html2canvas(card, {
+      scale: 2, allowTaint: true, useCORS: true,
+      backgroundColor: '#f5e6d3', logging: false, imageTimeout: 0
+    }).then(function(canvas){
+      btn.style.visibility = '';
 
-    requestAnimationFrame(function(){ setTimeout(function(){
+      var pdf = new jspdf.jsPDF('p','mm','a4');
+      var pageW = pdf.internal.pageSize.getWidth();
+      var pageH = pdf.internal.pageSize.getHeight();
+      var margin = 8;
+      var contentW = pageW - margin * 2;
+      var maxH = pageH - margin * 2;
 
-      var children = inner.children;
-      var sections = [];
-      for(var i = 0; i < children.length; i++){
-        var el = children[i];
-        if(el.classList.contains('screw') || el === btn || el.id === 'pdfBtn') continue;
-        if(el.offsetHeight === 0) continue;
-        sections.push(el);
-      }
+      // 캔버스를 PDF 너비에 맞춰 비율 계산
+      var pxPerMm = canvas.width / contentW;
+      var sliceH_px = Math.floor(maxH * pxPerMm);
+      var srcY = 0;
+      var pageIndex = 0;
 
-      var captureOpts = {
-        scale: 2, allowTaint: true, useCORS: true,
-        backgroundColor: null, logging: false, imageTimeout: 0
-      };
+      while(srcY < canvas.height) {
+        if(pageIndex > 0) pdf.addPage();
 
-      var promises = sections.map(function(sec){ return html2canvas(sec, captureOpts); });
-
-      Promise.all(promises).then(function(canvases){
-        card.classList.remove('pdf-compact');
-        btn.style.visibility = '';
-
-        var pdf = new jspdf.jsPDF('p','mm','a4');
-        var pageW = pdf.internal.pageSize.getWidth();
-        var pageH = pdf.internal.pageSize.getHeight();
-        var margin = 5;
-        var contentW = pageW - margin * 2;
-        var maxH = pageH - margin * 2;
-        var curY = margin;
-        var gap = 1;
-
+        // 페이지 배경색
         pdf.setFillColor(245, 236, 216);
         pdf.rect(0, 0, pageW, pageH, 'F');
 
-        canvases.forEach(function(cvs, idx){
-          if(cvs.width === 0 || cvs.height === 0) return;
-          var imgH = (cvs.height * contentW) / cvs.width;
+        // 현재 페이지에 들어갈 슬라이스 높이
+        var sh = Math.min(sliceH_px, canvas.height - srcY);
 
-          if(curY + imgH > pageH - margin && curY > margin + 1) {
-            pdf.addPage();
-            pdf.setFillColor(245, 236, 216);
-            pdf.rect(0, 0, pageW, pageH, 'F');
-            curY = margin;
-          }
+        // 슬라이스 캔버스 생성
+        var slice = document.createElement('canvas');
+        slice.width = canvas.width;
+        slice.height = sh;
+        slice.getContext('2d').drawImage(canvas, 0, srcY, canvas.width, sh, 0, 0, canvas.width, sh);
 
-          if(imgH > maxH) {
-            var pxPerMm = cvs.width / contentW;
-            var sliceH_px = maxH * pxPerMm;
-            var srcY = 0;
-            while(srcY < cvs.height) {
-              if(curY > margin + 1) {
-                pdf.addPage();
-                pdf.setFillColor(245, 236, 216);
-                pdf.rect(0, 0, pageW, pageH, 'F');
-                curY = margin;
-              }
-              var sh = Math.min(sliceH_px, cvs.height - srcY);
-              var slice = document.createElement('canvas');
-              slice.width = cvs.width;
-              slice.height = sh;
-              slice.getContext('2d').drawImage(cvs, 0, srcY, cvs.width, sh, 0, 0, cvs.width, sh);
-              var sliceMm = (sh * contentW) / cvs.width;
-              pdf.addImage(slice.toDataURL('image/jpeg', 0.95), 'JPEG', margin, curY, contentW, sliceMm);
-              curY += sliceMm + gap;
-              srcY += sh;
-            }
-          } else {
-            pdf.addImage(cvs.toDataURL('image/jpeg', 0.95), 'JPEG', margin, curY, contentW, imgH);
-            curY += imgH + gap;
-          }
-        });
+        var sliceMm = (sh / pxPerMm);
+        pdf.addImage(slice.toDataURL('image/jpeg', 0.92), 'JPEG', margin, margin, contentW, sliceMm);
 
-        pdf.save('라디오카페_사용법.pdf');
-        restoreBtn(btn);
+        srcY += sh;
+        pageIndex++;
+      }
 
-      }).catch(function(e){
-        card.classList.remove('pdf-compact');
-        btn.style.visibility = '';
-        console.error('PDF 생성 오류:', e);
-        restoreBtn(btn);
-        btn.style.display = 'none';
-        window.print();
-        btn.style.display = '';
-      });
+      pdf.save('라디오카페_사용법.pdf');
+      restoreBtn(btn);
 
-    }, 100); });
+    }).catch(function(e){
+      btn.style.visibility = '';
+      console.error('PDF 생성 오류:', e);
+      restoreBtn(btn);
+      btn.style.display = 'none';
+      window.print();
+      btn.style.display = '';
+    });
   }
   </script>
 </body>
