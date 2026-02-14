@@ -1091,7 +1091,6 @@
       var messageEl = document.getElementById('loginMessage');
 
       if (password === ADMIN_PASSWORD) {
-        sessionStorage.setItem('adminLoggedIn', 'true');
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminPanel').classList.add('active');
         loadDashboard();
@@ -1102,7 +1101,6 @@
     }
 
     function adminLogout() {
-      sessionStorage.removeItem('adminLoggedIn');
       document.getElementById('loginSection').style.display = 'block';
       document.getElementById('adminPanel').classList.remove('active');
       document.getElementById('adminPassword').value = '';
@@ -1764,11 +1762,6 @@
         appSettings = settings;
       } catch(e) { console.log('설정 로드 실패:', e); }
 
-      if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('adminPanel').classList.add('active');
-        loadDashboard();
-      }
     })();
   </script>
 </body>
