@@ -841,8 +841,7 @@
     });
     viewerChannel.on('broadcast', { event: 'viewer_opened' }, function(){
       var waitEl2 = document.getElementById('capsuleWaiting');
-      if(waitEl2) waitEl2.classList.add('hidden');
-      openChatPanel();
+      if(waitEl2) waitEl2.innerHTML = '<span class="waiting-dot"></span> 상대방이 링크를 열었습니다!';
     });
     viewerChannel.subscribe();
   }
@@ -857,15 +856,14 @@
     } else {
       showLockedCapsule();
     }
-    // 보낸 사람에게 링크 열림 알리고 양쪽 채팅 오픈
-    notifySenderAndOpenChat();
+    // 보낸 사람에게 링크 열림 알림만 (채팅은 자동 오픈하지 않음)
+    notifySender();
   }
 
-  function notifySenderAndOpenChat(){
+  function notifySender(){
     initSupabase();
     if(!supabaseClient) {
-      // Supabase 로딩 대기
-      setTimeout(notifySenderAndOpenChat, 500);
+      setTimeout(notifySender, 500);
       return;
     }
     var notifyChannel = supabaseClient.channel('capsule-' + chatRoomId, {
@@ -874,8 +872,6 @@
     notifyChannel.subscribe(function(status){
       if(status === 'SUBSCRIBED'){
         notifyChannel.send({ type: 'broadcast', event: 'viewer_opened', payload: {} });
-        // receiver도 채팅 오픈
-        openChatPanel();
       }
     });
   }
