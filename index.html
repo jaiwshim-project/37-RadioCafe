@@ -2746,28 +2746,31 @@
 
     /* === ANNIVERSARY SECTION === */
     .anniversary-section {
-      margin-bottom: 10px; position: relative; z-index: 1;
+      margin-bottom: 10px; position: relative; z-index: 2;
       margin-top: 16px; padding: 16px 12px 12px;
-      border-top: 1px solid rgba(212,175,105,0.2) !important;
-      background: linear-gradient(180deg, #2a1e0a, #1e1508) !important;
-      border-radius: 10px;
+      border-top: none !important;
+      background: linear-gradient(180deg, #3d2c14, #2a1e0e) !important;
+      border-radius: 12px;
+      border: 1px solid rgba(212,175,105,0.25) !important;
+      box-shadow: 0 0 12px rgba(0,0,0,0.5) !important;
+      isolation: isolate;
     }
     .anniversary-label {
       font-family: 'Orbitron', monospace; font-size: 8px; font-weight: 600;
       color: #FFD700 !important; letter-spacing: 3px; margin-bottom: 6px;
     }
     .anniversary-panel {
-      background: linear-gradient(180deg, #3a2a10, #2a1e0c) !important;
-      border: 1px solid rgba(212,175,105,0.3) !important; border-radius: 10px;
+      background: linear-gradient(180deg, #4a3618, #362810) !important;
+      border: 1px solid rgba(212,175,105,0.35) !important; border-radius: 10px;
       padding: 10px 12px;
-      box-shadow: 0 0 6px rgba(212,175,105,0.1), inset 0 2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 0 8px rgba(212,175,105,0.15), inset 0 2px 6px rgba(0,0,0,0.3) !important;
     }
     .anniversary-list { display: flex; flex-direction: column; gap: 4px; }
     .anniversary-item {
       display: flex; align-items: center; gap: 6px;
       padding: 4px 6px; border-radius: 6px;
-      background: rgba(212,175,105,0.08) !important;
-      border: 1px solid rgba(212,175,105,0.15) !important;
+      background: rgba(212,175,105,0.1) !important;
+      border: 1px solid rgba(212,175,105,0.2) !important;
     }
     .anniversary-item .anniv-name {
       font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
@@ -2803,12 +2806,12 @@
     .anniversary-add-row input[type="text"] {
       width: 58px; min-width: 0; flex-shrink: 1; padding: 3px 4px; font-size: 9px;
       font-family: 'Inter', sans-serif;
-      background: #1e1508 !important; border: 1px solid rgba(212,175,105,0.3) !important;
+      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
       border-radius: 3px; color: #f5e6c8 !important; outline: none;
     }
     .anniv-type-select {
       padding: 3px 1px; font-size: 8px; font-family: 'Inter', sans-serif;
-      background: #1e1508 !important; border: 1px solid rgba(212,175,105,0.3) !important;
+      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
       border-radius: 3px; color: #f5e6c8 !important; outline: none;
       cursor: pointer; flex-shrink: 0;
     }
@@ -2816,7 +2819,7 @@
     .anniv-date-field {
       width: 28px; padding: 3px 1px; font-size: 8px; text-align: center;
       font-family: 'Orbitron', monospace;
-      background: #1e1508 !important; border: 1px solid rgba(212,175,105,0.3) !important;
+      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
       border-radius: 3px; color: #f5e6c8 !important; outline: none;
     }
     .anniv-date-field::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -2831,7 +2834,7 @@
     .anniversary-add-row button:active { transform: scale(0.95); }
     .anniv-cal-select, .dash-cal-select {
       padding: 3px 2px; font-size: 9px; font-family: 'Inter', sans-serif;
-      background: #1e1508 !important; border: 1px solid rgba(212,175,105,0.3) !important;
+      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
       border-radius: 4px; color: #f5e6c8 !important; outline: none;
       cursor: pointer; flex-shrink: 0;
     }
@@ -2855,7 +2858,7 @@
     }
     .anniv-login-row input {
       padding: 4px 6px; font-size: 10px; font-family: 'Inter', sans-serif;
-      background: #1e1508 !important; border: 1px solid rgba(212,175,105,0.3) !important;
+      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
       border-radius: 4px; color: #f5e6c8 !important; outline: none;
     }
     .anniv-login-row input[type="text"] { flex: 1; min-width: 0; }
@@ -2889,7 +2892,7 @@
     /* Birthday Info */
     .anniv-birthday-info {
       display: none; padding: 6px 10px; margin-bottom: 6px; border-radius: 8px;
-      background: rgba(212,175,105,0.08) !important; border: 1px solid rgba(212,175,105,0.15) !important;
+      background: rgba(212,175,105,0.1) !important; border: 1px solid rgba(212,175,105,0.2) !important;
       align-items: center; gap: 6px;
     }
     .anniv-birthday-info.visible { display: flex; }
@@ -2917,7 +2920,7 @@
     }
     .dashboard-overlay.visible { display: flex; }
     .dashboard-modal {
-      background: linear-gradient(160deg, #2a2218, #1a150e) !important;
+      background: linear-gradient(160deg, #3d2c14, #2a1e0e) !important;
       border: 2px solid #d4af69 !important; border-radius: 16px;
       padding: 20px; width: 90%; max-width: 360px; max-height: 80vh;
       overflow-y: auto; position: relative;
@@ -2941,7 +2944,7 @@
     .dashboard-admin-back.hidden { display: none; }
     .dashboard-user-info {
       margin-bottom: 16px; padding: 10px 12px; border-radius: 8px;
-      background: rgba(212,175,105,0.06) !important; border: 1px solid rgba(212,175,105,0.15) !important;
+      background: rgba(212,175,105,0.1) !important; border: 1px solid rgba(212,175,105,0.2) !important;
     }
     .dashboard-user-name {
       font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700;
@@ -2959,7 +2962,7 @@
     .dashboard-usage-item {
       display: flex; align-items: center; gap: 8px;
       padding: 6px 10px; border-radius: 8px;
-      background: rgba(212,175,105,0.06) !important; border: 1px solid rgba(212,175,105,0.12) !important;
+      background: rgba(212,175,105,0.1) !important; border: 1px solid rgba(212,175,105,0.2) !important;
     }
     .dashboard-usage-item .usage-no {
       font-family: 'Orbitron', monospace; font-size: 9px;
@@ -2990,7 +2993,7 @@
     .dashboard-anniv-item {
       display: flex; align-items: center; gap: 8px;
       padding: 8px 10px; border-radius: 8px;
-      background: rgba(212,175,105,0.08) !important; border: 1px solid rgba(212,175,105,0.15) !important;
+      background: rgba(212,175,105,0.1) !important; border: 1px solid rgba(212,175,105,0.2) !important;
     }
     .dashboard-anniv-item.nearest {
       border-color: #d4af69 !important;
@@ -3031,12 +3034,12 @@
     .dashboard-add-row input[type="text"] {
       width: 70px; min-width: 0; flex-shrink: 1; padding: 5px 6px; font-size: 11px;
       font-family: 'Inter', sans-serif;
-      background: #1e1508 !important; border: 1px solid rgba(212,175,105,0.3) !important;
+      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
       border-radius: 4px; color: #f5e6c8 !important; outline: none;
     }
     .dash-type-select {
       padding: 5px 2px; font-size: 10px; font-family: 'Inter', sans-serif;
-      background: #1e1508 !important; border: 1px solid rgba(212,175,105,0.3) !important;
+      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
       border-radius: 4px; color: #f5e6c8 !important; outline: none;
       cursor: pointer; flex-shrink: 0;
     }
@@ -3044,7 +3047,7 @@
     .dash-date-field {
       width: 34px; padding: 5px 2px; font-size: 10px; text-align: center;
       font-family: 'Orbitron', monospace;
-      background: #1e1508 !important; border: 1px solid rgba(212,175,105,0.3) !important;
+      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
       border-radius: 4px; color: #f5e6c8 !important; outline: none;
     }
     .dash-date-field::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
