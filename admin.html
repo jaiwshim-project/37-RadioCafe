@@ -1785,18 +1785,8 @@
       showToast('비밀번호 변경 완료');
     }
 
-    // === 초기화 ===
-    (async function() {
-      // 페이지 로드 시 클라우드에서 관리자 비밀번호 먼저 로드
-      try {
-        var settings = await loadSettingsFromCloud();
-        if (settings && settings.adminPassword) {
-          ADMIN_PASSWORD = settings.adminPassword;
-        }
-        appSettings = settings;
-      } catch(e) { console.log('설정 로드 실패:', e); }
-
-      // 세션 중 자동 복원 (리프레시/돌아가기 시 로그인 유지)
+    // === 세션 중 자동 복원 (즉시 실행) ===
+    (function(){
       var urlTab = new URLSearchParams(location.search).get('tab');
       if(sessionStorage.getItem('adminLoggedIn') || urlTab){
         document.getElementById('loginSection').style.display = 'none';
@@ -1805,6 +1795,17 @@
         var targetTab = urlTab || sessionStorage.getItem('adminCurrentTab') || 'dashboard';
         switchTab(targetTab);
       }
+    })();
+
+    // === 초기화 (Supabase 설정 로드) ===
+    (async function() {
+      try {
+        var settings = await loadSettingsFromCloud();
+        if (settings && settings.adminPassword) {
+          ADMIN_PASSWORD = settings.adminPassword;
+        }
+        appSettings = settings;
+      } catch(e) { console.log('설정 로드 실패:', e); }
     })();
   </script>
 </body>
