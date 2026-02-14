@@ -72,6 +72,14 @@
       transition: all 0.2s;
     }
     .diary-btn-back:hover { border-color: rgba(139,105,20,0.4); color: #8B6914; }
+    .diary-btn-edit {
+      flex: 1; padding: 12px; border-radius: 12px;
+      background: transparent; border: 1px solid #C8A96E;
+      color: #8B6914; font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .diary-btn-edit:hover { background: rgba(200,169,110,0.15); }
 
     /* ── Type Selector ── */
     .diary-type-btn {
@@ -134,6 +142,71 @@
     }
     .diary-preview-audio {
       width: 100%; margin-top: 8px; border-radius: 8px;
+    }
+
+    /* ── Photo Upload ── */
+    .diary-photo-section {
+      margin-top: 12px;
+    }
+    .diary-photo-label {
+      font-size: 12px; color: #6a5530; margin-bottom: 6px;
+      text-align: left; font-weight: 600;
+    }
+    .diary-photo-upload {
+      border: 2px dashed rgba(139,105,20,0.25);
+      border-radius: 12px; padding: 16px;
+      cursor: pointer; transition: all 0.3s;
+      background: rgba(255,255,255,0.25);
+      text-align: center;
+    }
+    .diary-photo-upload:hover {
+      border-color: #C8A96E; background: rgba(255,255,255,0.4);
+    }
+    .diary-photo-upload-icon { font-size: 24px; margin-bottom: 4px; }
+    .diary-photo-upload-text { font-size: 12px; color: #9a8a6a; }
+    .diary-photo-thumbs {
+      display: flex; gap: 8px; margin-top: 8px;
+    }
+    .diary-photo-thumb {
+      position: relative; width: 80px; height: 80px;
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid rgba(139,105,20,0.15);
+    }
+    .diary-photo-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .diary-photo-thumb-del {
+      position: absolute; top: 3px; right: 3px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(0,0,0,0.6); border: none;
+      color: #fff; font-size: 12px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+    }
+    .diary-photo-thumb-del:hover { background: #ff4444; }
+    .diary-photo-file { display: none; }
+
+    /* ── Detail Photos ── */
+    .diary-detail-photos {
+      display: flex; gap: 8px; margin-top: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .diary-detail-photo {
+      width: 100px; height: 100px; border-radius: 10px;
+      overflow: hidden; cursor: pointer;
+      border: 1px solid rgba(139,105,20,0.12);
+    }
+    .diary-detail-photo img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .diary-photo-fullview {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.9); z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .diary-photo-fullview img {
+      max-width: 95%; max-height: 90vh; object-fit: contain;
+      border-radius: 8px;
     }
 
     /* ── Diary List ── */
@@ -235,9 +308,20 @@
 
   <!-- ── Step 1: Text Write ── -->
   <div id="diaryTextWrite" class="hidden">
-    <div class="diary-title">DIARY - TEXT</div>
+    <div class="diary-title" id="textWriteTitle">DIARY - TEXT</div>
     <textarea class="diary-textarea" id="diaryTextarea" placeholder="오늘의 일기를 써보세요..." maxlength="2000" oninput="updateCharCount()"></textarea>
     <div class="diary-char-count"><span id="diaryCharCount">0</span> / 2,000</div>
+
+    <div class="diary-photo-section">
+      <div class="diary-photo-label">사진 첨부 (최대 3장)</div>
+      <div class="diary-photo-upload" id="textPhotoUpload" onclick="document.getElementById('textPhotoInput').click()">
+        <div class="diary-photo-upload-icon">📷</div>
+        <div class="diary-photo-upload-text">클릭하여 사진 추가</div>
+      </div>
+      <input type="file" class="diary-photo-file" id="textPhotoInput" accept="image/jpeg,image/png,image/webp" multiple>
+      <div class="diary-photo-thumbs" id="textPhotoThumbs"></div>
+    </div>
+
     <div class="diary-btn-row" style="margin-top:12px;">
       <button class="diary-btn-back" onclick="backToMain()">&#9664; 취소</button>
       <button class="diary-btn" id="textSaveBtn" onclick="saveTextDiary()" disabled>저장</button>
@@ -246,7 +330,7 @@
 
   <!-- ── Step 2: Voice Write ── -->
   <div id="diaryVoiceWrite" class="hidden">
-    <div class="diary-title">DIARY - VOICE</div>
+    <div class="diary-title" id="voiceWriteTitle">DIARY - VOICE</div>
     <div class="diary-recorder">
       <div class="diary-rec-time" id="diaryRecTime">0:00</div>
       <button class="diary-rec-btn" id="diaryRecBtn" onclick="toggleRecord()">&#127908;</button>
@@ -256,6 +340,17 @@
         <audio class="diary-preview-audio" id="diaryPreviewAudio" controls></audio>
       </div>
     </div>
+
+    <div class="diary-photo-section">
+      <div class="diary-photo-label">사진 첨부 (최대 3장)</div>
+      <div class="diary-photo-upload" id="voicePhotoUpload" onclick="document.getElementById('voicePhotoInput').click()">
+        <div class="diary-photo-upload-icon">📷</div>
+        <div class="diary-photo-upload-text">클릭하여 사진 추가</div>
+      </div>
+      <input type="file" class="diary-photo-file" id="voicePhotoInput" accept="image/jpeg,image/png,image/webp" multiple>
+      <div class="diary-photo-thumbs" id="voicePhotoThumbs"></div>
+    </div>
+
     <div class="diary-btn-row" style="margin-top:12px;">
       <button class="diary-btn-back" onclick="cancelVoice()">&#9664; 취소</button>
       <button class="diary-btn" id="voiceSaveBtn" onclick="saveVoiceDiary()" disabled>저장</button>
@@ -268,12 +363,19 @@
     <div class="diary-detail-date" id="detailDate"></div>
     <div id="detailBadge"></div>
     <div id="detailBody"></div>
+    <div id="detailPhotos"></div>
     <div class="diary-btn-row" style="margin-top:14px;">
-      <button class="diary-btn-back" onclick="backToMain()">&#9664; 목록으로</button>
+      <button class="diary-btn-back" onclick="backToMain()">&#9664; 목록</button>
+      <button class="diary-btn-edit" onclick="editDiary()">수정</button>
       <button class="diary-btn" style="background:linear-gradient(135deg,#e05050,#c03030);" onclick="deleteDiary()">삭제</button>
     </div>
   </div>
 
+</div>
+
+<!-- Photo Full View -->
+<div class="diary-photo-fullview hidden" id="diaryPhotoFullView" onclick="this.classList.add('hidden')">
+  <img id="diaryFullViewImg" src="" alt="">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -292,6 +394,14 @@
   // === State ===
   var diaries = [];
   var currentDetailId = null;
+  var editingDiaryId = null;
+
+  // Photo state
+  var diaryPhotoDataUrls = []; // for preview
+  var diaryPhotoBlobs = [];    // for upload
+  var diaryExistingPhotoUrls = []; // already uploaded (edit mode)
+  var MAX_DIARY_PHOTOS = 3;
+  var MAX_PHOTO_SIZE = 10 * 1024 * 1024;
 
   // Voice recording state
   var recMediaRecorder = null;
@@ -303,7 +413,7 @@
   var recMimeType = 'audio/webm';
   var recExtension = '.webm';
 
-  // === User ID (로그인 계정 기반 - 디바이스 간 공유) ===
+  // === User ID ===
   function getUserId(){
     var username = localStorage.getItem('radioUsername');
     if(!username){
@@ -318,6 +428,16 @@
   document.addEventListener('DOMContentLoaded', function(){
     initSupabase();
     loadDiaries();
+
+    document.getElementById('textPhotoInput').addEventListener('change', function(){
+      handleDiaryPhotos(this.files, 'text');
+      this.value = '';
+    });
+    document.getElementById('voicePhotoInput').addEventListener('change', function(){
+      handleDiaryPhotos(this.files, 'voice');
+      this.value = '';
+    });
+
     var uid = localStorage.getItem('radioUsername');
     if(uid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'diary'}).then(function(){});
   });
@@ -333,19 +453,197 @@
   function backToMain(){
     resetTextForm();
     resetVoiceForm();
+    resetPhotos();
+    editingDiaryId = null;
     showStep('diaryMain');
     loadDiaries();
   }
 
   function showTextWrite(){
     resetTextForm();
+    resetPhotos();
+    editingDiaryId = null;
+    document.getElementById('textWriteTitle').textContent = 'DIARY - TEXT';
+    document.getElementById('textSaveBtn').textContent = '저장';
     showStep('diaryTextWrite');
     document.getElementById('diaryTextarea').focus();
   }
 
   function showVoiceWrite(){
     resetVoiceForm();
+    resetPhotos();
+    editingDiaryId = null;
+    document.getElementById('voiceWriteTitle').textContent = 'DIARY - VOICE';
+    document.getElementById('voiceSaveBtn').textContent = '저장';
     showStep('diaryVoiceWrite');
+  }
+
+  // === Photo Handling ===
+  function resetPhotos(){
+    diaryPhotoDataUrls = [];
+    diaryPhotoBlobs = [];
+    diaryExistingPhotoUrls = [];
+    renderPhotoThumbs('text');
+    renderPhotoThumbs('voice');
+  }
+
+  function handleDiaryPhotos(fileList, mode){
+    if(!fileList || fileList.length === 0) return;
+    var total = diaryPhotoDataUrls.length + diaryExistingPhotoUrls.length;
+    var remaining = MAX_DIARY_PHOTOS - total;
+    if(remaining <= 0){
+      alert('사진은 최대 ' + MAX_DIARY_PHOTOS + '장까지 첨부할 수 있습니다.');
+      return;
+    }
+
+    var files = [];
+    for(var i = 0; i < Math.min(fileList.length, remaining); i++){
+      var f = fileList[i];
+      if(!f.type.match(/^image\/(jpeg|png|webp)$/)){
+        alert(f.name + ': 지원하지 않는 형식입니다. (JPG, PNG만 가능)');
+        continue;
+      }
+      if(f.size > MAX_PHOTO_SIZE){
+        alert(f.name + ': 파일 크기가 10MB를 초과합니다.');
+        continue;
+      }
+      files.push(f);
+    }
+
+    files.forEach(function(file){
+      compressImage(file, 1200, function(blob){
+        var reader = new FileReader();
+        reader.onload = function(e){
+          diaryPhotoDataUrls.push(e.target.result);
+          diaryPhotoBlobs.push(blob);
+          renderPhotoThumbs(mode);
+          updatePhotoUploadVisibility(mode);
+        };
+        reader.readAsDataURL(blob);
+      });
+    });
+  }
+
+  function removeDiaryPhoto(idx, isExisting, mode){
+    if(isExisting){
+      diaryExistingPhotoUrls.splice(idx, 1);
+    } else {
+      diaryPhotoDataUrls.splice(idx, 1);
+      diaryPhotoBlobs.splice(idx, 1);
+    }
+    renderPhotoThumbs(mode);
+    updatePhotoUploadVisibility(mode);
+  }
+
+  function renderPhotoThumbs(mode){
+    var thumbsEl = document.getElementById(mode + 'PhotoThumbs');
+    if(!thumbsEl) return;
+    var html = '';
+
+    // Existing photos (edit mode)
+    diaryExistingPhotoUrls.forEach(function(url, i){
+      html += '<div class="diary-photo-thumb">' +
+        '<img src="' + url + '" alt="사진">' +
+        '<button class="diary-photo-thumb-del" onclick="removeDiaryPhoto(' + i + ',true,\'' + mode + '\')">&times;</button>' +
+        '</div>';
+    });
+
+    // New photos
+    diaryPhotoDataUrls.forEach(function(dataUrl, i){
+      html += '<div class="diary-photo-thumb">' +
+        '<img src="' + dataUrl + '" alt="사진">' +
+        '<button class="diary-photo-thumb-del" onclick="removeDiaryPhoto(' + i + ',false,\'' + mode + '\')">&times;</button>' +
+        '</div>';
+    });
+
+    thumbsEl.innerHTML = html;
+  }
+
+  function updatePhotoUploadVisibility(mode){
+    var total = diaryPhotoDataUrls.length + diaryExistingPhotoUrls.length;
+    var uploadEl = document.getElementById(mode + 'PhotoUpload');
+    if(uploadEl){
+      uploadEl.style.display = total >= MAX_DIARY_PHOTOS ? 'none' : '';
+    }
+  }
+
+  // === Image Compression ===
+  var MAX_COMPRESSED_SIZE = 1 * 1024 * 1024;
+
+  function compressImage(file, maxWidth, callback){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var w = img.width, h = img.height;
+        if(w > maxWidth){
+          h = Math.round(h * maxWidth / w);
+          w = maxWidth;
+        }
+        var canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        var qualities = [0.8, 0.6, 0.4, 0.3];
+        function tryCompress(qi){
+          canvas.toBlob(function(blob){
+            if(blob.size <= MAX_COMPRESSED_SIZE || qi >= qualities.length - 1){
+              callback(blob);
+            } else {
+              tryCompress(qi + 1);
+            }
+          }, 'image/jpeg', qualities[qi]);
+        }
+        tryCompress(0);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // === Upload Photos to Supabase ===
+  function uploadDiaryPhotos(callback){
+    var allUrls = diaryExistingPhotoUrls.slice(); // keep existing
+    if(diaryPhotoBlobs.length === 0){
+      callback(allUrls);
+      return;
+    }
+
+    var uploaded = 0;
+    var total = diaryPhotoBlobs.length;
+    diaryPhotoBlobs.forEach(function(blob, i){
+      var fileName = 'diary-photos/' + getUserId() + '/' + Date.now() + '-' + i + '.jpg';
+      supabaseClient.storage.from('photo-albums').upload(fileName, blob, {
+        contentType: 'image/jpeg', upsert: false
+      }).then(function(res){
+        if(!res.error){
+          allUrls.push(SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + fileName);
+        }
+        uploaded++;
+        if(uploaded >= total) callback(allUrls);
+      }).catch(function(){
+        uploaded++;
+        if(uploaded >= total) callback(allUrls);
+      });
+    });
+  }
+
+  // === Content JSON helpers ===
+  function buildContentJson(text, photoUrls){
+    if(!photoUrls || photoUrls.length === 0) return text || null;
+    return JSON.stringify({ text: text || '', photos: photoUrls });
+  }
+
+  function parseDiaryContent(content){
+    if(!content) return { text: '', photos: [] };
+    if(content.charAt(0) === '{'){
+      try {
+        var obj = JSON.parse(content);
+        return { text: obj.text || '', photos: obj.photos || [] };
+      } catch(e){ /* fall through */ }
+    }
+    return { text: content, photos: [] };
   }
 
   // === Text Diary ===
@@ -362,36 +660,54 @@
   }
 
   function saveTextDiary(){
-    var content = document.getElementById('diaryTextarea').value.trim();
-    if(!content) return;
-    document.getElementById('textSaveBtn').disabled = true;
-    document.getElementById('textSaveBtn').textContent = '저장 중...';
+    var text = document.getElementById('diaryTextarea').value.trim();
+    if(!text) return;
+    var saveBtn = document.getElementById('textSaveBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = '저장 중...';
 
     initSupabase();
-    supabaseClient.from('diaries').insert({
-      user_id: getUserId(),
-      type: 'text',
-      content: content,
-      audio_url: null
-    }).select().then(function(res){
-      if(res.error){
-        alert('저장 실패: ' + res.error.message);
-        document.getElementById('textSaveBtn').disabled = false;
-        document.getElementById('textSaveBtn').textContent = '저장';
-        return;
+    uploadDiaryPhotos(function(photoUrls){
+      var contentVal = buildContentJson(text, photoUrls);
+
+      if(editingDiaryId){
+        // Update
+        supabaseClient.from('diaries').update({
+          content: contentVal
+        }).eq('id', editingDiaryId).then(function(res){
+          saveBtn.textContent = '저장';
+          if(res.error){
+            alert('수정 실패: ' + res.error.message);
+            saveBtn.disabled = false;
+            return;
+          }
+          editingDiaryId = null;
+          backToMain();
+        });
+      } else {
+        // Insert
+        supabaseClient.from('diaries').insert({
+          user_id: getUserId(),
+          type: 'text',
+          content: contentVal,
+          audio_url: null
+        }).select().then(function(res){
+          saveBtn.textContent = '저장';
+          if(res.error){
+            alert('저장 실패: ' + res.error.message);
+            saveBtn.disabled = false;
+            return;
+          }
+          backToMain();
+        });
       }
-      document.getElementById('textSaveBtn').textContent = '저장';
-      backToMain();
     });
   }
 
   // === Voice Diary ===
   function toggleRecord(){
-    if(recRecording){
-      stopRecord();
-    } else {
-      startRecord();
-    }
+    if(recRecording) stopRecord();
+    else startRecord();
   }
 
   function startRecord(){
@@ -475,39 +791,81 @@
   }
 
   function saveVoiceDiary(){
-    if(!recBlob) return;
-    document.getElementById('voiceSaveBtn').disabled = true;
-    document.getElementById('voiceSaveBtn').textContent = '업로드 중...';
+    if(!recBlob && !editingDiaryId) return;
+    var saveBtn = document.getElementById('voiceSaveBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = '업로드 중...';
 
     initSupabase();
-    var fileName = 'diary-voice/' + getUserId() + '_' + Date.now() + recExtension;
 
-    supabaseClient.storage.from('photo-albums').upload(fileName, recBlob, {
-      contentType: recMimeType, upsert: false
-    }).then(function(uploadRes){
-      if(uploadRes.error){
-        alert('업로드 실패: ' + uploadRes.error.message);
-        document.getElementById('voiceSaveBtn').disabled = false;
-        document.getElementById('voiceSaveBtn').textContent = '저장';
-        return;
+    function afterPhotoUpload(photoUrls){
+      var contentVal = buildContentJson('', photoUrls);
+
+      if(editingDiaryId){
+        // Update - only update content (photos), keep audio_url if no new recording
+        var updateData = { content: contentVal };
+        if(recBlob){
+          // New recording - upload then update
+          var fileName = 'diary-voice/' + getUserId() + '_' + Date.now() + recExtension;
+          supabaseClient.storage.from('photo-albums').upload(fileName, recBlob, {
+            contentType: recMimeType, upsert: false
+          }).then(function(uploadRes){
+            if(uploadRes.error){
+              alert('업로드 실패: ' + uploadRes.error.message);
+              saveBtn.disabled = false;
+              saveBtn.textContent = '저장';
+              return;
+            }
+            updateData.audio_url = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + fileName;
+            supabaseClient.from('diaries').update(updateData).eq('id', editingDiaryId).then(function(res){
+              saveBtn.textContent = '저장';
+              if(res.error){ alert('수정 실패: ' + res.error.message); saveBtn.disabled = false; return; }
+              editingDiaryId = null;
+              backToMain();
+            });
+          });
+        } else {
+          // No new recording, just update photos
+          supabaseClient.from('diaries').update(updateData).eq('id', editingDiaryId).then(function(res){
+            saveBtn.textContent = '저장';
+            if(res.error){ alert('수정 실패: ' + res.error.message); saveBtn.disabled = false; return; }
+            editingDiaryId = null;
+            backToMain();
+          });
+        }
+      } else {
+        // New insert
+        var fileName = 'diary-voice/' + getUserId() + '_' + Date.now() + recExtension;
+        supabaseClient.storage.from('photo-albums').upload(fileName, recBlob, {
+          contentType: recMimeType, upsert: false
+        }).then(function(uploadRes){
+          if(uploadRes.error){
+            alert('업로드 실패: ' + uploadRes.error.message);
+            saveBtn.disabled = false;
+            saveBtn.textContent = '저장';
+            return;
+          }
+          var audioUrl = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + fileName;
+          return supabaseClient.from('diaries').insert({
+            user_id: getUserId(),
+            type: 'voice',
+            content: contentVal,
+            audio_url: audioUrl
+          }).select();
+        }).then(function(res){
+          if(res && res.error){
+            alert('저장 실패: ' + res.error.message);
+            saveBtn.disabled = false;
+            saveBtn.textContent = '저장';
+            return;
+          }
+          saveBtn.textContent = '저장';
+          backToMain();
+        });
       }
-      var audioUrl = SUPABASE_URL + '/storage/v1/object/public/photo-albums/' + fileName;
-      return supabaseClient.from('diaries').insert({
-        user_id: getUserId(),
-        type: 'voice',
-        content: null,
-        audio_url: audioUrl
-      }).select();
-    }).then(function(res){
-      if(res && res.error){
-        alert('저장 실패: ' + res.error.message);
-        document.getElementById('voiceSaveBtn').disabled = false;
-        document.getElementById('voiceSaveBtn').textContent = '저장';
-        return;
-      }
-      document.getElementById('voiceSaveBtn').textContent = '저장';
-      backToMain();
-    });
+    }
+
+    uploadDiaryPhotos(afterPhotoUpload);
   }
 
   // === Load Diary List ===
@@ -552,13 +910,16 @@
         String(date.getHours()).padStart(2,'0') + ':' +
         String(date.getMinutes()).padStart(2,'0');
       var typeLabel = d.type === 'text' ? '&#9998; 글' : '&#127908; 음성';
+      var parsed = parseDiaryContent(d.content);
+      var hasPhotos = parsed.photos.length > 0;
+      var photoTag = hasPhotos ? ' · 📷' + parsed.photos.length : '';
       var icon = d.type === 'text' ? '&#9658;' : '&#9654;';
 
       html += '<div class="diary-item" onclick="showDetail(\'' + d.id + '\')">' +
         '<span class="diary-item-no">#' + no + '</span>' +
         '<div class="diary-item-info">' +
           '<div class="diary-item-date">' + dateStr + '</div>' +
-          '<div class="diary-item-type">' + typeLabel + '</div>' +
+          '<div class="diary-item-type">' + typeLabel + photoTag + '</div>' +
         '</div>' +
         '<span class="diary-item-icon">' + icon + '</span>' +
       '</div>';
@@ -581,17 +942,81 @@
 
     document.getElementById('detailDate').textContent = dateStr;
 
+    var parsed = parseDiaryContent(diary.content);
+
     if(diary.type === 'text'){
       document.getElementById('detailBadge').innerHTML = '<span class="diary-detail-type-badge badge-text">&#9998; 글 일기</span>';
-      document.getElementById('detailBody').innerHTML = '<div class="diary-detail-content">' + escapeHtml(diary.content) + '</div>';
+      document.getElementById('detailBody').innerHTML = '<div class="diary-detail-content">' + escapeHtml(parsed.text) + '</div>';
     } else {
       document.getElementById('detailBadge').innerHTML = '<span class="diary-detail-type-badge badge-voice">&#127908; 음성 일기</span>';
       document.getElementById('detailBody').innerHTML = '<audio class="diary-detail-audio" controls src="' + diary.audio_url + '"></audio>';
     }
 
+    // Photos
+    var photosEl = document.getElementById('detailPhotos');
+    if(parsed.photos.length > 0){
+      var photosHtml = '<div class="diary-detail-photos">';
+      parsed.photos.forEach(function(url){
+        photosHtml += '<div class="diary-detail-photo" onclick="openPhotoFullView(\'' + url + '\')">' +
+          '<img src="' + url + '" alt="사진">' +
+          '</div>';
+      });
+      photosHtml += '</div>';
+      photosEl.innerHTML = photosHtml;
+    } else {
+      photosEl.innerHTML = '';
+    }
+
     showStep('diaryDetail');
   }
 
+  function openPhotoFullView(url){
+    document.getElementById('diaryFullViewImg').src = url;
+    document.getElementById('diaryPhotoFullView').classList.remove('hidden');
+  }
+
+  // === Edit Diary ===
+  function editDiary(){
+    var diary = diaries.find(function(d){ return String(d.id) === String(currentDetailId); });
+    if(!diary) return;
+
+    editingDiaryId = diary.id;
+    var parsed = parseDiaryContent(diary.content);
+
+    // Load existing photos
+    resetPhotos();
+    diaryExistingPhotoUrls = parsed.photos.slice();
+
+    if(diary.type === 'text'){
+      resetTextForm();
+      document.getElementById('diaryTextarea').value = parsed.text;
+      document.getElementById('diaryCharCount').textContent = parsed.text.length;
+      document.getElementById('textSaveBtn').disabled = parsed.text.length === 0;
+      document.getElementById('textWriteTitle').textContent = 'DIARY - 수정';
+      document.getElementById('textSaveBtn').textContent = '수정 저장';
+      renderPhotoThumbs('text');
+      updatePhotoUploadVisibility('text');
+      showStep('diaryTextWrite');
+      document.getElementById('diaryTextarea').focus();
+    } else {
+      resetVoiceForm();
+      // In edit mode, voice save is enabled even without new recording (to update photos)
+      document.getElementById('voiceSaveBtn').disabled = false;
+      document.getElementById('voiceWriteTitle').textContent = 'DIARY - 수정';
+      document.getElementById('voiceSaveBtn').textContent = '수정 저장';
+      document.getElementById('diaryRecStatus').textContent = '새로 녹음하거나 사진만 수정하세요';
+      // Show existing audio
+      if(diary.audio_url){
+        document.getElementById('diaryPreviewAudio').src = diary.audio_url;
+        document.getElementById('diaryVoicePreview').classList.remove('hidden');
+      }
+      renderPhotoThumbs('voice');
+      updatePhotoUploadVisibility('voice');
+      showStep('diaryVoiceWrite');
+    }
+  }
+
+  // === Delete Diary ===
   function deleteDiary(){
     if(!currentDetailId) return;
     if(!confirm('이 일기를 삭제하시겠습니까?')) return;
@@ -604,10 +1029,22 @@
         alert('삭제 실패: ' + res.error.message);
         return;
       }
-      // 음성 파일도 스토리지에서 삭제
+      // Delete voice file from storage
       if(diary && diary.type === 'voice' && diary.audio_url){
         var path = diary.audio_url.split('/photo-albums/')[1];
         if(path) supabaseClient.storage.from('photo-albums').remove([path]);
+      }
+      // Delete photo files from storage
+      if(diary && diary.content){
+        var parsed = parseDiaryContent(diary.content);
+        if(parsed.photos.length > 0){
+          var photoPaths = parsed.photos.map(function(url){
+            return url.split('/photo-albums/')[1];
+          }).filter(function(p){ return !!p; });
+          if(photoPaths.length > 0){
+            supabaseClient.storage.from('photo-albums').remove(photoPaths);
+          }
+        }
       }
       backToMain();
     });
