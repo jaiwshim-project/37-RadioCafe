@@ -5091,16 +5091,37 @@
     // [+] 버튼 표시
     document.getElementById('photoUploadBtn').classList.add('has-photos');
     // 기념일 자동 로그인: 메인 로그인 사용자 자동 연결
-    if (currentUsername && !annivLoggedUser) {
+    if (currentUsername) {
       annivLoggedUser = currentUsername;
-      loadAnniversariesFromCloud(currentUsername).then(function(data){
-        anniversaries = data;
+      var localAnniv = [];
+      try {
+        var saved = JSON.parse(localStorage.getItem('radio-anniversaries'));
+        if (saved && Array.isArray(saved)) localAnniv = saved;
+      } catch(e) {}
+
+      // 클라우드에서 직접 로드 (localStorage 폴백 없이)
+      (async function(){
+        var cloudData = [];
+        try {
+          var r = await supabase.storage.from(BUCKET_NAME).download(
+            '_system/anniversaries/' + toSafePath(currentUsername) + '.json'
+          );
+          if (r.data) {
+            var arr = JSON.parse(await r.data.text());
+            if (Array.isArray(arr) && arr.length > 0) cloudData = arr;
+          }
+        } catch(e) {}
+
+        if (cloudData.length > 0) {
+          anniversaries = cloudData;
+        } else if (localAnniv.length > 0) {
+          anniversaries = localAnniv;
+          await saveAnniversariesToCloud();
+        }
         try { localStorage.setItem('radio-anniversaries', JSON.stringify(anniversaries)); } catch(e) {}
-        // 클라우드에 데이터가 없었으면 로컬 데이터를 클라우드에 업로드
-        if(anniversaries.length > 0) saveAnniversariesToCloud();
         updateAnnivUI();
         renderAnniversaries();
-      });
+      })();
     }
   }
 
