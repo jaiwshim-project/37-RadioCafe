@@ -379,6 +379,8 @@
     document.getElementById('giftNextBtn').disabled = true;
     renderGiftCategories();
     renderGiftSongs(GIFT_CATEGORIES[0]);
+    var uid = localStorage.getItem('radioUsername');
+    if(uid){ initSupabase(); if(supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'gift_song'}).then(function(){}); }
   });
 
   function renderGiftCategories(){

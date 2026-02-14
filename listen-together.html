@@ -208,6 +208,9 @@
 
     updateGreetingInLink();
 
+    // Feature usage logging
+    var uid = localStorage.getItem('radioUsername');
+    if(uid){ initSupabase(); if(supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'listen_together'}).then(function(){}); }
   });
 
   function buildInviteUrl(){

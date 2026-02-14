@@ -318,6 +318,8 @@
   document.addEventListener('DOMContentLoaded', function(){
     initSupabase();
     loadDiaries();
+    var uid = localStorage.getItem('radioUsername');
+    if(uid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'diary'}).then(function(){});
   });
 
   // === Navigation ===

@@ -462,6 +462,8 @@
     document.getElementById('vgNextBtn2').disabled = true;
     renderVgCategories();
     renderVgSongs(GIFT_CATEGORIES[0]);
+    var uid = localStorage.getItem('radioUsername');
+    if(uid){ initSupabase(); if(supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'voice_gift'}).then(function(){}); }
   });
 
   function renderVgCategories(){

@@ -2952,6 +2952,24 @@
       font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 600;
       color: var(--label-color); letter-spacing: 2px; margin-bottom: 8px;
     }
+    .dashboard-usage-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+    .dashboard-usage-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 8px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    }
+    .dashboard-usage-item .usage-no {
+      font-family: 'Orbitron', monospace; font-size: 9px;
+      color: var(--accent); font-weight: 700; min-width: 18px;
+    }
+    .dashboard-usage-item .usage-name {
+      flex: 1; font-family: 'Inter', sans-serif; font-size: 11px;
+      color: var(--lcd-text, #e0e0e0);
+    }
+    .dashboard-usage-item .usage-count {
+      font-family: 'Orbitron', monospace; font-size: 12px;
+      color: #FFD700; font-weight: 700; min-width: 30px; text-align: right;
+    }
     .dashboard-anniv-list { display: flex; flex-direction: column; gap: 6px; }
     .dashboard-anniv-item {
       display: flex; align-items: center; gap: 8px;
@@ -3343,7 +3361,11 @@
       <div class="dashboard-user-name" id="dashUserName"></div>
       <div class="dashboard-user-email" id="dashUserEmail"></div>
     </div>
-    <div class="dashboard-section-title">ANNIVERSARIES</div>
+    <div class="dashboard-section-title">FEATURE USAGE</div>
+    <div class="dashboard-usage-list" id="dashUsageList">
+      <div class="dashboard-empty">로딩 중...</div>
+    </div>
+    <div class="dashboard-section-title" style="margin-top:16px;">ANNIVERSARIES</div>
     <div class="dashboard-anniv-list" id="dashAnnivList"></div>
     <div class="dashboard-add-row" id="dashAddRow">
       <input type="text" id="dashAnnivNameInput" placeholder="기념일 이름" maxlength="12" autocomplete="off">
@@ -5594,6 +5616,42 @@
     if (dashAddRow) dashAddRow.classList.toggle('hidden', anniversaries.length >= 5);
   }
 
+  var FEATURE_NAMES = [
+    {key:'listen_together', label:'같이듣기 초대'},
+    {key:'gift_song', label:'노래 선물하기'},
+    {key:'voice_gift', label:'노래+음성 선물하기'},
+    {key:'radio_postcard', label:'라디오 엽서'},
+    {key:'time_capsule', label:'타임캡슐'},
+    {key:'dj_story', label:'DJ 사연'},
+    {key:'music_quiz', label:'음악 퀴즈'},
+    {key:'photo_album', label:'포토앨범'},
+    {key:'diary', label:'일기쓰기'}
+  ];
+
+  async function loadFeatureUsage(){
+    var listEl = document.getElementById('dashUsageList');
+    try {
+      var res = await supabase.from('feature_usage')
+        .select('feature')
+        .eq('user_id', annivLoggedUser);
+      var counts = {};
+      if(res.data){
+        res.data.forEach(function(r){ counts[r.feature] = (counts[r.feature]||0) + 1; });
+      }
+      var html = FEATURE_NAMES.map(function(f, i){
+        var count = counts[f.key] || 0;
+        return '<div class="dashboard-usage-item">' +
+          '<span class="usage-no">' + (i+1) + '</span>' +
+          '<span class="usage-name">' + f.label + '</span>' +
+          '<span class="usage-count">' + count + '</span>' +
+        '</div>';
+      }).join('');
+      listEl.innerHTML = html;
+    } catch(e){
+      listEl.innerHTML = '<div class="dashboard-empty">로드 실패</div>';
+    }
+  }
+
   async function openDashboard() {
     if (!annivLoggedUser) return;
     var users = await loadAnnivUsers();
@@ -5602,6 +5660,7 @@
     document.getElementById('dashUserName').textContent = annivLoggedUser;
     document.getElementById('dashUserEmail').textContent = email || '이메일 미등록';
     renderDashboardList();
+    loadFeatureUsage();
     document.getElementById('dashboardOverlay').classList.add('visible');
   }
 
