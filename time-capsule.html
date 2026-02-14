@@ -123,6 +123,19 @@
       font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
     }
     .gift-copied { color: #4ecdc4; font-size: 12px; margin-top: 6px; font-family: 'Inter', sans-serif; }
+    .capsule-waiting {
+      color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 10px;
+      font-family: 'Inter', sans-serif; display: flex; align-items: center;
+      justify-content: center; gap: 6px;
+    }
+    .waiting-dot {
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: #4ecdc4; animation: waitPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes waitPulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
     .gift-guide {
       margin-top: 14px; text-align: left; padding: 12px 14px;
       background: rgba(255,255,255,0.06); border-radius: 10px;
@@ -490,9 +503,12 @@
       <button onclick="copyCapsuleLink()">복사</button>
     </div>
     <div class="gift-copied hidden" id="capsuleCopied">링크가 복사되었습니다!</div>
+    <div class="capsule-waiting hidden" id="capsuleWaiting">
+      <span class="waiting-dot"></span> 상대방이 링크를 열면 채팅이 시작됩니다...
+    </div>
     <div class="gift-guide">
-      <p>복사 버튼을 선택하고 타임캡슐을 전달하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
-      <p>타임캡슐을 받은 상대방과 대화할 수 있는 채팅창으로 이동합니다.</p>
+      <p>1. 복사 버튼을 선택하고 타임캡슐을 전달하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
+      <p>2. 상대방이 링크를 열면 자동으로 채팅창이 열립니다.</p>
     </div>
     <div class="gift-btn-row">
       <button class="gift-btn-back" onclick="senderGoStep1()">이전</button>
@@ -753,13 +769,33 @@
     navigator.clipboard.writeText(input.value).then(function(){
       document.getElementById('capsuleCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('capsuleCopied').classList.add('hidden'); }, 2000);
-      openChatPanel();
+      waitForReceiver();
     }).catch(function(){
       document.execCommand('copy');
       document.getElementById('capsuleCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('capsuleCopied').classList.add('hidden'); }, 2000);
+      waitForReceiver();
+    });
+  }
+
+  var viewerChannel = null;
+  function waitForReceiver(){
+    // 대기 상태 표시
+    var waitEl = document.getElementById('capsuleWaiting');
+    if(waitEl) waitEl.classList.remove('hidden');
+    // Supabase 채널 구독하여 receiver가 링크를 열면 양쪽 채팅 오픈
+    initSupabase();
+    if(!supabaseClient) return;
+    if(viewerChannel) return;
+    viewerChannel = supabaseClient.channel('capsule-' + chatRoomId, {
+      config: { broadcast: { self: false } }
+    });
+    viewerChannel.on('broadcast', { event: 'viewer_opened' }, function(){
+      var waitEl2 = document.getElementById('capsuleWaiting');
+      if(waitEl2) waitEl2.classList.add('hidden');
       openChatPanel();
     });
+    viewerChannel.subscribe();
   }
 
   // === RECEIVER MODE ===
@@ -771,6 +807,27 @@
     } else {
       showLockedCapsule();
     }
+    // 보낸 사람에게 링크 열림 알리고 양쪽 채팅 오픈
+    notifySenderAndOpenChat();
+  }
+
+  function notifySenderAndOpenChat(){
+    initSupabase();
+    if(!supabaseClient) {
+      // Supabase 로딩 대기
+      setTimeout(notifySenderAndOpenChat, 500);
+      return;
+    }
+    var notifyChannel = supabaseClient.channel('capsule-' + chatRoomId, {
+      config: { broadcast: { self: false } }
+    });
+    notifyChannel.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        notifyChannel.send({ type: 'broadcast', event: 'viewer_opened', payload: {} });
+        // receiver도 채팅 오픈
+        openChatPanel();
+      }
+    });
   }
 
   function showLockedCapsule(){
