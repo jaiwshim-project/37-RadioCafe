@@ -303,16 +303,15 @@
   var recMimeType = 'audio/webm';
   var recExtension = '.webm';
 
-  // === User ID ===
+  // === User ID (로그인 계정 기반 - 디바이스 간 공유) ===
   function getUserId(){
-    var uid = localStorage.getItem('diary_user_id');
-    if(!uid){
-      var chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-      uid = '';
-      for(var i = 0; i < 12; i++) uid += chars.charAt(Math.floor(Math.random() * chars.length));
-      localStorage.setItem('diary_user_id', uid);
+    var username = localStorage.getItem('radioUsername');
+    if(!username){
+      alert('로그인이 필요합니다.');
+      history.back();
+      return '';
     }
-    return uid;
+    return username;
   }
 
   // === Init ===
