@@ -2165,6 +2165,19 @@
       color: rgba(100,200,255,0.6); font-size: 11px;
       font-family: 'Inter', sans-serif;
     }
+    .album-item-delete {
+      background: none; border: 1px solid rgba(255,100,100,0.3);
+      color: rgba(255,100,100,0.6); font-size: 14px;
+      width: 26px; height: 26px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .album-item-delete:hover {
+      background: rgba(255,100,100,0.15);
+      border-color: rgba(255,100,100,0.6);
+      color: #ff6666;
+    }
     .album-list-empty {
       text-align: center; padding: 30px 20px;
       color: rgba(100,200,255,0.5); font-size: 13px;
@@ -5143,6 +5156,17 @@
             '<span class="album-item-name">' + album.displayName + '</span>' +
             '<span class="album-item-count">' + album.count + '장</span>';
           item.onclick = function(){ loadAlbum(album.name); };
+
+          var delBtn = document.createElement('button');
+          delBtn.className = 'album-item-delete';
+          delBtn.innerHTML = '&times;';
+          delBtn.title = '삭제';
+          delBtn.onclick = function(e){
+            e.stopPropagation();
+            deleteAlbum(album.name, album.displayName);
+          };
+          item.appendChild(delBtn);
+
           content.appendChild(item);
         });
       }
@@ -5156,6 +5180,29 @@
 
   function hideAlbumList(){
     document.getElementById('albumListPopup').classList.remove('visible');
+  }
+
+  async function deleteAlbum(albumName, displayName){
+    if(!confirm('"' + displayName + '" 사진첩을 삭제하시겠습니까?')) return;
+    try {
+      var userAlbumPath = toSafePath(currentUsername) + '/' + albumName;
+      var { data: files, error } = await supabase.storage
+        .from(BUCKET_NAME)
+        .list(userAlbumPath, { limit: 100 });
+      if(error) throw error;
+      if(files && files.length > 0){
+        var filePaths = files.map(function(f){ return userAlbumPath + '/' + f.name; });
+        var { error: removeError } = await supabase.storage
+          .from(BUCKET_NAME)
+          .remove(filePaths);
+        if(removeError) throw removeError;
+      }
+      alert('"' + displayName + '" 사진첩이 삭제되었습니다.');
+      showAlbumList();
+    } catch(e) {
+      console.error(e);
+      alert('삭제 중 오류가 발생했습니다: ' + e.message);
+    }
   }
 
   async function loadAlbum(albumName){
