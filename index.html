@@ -2935,75 +2935,77 @@
     /* Dashboard Modal */
     .dashboard-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7); z-index: 9999;
+      background: rgba(0,0,0,0.5); z-index: 9999;
       justify-content: center; align-items: center;
     }
     .dashboard-overlay.visible { display: flex; }
     .dashboard-modal {
-      background: linear-gradient(160deg, #3d2c14, #2a1e0e) !important;
-      border: 2px solid #d4af69 !important; border-radius: 16px;
-      padding: 20px; width: 90%; max-width: 360px; max-height: 80vh;
+      background: linear-gradient(145deg, #FFF8E7, #F2E8D0) !important;
+      border: 1px solid rgba(139,105,20,0.2) !important; border-radius: 20px;
+      padding: 24px 20px; width: 90%; max-width: 360px; max-height: 80vh;
       overflow-y: auto; position: relative;
-      box-shadow: 0 0 30px rgba(0,0,0,0.6), 0 0 15px rgba(212,175,105,0.4) !important;
+      box-shadow: 0 40px 80px rgba(100,70,30,0.15), 0 0 40px rgba(200,169,110,0.15), inset 0 1px 0 rgba(255,255,255,0.3) !important;
     }
+    .dashboard-modal::-webkit-scrollbar { width: 4px; }
+    .dashboard-modal::-webkit-scrollbar-thumb { background: rgba(200,169,110,0.4); border-radius: 2px; }
     .dashboard-header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 16px; padding-bottom: 10px;
-      border-bottom: 1px solid rgba(212,175,105,0.2) !important;
+      border-bottom: 1px solid rgba(139,105,20,0.15) !important;
     }
     .dashboard-title {
       font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700;
-      color: #FFD700 !important; letter-spacing: 2px;
+      color: #8B6914 !important; letter-spacing: 2px;
     }
     .dashboard-close {
-      background: none; border: none; color: #c4a265 !important;
+      background: none; border: none; color: #A08050 !important;
       font-size: 20px; cursor: pointer; padding: 0 4px;
     }
     .dashboard-close:hover { color: #ff6b6b !important; }
     .dashboard-admin-back { margin-bottom: 10px; }
     .dashboard-admin-back.hidden { display: none; }
     .dashboard-user-info {
-      margin-bottom: 16px; padding: 10px 12px; border-radius: 8px;
-      background: rgba(212,175,105,0.1) !important; border: 1px solid rgba(212,175,105,0.2) !important;
+      margin-bottom: 16px; padding: 12px 14px; border-radius: 12px;
+      background: rgba(255,255,255,0.5) !important; border: 1px solid rgba(139,105,20,0.12) !important;
     }
     .dashboard-user-name {
       font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700;
-      color: #f5e6c8 !important; margin-bottom: 2px;
+      color: #3a2a10 !important; margin-bottom: 2px;
     }
     .dashboard-user-email {
       font-family: 'Inter', sans-serif; font-size: 10px;
-      color: #c4a265 !important; opacity: 0.7;
+      color: #6a5530 !important; opacity: 0.8;
     }
     .dashboard-section-title {
       font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 600;
-      color: #FFD700 !important; letter-spacing: 2px; margin-bottom: 8px;
+      color: #8B6914 !important; letter-spacing: 2px; margin-bottom: 8px;
     }
     .dashboard-usage-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
     .dashboard-usage-item {
       display: flex; align-items: center; gap: 8px;
       padding: 6px 10px; border-radius: 8px;
-      background: rgba(212,175,105,0.1) !important; border: 1px solid rgba(212,175,105,0.2) !important;
+      background: rgba(255,255,255,0.4) !important; border: 1px solid rgba(139,105,20,0.1) !important;
     }
     .dashboard-usage-item .usage-no {
       font-family: 'Orbitron', monospace; font-size: 9px;
-      color: #d4af69 !important; font-weight: 700; min-width: 18px;
+      color: #C8A96E !important; font-weight: 700; min-width: 18px;
     }
     .dashboard-usage-item .usage-name {
       flex: 1; font-family: 'Inter', sans-serif; font-size: 11px;
-      color: #f5e6c8 !important;
+      color: #3a2a10 !important;
     }
     .dashboard-usage-item .usage-count {
       font-family: 'Orbitron', monospace; font-size: 12px;
-      color: #FFD700 !important; font-weight: 700; min-width: 30px; text-align: right;
+      color: #8B6914 !important; font-weight: 700; min-width: 30px; text-align: right;
     }
     .dashboard-usage-item .usage-received {
       font-family: 'Orbitron', monospace; font-size: 12px;
-      color: #FFD700 !important; font-weight: 700; min-width: 30px; text-align: right;
+      color: #8B6914 !important; font-weight: 700; min-width: 30px; text-align: right;
     }
     .dashboard-usage-header {
       display: flex; align-items: center; gap: 8px;
       padding: 2px 10px 6px; font-family: 'Inter', sans-serif; font-size: 9px;
-      color: #FFD700 !important; letter-spacing: 0.5px;
+      color: #8B6914 !important; letter-spacing: 0.5px;
     }
     .dashboard-usage-header .usage-no { min-width: 18px; }
     .dashboard-usage-header .usage-name { flex: 1; }
@@ -3012,77 +3014,77 @@
     .dashboard-anniv-list { display: flex; flex-direction: column; gap: 6px; }
     .dashboard-anniv-item {
       display: flex; align-items: center; gap: 8px;
-      padding: 8px 10px; border-radius: 8px;
-      background: rgba(212,175,105,0.1) !important; border: 1px solid rgba(212,175,105,0.2) !important;
+      padding: 8px 10px; border-radius: 10px;
+      background: rgba(255,255,255,0.4) !important; border: 1px solid rgba(139,105,20,0.12) !important;
     }
     .dashboard-anniv-item.nearest {
-      border-color: #d4af69 !important;
-      box-shadow: 0 0 8px rgba(212,175,105,0.3) !important;
+      border-color: #C8A96E !important;
+      box-shadow: 0 0 10px rgba(200,169,110,0.25) !important;
     }
     .dashboard-anniv-item .dash-name {
       font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
-      color: #f5e6c8 !important; flex: 1;
+      color: #3a2a10 !important; flex: 1;
     }
     .dashboard-anniv-item .dash-date {
       font-family: 'Orbitron', monospace; font-size: 9px;
-      color: #c4a265 !important; opacity: 0.7;
+      color: #6a5530 !important; opacity: 0.7;
     }
     .dashboard-anniv-item .dash-dday {
       font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
-      min-width: 56px; text-align: right; color: #FFD700 !important;
+      min-width: 56px; text-align: right; color: #8B6914 !important;
     }
     .dashboard-empty {
-      font-size: 11px; color: #c4a265 !important; opacity: 0.6;
+      font-size: 11px; color: #6a5530 !important; opacity: 0.6;
       text-align: center; padding: 16px 0; font-family: 'Inter', sans-serif;
     }
     .dashboard-anniv-item .dash-edit {
-      background: none; border: 1px solid rgba(196,162,101,0.3); color: #c4a265 !important;
-      font-size: 9px; cursor: pointer; padding: 2px 6px; opacity: 0.5;
+      background: none; border: 1px solid rgba(139,105,20,0.2); color: #6a5530 !important;
+      font-size: 9px; cursor: pointer; padding: 2px 6px; opacity: 0.6;
       transition: all 0.2s; flex-shrink: 0; border-radius: 4px;
       font-family: 'Inter', sans-serif; white-space: nowrap;
     }
-    .dashboard-anniv-item .dash-edit:hover { opacity: 1; color: #88DDFF !important; border-color: rgba(136,221,255,0.4); }
+    .dashboard-anniv-item .dash-edit:hover { opacity: 1; color: #8B6914 !important; border-color: #C8A96E; }
     .dashboard-anniv-item .dash-del {
-      background: none; border: none; color: #c4a265 !important;
+      background: none; border: none; color: #A08050 !important;
       font-size: 14px; cursor: pointer; padding: 0 2px; opacity: 0.4;
       transition: opacity 0.2s; flex-shrink: 0;
     }
     .dashboard-anniv-item .dash-del:hover { opacity: 1; color: #ff6b6b !important; }
     .dashboard-anniv-item.bday-anniv { flex-wrap: wrap; }
     .dashboard-anniv-item.bday-anniv .dash-name { flex: none; }
-    .dashboard-anniv-item.bday-anniv .anniv-bday-date { font-family: 'Inter', sans-serif; font-size: 10px; color: #f5e6c8 !important; white-space: nowrap; }
-    .dashboard-anniv-item.bday-anniv .anniv-bday-sep { color: rgba(212,175,105,0.2) !important; font-size: 10px; }
+    .dashboard-anniv-item.bday-anniv .anniv-bday-date { font-family: 'Inter', sans-serif; font-size: 10px; color: #3a2a10 !important; white-space: nowrap; }
+    .dashboard-anniv-item.bday-anniv .anniv-bday-sep { color: rgba(139,105,20,0.2) !important; font-size: 10px; }
     .dashboard-anniv-item.bday-anniv .dash-dday { min-width: auto; font-size: 10px; text-align: left; }
-    .dashboard-anniv-item.bday-anniv .anniv-bday-lived { font-family: 'Inter', sans-serif; font-size: 10px; color: #f5e6c8 !important; white-space: nowrap; margin-left: auto; }
+    .dashboard-anniv-item.bday-anniv .anniv-bday-lived { font-family: 'Inter', sans-serif; font-size: 10px; color: #3a2a10 !important; white-space: nowrap; margin-left: auto; }
     .dashboard-add-row {
       display: flex; gap: 4px; margin-top: 10px; padding-top: 8px;
-      border-top: 1px solid rgba(212,175,105,0.15) !important; align-items: center;
+      border-top: 1px solid rgba(139,105,20,0.1) !important; align-items: center;
     }
     .dashboard-add-row input[type="text"] {
       width: 70px; min-width: 0; flex-shrink: 1; padding: 5px 6px; font-size: 11px;
       font-family: 'Inter', sans-serif;
-      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
-      border-radius: 4px; color: #f5e6c8 !important; outline: none;
+      background: rgba(255,255,255,0.7) !important; border: 1px solid rgba(139,105,20,0.2) !important;
+      border-radius: 6px; color: #3a2a10 !important; outline: none;
     }
     .dash-type-select {
       padding: 5px 2px; font-size: 10px; font-family: 'Inter', sans-serif;
-      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
-      border-radius: 4px; color: #f5e6c8 !important; outline: none;
+      background: rgba(255,255,255,0.7) !important; border: 1px solid rgba(139,105,20,0.2) !important;
+      border-radius: 6px; color: #3a2a10 !important; outline: none;
       cursor: pointer; flex-shrink: 0;
     }
-    .dash-type-select option { color: #3a2a10; background: #f5e6c8; }
+    .dash-type-select option { color: #3a2a10; background: #FFF8E7; }
     .dash-date-field {
       width: 34px; padding: 5px 2px; font-size: 10px; text-align: center;
       font-family: 'Orbitron', monospace;
-      background: #2a1e0e !important; border: 1px solid rgba(212,175,105,0.35) !important;
-      border-radius: 4px; color: #f5e6c8 !important; outline: none;
+      background: rgba(255,255,255,0.7) !important; border: 1px solid rgba(139,105,20,0.2) !important;
+      border-radius: 6px; color: #3a2a10 !important; outline: none;
     }
     .dash-date-field::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .dash-date-field::placeholder { color: rgba(212,175,105,0.3) !important; font-size: 10px; }
+    .dash-date-field::placeholder { color: rgba(100,70,30,0.3) !important; font-size: 10px; }
     .dashboard-add-row button {
-      background: linear-gradient(180deg, #d4af69, #b8943f) !important;
-      border: 1px solid rgba(212,175,105,0.4) !important; border-radius: 6px;
-      color: #3a2a10 !important; font-size: 18px; font-weight: 700;
+      background: linear-gradient(135deg, #C8A96E, #b89858) !important;
+      border: none !important; border-radius: 8px;
+      color: #fff !important; font-size: 18px; font-weight: 700;
       width: 34px; height: 34px; cursor: pointer; padding: 0;
       display: flex; align-items: center; justify-content: center;
     }
@@ -3404,7 +3406,7 @@
       <button class="dashboard-close" onclick="closeDashboard()">&times;</button>
     </div>
     <div class="dashboard-admin-back hidden" id="dashAdminBack">
-      <button onclick="location.href='admin.html?tab=users'" style="background:linear-gradient(180deg,#d4af69,#b8943f);border:1px solid rgba(212,175,105,0.4);border-radius:6px;color:#3a2a10;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;padding:6px 14px;cursor:pointer;width:100%;">관리자 페이지로 돌아가기</button>
+      <button onclick="location.href='admin.html?tab=users'" style="background:linear-gradient(135deg,#C8A96E,#b89858);border:none;border-radius:8px;color:#fff;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;padding:8px 14px;cursor:pointer;width:100%;">관리자 페이지로 돌아가기</button>
     </div>
     <div class="dashboard-user-info">
       <div class="dashboard-user-name" id="dashUserName"></div>
@@ -3827,41 +3829,41 @@
     if (bday) bday.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
     document.querySelectorAll('.anniv-bday-date, .anniv-bday-lived').forEach(function(el) { el.style.color = '#f5e6c8'; });
     document.querySelectorAll('.anniv-bday-dday').forEach(function(el) { el.style.color = '#FFD700'; });
-    // Dashboard modal
+    // Dashboard modal (cream-gold theme)
     var dm = document.querySelector('.dashboard-modal');
-    if (dm) dm.style.cssText += 'background:linear-gradient(160deg,#3d2c14,#2a1e0e)!important;border:2px solid #d4af69!important;box-shadow:0 0 30px rgba(0,0,0,0.6),0 0 15px rgba(212,175,105,0.4)!important;';
+    if (dm) dm.style.cssText += 'background:linear-gradient(145deg,#FFF8E7,#F2E8D0)!important;border:1px solid rgba(139,105,20,0.2)!important;box-shadow:0 40px 80px rgba(100,70,30,0.15),0 0 40px rgba(200,169,110,0.15),inset 0 1px 0 rgba(255,255,255,0.3)!important;';
     var dh = document.querySelector('.dashboard-header');
-    if (dh) dh.style.cssText += 'border-bottom:1px solid rgba(212,175,105,0.2)!important;';
+    if (dh) dh.style.cssText += 'border-bottom:1px solid rgba(139,105,20,0.15)!important;';
     var dt = document.querySelector('.dashboard-title');
-    if (dt) dt.style.cssText += 'color:#FFD700!important;';
+    if (dt) dt.style.cssText += 'color:#8B6914!important;';
     var dc = document.querySelector('.dashboard-close');
-    if (dc) dc.style.cssText += 'color:#c4a265!important;';
+    if (dc) dc.style.cssText += 'color:#A08050!important;';
     var dui = document.querySelector('.dashboard-user-info');
-    if (dui) dui.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
+    if (dui) dui.style.cssText += 'background:rgba(255,255,255,0.5)!important;border:1px solid rgba(139,105,20,0.12)!important;';
     var dun = document.querySelector('.dashboard-user-name');
-    if (dun) dun.style.cssText += 'color:#f5e6c8!important;';
+    if (dun) dun.style.cssText += 'color:#3a2a10!important;';
     var due = document.querySelector('.dashboard-user-email');
-    if (due) due.style.cssText += 'color:#c4a265!important;';
-    document.querySelectorAll('.dashboard-section-title').forEach(function(el) { el.style.cssText += 'color:#FFD700!important;'; });
+    if (due) due.style.cssText += 'color:#6a5530!important;';
+    document.querySelectorAll('.dashboard-section-title').forEach(function(el) { el.style.cssText += 'color:#8B6914!important;'; });
     document.querySelectorAll('.dashboard-usage-item').forEach(function(el) {
-      el.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
+      el.style.cssText += 'background:rgba(255,255,255,0.4)!important;border:1px solid rgba(139,105,20,0.1)!important;';
     });
-    document.querySelectorAll('.usage-no').forEach(function(el) { el.style.cssText += 'color:#d4af69!important;'; });
-    document.querySelectorAll('.usage-name').forEach(function(el) { el.style.cssText += 'color:#f5e6c8!important;'; });
-    document.querySelectorAll('.usage-count, .usage-received').forEach(function(el) { el.style.cssText += 'color:#FFD700!important;'; });
+    document.querySelectorAll('.usage-no').forEach(function(el) { el.style.cssText += 'color:#C8A96E!important;'; });
+    document.querySelectorAll('.usage-name').forEach(function(el) { el.style.cssText += 'color:#3a2a10!important;'; });
+    document.querySelectorAll('.usage-count, .usage-received').forEach(function(el) { el.style.cssText += 'color:#8B6914!important;'; });
     document.querySelectorAll('.dashboard-anniv-item').forEach(function(el) {
-      el.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
+      el.style.cssText += 'background:rgba(255,255,255,0.4)!important;border:1px solid rgba(139,105,20,0.12)!important;';
     });
-    document.querySelectorAll('.dash-name').forEach(function(el) { el.style.cssText += 'color:#f5e6c8!important;'; });
-    document.querySelectorAll('.dash-date').forEach(function(el) { el.style.cssText += 'color:#c4a265!important;'; });
-    document.querySelectorAll('.dash-dday').forEach(function(el) { el.style.cssText += 'color:#FFD700!important;'; });
+    document.querySelectorAll('.dash-name').forEach(function(el) { el.style.cssText += 'color:#3a2a10!important;'; });
+    document.querySelectorAll('.dash-date').forEach(function(el) { el.style.cssText += 'color:#6a5530!important;'; });
+    document.querySelectorAll('.dash-dday').forEach(function(el) { el.style.cssText += 'color:#8B6914!important;'; });
     document.querySelectorAll('.dashboard-add-row input, .dash-type-select, .dash-date-field, .dash-cal-select').forEach(function(el) {
-      el.style.cssText += 'background:#2a1e0e!important;border:1px solid rgba(212,175,105,0.35)!important;color:#f5e6c8!important;';
+      el.style.cssText += 'background:rgba(255,255,255,0.7)!important;border:1px solid rgba(139,105,20,0.2)!important;color:#3a2a10!important;';
     });
     document.querySelectorAll('.dashboard-add-row button').forEach(function(el) {
-      el.style.cssText += 'background:linear-gradient(180deg,#d4af69,#b8943f)!important;border:1px solid rgba(212,175,105,0.4)!important;color:#3a2a10!important;';
+      el.style.cssText += 'background:linear-gradient(135deg,#C8A96E,#b89858)!important;border:none!important;color:#fff!important;';
     });
-    document.querySelectorAll('.dashboard-usage-header').forEach(function(el) { el.style.cssText += 'color:#FFD700!important;'; });
+    document.querySelectorAll('.dashboard-usage-header').forEach(function(el) { el.style.cssText += 'color:#8B6914!important;'; });
   }
 
   // === Init ===
