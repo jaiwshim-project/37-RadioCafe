@@ -16,18 +16,19 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 16px;
+      justify-content: flex-start;
+      padding: 12px;
     }
 
     /* Main Card */
     .match-card {
       background: linear-gradient(145deg, #FFF8E7, #F5ECD8);
       border: 1px solid rgba(139,105,20,0.15);
-      border-radius: 20px; padding: 24px;
+      border-radius: 20px; padding: 16px;
       width: 100%; max-width: 400px;
       text-align: center;
       box-shadow: 0 40px 80px rgba(100,70,30,0.15), 0 0 40px rgba(200,169,110,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
+      overflow-y: auto; max-height: calc(100vh - 24px);
     }
     .match-title {
       font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
@@ -106,7 +107,7 @@
       cursor: pointer; transition: all 0.2s; margin-top: 8px;
     }
     .match-btn-outline:hover { background: rgba(200,169,110,0.1); }
-    .match-btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+    .match-btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
 
     /* Question Screen */
     .question-progress {
@@ -147,11 +148,11 @@
 
     /* Result Screen */
     .result-percent-wrap {
-      position: relative; width: 160px; height: 160px;
-      margin: 0 auto 16px;
+      position: relative; width: 120px; height: 120px;
+      margin: 0 auto 10px;
     }
     .result-percent-ring {
-      width: 160px; height: 160px; transform: rotate(-90deg);
+      width: 120px; height: 120px; transform: rotate(-90deg);
     }
     .result-percent-bg {
       fill: none; stroke: rgba(139,105,20,0.1); stroke-width: 8;
@@ -165,39 +166,39 @@
     .result-percent-text {
       position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      font-family: 'Orbitron', monospace; font-size: 36px; font-weight: 900;
+      font-family: 'Orbitron', monospace; font-size: 28px; font-weight: 900;
       color: #C8A96E;
     }
     .result-percent-unit {
-      font-size: 16px; font-weight: 700;
+      font-size: 14px; font-weight: 700;
     }
     .result-level {
-      font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700;
-      color: #8B6914; margin-bottom: 4px;
+      font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700;
+      color: #8B6914; margin-bottom: 2px;
     }
     .result-message {
-      font-family: 'Inter', sans-serif; font-size: 13px;
-      color: #A08050; line-height: 1.5; margin-bottom: 16px;
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: #A08050; line-height: 1.4; margin-bottom: 10px;
     }
     .result-names {
-      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
-      color: #3a2a10; margin-bottom: 16px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+      color: #3a2a10; margin-bottom: 8px;
     }
 
     /* Comparison List */
-    .compare-list { text-align: left; margin-top: 12px; }
+    .compare-list { text-align: left; margin-top: 8px; }
     .compare-item {
-      padding: 10px 12px; border-radius: 10px;
-      margin-bottom: 6px;
+      padding: 8px 10px; border-radius: 8px;
+      margin-bottom: 4px;
       background: rgba(255,255,255,0.4);
       border: 1px solid rgba(139,105,20,0.1);
     }
     .compare-question {
-      font-size: 12px; color: #A08050; margin-bottom: 6px;
+      font-size: 11px; color: #A08050; margin-bottom: 4px;
     }
     .compare-answers {
       display: flex; justify-content: space-between; align-items: center;
-      font-size: 13px;
+      font-size: 12px;
     }
     .compare-answer {
       flex: 1; text-align: center; color: #3a2a10; font-weight: 500;
@@ -381,7 +382,7 @@
 
   <!-- ========== RESULT SCREEN ========== -->
   <div id="resultScreen" class="hidden">
-    <div class="match-title" style="margin-bottom:12px;">MUSIC MATCH</div>
+    <div class="match-title" style="margin-bottom:6px;">MUSIC MATCH</div>
     <div class="result-names" id="resultNames"></div>
 
     <div class="result-percent-wrap">
