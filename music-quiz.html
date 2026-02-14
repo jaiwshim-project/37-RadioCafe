@@ -402,6 +402,9 @@
       <button class="match-btn" onclick="restartGame()">다시 하기</button>
       <button class="match-btn-outline" onclick="openChatPanel()">채팅하기</button>
     </div>
+    <div style="margin-top:10px;">
+      <button class="match-btn-outline" id="resultBackBtn" onclick="goBack()" style="width:100%;"></button>
+    </div>
   </div>
 
 </div>
@@ -756,6 +759,14 @@
     document.getElementById('questionScreen').classList.add('hidden');
     document.getElementById('resultScreen').classList.remove('hidden');
 
+    // 호스트: 이전 버튼 → 아날로그, 게스트: 클라라 라디오카페 → 랜딩
+    var backBtn = document.getElementById('resultBackBtn');
+    if(isHost){
+      backBtn.innerHTML = '&#9664; 이전';
+    } else {
+      backBtn.textContent = '클라라 라디오카페';
+    }
+
     // Calculate match percentage
     var matchCount = 0;
     for(var i = 0; i < gameQuestions.length; i++){
@@ -845,6 +856,14 @@
       }
       el.innerHTML = current + '<span class="result-percent-unit">%</span>';
     }, 30);
+  }
+
+  function goBack(){
+    if(isHost){
+      location.href = 'analog.html';
+    } else {
+      location.href = 'index.html';
+    }
   }
 
   function restartGame(){
