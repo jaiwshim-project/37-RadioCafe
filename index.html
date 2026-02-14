@@ -2801,6 +2801,12 @@
     .anniv-dday.future { color: #FFD700 !important; }
     .anniv-dday.today { color: #FFD700 !important; text-shadow: 0 0 6px rgba(255,215,0,0.5); }
     .anniv-dday.past { color: #FFD700 !important; opacity: 0.5; }
+    .anniversary-item .anniv-edit {
+      background: none; border: none; color: #c4a265 !important;
+      font-size: 11px; cursor: pointer; padding: 0 2px; opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .anniversary-item .anniv-edit:hover { opacity: 1; color: #88DDFF; }
     .anniversary-item .anniv-del {
       background: none; border: none; color: #c4a265 !important;
       font-size: 12px; cursor: pointer; padding: 0 2px; opacity: 0.5;
@@ -3028,6 +3034,12 @@
       font-size: 11px; color: #c4a265 !important; opacity: 0.6;
       text-align: center; padding: 16px 0; font-family: 'Inter', sans-serif;
     }
+    .dashboard-anniv-item .dash-edit {
+      background: none; border: none; color: #c4a265 !important;
+      font-size: 12px; cursor: pointer; padding: 0 2px; opacity: 0.4;
+      transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .dashboard-anniv-item .dash-edit:hover { opacity: 1; color: #88DDFF !important; }
     .dashboard-anniv-item .dash-del {
       background: none; border: none; color: #c4a265 !important;
       font-size: 14px; cursor: pointer; padding: 0 2px; opacity: 0.4;
@@ -5658,6 +5670,52 @@
     if(calEl) calEl.value='solar';
   }
 
+  var editingAnnivIdx = -1;
+
+  function editAnniversary(idx) {
+    var a = anniversaries[idx];
+    if (!a) return;
+    var parts = a.date.split('-');
+    document.getElementById('annivNameInput').value = a.name;
+    document.getElementById('annivTypeSelect').value = a.type || 'birthday';
+    document.getElementById('annivYearInput').value = parseInt(parts[0]);
+    document.getElementById('annivMonthInput').value = parseInt(parts[1]);
+    document.getElementById('annivDayInput').value = parseInt(parts[2]);
+    document.getElementById('annivCalSelect').value = a.calendar || 'solar';
+    editingAnnivIdx = idx;
+    var addRow = document.getElementById('anniversaryAddRow');
+    addRow.classList.remove('hidden');
+    var btn = addRow.querySelector('button');
+    btn.textContent = '✓';
+    btn.onclick = function(){ saveEditedAnniversary(); };
+    document.getElementById('annivNameInput').focus();
+  }
+
+  function saveEditedAnniversary() {
+    var nameEl = document.getElementById('annivNameInput');
+    var typeEl = document.getElementById('annivTypeSelect');
+    var yEl = document.getElementById('annivYearInput');
+    var mEl = document.getElementById('annivMonthInput');
+    var dEl = document.getElementById('annivDayInput');
+    var calEl = document.getElementById('annivCalSelect');
+    var name = nameEl.value.trim();
+    var type = typeEl ? typeEl.value : 'birthday';
+    var y = parseInt(yEl.value), m = parseInt(mEl.value), d = parseInt(dEl.value);
+    var cal = calEl ? calEl.value : 'solar';
+    if (!name || !y || !m || !d || m<1||m>12||d<1||d>31) return;
+    var date = y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    anniversaries[editingAnnivIdx] = { name: name, type: type, date: date, calendar: cal };
+    saveAnniversaries();
+    renderAnniversaries();
+    nameEl.value=''; yEl.value=''; mEl.value=''; dEl.value='';
+    if(typeEl) typeEl.value='birthday';
+    if(calEl) calEl.value='solar';
+    editingAnnivIdx = -1;
+    var btn = document.getElementById('anniversaryAddRow').querySelector('button');
+    btn.textContent = '+';
+    btn.onclick = function(){ addAnniversary(); };
+  }
+
   function removeAnniversary(idx) {
     anniversaries.splice(idx, 1);
     saveAnniversaries();
@@ -5749,6 +5807,7 @@
           '<span class="anniv-dday ' + bInfo.ddayCls + '">' + bInfo.ddayText + '</span>' +
           '<span class="anniv-bday-sep">|</span>' +
           '<span class="anniv-bday-lived">' + livedLabel + ' ' + bInfo.livedDays.toLocaleString() + '일</span>' +
+          '<button class="anniv-edit" onclick="editAnniversary(' + i + ')" title="수정">&#9998;</button>' +
           '<button class="anniv-del" onclick="removeAnniversary(' + i + ')" title="삭제">&times;</button>' +
           '</div>';
       }).join('');
@@ -5786,6 +5845,7 @@
           '<span class="dash-dday ' + s.bInfo.ddayCls + '">' + s.bInfo.ddayText + '</span>' +
           '<span class="anniv-bday-sep">|</span>' +
           '<span class="anniv-bday-lived">' + livedLabel + ' ' + s.bInfo.livedDays.toLocaleString() + '일</span>' +
+          '<button class="dash-edit" onclick="editAnniversaryFromDash(' + s.idx + ')" title="수정">&#9998;</button>' +
           '<button class="dash-del" onclick="removeAnniversaryFromDash(' + s.idx + ')" title="삭제">&times;</button>' +
           '</div>';
       }).join('');
@@ -5883,6 +5943,53 @@
     nameEl.value=''; yEl.value=''; mEl.value=''; dEl.value='';
     if(typeEl) typeEl.value='birthday';
     if(calEl) calEl.value='solar';
+  }
+
+  var editingDashAnnivIdx = -1;
+
+  function editAnniversaryFromDash(idx) {
+    var a = anniversaries[idx];
+    if (!a) return;
+    var parts = a.date.split('-');
+    document.getElementById('dashAnnivNameInput').value = a.name;
+    document.getElementById('dashAnnivTypeSelect').value = a.type || 'birthday';
+    document.getElementById('dashAnnivYearInput').value = parseInt(parts[0]);
+    document.getElementById('dashAnnivMonthInput').value = parseInt(parts[1]);
+    document.getElementById('dashAnnivDayInput').value = parseInt(parts[2]);
+    document.getElementById('dashAnnivCalSelect').value = a.calendar || 'solar';
+    editingDashAnnivIdx = idx;
+    var addRow = document.getElementById('dashAddRow');
+    addRow.classList.remove('hidden');
+    var btn = addRow.querySelector('button');
+    btn.textContent = '✓';
+    btn.onclick = function(){ saveEditedAnniversaryFromDash(); };
+    document.getElementById('dashAnnivNameInput').focus();
+  }
+
+  function saveEditedAnniversaryFromDash() {
+    var nameEl = document.getElementById('dashAnnivNameInput');
+    var typeEl = document.getElementById('dashAnnivTypeSelect');
+    var yEl = document.getElementById('dashAnnivYearInput');
+    var mEl = document.getElementById('dashAnnivMonthInput');
+    var dEl = document.getElementById('dashAnnivDayInput');
+    var calEl = document.getElementById('dashAnnivCalSelect');
+    var name = nameEl.value.trim();
+    var type = typeEl ? typeEl.value : 'birthday';
+    var y = parseInt(yEl.value), m = parseInt(mEl.value), d = parseInt(dEl.value);
+    var cal = calEl ? calEl.value : 'solar';
+    if (!name || !y || !m || !d || m<1||m>12||d<1||d>31) return;
+    var date = y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    anniversaries[editingDashAnnivIdx] = { name: name, type: type, date: date, calendar: cal };
+    saveAnniversaries();
+    renderAnniversaries();
+    renderDashboardList();
+    nameEl.value=''; yEl.value=''; mEl.value=''; dEl.value='';
+    if(typeEl) typeEl.value='birthday';
+    if(calEl) calEl.value='solar';
+    editingDashAnnivIdx = -1;
+    var btn = document.getElementById('dashAddRow').querySelector('button');
+    btn.textContent = '+';
+    btn.onclick = function(){ addAnniversaryFromDash(); };
   }
 
   function removeAnniversaryFromDash(idx) {
