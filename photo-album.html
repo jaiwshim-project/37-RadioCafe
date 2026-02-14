@@ -124,6 +124,19 @@
     }
     .gift-link-box button:hover { box-shadow: 0 0 12px rgba(236,72,153,0.5); }
     .gift-copied { color: #ec4899; font-size: 12px; margin-top: 6px; }
+    .album-waiting {
+      color: rgba(255,255,255,0.6); font-size: 12px; margin: 10px 0;
+      font-family: 'Inter', sans-serif; display: flex; align-items: center;
+      justify-content: center; gap: 6px;
+    }
+    .waiting-dot {
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: #ec4899; animation: waitPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes waitPulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
     .hidden { display: none !important; }
 
     /* Action Buttons */
@@ -389,7 +402,7 @@
          onclick="document.getElementById('albumFileInput').click()">
       <div class="album-upload-icon">📷</div>
       <div class="album-upload-text">사진을 드래그하거나 클릭하여 업로드</div>
-      <div class="album-upload-sub">최대 10장 / 각 5MB 이하 / JPG, PNG</div>
+      <div class="album-upload-sub">최대 10장 / 각 10MB 이하 / JPG, PNG</div>
     </div>
     <input type="file" class="album-file-input" id="albumFileInput"
            accept="image/jpeg,image/png,image/webp" multiple>
@@ -425,15 +438,19 @@
       <button onclick="copyAlbumLink()">복사</button>
     </div>
     <div class="gift-copied hidden" id="albumCopied">링크가 복사되었습니다!</div>
+    <div class="album-waiting hidden" id="albumWaiting">
+      <span class="waiting-dot"></span> 상대방이 채팅하기를 누르면 채팅이 시작됩니다...
+    </div>
     <div class="album-guide">
-      <p>복사 버튼을 선택하고 공유하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
+      <p>1. 복사 버튼을 선택하고 공유하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
+      <p>2. 상대방이 채팅하기 버튼을 누르면 자동으로 채팅창이 열립니다.</p>
     </div>
   </div>
 
   <!-- Action Buttons -->
   <div class="album-actions" id="albumActions">
     <button class="album-action-btn hidden" id="btnSlideshow" onclick="openSlideshow()">슬라이드쇼</button>
-    <button class="album-action-btn" id="btnChat" onclick="openChatPanel()">채팅하기</button>
+    <button class="album-action-btn" id="btnChat" onclick="handleChatClick()">채팅하기</button>
     <button class="album-action-btn hidden" id="btnAddPhoto" onclick="document.getElementById('albumFileInput').click()">사진 추가</button>
   </div>
 </div>
@@ -493,7 +510,7 @@
   var photos = []; // { fileName, url }
   var uploadingCount = 0;
   var MAX_PHOTOS = 10;
-  var MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  var MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
   // Slideshow state
   var slideIndex = 0;
@@ -564,10 +581,46 @@
     navigator.clipboard.writeText(input.value).then(function(){
       document.getElementById('albumCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('albumCopied').classList.add('hidden'); }, 2000);
+      waitForReceiver();
     }).catch(function(){
       document.execCommand('copy');
       document.getElementById('albumCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('albumCopied').classList.add('hidden'); }, 2000);
+      waitForReceiver();
+    });
+  }
+
+  var viewerChannel = null;
+  function waitForReceiver(){
+    var waitEl = document.getElementById('albumWaiting');
+    if(waitEl) waitEl.classList.remove('hidden');
+    if(!supabaseClient){ initSupabase(); }
+    if(!supabaseClient || viewerChannel) return;
+    viewerChannel = supabaseClient.channel('album-notify-' + chatRoomId, {
+      config: { broadcast: { self: false } }
+    });
+    viewerChannel.on('broadcast', { event: 'viewer_opened' }, function(){
+      var w = document.getElementById('albumWaiting');
+      if(w) w.classList.add('hidden');
+      openChatPanel();
+    });
+    viewerChannel.subscribe();
+  }
+
+  function viewerRequestChat(){
+    if(!supabaseClient){ initSupabase(); }
+    if(!supabaseClient){
+      setTimeout(viewerRequestChat, 500);
+      return;
+    }
+    var notifyChannel = supabaseClient.channel('album-notify-' + chatRoomId, {
+      config: { broadcast: { self: false } }
+    });
+    notifyChannel.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        notifyChannel.send({ type: 'broadcast', event: 'viewer_opened', payload: {} });
+        openChatPanel();
+      }
     });
   }
 
@@ -621,7 +674,7 @@
         continue;
       }
       if(f.size > MAX_FILE_SIZE){
-        alert(f.name + ': 파일 크기가 5MB를 초과합니다.');
+        alert(f.name + ': 파일 크기가 10MB를 초과합니다.');
         continue;
       }
       files.push(f);
@@ -1013,6 +1066,14 @@
   }
 
   // === Chat Functions ===
+  function handleChatClick(){
+    if(isViewer){
+      viewerRequestChat();
+    } else {
+      openChatPanel();
+    }
+  }
+
   function openChatPanel(){
     initSupabase();
     var panel = document.getElementById('chatPanel');
