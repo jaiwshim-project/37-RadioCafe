@@ -16,13 +16,7 @@
       var savedTab = sessionStorage.getItem('adminCurrentTab');
       if(sessionStorage.getItem('adminLoggedIn') || urlTab){
         sessionStorage.setItem('adminLoggedIn', '1');
-        var activeTab = urlTab || savedTab || 'dashboard';
-        var css = '#loginSection{display:none!important}.admin-panel{display:block!important}'
-          + '.tab-content{display:none!important}'
-          + '#tab-' + activeTab + '{display:block!important}'
-          + '.tab-btn{}'
-          + '.tab-btn[data-tab="' + activeTab + '"]{color:rgba(139,105,20,1)!important;border-bottom:2px solid #8B6914!important}';
-        document.write('<style>' + css + '</style>');
+        document.write('<style id="adminAutoRestore">#loginSection{display:none}.admin-panel{display:block}</style>');
       }
     })();
   </script>
@@ -1805,10 +1799,16 @@
       showToast('비밀번호 변경 완료');
     }
 
-    // 세션 복원 시 탭 전환
+    // 세션 복원 시 탭 전환 + 임시 CSS 제거
     (function(){
       var urlTab = new URLSearchParams(location.search).get('tab');
       if(sessionStorage.getItem('adminLoggedIn') || urlTab){
+        // head에서 주입한 임시 스타일 제거 (JS switchTab이 정상 제어)
+        var tmpStyle = document.getElementById('adminAutoRestore');
+        if(tmpStyle) tmpStyle.remove();
+        // 실제 DOM 상태 적용
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('active');
         var targetTab = urlTab || sessionStorage.getItem('adminCurrentTab') || 'dashboard';
         switchTab(targetTab);
       }
