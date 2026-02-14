@@ -3767,6 +3767,74 @@
       d.classList.toggle('active', d.getAttribute('data-t') === name);
     });
     try { localStorage.setItem('k-radio-theme', name); } catch(e) {}
+    applyCreamGoldOverride();
+  }
+  function applyCreamGoldOverride() {
+    // Anniversary section
+    var sec = document.querySelector('.anniversary-section');
+    if (sec) {
+      sec.style.cssText += 'background:linear-gradient(180deg,#3d2c14,#2a1e0e)!important;border:1px solid rgba(212,175,105,0.25)!important;border-radius:12px;isolation:isolate;position:relative;z-index:2;';
+    }
+    var lbl = document.querySelector('.anniversary-label');
+    if (lbl) lbl.style.cssText += 'color:#FFD700!important;';
+    var pnl = document.querySelector('.anniversary-panel');
+    if (pnl) pnl.style.cssText += 'background:linear-gradient(180deg,#4a3618,#362810)!important;border:1px solid rgba(212,175,105,0.35)!important;';
+    // Anniversary items
+    document.querySelectorAll('.anniversary-item').forEach(function(el) {
+      el.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
+    });
+    document.querySelectorAll('.anniv-name').forEach(function(el) { el.style.color = '#f5e6c8'; });
+    document.querySelectorAll('.anniv-date').forEach(function(el) { el.style.color = '#c4a265'; });
+    document.querySelectorAll('.anniv-dday').forEach(function(el) { el.style.color = '#FFD700'; });
+    // Anniversary inputs
+    document.querySelectorAll('.anniversary-add-row input, .anniv-type-select, .anniv-date-field, .anniv-cal-select, .anniv-login-row input').forEach(function(el) {
+      el.style.cssText += 'background:#2a1e0e!important;border:1px solid rgba(212,175,105,0.35)!important;color:#f5e6c8!important;';
+    });
+    document.querySelectorAll('.anniversary-add-row button, .anniv-login-row button, .anniv-user-row button').forEach(function(el) {
+      el.style.cssText += 'background:linear-gradient(180deg,#d4af69,#b8943f)!important;border:1px solid rgba(212,175,105,0.4)!important;color:#3a2a10!important;';
+    });
+    var uname = document.querySelector('.anniv-user-name');
+    if (uname) uname.style.cssText += 'color:#FFD700!important;';
+    // Birthday info
+    var bday = document.querySelector('.anniv-birthday-info');
+    if (bday) bday.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
+    document.querySelectorAll('.anniv-bday-date, .anniv-bday-lived').forEach(function(el) { el.style.color = '#f5e6c8'; });
+    document.querySelectorAll('.anniv-bday-dday').forEach(function(el) { el.style.color = '#FFD700'; });
+    // Dashboard modal
+    var dm = document.querySelector('.dashboard-modal');
+    if (dm) dm.style.cssText += 'background:linear-gradient(160deg,#3d2c14,#2a1e0e)!important;border:2px solid #d4af69!important;box-shadow:0 0 30px rgba(0,0,0,0.6),0 0 15px rgba(212,175,105,0.4)!important;';
+    var dh = document.querySelector('.dashboard-header');
+    if (dh) dh.style.cssText += 'border-bottom:1px solid rgba(212,175,105,0.2)!important;';
+    var dt = document.querySelector('.dashboard-title');
+    if (dt) dt.style.cssText += 'color:#FFD700!important;';
+    var dc = document.querySelector('.dashboard-close');
+    if (dc) dc.style.cssText += 'color:#c4a265!important;';
+    var dui = document.querySelector('.dashboard-user-info');
+    if (dui) dui.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
+    var dun = document.querySelector('.dashboard-user-name');
+    if (dun) dun.style.cssText += 'color:#f5e6c8!important;';
+    var due = document.querySelector('.dashboard-user-email');
+    if (due) due.style.cssText += 'color:#c4a265!important;';
+    document.querySelectorAll('.dashboard-section-title').forEach(function(el) { el.style.cssText += 'color:#FFD700!important;'; });
+    document.querySelectorAll('.dashboard-usage-item').forEach(function(el) {
+      el.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
+    });
+    document.querySelectorAll('.usage-no').forEach(function(el) { el.style.cssText += 'color:#d4af69!important;'; });
+    document.querySelectorAll('.usage-name').forEach(function(el) { el.style.cssText += 'color:#f5e6c8!important;'; });
+    document.querySelectorAll('.usage-count, .usage-received').forEach(function(el) { el.style.cssText += 'color:#FFD700!important;'; });
+    document.querySelectorAll('.dashboard-anniv-item').forEach(function(el) {
+      el.style.cssText += 'background:rgba(212,175,105,0.1)!important;border:1px solid rgba(212,175,105,0.2)!important;';
+    });
+    document.querySelectorAll('.dash-name').forEach(function(el) { el.style.cssText += 'color:#f5e6c8!important;'; });
+    document.querySelectorAll('.dash-date').forEach(function(el) { el.style.cssText += 'color:#c4a265!important;'; });
+    document.querySelectorAll('.dash-dday').forEach(function(el) { el.style.cssText += 'color:#FFD700!important;'; });
+    document.querySelectorAll('.dashboard-add-row input, .dash-type-select, .dash-date-field, .dash-cal-select').forEach(function(el) {
+      el.style.cssText += 'background:#2a1e0e!important;border:1px solid rgba(212,175,105,0.35)!important;color:#f5e6c8!important;';
+    });
+    document.querySelectorAll('.dashboard-add-row button').forEach(function(el) {
+      el.style.cssText += 'background:linear-gradient(180deg,#d4af69,#b8943f)!important;border:1px solid rgba(212,175,105,0.4)!important;color:#3a2a10!important;';
+    });
+    document.querySelectorAll('.dashboard-usage-header').forEach(function(el) { el.style.cssText += 'color:#FFD700!important;'; });
   }
 
   // === Init ===
@@ -5640,6 +5708,7 @@
     }
     if (list) list.innerHTML = html;
     if (addRow) addRow.classList.toggle('hidden', anniversaries.length >= 5);
+    if (typeof applyCreamGoldOverride === 'function') applyCreamGoldOverride();
   }
 
   function renderDashboardList() {
@@ -5675,6 +5744,7 @@
       }).join('');
     }
     if (dashAddRow) dashAddRow.classList.toggle('hidden', anniversaries.length >= 5);
+    if (typeof applyCreamGoldOverride === 'function') applyCreamGoldOverride();
   }
 
   var FEATURE_NAMES = [
