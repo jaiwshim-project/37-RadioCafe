@@ -620,6 +620,12 @@
       chatRoomId = roomParam;
       document.getElementById('receiverView').style.display = '';
       loadStory(roomParam);
+
+      /* Log receiver usage */
+      try {
+        var ruid = localStorage.getItem('radioUsername');
+        if(ruid){ initSupabase(); if(supabaseClient) supabaseClient.from('feature_usage').insert({user_id:ruid, feature:'dj_story_received'}).then(function(){}); }
+      } catch(e){}
     } else {
       // SENDER MODE
       isReceiver = false;

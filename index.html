@@ -2970,6 +2970,19 @@
       font-family: 'Orbitron', monospace; font-size: 12px;
       color: #FFD700; font-weight: 700; min-width: 30px; text-align: right;
     }
+    .dashboard-usage-item .usage-received {
+      font-family: 'Orbitron', monospace; font-size: 12px;
+      color: #88ccff; font-weight: 700; min-width: 30px; text-align: right;
+    }
+    .dashboard-usage-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 2px 10px 6px; font-family: 'Inter', sans-serif; font-size: 9px;
+      color: var(--label-color); letter-spacing: 0.5px;
+    }
+    .dashboard-usage-header .usage-no { min-width: 18px; }
+    .dashboard-usage-header .usage-name { flex: 1; }
+    .dashboard-usage-header .usage-count { min-width: 30px; text-align: right; }
+    .dashboard-usage-header .usage-received { min-width: 30px; text-align: right; }
     .dashboard-anniv-list { display: flex; flex-direction: column; gap: 6px; }
     .dashboard-anniv-item {
       display: flex; align-items: center; gap: 8px;
@@ -5638,12 +5651,20 @@
       if(res.data){
         res.data.forEach(function(r){ counts[r.feature] = (counts[r.feature]||0) + 1; });
       }
-      var html = FEATURE_NAMES.map(function(f, i){
+      var headerHtml = '<div class="dashboard-usage-header">' +
+        '<span class="usage-no"></span>' +
+        '<span class="usage-name"></span>' +
+        '<span class="usage-count">사용</span>' +
+        '<span class="usage-received">수신</span>' +
+      '</div>';
+      var html = headerHtml + FEATURE_NAMES.map(function(f, i){
         var count = counts[f.key] || 0;
+        var received = counts[f.key + '_received'] || 0;
         return '<div class="dashboard-usage-item">' +
           '<span class="usage-no">' + (i+1) + '</span>' +
           '<span class="usage-name">' + f.label + '</span>' +
           '<span class="usage-count">' + count + '</span>' +
+          '<span class="usage-received">' + received + '</span>' +
         '</div>';
       }).join('');
       listEl.innerHTML = html;

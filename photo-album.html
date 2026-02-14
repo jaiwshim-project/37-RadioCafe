@@ -562,6 +562,12 @@
       document.getElementById('btnAddPhoto').classList.remove('hidden');
       document.getElementById('lpOverlay').classList.remove('hidden');
       loadPhotosFromSupabase();
+
+      /* Log receiver usage */
+      try {
+        var ruid = localStorage.getItem('radioUsername');
+        if(ruid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:ruid, feature:'photo_album_received'}).then(function(){});
+      } catch(e){}
     } else {
       // CREATOR mode
       isViewer = false;

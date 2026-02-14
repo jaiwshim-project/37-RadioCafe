@@ -509,6 +509,12 @@
       document.getElementById('hostLobby').classList.add('hidden');
       document.getElementById('guestLobby').classList.remove('hidden');
       subscribeQuizChannel();
+
+      /* Log receiver usage */
+      try {
+        var ruid = localStorage.getItem('radioUsername');
+        if(ruid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:ruid, feature:'music_quiz_received'}).then(function(){});
+      } catch(e){}
     } else {
       // HOST mode
       isHost = true;

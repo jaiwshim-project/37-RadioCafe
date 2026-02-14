@@ -1176,6 +1176,12 @@ function init(){
     chatRoomId = room;
     document.getElementById('receiverCard').style.display = '';
 
+    /* Log receiver usage */
+    try {
+      var uid = localStorage.getItem('radioUsername');
+      if(uid){ initSupabase(); if(supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'radio_postcard_received'}).then(function(){}); }
+    } catch(e){}
+
     /* Build mini postcard for envelope reveal */
     var revealEl = document.getElementById('postcardReveal');
     var miniCard = buildMiniPostcard(design);

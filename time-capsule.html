@@ -682,6 +682,12 @@
       capsuleDate = pDate;
       capsuleMsg = pMsg ? decodeURIComponent(pMsg) : '';
       initReceiverMode();
+
+      /* Log receiver usage */
+      try {
+        var ruid = localStorage.getItem('radioUsername');
+        if(ruid){ initSupabase(); if(supabaseClient) supabaseClient.from('feature_usage').insert({user_id:ruid, feature:'time_capsule_received'}).then(function(){}); }
+      } catch(e){}
     } else {
       // SENDER mode
       pageMode = 'sender';

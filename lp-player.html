@@ -666,6 +666,16 @@
     if(chatRoomId){
       document.getElementById('chatOpenBtn').style.display = 'inline-flex';
     }
+
+    /* Log receiver usage */
+    try {
+      initSupabase();
+      var ruid = localStorage.getItem('radioUsername');
+      if(ruid && supabaseClient){
+        var receivedFeature = voiceId ? 'voice_gift_received' : 'gift_song_received';
+        supabaseClient.from('feature_usage').insert({user_id:ruid, feature:receivedFeature}).then(function(){});
+      }
+    } catch(e){}
   }
 
   // === Gift Box + Fireworks Animation ===
