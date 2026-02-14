@@ -13,8 +13,8 @@
     body {
       min-height: 100vh;
       background: linear-gradient(135deg, #FFF8E7 0%, #F2E8D0 30%, #EDE0C8 60%, #FFF8E7 100%);
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
+      display: flex; align-items: stretch; justify-content: center;
+      padding: 0;
       font-family: 'Inter', sans-serif;
     }
 
@@ -28,8 +28,9 @@
 
     .profile-card {
       width: 100%; max-width: 480px;
+      min-height: 100vh;
       background: linear-gradient(145deg, #C8A96E, #A08050);
-      border-radius: 28px; padding: 3px;
+      border-radius: 0; padding: 3px;
       box-shadow:
         0 40px 80px rgba(139,105,20,0.2),
         0 0 40px rgba(200,169,110,0.15),
@@ -39,9 +40,10 @@
 
     .profile-inner {
       background: linear-gradient(145deg, #FFF8E7, #F5EDD8);
-      border-radius: 25px; padding: 40px 30px;
-      position: relative;
+      border-radius: 0; padding: 40px 30px;
+      position: relative; min-height: calc(100vh - 6px);
       border: 1px solid #C8A96E;
+      display: flex; flex-direction: column; justify-content: center;
     }
 
     /* 나사 장식 */
