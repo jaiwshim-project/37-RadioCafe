@@ -370,7 +370,7 @@
 <!-- Chat Panel (전체화면) -->
 <div class="chat-panel" id="chatPanel" style="display:none;">
   <div class="chat-header">
-    <button class="chat-back-btn" onclick="history.back()">&#9664; 이전</button>
+    <button class="chat-back-btn" onclick="closeChatPanel()">&#9664; 이전</button>
     <span class="chat-header-title">CHAT</span>
     <span class="chat-header-info" id="chatHeaderInfo"></span>
   </div>
@@ -747,6 +747,10 @@
       document.getElementById('chatInputBox').classList.remove('hidden');
       if(!chatActive) connectChat();
     }
+  }
+
+  function closeChatPanel(){
+    document.getElementById('chatPanel').style.display = 'none';
   }
 
   function joinChat(){
