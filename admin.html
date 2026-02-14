@@ -1321,6 +1321,7 @@
           + '<div class="user-meta" id="userMeta-' + i + '">불러오는 중...</div></div>'
           + '</div>'
           + '<div class="user-actions">'
+          + '<button class="btn btn-gold btn-sm" onclick="event.stopPropagation();viewUserDashboard(\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">대시보드</button>'
           + '<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteUser(\'' + escapeHtml(name).replace(/'/g, "\\'") + '\')">삭제</button>'
           + '<span class="expand-arrow">&#9660;</span>'
           + '</div></div>'
@@ -1447,6 +1448,10 @@
     function closeLightbox(e) {
       if (e.target.tagName === 'IMG') return;
       document.getElementById('photoLightbox').classList.add('hidden');
+    }
+
+    function viewUserDashboard(userName) {
+      location.href = 'index.html?mode=digital&dashboard=' + encodeURIComponent(userName);
     }
 
     async function deleteUser(userName) {

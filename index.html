@@ -2936,6 +2936,8 @@
       font-size: 20px; cursor: pointer; padding: 0 4px;
     }
     .dashboard-close:hover { color: var(--needle, #ff6b6b); }
+    .dashboard-admin-back { margin-bottom: 10px; }
+    .dashboard-admin-back.hidden { display: none; }
     .dashboard-user-info {
       margin-bottom: 16px; padding: 10px 12px; border-radius: 8px;
       background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
@@ -3369,6 +3371,9 @@
     <div class="dashboard-header">
       <span class="dashboard-title">MY DASHBOARD</span>
       <button class="dashboard-close" onclick="closeDashboard()">&times;</button>
+    </div>
+    <div class="dashboard-admin-back hidden" id="dashAdminBack">
+      <button onclick="location.href='admin.html'" style="background:linear-gradient(180deg,#d4af69,#b8943f);border:1px solid rgba(212,175,105,0.4);border-radius:6px;color:#3a2a10;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;padding:6px 14px;cursor:pointer;width:100%;">관리자 페이지로 돌아가기</button>
     </div>
     <div class="dashboard-user-info">
       <div class="dashboard-user-name" id="dashUserName"></div>
@@ -4901,11 +4906,12 @@
     // 아날로그→디지털 전환 또는 리프레시(F5)인 경우 자동 복원
     var urlParams = new URLSearchParams(location.search);
     var modeDigital = urlParams.get('mode') === 'digital';
+    var dashboardUser = urlParams.get('dashboard');
     var navEntries = performance.getEntriesByType && performance.getEntriesByType('navigation');
     var isReload = (navEntries && navEntries[0] && navEntries[0].type === 'reload') ||
                    (performance.navigation && performance.navigation.type === 1);
-    if(modeDigital || isReload){
-      var savedUser = localStorage.getItem('radioUsername');
+    if(modeDigital || dashboardUser || isReload){
+      var savedUser = dashboardUser || localStorage.getItem('radioUsername');
       var savedPhotos = null;
       try { savedPhotos = JSON.parse(localStorage.getItem('radioUserPhotos')); } catch(e){}
 
@@ -4918,6 +4924,17 @@
         currentUsername = savedUser;
         document.getElementById('userLoginScreen').classList.add('hidden');
         document.getElementById('photoSelectScreen').classList.remove('hidden');
+      }
+
+      // 관리자에서 사용자 대시보드 열기
+      if(dashboardUser){
+        annivLoggedUser = dashboardUser;
+        var waitDash = setInterval(function(){
+          if(supabase){
+            clearInterval(waitDash);
+            openDashboard();
+          }
+        }, 200);
       }
     }
 
@@ -5705,6 +5722,14 @@
     var email = typeof userData === 'string' ? '' : (userData.email || '');
     document.getElementById('dashUserName').textContent = annivLoggedUser;
     document.getElementById('dashUserEmail').textContent = email || '이메일 미등록';
+    // 관리자에서 온 경우 돌아가기 버튼 표시
+    var adminBack = document.getElementById('dashAdminBack');
+    var urlP = new URLSearchParams(location.search);
+    if(urlP.get('dashboard')){
+      adminBack.classList.remove('hidden');
+    } else {
+      adminBack.classList.add('hidden');
+    }
     renderDashboardList();
     loadFeatureUsage();
     document.getElementById('dashboardOverlay').classList.add('visible');
