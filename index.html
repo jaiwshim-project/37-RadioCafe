@@ -5374,24 +5374,41 @@
 
   function loadAnniversaries() {
     // 먼저 localStorage에서 임시 로드
+    var localData = [];
     try {
       var saved = JSON.parse(localStorage.getItem('radio-anniversaries'));
-      if (saved && Array.isArray(saved)) anniversaries = saved;
+      if (saved && Array.isArray(saved)) { anniversaries = saved; localData = saved; }
     } catch(e) {}
     renderAnniversaries();
     // 로그인 사용자가 있으면 클라우드에서도 로드 시도
     var username = currentUsername || localStorage.getItem('radioUsername');
     if (username) {
       annivLoggedUser = username;
-      loadAnniversariesFromCloud(username).then(function(data){
-        if (data && data.length > 0) {
-          anniversaries = data;
+      // 클라우드에서 직접 다운로드 시도 (localStorage 폴백 없이)
+      (async function(){
+        var cloudData = [];
+        try {
+          var r = await supabase.storage.from(BUCKET_NAME).download(
+            '_system/anniversaries/' + toSafePath(username) + '.json'
+          );
+          if (r.data) {
+            var arr = JSON.parse(await r.data.text());
+            if (Array.isArray(arr) && arr.length > 0) cloudData = arr;
+          }
+        } catch(e) {}
+
+        if (cloudData.length > 0) {
+          // 클라우드 데이터 우선 사용
+          anniversaries = cloudData;
+        } else if (localData.length > 0) {
+          // 클라우드에 없고 로컬에 있으면 로컬 데이터를 클라우드에 업로드
+          anniversaries = localData;
+          saveAnniversariesToCloud();
         }
         try { localStorage.setItem('radio-anniversaries', JSON.stringify(anniversaries)); } catch(e) {}
-        if (anniversaries.length > 0) saveAnniversariesToCloud();
         updateAnnivUI();
         renderAnniversaries();
-      });
+      })();
     }
   }
 
