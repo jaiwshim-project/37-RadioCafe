@@ -1096,7 +1096,8 @@
       if (password === ADMIN_PASSWORD) {
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminPanel').classList.add('active');
-        loadDashboard();
+        var urlTab = new URLSearchParams(location.search).get('tab');
+        if(urlTab) { switchTab(urlTab); } else { loadDashboard(); }
       } else {
         messageEl.className = 'message error';
         messageEl.textContent = '비밀번호가 올바르지 않습니다.';
