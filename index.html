@@ -4898,11 +4898,13 @@
     // 오래된 localStorage 사용자 캐시 정리
     try { localStorage.removeItem('radioUsers'); } catch(e){}
 
-    // 리프레시(F5)인 경우에만 자동 복원 (새 접속/URL 입력 시에는 랜딩 페이지)
+    // 아날로그→디지털 전환 또는 리프레시(F5)인 경우 자동 복원
+    var urlParams = new URLSearchParams(location.search);
+    var modeDigital = urlParams.get('mode') === 'digital';
     var navEntries = performance.getEntriesByType && performance.getEntriesByType('navigation');
     var isReload = (navEntries && navEntries[0] && navEntries[0].type === 'reload') ||
                    (performance.navigation && performance.navigation.type === 1);
-    if(isReload){
+    if(modeDigital || isReload){
       var savedUser = localStorage.getItem('radioUsername');
       var savedPhotos = null;
       try { savedPhotos = JSON.parse(localStorage.getItem('radioUserPhotos')); } catch(e){}
