@@ -1298,9 +1298,11 @@
     }
 
     function filterUsers() {
-      var query = document.getElementById('userSearch').value.toLowerCase();
-      var filtered = Object.keys(allUsers).filter(function(name) {
-        return name.toLowerCase().indexOf(query) !== -1;
+      var query = document.getElementById('userSearch').value.trim().toLowerCase();
+      var allKeys = Object.keys(allUsers);
+      var filtered = allKeys.filter(function(name) {
+        var serial = getUserSerial(name);
+        return name.toLowerCase().indexOf(query) !== -1 || serial.indexOf(query) !== -1;
       });
       renderUserList(filtered);
     }
