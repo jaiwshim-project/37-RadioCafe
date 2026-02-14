@@ -3291,7 +3291,7 @@
           <div class="login-lcd-title">PASSWORD</div>
           <div class="login-lcd-sub"><span id="selectedUserName"></span>님, 비밀번호를 입력하세요</div>
         </div>
-        <input type="password" id="passwordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+        <input type="password" id="passwordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
         <button class="login-btn" onclick="submitPassword()">확인</button>
         <button class="back-btn" onclick="showUserSelect()">← 돌아가기</button>
       </div>
@@ -3322,7 +3322,7 @@
           <label class="birth-radio-label"><input type="radio" name="userGender" value="male" checked> 남자</label>
           <label class="birth-radio-label"><input type="radio" name="userGender" value="female"> 여자</label>
         </div>
-        <input type="password" id="newPasswordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+        <input type="password" id="newPasswordInput" class="password-input" placeholder="●●●●" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
         <button class="login-btn" onclick="registerNewUser()">등록하기</button>
         <button class="back-btn" onclick="showUserSelect()">← 돌아가기</button>
       </div>
