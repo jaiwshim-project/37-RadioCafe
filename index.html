@@ -4896,6 +4896,24 @@
     // 오래된 localStorage 사용자 캐시 정리
     try { localStorage.removeItem('radioUsers'); } catch(e){}
 
+    // 리프레시 시 자동 복원: 이전 로그인 상태가 있으면 바로 라디오 화면으로
+    var savedUser = localStorage.getItem('radioUsername');
+    var savedPhotos = null;
+    try { savedPhotos = JSON.parse(localStorage.getItem('radioUserPhotos')); } catch(e){}
+
+    if(savedUser && savedPhotos && Array.isArray(savedPhotos) && savedPhotos.filter(function(p){return p!==null;}).length >= 6){
+      // 로그인 + 사진 모두 있음 → 바로 라디오 화면으로
+      currentUsername = savedUser;
+      slotPhotos = savedPhotos;
+      document.getElementById('userLoginScreen').classList.add('hidden');
+      showRadioScreen(savedPhotos);
+    } else if(savedUser){
+      // 로그인만 있음 → 사진 선택 화면으로
+      currentUsername = savedUser;
+      document.getElementById('userLoginScreen').classList.add('hidden');
+      document.getElementById('photoSelectScreen').classList.remove('hidden');
+    }
+
     // Supabase 초기화 대기 후 사용자 목록 로드
     var waitInit = setInterval(function(){
       if(supabase){
