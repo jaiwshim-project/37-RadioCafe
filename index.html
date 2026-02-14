@@ -3709,7 +3709,7 @@
         </div>
         <div class="anniv-birthday-info" id="annivBirthdayInfo"></div>
         <div class="anniversary-list" id="anniversaryList"></div>
-        <div class="anniversary-add-row" id="anniversaryAddRow">
+        <div class="anniversary-add-row hidden" id="anniversaryAddRow">
           <input type="text" id="annivNameInput" placeholder="기념일 이름" maxlength="12" autocomplete="off">
           <select id="annivTypeSelect" class="anniv-type-select"><option value="birthday">생일</option><option value="wedding">결혼기념일</option><option value="meeting">만난 날</option></select>
           <input type="number" id="annivYearInput" class="anniv-date-field" placeholder="년" min="1920" max="2030" inputmode="numeric">
@@ -5797,7 +5797,7 @@
     var html;
     if (anniversaries.length === 0) {
       html = '<div class="anniversary-empty">' +
-        (annivLoggedUser ? '기념일을 추가해보세요 (최대 5개)' : '로그인 후 기념일을 관리하세요') + '</div>';
+        (annivLoggedUser ? 'DASHBOARD에서 기념일을 추가하세요' : '로그인 후 기념일을 관리하세요') + '</div>';
     } else {
       html = anniversaries.map(function(a, i) {
         var bInfo = getBirthdayDisplayInfo(a);
@@ -5811,13 +5811,11 @@
           '<span class="anniv-dday ' + bInfo.ddayCls + '">' + bInfo.ddayText + '</span>' +
           '<span class="anniv-bday-sep">|</span>' +
           '<span class="anniv-bday-lived">' + livedLabel + ' ' + bInfo.livedDays.toLocaleString() + '일</span>' +
-          '<button class="anniv-edit" onclick="editAnniversary(' + i + ')" title="수정">수정</button>' +
-          '<button class="anniv-del" onclick="removeAnniversary(' + i + ')" title="삭제">&times;</button>' +
           '</div>';
       }).join('');
     }
     if (list) list.innerHTML = html;
-    if (addRow) addRow.classList.toggle('hidden', anniversaries.length >= 5);
+    // 추가/삭제는 대시보드에서만 가능 — addRow 항상 숨김
     if (typeof applyCreamGoldOverride === 'function') applyCreamGoldOverride();
   }
 
