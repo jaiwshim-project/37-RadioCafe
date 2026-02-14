@@ -779,24 +779,10 @@
     chatChannel.on('broadcast', { event: 'join' }, function(payload){
       chatPeerCount++;
       addSystemMessage(payload.payload.name + '님이 입장했습니다.');
-      if(chatAutoHidden){
-        chatAutoHidden = false;
-        var panel = document.getElementById('chatPanel');
-        panel.style.display = 'flex';
-        panel.classList.add('minimized');
-        document.getElementById('chatMinBtn').innerHTML = '&#9650;';
-      }
     });
     chatChannel.on('broadcast', { event: 'leave' }, function(payload){
       chatPeerCount = Math.max(0, chatPeerCount - 1);
       addSystemMessage(payload.payload.name + '님이 퇴장했습니다.');
-      if(chatPeerCount <= 0){
-        addSystemMessage('모든 상대방이 퇴장하여 채팅이 닫힙니다.');
-        setTimeout(function(){
-          chatAutoHidden = true;
-          document.getElementById('chatPanel').style.display = 'none';
-        }, 2000);
-      }
     });
     chatChannel.subscribe(function(status){
       if(status === 'SUBSCRIBED'){

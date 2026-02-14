@@ -2962,30 +2962,12 @@
       chatPeerCount++;
       addSystemMessage(payload.payload.name + '님이 입장했습니다.');
       updateChatInfo();
-      // 자동 숨김 상태였으면 채팅 패널 다시 열기 (접힌 상태로)
-      if(chatAutoHidden){
-        chatAutoHidden = false;
-        var panel = document.getElementById('chatPanel');
-        var minBtn = document.getElementById('chatMinBtn');
-        panel.style.display = 'flex';
-        panel.classList.remove('minimized');
-        minBtn.innerHTML = '&#9660;';
-        addSystemMessage('상대방이 다시 접속했습니다.');
-      }
     });
 
     chatChannel.on('broadcast', { event: 'leave' }, function(payload){
       chatPeerCount = Math.max(0, chatPeerCount - 1);
       addSystemMessage(payload.payload.name + '님이 퇴장했습니다.');
       updateChatInfo();
-      // 모든 상대방이 퇴장하면 채팅 자동 숨김 (채널은 유지)
-      if(chatPeerCount <= 0){
-        addSystemMessage('모든 상대방이 퇴장하여 채팅이 닫힙니다.');
-        setTimeout(function(){
-          chatAutoHidden = true;
-          document.getElementById('chatPanel').style.display = 'none';
-        }, 2000);
-      }
     });
 
     chatChannel.subscribe(function(status){

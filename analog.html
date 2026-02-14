@@ -2128,6 +2128,15 @@
       <a class="analog-listen-together-btn" href="gift-song.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">노래 선물하기</a>
       <a class="analog-listen-together-btn" href="voice-gift.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">노래+음성 선물하기</a>
     </div>
+    <div class="analog-listen-together" style="margin-top:4px;">
+      <a class="analog-listen-together-btn" href="radio-postcard.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">라디오 엽서</a>
+      <a class="analog-listen-together-btn" href="time-capsule.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">타임캡슐</a>
+      <a class="analog-listen-together-btn" href="dj-story.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">DJ 사연</a>
+    </div>
+    <div class="analog-listen-together" style="margin-top:4px;">
+      <a class="analog-listen-together-btn" href="music-quiz.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">음악 퀴즈</a>
+      <a class="analog-listen-together-btn" href="photo-album.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">포토앨범</a>
+    </div>
 
     <!-- Chat Panel (인라인 모드용, radio-inner 안) -->
     <div class="chat-panel hidden" id="chatPanel">
@@ -3075,14 +3084,6 @@
       chatPeerCount = Math.max(0, chatPeerCount - 1);
       addSystemMessage(payload.payload.name + '님이 퇴장했습니다.');
       updateChatInfo();
-      // 모든 상대방이 퇴장하면 채팅 자동 숨김 (채널은 유지)
-      if(chatPeerCount <= 0){
-        addSystemMessage('모든 상대방이 퇴장하여 채팅이 닫힙니다.');
-        setTimeout(function(){
-          chatAutoHidden = true;
-          document.getElementById('chatPanel').classList.add('hidden');
-        }, 2000);
-      }
     });
 
     chatChannel.subscribe(function(status){
@@ -3183,8 +3184,7 @@
     document.getElementById('analogVolKnob').style.cursor = 'default';
     var photoBtn = document.getElementById('analogPhotoBtn');
     if(photoBtn) photoBtn.style.display = 'none';
-    var ltSection = document.querySelector('.analog-listen-together');
-    if(ltSection) ltSection.style.display = 'none';
+    document.querySelectorAll('.analog-listen-together').forEach(function(el){ el.style.display = 'none'; });
   }
 
   function renderAnalogFreqTicks(){

@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ko" style="background:#1a1a2e">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>타임캡슐 | 클라라 라디오카페</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #1a1a2e;
+      --body-out1: #3a2a1a; --body-out2: #2a1c0e;
+      --accent: #4ecdc4;
+      --accent-glow: rgba(78,205,196,0.5);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    /* Capsule Card */
+    .capsule-card {
+      background: linear-gradient(145deg, #3a2a1a, #2a1c0e);
+      border: 1px solid #4ecdc4;
+      border-radius: 20px; padding: 24px;
+      width: 100%; max-width: 360px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(78,205,196,0.3), 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .capsule-title {
+      font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
+      color: #4ecdc4; letter-spacing: 3px; margin-bottom: 16px;
+      text-shadow: 0 0 10px rgba(78,205,196,0.5);
+    }
+    .capsule-subtitle {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: rgba(255,255,255,0.5); margin-bottom: 16px;
+    }
+
+    /* Sender Mode Styles */
+    .capsule-label {
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+      color: rgba(255,255,255,0.7); margin-bottom: 8px; text-align: left;
+    }
+    .capsule-date-input {
+      width: 100%; padding: 12px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      outline: none; margin-bottom: 16px;
+      color-scheme: dark;
+    }
+    .capsule-date-input:focus { border-color: #4ecdc4; }
+    .capsule-msg-input {
+      width: 100%; padding: 12px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.3); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      outline: none; resize: none; min-height: 80px;
+      margin-bottom: 4px;
+    }
+    .capsule-msg-input:focus { border-color: #4ecdc4; }
+    .capsule-msg-input::placeholder { color: rgba(255,255,255,0.3); }
+    .capsule-char-count {
+      font-family: 'Inter', sans-serif; font-size: 11px;
+      color: rgba(255,255,255,0.35); text-align: right; margin-bottom: 12px;
+    }
+
+    /* Step 2 Summary */
+    .capsule-summary-icon {
+      font-size: 48px; margin-bottom: 12px;
+      filter: drop-shadow(0 0 12px rgba(78,205,196,0.5));
+    }
+    .capsule-summary-date {
+      font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700;
+      color: #4ecdc4; margin-bottom: 8px;
+    }
+    .capsule-summary-msg {
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      color: rgba(255,255,255,0.7); margin-bottom: 16px;
+      padding: 12px; border-radius: 10px;
+      background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.06);
+      word-break: break-word; line-height: 1.5;
+    }
+
+    /* Button Styles */
+    .gift-btn-row { display: flex; gap: 8px; margin-top: 14px; }
+    .gift-btn-back {
+      padding: 12px; border-radius: 12px; flex: 0 0 70px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7); font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    .gift-btn-next {
+      flex: 1; padding: 12px; border-radius: 12px;
+      background: #4ecdc4; border: none; color: #fff;
+      font-family: 'Outfit', sans-serif; font-size: 14px;
+      font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .gift-btn-next:disabled { opacity: 0.3; cursor: default; }
+    .gift-btn-next:not(:disabled):hover { box-shadow: 0 0 16px rgba(78,205,196,0.5); }
+
+    /* Link Box */
+    .gift-link-box {
+      display: flex; gap: 6px; margin-top: 12px;
+    }
+    .gift-link-box input {
+      flex: 1; padding: 10px; border-radius: 8px;
+      background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; font-size: 11px; font-family: 'Inter', sans-serif; outline: none;
+    }
+    .gift-link-box button {
+      padding: 10px 16px; border-radius: 8px;
+      background: #4ecdc4; border: none; color: #fff;
+      font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .gift-copied { color: #4ecdc4; font-size: 12px; margin-top: 6px; font-family: 'Inter', sans-serif; }
+    .gift-guide {
+      margin-top: 14px; text-align: left; padding: 12px 14px;
+      background: rgba(255,255,255,0.06); border-radius: 10px;
+      border-left: 3px solid #4ecdc4;
+    }
+    .gift-guide p {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      color: rgba(255,255,255,0.7); line-height: 1.6;
+      margin: 0 0 8px 0;
+    }
+    .gift-guide p:last-child { margin-bottom: 0; }
+    .hidden { display: none !important; }
+    .gift-step2 { display: none; }
+    .gift-step2.active { display: block; }
+
+    /* ===== RECEIVER MODE - CAPSULE CSS ART ===== */
+    .capsule-scene {
+      perspective: 800px;
+      margin: 20px auto;
+      width: 200px; height: 260px;
+      position: relative;
+    }
+    .capsule-body {
+      position: relative;
+      width: 180px; height: 220px;
+      margin: 0 auto;
+      transform-style: preserve-3d;
+    }
+
+    /* Main capsule shell */
+    .capsule-shell {
+      position: absolute;
+      width: 180px; height: 220px;
+      border-radius: 90px 90px 30px 30px;
+      background: linear-gradient(135deg, #7a7a8a 0%, #b8b8c8 20%, #5a5a6a 40%, #a8a8b8 60%, #6a6a7a 80%, #9a9ab0 100%);
+      box-shadow:
+        inset 0 2px 4px rgba(255,255,255,0.3),
+        inset 0 -4px 8px rgba(0,0,0,0.4),
+        0 8px 32px rgba(0,0,0,0.6),
+        0 0 20px rgba(78,205,196,0.2);
+      overflow: hidden;
+    }
+    .capsule-shell::before {
+      content: '';
+      position: absolute;
+      top: 8px; left: 20px;
+      width: 60px; height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent);
+      pointer-events: none;
+    }
+
+    /* Capsule lid */
+    .capsule-lid {
+      position: absolute;
+      top: 0; left: 0;
+      width: 180px; height: 110px;
+      border-radius: 90px 90px 10px 10px;
+      background: linear-gradient(135deg, #8a8a9a 0%, #c8c8d8 25%, #6a6a7a 50%, #b0b0c0 75%, #7a7a8a 100%);
+      box-shadow:
+        inset 0 2px 4px rgba(255,255,255,0.4),
+        0 2px 8px rgba(0,0,0,0.3);
+      transform-origin: center bottom;
+      transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 2;
+    }
+    .capsule-lid::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 10px; right: 10px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(78,205,196,0.6), transparent);
+      border-radius: 2px;
+    }
+
+    /* Rivets */
+    .capsule-rivet {
+      position: absolute;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 3px 3px, #d0d0e0, #606070);
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.5), 0 1px 2px rgba(0,0,0,0.3);
+    }
+    .rivet-1 { top: 115px; left: 10px; }
+    .rivet-2 { top: 115px; right: 10px; }
+    .rivet-3 { top: 160px; left: 8px; }
+    .rivet-4 { top: 160px; right: 8px; }
+    .rivet-5 { top: 50px; left: 14px; }
+    .rivet-6 { top: 50px; right: 14px; }
+
+    /* Lock icon */
+    .capsule-lock {
+      position: absolute;
+      top: 60px; left: 50%; transform: translateX(-50%);
+      z-index: 3;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .lock-body {
+      width: 32px; height: 26px;
+      background: linear-gradient(135deg, #c8a030, #e8c850, #b89020);
+      border-radius: 4px;
+      margin: 0 auto;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .lock-body::after {
+      content: '';
+      position: absolute;
+      top: 8px; left: 50%; transform: translateX(-50%);
+      width: 6px; height: 10px;
+      background: #1a1a2e;
+      border-radius: 0 0 3px 3px;
+    }
+    .lock-shackle {
+      width: 22px; height: 16px;
+      border: 4px solid #d8b040;
+      border-bottom: none;
+      border-radius: 11px 11px 0 0;
+      margin: 0 auto;
+      box-shadow: 0 -1px 3px rgba(0,0,0,0.3);
+    }
+
+    /* Teal glow ring around capsule */
+    .capsule-glow {
+      position: absolute;
+      top: -10px; left: -10px; right: -10px; bottom: -10px;
+      border-radius: 100px 100px 40px 40px;
+      border: 2px solid rgba(78,205,196,0.3);
+      box-shadow: 0 0 20px rgba(78,205,196,0.15);
+      animation: capsule-pulse 3s ease-in-out infinite;
+    }
+    @keyframes capsule-pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(78,205,196,0.15); border-color: rgba(78,205,196,0.3); }
+      50% { box-shadow: 0 0 35px rgba(78,205,196,0.3); border-color: rgba(78,205,196,0.5); }
+    }
+
+    /* Band around middle */
+    .capsule-band {
+      position: absolute;
+      top: 106px; left: 0; right: 0; height: 14px;
+      background: linear-gradient(180deg, #4ecdc4, #38b2ac, #4ecdc4);
+      box-shadow: 0 0 12px rgba(78,205,196,0.5);
+      z-index: 1;
+    }
+
+    /* Countdown Timer */
+    .countdown-container {
+      margin-top: 20px;
+    }
+    .countdown-label {
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: rgba(255,255,255,0.4); margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .countdown-boxes {
+      display: flex; gap: 8px; justify-content: center;
+    }
+    .countdown-box {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(78,205,196,0.3);
+      border-radius: 10px; padding: 10px 6px;
+      min-width: 58px; text-align: center;
+    }
+    .countdown-value {
+      font-family: 'Orbitron', monospace; font-size: 24px; font-weight: 900;
+      color: #4ecdc4;
+      text-shadow: 0 0 10px rgba(78,205,196,0.5);
+    }
+    .countdown-unit {
+      font-family: 'Inter', sans-serif; font-size: 10px;
+      color: rgba(255,255,255,0.4); margin-top: 2px;
+    }
+
+    /* Chat button */
+    .capsule-chat-btn {
+      width: 100%; padding: 12px; margin-top: 16px;
+      border-radius: 12px; background: transparent;
+      border: 1px solid #4ecdc4; color: #4ecdc4;
+      font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .capsule-chat-btn:hover { background: #4ecdc4; color: #fff; }
+
+    /* ===== OPEN ANIMATION ===== */
+    .capsule-opened .capsule-lid {
+      transform: rotateX(-130deg);
+    }
+    .capsule-opened .capsule-lock {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px) scale(0.5);
+    }
+
+    /* Light burst from inside */
+    .capsule-light-burst {
+      position: absolute;
+      top: 40px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,230,150,0.9), rgba(78,205,196,0.4), transparent);
+      opacity: 0;
+      z-index: 1;
+      transition: all 1s ease-out;
+    }
+    .capsule-opened .capsule-light-burst {
+      width: 300px; height: 300px;
+      top: -40px;
+      opacity: 1;
+      animation: burst-fade 2s ease-out forwards;
+    }
+    @keyframes burst-fade {
+      0% { opacity: 0; width: 0; height: 0; }
+      30% { opacity: 1; width: 250px; height: 250px; }
+      100% { opacity: 0; width: 350px; height: 350px; }
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 4px; height: 4px;
+      background: #ffe68a;
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow: 0 0 6px #ffe68a;
+    }
+    .capsule-opened .sparkle {
+      animation: sparkle-fly 1.5s ease-out forwards;
+    }
+    @keyframes sparkle-fly {
+      0% { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0); }
+    }
+
+    /* ===== PARCHMENT / MESSAGE SCROLL ===== */
+    .capsule-message-area {
+      margin-top: 20px; opacity: 0; transform: translateY(20px);
+      transition: all 0.8s ease-out 1s;
+    }
+    .capsule-opened ~ .capsule-message-area,
+    .message-visible {
+      opacity: 1 !important; transform: translateY(0) !important;
+    }
+    .parchment-scroll {
+      background: linear-gradient(145deg, #f5e6c8, #e8d5a8, #f0ddb8);
+      border: 1px solid #c8a870;
+      border-radius: 12px; padding: 20px 16px;
+      position: relative;
+      box-shadow:
+        inset 0 0 30px rgba(160,120,60,0.15),
+        0 4px 16px rgba(0,0,0,0.3);
+    }
+    .parchment-scroll::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      border-radius: 12px;
+      pointer-events: none;
+    }
+    .parchment-date {
+      font-family: 'Inter', sans-serif; font-size: 11px;
+      color: #8a6a3a; margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .parchment-text {
+      font-family: 'Inter', sans-serif; font-size: 16px;
+      color: #3a2a10; line-height: 1.7;
+      word-break: break-word;
+    }
+    .parchment-ornament {
+      margin-top: 12px;
+      font-size: 18px; color: #c8a870;
+      letter-spacing: 8px;
+    }
+
+    /* Floating particles background */
+    .bg-particles {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none; z-index: -1; overflow: hidden;
+    }
+    .bg-particle {
+      position: absolute;
+      width: 3px; height: 3px;
+      background: rgba(78,205,196,0.3);
+      border-radius: 50%;
+      animation: float-up linear infinite;
+    }
+    @keyframes float-up {
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+    }
+
+    /* Chat Panel - cream/gold theme */
+    .chat-panel {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(145deg, #FFF8E7, #F2E8D0);
+      border: none; z-index: 100; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .chat-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; background: rgba(200,169,110,0.12);
+      border-bottom: 1px solid rgba(200,169,110,0.25); flex-shrink: 0;
+    }
+    .chat-header-title { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: #8B6914; letter-spacing: 2px; }
+    .chat-header-info { font-family: 'Inter', sans-serif; font-size: 11px; color: #A08050; }
+    .chat-back-btn { background: none; border: 1px solid rgba(139,105,20,0.4); color: #8B6914; font-size: 12px; padding: 4px 10px; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; white-space: nowrap; }
+    #chatBody { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .chat-nickname-box { padding: 24px 16px; text-align: center; }
+    .chat-nickname-box input { padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(139,105,20,0.3); background: rgba(255,255,255,0.7); color: #3a2a10; font-family: 'Inter', sans-serif; font-size: 14px; text-align: center; outline: none; width: 65%; }
+    .chat-nickname-box input:focus { border-color: #C8A96E; }
+    .chat-nickname-box button { margin-left: 8px; padding: 12px 20px; border-radius: 10px; background: #C8A96E; border: none; color: #fff; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(200,169,110,0.4); border-radius: 2px; }
+    .chat-msg { margin-bottom: 10px; font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.5; word-break: break-word; display: flex; flex-direction: column; max-width: 78%; }
+    .chat-msg.me { align-self: flex-end; align-items: flex-end; }
+    .chat-msg.other { align-self: flex-start; align-items: flex-start; }
+    .chat-msg-name { font-weight: 700; color: #8B6914; font-size: 13px; margin-bottom: 3px; }
+    .chat-msg.me .chat-msg-name { color: #A08050; }
+    .chat-msg-bubble { padding: 8px 14px; border-radius: 14px; line-height: 1.5; color: #3a2a10; }
+    .chat-msg.other .chat-msg-bubble { background: rgba(200,169,110,0.15); border: 1px solid rgba(200,169,110,0.2); border-top-left-radius: 4px; }
+    .chat-msg.me .chat-msg-bubble { background: #C8A96E; color: #fff; border-top-right-radius: 4px; }
+    .chat-msg-system { text-align: center; color: #A08050; font-size: 13px; font-style: italic; margin: 6px 0; align-self: center; }
+    .chat-input-box { display: flex; gap: 8px; padding: 10px 16px; border-top: 1px solid rgba(200,169,110,0.25); }
+    .chat-input-box input { flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(139,105,20,0.25); background: rgba(255,255,255,0.7); color: #3a2a10; font-family: 'Inter', sans-serif; font-size: 13px; outline: none; }
+    .chat-input-box input:focus { border-color: #C8A96E; }
+    .chat-input-box button { padding: 10px 16px; border-radius: 10px; background: #C8A96E; border: none; color: #fff; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+<!-- Background Particles -->
+<div class="bg-particles" id="bgParticles"></div>
+
+<!-- ===== SENDER MODE ===== -->
+<div class="capsule-card" id="senderCard" style="display:none;">
+  <div class="capsule-title">TIME CAPSULE</div>
+  <div class="capsule-subtitle">추억의 타임캡슐</div>
+
+  <!-- Step 1: Date + Message -->
+  <div id="senderStep1">
+    <div class="capsule-label">개봉 날짜 선택</div>
+    <input type="date" class="capsule-date-input" id="capsuleDateInput" onchange="validateSenderStep1()">
+    <div class="capsule-label">메시지 입력</div>
+    <textarea class="capsule-msg-input" id="capsuleMsgInput" placeholder="미래의 나에게, 또는 소중한 사람에게 보내는 메시지..." maxlength="150" oninput="updateCharCount(); validateSenderStep1()"></textarea>
+    <div class="capsule-char-count"><span id="charCount">0</span> / 150</div>
+    <div class="gift-guide">
+      <p>1. 타임캡슐을 열 날짜를 선택하세요.</p>
+      <p>2. 미래에 전하고 싶은 메시지를 입력하세요.</p>
+      <p>3. '다음' 버튼을 누르면 공유 링크가 생성됩니다.</p>
+    </div>
+    <div class="gift-btn-row">
+      <button class="gift-btn-back" onclick="history.back()">이전</button>
+      <button class="gift-btn-next" id="senderNextBtn" disabled onclick="senderGoStep2()">다음</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Summary + Link -->
+  <div class="gift-step2" id="senderStep2">
+    <div class="capsule-summary-icon">&#128232;</div>
+    <div class="capsule-summary-date" id="summaryDate"></div>
+    <div class="capsule-summary-msg" id="summaryMsg"></div>
+    <div class="gift-link-box">
+      <input type="text" readonly id="capsuleLink">
+      <button onclick="copyCapsuleLink()">복사</button>
+    </div>
+    <div class="gift-copied hidden" id="capsuleCopied">링크가 복사되었습니다!</div>
+    <div class="gift-guide">
+      <p>복사 버튼을 선택하고 타임캡슐을 전달하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
+      <p>타임캡슐을 받은 상대방과 대화할 수 있는 채팅창으로 이동합니다.</p>
+    </div>
+    <div class="gift-btn-row">
+      <button class="gift-btn-back" onclick="senderGoStep1()">이전</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RECEIVER MODE - LOCKED ===== -->
+<div class="capsule-card" id="receiverLocked" style="display:none;">
+  <div class="capsule-title">TIME CAPSULE</div>
+  <div class="capsule-subtitle">아직 열 수 없는 타임캡슐이에요</div>
+
+  <div class="capsule-scene">
+    <div class="capsule-body">
+      <div class="capsule-glow"></div>
+      <div class="capsule-shell"></div>
+      <div class="capsule-band"></div>
+      <div class="capsule-lid"></div>
+      <div class="capsule-lock">
+        <div class="lock-shackle"></div>
+        <div class="lock-body"></div>
+      </div>
+      <div class="capsule-rivet rivet-1"></div>
+      <div class="capsule-rivet rivet-2"></div>
+      <div class="capsule-rivet rivet-3"></div>
+      <div class="capsule-rivet rivet-4"></div>
+      <div class="capsule-rivet rivet-5"></div>
+      <div class="capsule-rivet rivet-6"></div>
+    </div>
+  </div>
+
+  <div class="countdown-container">
+    <div class="countdown-label">개봉까지 남은 시간</div>
+    <div class="countdown-boxes">
+      <div class="countdown-box">
+        <div class="countdown-value" id="countDays">0</div>
+        <div class="countdown-unit">일</div>
+      </div>
+      <div class="countdown-box">
+        <div class="countdown-value" id="countHours">0</div>
+        <div class="countdown-unit">시간</div>
+      </div>
+      <div class="countdown-box">
+        <div class="countdown-value" id="countMins">0</div>
+        <div class="countdown-unit">분</div>
+      </div>
+      <div class="countdown-box">
+        <div class="countdown-value" id="countSecs">0</div>
+        <div class="countdown-unit">초</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="capsule-chat-btn" onclick="openChatPanel()">채팅하기</button>
+</div>
+
+<!-- ===== RECEIVER MODE - UNLOCKED ===== -->
+<div class="capsule-card" id="receiverUnlocked" style="display:none;">
+  <div class="capsule-title">TIME CAPSULE</div>
+  <div class="capsule-subtitle">타임캡슐이 열렸습니다!</div>
+
+  <div class="capsule-scene">
+    <div class="capsule-body capsule-opened" id="capsuleOpenBody">
+      <div class="capsule-glow"></div>
+      <div class="capsule-shell"></div>
+      <div class="capsule-band"></div>
+      <div class="capsule-light-burst"></div>
+      <div class="capsule-lid"></div>
+      <div class="capsule-lock">
+        <div class="lock-shackle"></div>
+        <div class="lock-body"></div>
+      </div>
+      <div class="capsule-rivet rivet-1"></div>
+      <div class="capsule-rivet rivet-2"></div>
+      <div class="capsule-rivet rivet-3"></div>
+      <div class="capsule-rivet rivet-4"></div>
+      <div class="capsule-rivet rivet-5"></div>
+      <div class="capsule-rivet rivet-6"></div>
+      <!-- Sparkles -->
+      <div class="sparkle" style="top:40px;left:50%;--sx:-60px;--sy:-80px;animation-delay:0.2s"></div>
+      <div class="sparkle" style="top:50px;left:55%;--sx:50px;--sy:-90px;animation-delay:0.4s"></div>
+      <div class="sparkle" style="top:45px;left:45%;--sx:-40px;--sy:-70px;animation-delay:0.6s"></div>
+      <div class="sparkle" style="top:55px;left:60%;--sx:70px;--sy:-60px;animation-delay:0.3s"></div>
+      <div class="sparkle" style="top:48px;left:40%;--sx:-80px;--sy:-50px;animation-delay:0.5s"></div>
+      <div class="sparkle" style="top:42px;left:52%;--sx:30px;--sy:-100px;animation-delay:0.1s"></div>
+      <div class="sparkle" style="top:52px;left:48%;--sx:-20px;--sy:-85px;animation-delay:0.7s"></div>
+      <div class="sparkle" style="top:46px;left:58%;--sx:60px;--sy:-75px;animation-delay:0.35s"></div>
+    </div>
+  </div>
+
+  <div class="capsule-message-area" id="capsuleMessageArea">
+    <div class="parchment-scroll">
+      <div class="parchment-date" id="parchmentDate"></div>
+      <div class="parchment-text" id="parchmentText"></div>
+      <div class="parchment-ornament">&#10047; &#10047; &#10047;</div>
+    </div>
+  </div>
+
+  <button class="capsule-chat-btn" onclick="openChatPanel()">채팅하기</button>
+</div>
+
+<!-- Chat Panel -->
+<div class="chat-panel" id="chatPanel" style="display:none;">
+  <div class="chat-header">
+    <button class="chat-back-btn" onclick="closeChatPanel()">&#9664; 이전</button>
+    <span class="chat-header-title">CHAT</span>
+    <span class="chat-header-info" id="chatHeaderInfo"></span>
+  </div>
+  <div id="chatBody">
+    <div class="chat-nickname-box" id="chatNicknameBox">
+      <input type="text" id="chatNicknameInput" placeholder="닉네임 입력" maxlength="12" onkeydown="if(event.key==='Enter')joinChat()">
+      <button onclick="joinChat()">입장</button>
+    </div>
+    <div class="chat-messages hidden" id="chatMessages"></div>
+    <div class="chat-input-box hidden" id="chatInputBox">
+      <input type="text" id="chatMsgInput" placeholder="메시지 입력..." maxlength="200" onkeydown="if(event.key==='Enter')sendChatMsg()">
+      <button onclick="sendChatMsg()">전송</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.15"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // === Supabase Config ===
+  var SUPABASE_URL = 'https://haxcktfnuudlqciyljtp.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhheGNrdGZudXVkbHFjaXlsanRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMDUwNDAsImV4cCI6MjA4NDg4MTA0MH0.suN7BeaHx3MjaNlMDQa0940P-rMl2XPyk4ksoQEU3YM';
+  var supabaseClient = null;
+
+  // === Chat State ===
+  var chatChannel = null;
+  var chatRoomId = null;
+  var chatNickname = '';
+  var chatActive = false;
+  var chatPeerCount = 0;
+  var chatAutoHidden = false;
+
+  // === Mode State ===
+  var pageMode = 'sender'; // 'sender' or 'receiver'
+  var capsuleDate = '';
+  var capsuleMsg = '';
+  var countdownTimer = null;
+
+  function generateRoomId(){
+    var chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    var id = '';
+    for(var i = 0; i < 8; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
+    return id;
+  }
+
+  // === Init ===
+  document.addEventListener('DOMContentLoaded', function(){
+    createBgParticles();
+    var params = new URLSearchParams(location.search);
+    var pRoom = params.get('room');
+    var pDate = params.get('date');
+    var pMsg = params.get('msg');
+
+    if(pRoom && pDate){
+      // RECEIVER mode
+      pageMode = 'receiver';
+      chatRoomId = pRoom;
+      capsuleDate = pDate;
+      capsuleMsg = pMsg ? decodeURIComponent(pMsg) : '';
+      initReceiverMode();
+    } else {
+      // SENDER mode
+      pageMode = 'sender';
+      chatRoomId = generateRoomId();
+      initSenderMode();
+    }
+  });
+
+  // === Background Particles ===
+  function createBgParticles(){
+    var container = document.getElementById('bgParticles');
+    for(var i = 0; i < 20; i++){
+      var p = document.createElement('div');
+      p.className = 'bg-particle';
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.animationDuration = (8 + Math.random() * 12) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      p.style.width = (2 + Math.random() * 3) + 'px';
+      p.style.height = p.style.width;
+      p.style.opacity = (0.2 + Math.random() * 0.4);
+      container.appendChild(p);
+    }
+  }
+
+  // === SENDER MODE ===
+  function initSenderMode(){
+    document.getElementById('senderCard').style.display = '';
+    // Set date limits: min = tomorrow, max = +1 year
+    var today = new Date();
+    var tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var maxDate = new Date(today);
+    maxDate.setFullYear(maxDate.getFullYear() + 1);
+    var dateInput = document.getElementById('capsuleDateInput');
+    dateInput.min = formatDateISO(tomorrow);
+    dateInput.max = formatDateISO(maxDate);
+  }
+
+  function formatDateISO(d){
+    var y = d.getFullYear();
+    var m = (d.getMonth() + 1); if(m < 10) m = '0' + m;
+    var dd = d.getDate(); if(dd < 10) dd = '0' + dd;
+    return y + '-' + m + '-' + dd;
+  }
+
+  function formatDateKR(dateStr){
+    var parts = dateStr.split('-');
+    return parts[0] + '년 ' + parseInt(parts[1]) + '월 ' + parseInt(parts[2]) + '일';
+  }
+
+  function updateCharCount(){
+    var len = document.getElementById('capsuleMsgInput').value.length;
+    document.getElementById('charCount').textContent = len;
+  }
+
+  function validateSenderStep1(){
+    var date = document.getElementById('capsuleDateInput').value;
+    var msg = document.getElementById('capsuleMsgInput').value.trim();
+    document.getElementById('senderNextBtn').disabled = !(date && msg);
+  }
+
+  function senderGoStep2(){
+    var date = document.getElementById('capsuleDateInput').value;
+    var msg = document.getElementById('capsuleMsgInput').value.trim();
+    if(!date || !msg) return;
+    capsuleDate = date;
+    capsuleMsg = msg;
+    document.getElementById('senderStep1').style.display = 'none';
+    document.getElementById('senderStep2').classList.add('active');
+    document.getElementById('summaryDate').textContent = formatDateKR(date) + ' 에 열리는 타임캡슐';
+    document.getElementById('summaryMsg').textContent = msg;
+    updateCapsuleLink();
+  }
+
+  function senderGoStep1(){
+    document.getElementById('senderStep2').classList.remove('active');
+    document.getElementById('senderStep1').style.display = '';
+  }
+
+  function updateCapsuleLink(){
+    var msg = document.getElementById('capsuleMsgInput').value.trim();
+    var date = document.getElementById('capsuleDateInput').value;
+    var base = location.pathname.replace(/[^\/]*$/, '') + 'time-capsule.html';
+    var url = location.origin + base + '?date=' + date + '&room=' + chatRoomId;
+    if(msg) url += '&msg=' + encodeURIComponent(msg);
+    document.getElementById('capsuleLink').value = url;
+  }
+
+  function copyCapsuleLink(){
+    updateCapsuleLink();
+    var input = document.getElementById('capsuleLink');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(function(){
+      document.getElementById('capsuleCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('capsuleCopied').classList.add('hidden'); }, 2000);
+      openChatPanel();
+    }).catch(function(){
+      document.execCommand('copy');
+      document.getElementById('capsuleCopied').classList.remove('hidden');
+      setTimeout(function(){ document.getElementById('capsuleCopied').classList.add('hidden'); }, 2000);
+      openChatPanel();
+    });
+  }
+
+  // === RECEIVER MODE ===
+  function initReceiverMode(){
+    var target = new Date(capsuleDate + 'T00:00:00');
+    var now = new Date();
+    if(now >= target){
+      showUnlockedCapsule();
+    } else {
+      showLockedCapsule();
+    }
+  }
+
+  function showLockedCapsule(){
+    document.getElementById('receiverLocked').style.display = '';
+    startCountdown(capsuleDate);
+  }
+
+  function showUnlockedCapsule(){
+    document.getElementById('receiverUnlocked').style.display = '';
+    // Trigger message reveal after animation
+    setTimeout(function(){
+      document.getElementById('capsuleMessageArea').classList.add('message-visible');
+    }, 100);
+    // Set parchment content
+    document.getElementById('parchmentDate').textContent = formatDateKR(capsuleDate) + '에 담긴 메시지';
+    document.getElementById('parchmentText').textContent = capsuleMsg || '(메시지가 없습니다)';
+  }
+
+  // === Countdown Timer ===
+  function startCountdown(targetDateStr){
+    var target = new Date(targetDateStr + 'T00:00:00');
+    function update(){
+      var now = new Date();
+      var diff = target - now;
+      if(diff <= 0){
+        clearInterval(countdownTimer);
+        openCapsuleAnimation();
+        return;
+      }
+      var d = Math.floor(diff / 86400000);
+      var h = Math.floor((diff % 86400000) / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      var s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('countDays').textContent = d;
+      document.getElementById('countHours').textContent = h;
+      document.getElementById('countMins').textContent = m;
+      document.getElementById('countSecs').textContent = s;
+    }
+    update();
+    countdownTimer = setInterval(update, 1000);
+  }
+
+  function openCapsuleAnimation(){
+    // Transition from locked to unlocked view
+    document.getElementById('receiverLocked').style.display = 'none';
+    showUnlockedCapsule();
+  }
+
+  // === Supabase Init ===
+  function initSupabase(){
+    if(supabaseClient) return;
+    if(!window.supabase) return;
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+
+  // === Chat Functions ===
+  function openChatPanel(){
+    initSupabase();
+    var panel = document.getElementById('chatPanel');
+    panel.style.display = 'flex';
+    if(chatNickname){
+      document.getElementById('chatNicknameBox').classList.add('hidden');
+      document.getElementById('chatMessages').classList.remove('hidden');
+      document.getElementById('chatInputBox').classList.remove('hidden');
+      if(!chatActive) connectChat();
+    }
+  }
+
+  function closeChatPanel(){
+    document.getElementById('chatPanel').style.display = 'none';
+  }
+
+  function joinChat(){
+    var input = document.getElementById('chatNicknameInput');
+    var name = input.value.trim();
+    if(!name){ input.focus(); return; }
+    chatNickname = name;
+    document.getElementById('chatNicknameBox').classList.add('hidden');
+    document.getElementById('chatMessages').classList.remove('hidden');
+    document.getElementById('chatInputBox').classList.remove('hidden');
+    document.getElementById('chatMsgInput').focus();
+    connectChat();
+  }
+
+  function connectChat(){
+    if(!supabaseClient || !chatRoomId || chatActive) return;
+    chatActive = true;
+    var channelName = 'listen-' + chatRoomId;
+    chatChannel = supabaseClient.channel(channelName, {
+      config: { broadcast: { self: false } }
+    });
+    chatChannel.on('broadcast', { event: 'message' }, function(payload){
+      addChatMessage(payload.payload.name, payload.payload.text);
+    });
+    chatChannel.on('broadcast', { event: 'join' }, function(payload){
+      chatPeerCount++;
+      addSystemMessage(payload.payload.name + '님이 입장했습니다.');
+    });
+    chatChannel.on('broadcast', { event: 'leave' }, function(payload){
+      chatPeerCount = Math.max(0, chatPeerCount - 1);
+      addSystemMessage(payload.payload.name + '님이 퇴장했습니다.');
+    });
+    chatChannel.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        chatChannel.send({
+          type: 'broadcast', event: 'join',
+          payload: { name: chatNickname }
+        });
+        addSystemMessage('채팅에 연결되었습니다.');
+      }
+    });
+  }
+
+  function disconnectChat(){
+    if(chatChannel && chatActive){
+      chatChannel.send({
+        type: 'broadcast', event: 'leave',
+        payload: { name: chatNickname }
+      });
+      supabaseClient.removeChannel(chatChannel);
+      chatChannel = null;
+      chatActive = false;
+    }
+  }
+
+  function sendChatMsg(){
+    var input = document.getElementById('chatMsgInput');
+    var text = input.value.trim();
+    if(!text || !chatChannel || !chatActive) return;
+    chatChannel.send({
+      type: 'broadcast', event: 'message',
+      payload: { name: chatNickname, text: text }
+    });
+    addChatMessage(chatNickname, text, true);
+    input.value = '';
+    input.focus();
+  }
+
+  function addChatMessage(name, text, isMe){
+    var container = document.getElementById('chatMessages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg ' + (isMe ? 'me' : 'other');
+    var nameSpan = document.createElement('div');
+    nameSpan.className = 'chat-msg-name';
+    nameSpan.textContent = name;
+    var bubble = document.createElement('div');
+    bubble.className = 'chat-msg-bubble';
+    bubble.textContent = text;
+    div.appendChild(nameSpan);
+    div.appendChild(bubble);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function addSystemMessage(text){
+    var container = document.getElementById('chatMessages');
+    var div = document.createElement('div');
+    div.className = 'chat-msg-system';
+    div.textContent = text;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  window.addEventListener('beforeunload', function(){
+    disconnectChat();
+  });
+</script>
+</body>
+</html>
