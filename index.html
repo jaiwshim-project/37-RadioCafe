@@ -3714,11 +3714,11 @@
     {id:'obs',name:'OBS 라디오',url:'https://vod3.obs.co.kr:444/live/obsstream1/radio.stream/playlist.m3u8',freq:'99.9 MHz',freqNum:99.9,logoText:'OBS',provider:'OBS'},
     {id:'tarot',name:'타로 점보기',url:'',freq:'타로',freqNum:0,logoText:'타로 점보기',provider:'CLARA',isTarot:true},
     {id:'fortune',name:'오늘의 운세',url:'',freq:'운세',freqNum:0,logoText:'오늘의 운세',provider:'CLARA',isFortune:true},
-    {id:'wqxr',name:'WQXR',url:'https://stream.wqxr.org/wqxr',freq:'미국',freqNum:0,logoText:'WQXR',provider:'WQXR',flag:'us'},
-    {id:'ottava',name:'OTTAVA',url:'https://sslv.smartstream.ne.jp/ottava/_definst_/live01/chunklist.m3u8',freq:'일본',freqNum:0,logoText:'OTTAVA',provider:'OTTAVA',flag:'jp'},
-    {id:'france-musique',name:'France Musique',url:'https://stream.radiofrance.fr/francemusique/francemusique.m3u8',freq:'프랑스',freqNum:0,logoText:'France M',provider:'Radio France',flag:'fr'},
-    {id:'br-klassik',name:'BR Klassik',url:'https://dispatcher.rndfnk.com/br/brklassik/live/mp3/high',freq:'독일',freqNum:0,logoText:'BR Klassik',provider:'BR',flag:'de'},
-    {id:'classic-fm',name:'Classic FM',url:'http://media-the.musicradio.com/ClassicFMMP3',freq:'영국',freqNum:0,logoText:'Classic FM',provider:'Global',flag:'gb'}
+    {id:'empty-1',name:'',url:'',freq:'',freqNum:0,logoText:'',provider:'',isEmpty:true},
+    {id:'empty-2',name:'',url:'',freq:'',freqNum:0,logoText:'',provider:'',isEmpty:true},
+    {id:'empty-3',name:'',url:'',freq:'',freqNum:0,logoText:'',provider:'',isEmpty:true},
+    {id:'empty-4',name:'',url:'',freq:'',freqNum:0,logoText:'',provider:'',isEmpty:true},
+    {id:'empty-5',name:'',url:'',freq:'',freqNum:0,logoText:'',provider:'',isEmpty:true}
   ];
 
   // === Theme Names ===
@@ -3808,13 +3808,15 @@
     var c = document.getElementById('presetButtons');
     c.innerHTML = STATIONS.map(function(s,i) {
       var cat = s.isTarot || s.isFortune ? ' preset-special' : s.flag ? ' preset-foreign' : '';
-      var cls = 'preset-btn' + cat + (s.empty ? ' preset-empty' : '');
+      var cls = 'preset-btn' + cat + (s.empty || s.isEmpty ? ' preset-empty' : '');
       var nameHtml;
-      if(s.empty) nameHtml='';
+      if(s.empty || s.isEmpty) nameHtml='';
       else if(s.isTarot) nameHtml='<span class="preset-tarot-cards">🂠🂠🂠</span>';
       else if(s.isFortune) nameHtml='<span class="preset-lucky7">7</span>';
       else if(s.flag) nameHtml='<img src="https://flagcdn.com/24x18/'+s.flag+'.png" alt="'+s.flag+'" style="height:13px;vertical-align:middle;">';
       else nameHtml=s.name.replace(/\s+/g,' ').split(' ')[0];
+      if(s.isEmpty) return '<button class="'+cls+'" disabled style="cursor:default;opacity:0.3;">' +
+        '<span class="preset-num"></span><span class="preset-name"></span></button>';
       return '<button class="'+cls+'" data-id="'+s.id+'" onclick="selectStation(\''+s.id+'\')">' +
         '<span class="preset-num">'+s.logoText+'</span>' +
         '<span class="preset-name">'+nameHtml+'</span></button>';
