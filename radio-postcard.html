@@ -1214,8 +1214,8 @@ function init(){
 
 init();
 (function(){ var uid=localStorage.getItem('radioUsername'); if(uid){initSupabase(); if(supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid,feature:'radio_postcard'}).then(function(){});} })();
-// 닉네임 자동 채우기
-(function(){ var n=localStorage.getItem('radioUsername'); if(n){ var ci=document.getElementById('chatNicknameInput'); if(ci&&!ci.value) ci.value=n; } })();
+// 닉네임 자동 채우기 (발신자만)
+(function(){ if(!new URLSearchParams(location.search).get('room')){ var n=localStorage.getItem('radioUsername'); if(n){ var ci=document.getElementById('chatNicknameInput'); if(ci&&!ci.value) ci.value=n; } } })();
 </script>
 </body>
 </html>

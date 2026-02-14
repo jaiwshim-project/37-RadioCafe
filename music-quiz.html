@@ -524,13 +524,13 @@
       updateQuizLink();
       subscribeQuizChannel();
     }
-    // 닉네임 자동 채우기
-    var savedNick = localStorage.getItem('radioUsername') || '';
-    if(savedNick){
-      var hostInput = document.getElementById('hostNicknameInput');
-      var guestInput = document.getElementById('guestNicknameInput');
-      if(hostInput && !hostInput.value) hostInput.value = savedNick;
-      if(guestInput && !guestInput.value) guestInput.value = savedNick;
+    // 닉네임 자동 채우기 (호스트/발신자만)
+    if(isHost){
+      var savedNick = localStorage.getItem('radioUsername') || '';
+      if(savedNick){
+        var hostInput = document.getElementById('hostNicknameInput');
+        if(hostInput && !hostInput.value) hostInput.value = savedNick;
+      }
     }
     var uid = localStorage.getItem('radioUsername');
     if(uid && supabaseClient) supabaseClient.from('feature_usage').insert({user_id:uid, feature:'music_quiz'}).then(function(){});
