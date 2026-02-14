@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" style="background:#1a1a2e">
+<html lang="ko" style="background:#f5e6d3">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,15 +10,15 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #1a1a2e;
-      --body-out1: #3a2a1a; --body-out2: #2a1c0e;
-      --body-in1: #2c1e10; --body-in2: #1e140a;
-      --accent: #e8a87c;
-      --accent-glow: rgba(232,168,124,0.5);
+      --bg: #f5e6d3;
+      --body-out1: #e8d5b0; --body-out2: #d4c09a;
+      --body-in1: #FFF8E7; --body-in2: #F5ECD8;
+      --accent: #C8A96E;
+      --accent-glow: rgba(200,169,110,0.5);
     }
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d5b7 50%, #f0dcc4 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -26,32 +26,40 @@
       justify-content: center;
       padding: 16px;
     }
+    body::before {
+      content: '';
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(200,169,110,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(200,169,110,0.04) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
     .hidden { display: none !important; }
 
     /* ── Gift Card Container ── */
     .gift-card {
-      background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
-      border: 1px solid var(--accent);
+      background: linear-gradient(145deg, #e8d5b0, #d4c09a);
+      border: 1px solid rgba(139,105,20,0.15);
       border-radius: 20px; padding: 24px;
       width: 100%; max-width: 380px;
       text-align: center;
-      box-shadow: 0 0 30px var(--accent-glow), 0 20px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 40px 80px rgba(100,70,30,0.15), 0 0 40px rgba(200,169,110,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
+      position: relative; z-index: 1;
     }
     .gift-title {
       font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
-      color: var(--accent); letter-spacing: 3px; margin-bottom: 16px;
-      text-shadow: 0 0 10px var(--accent-glow);
+      color: #8B6914; letter-spacing: 3px; margin-bottom: 16px;
     }
 
     /* ── Step Guide ── */
     .gift-guide {
       text-align: left; margin-top: 14px; padding: 12px 14px;
-      background: rgba(255,255,255,0.06); border-radius: 10px;
-      border-left: 3px solid var(--accent);
+      background: rgba(139,105,20,0.06); border-radius: 10px;
+      border-left: 3px solid #C8A96E;
     }
     .gift-guide p {
       font-family: 'Inter', sans-serif; font-size: 13px;
-      color: rgba(255,255,255,0.7); line-height: 1.6;
+      color: #A08050; line-height: 1.6;
       margin: 0 0 8px 0;
     }
     .gift-guide p:last-child { margin-bottom: 0; }
@@ -62,21 +70,21 @@
     }
     .gift-btn-next {
       flex: 1; padding: 12px; border-radius: 12px;
-      background: var(--accent); border: none;
+      background: linear-gradient(135deg, #C8A96E, #b89858); border: none;
       color: #fff; font-family: 'Outfit', sans-serif;
       font-size: 14px; font-weight: 700; cursor: pointer;
       transition: all 0.2s;
     }
     .gift-btn-next:disabled { opacity: 0.3; cursor: default; }
-    .gift-btn-next:not(:disabled):hover { box-shadow: 0 0 16px var(--accent-glow); }
+    .gift-btn-next:not(:disabled):hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
     .gift-btn-back {
       padding: 12px 16px; border-radius: 12px;
-      background: transparent; border: 1px solid rgba(255,255,255,0.2);
-      color: rgba(255,255,255,0.6); font-family: 'Outfit', sans-serif;
+      background: transparent; border: 1px solid rgba(139,105,20,0.2);
+      color: #A08050; font-family: 'Outfit', sans-serif;
       font-size: 14px; font-weight: 600; cursor: pointer;
       transition: all 0.2s;
     }
-    .gift-btn-back:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+    .gift-btn-back:hover { border-color: rgba(139,105,20,0.4); color: #8B6914; }
 
     /* ── Postcard Design Selector ── */
     .postcard-designs {
@@ -85,23 +93,23 @@
     }
     .design-option {
       position: relative; cursor: pointer;
-      border: 2px solid rgba(255,255,255,0.1);
+      border: 2px solid rgba(139,105,20,0.15);
       border-radius: 12px; padding: 10px;
-      background: rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.4);
       transition: all 0.3s;
       display: flex; flex-direction: column; align-items: center;
     }
-    .design-option:hover { border-color: rgba(232,168,124,0.4); }
+    .design-option:hover { border-color: rgba(200,169,110,0.5); }
     .design-option.selected {
-      border-color: var(--accent);
-      background: rgba(232,168,124,0.08);
-      box-shadow: 0 0 12px rgba(232,168,124,0.2);
+      border-color: #C8A96E;
+      background: rgba(200,169,110,0.12);
+      box-shadow: 0 0 12px rgba(200,169,110,0.3);
     }
     .design-option .design-label {
       font-family: 'Inter', sans-serif; font-size: 11px;
-      color: rgba(255,255,255,0.5); margin-top: 8px;
+      color: #A08050; margin-top: 8px;
     }
-    .design-option.selected .design-label { color: var(--accent); font-weight: 600; }
+    .design-option.selected .design-label { color: #8B6914; font-weight: 600; }
 
     /* ── Design 1: Vintage Microphone ── */
     .design-vintage1 {
@@ -332,16 +340,16 @@
     /* ── Step 2: Message Input ── */
     .gift-msg-input {
       width: 100%; padding: 12px; border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(0,0,0,0.3); color: #fff;
+      border: 2px solid rgba(139,105,20,0.2);
+      background: rgba(255,255,255,0.7); color: #3a2a10;
       font-family: 'Inter', sans-serif; font-size: 14px;
       outline: none; resize: none; min-height: 70px;
       margin-bottom: 4px;
     }
-    .gift-msg-input:focus { border-color: var(--accent); }
-    .gift-msg-input::placeholder { color: rgba(255,255,255,0.3); }
+    .gift-msg-input:focus { border-color: #C8A96E; }
+    .gift-msg-input::placeholder { color: rgba(100,70,30,0.4); }
     .msg-counter {
-      text-align: right; font-size: 11px; color: rgba(255,255,255,0.3);
+      text-align: right; font-size: 11px; color: rgba(139,105,20,0.4);
       margin-bottom: 12px; font-family: 'Inter', sans-serif;
     }
 
@@ -351,38 +359,38 @@
     }
     .gift-link-box input {
       flex: 1; padding: 10px 12px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(0,0,0,0.3); color: #fff;
+      border: 2px solid rgba(139,105,20,0.2);
+      background: rgba(255,255,255,0.7); color: #3a2a10;
       font-family: 'Inter', sans-serif; font-size: 11px; outline: none;
     }
     .gift-link-box button {
       padding: 10px 16px; border-radius: 10px;
-      background: var(--accent); border: none;
+      background: linear-gradient(135deg, #C8A96E, #b89858); border: none;
       color: #fff; font-family: 'Outfit', sans-serif;
       font-size: 13px; font-weight: 700; cursor: pointer;
       transition: all 0.2s; white-space: nowrap;
     }
-    .gift-link-box button:hover { box-shadow: 0 0 12px var(--accent-glow); }
+    .gift-link-box button:hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
     .gift-copied {
       font-family: 'Inter', sans-serif; font-size: 12px;
-      color: var(--accent); margin-bottom: 12px;
+      color: #8B6914; margin-bottom: 12px;
     }
     .gift-copied.hidden { display: none; }
 
     /* ── Receiver Mode ── */
     .receiver-card {
-      background: linear-gradient(145deg, var(--body-out1), var(--body-out2));
-      border: 1px solid var(--accent);
+      background: linear-gradient(145deg, #e8d5b0, #d4c09a);
+      border: 1px solid rgba(139,105,20,0.15);
       border-radius: 20px; padding: 24px;
       width: 100%; max-width: 380px;
       text-align: center;
-      box-shadow: 0 0 30px var(--accent-glow), 0 20px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 40px 80px rgba(100,70,30,0.15), 0 0 40px rgba(200,169,110,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
       perspective: 800px;
+      position: relative; z-index: 1;
     }
     .receiver-title {
       font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
-      color: var(--accent); letter-spacing: 3px; margin-bottom: 20px;
-      text-shadow: 0 0 10px var(--accent-glow);
+      color: #8B6914; letter-spacing: 3px; margin-bottom: 20px;
     }
 
     /* ── Envelope Animation ── */
@@ -705,13 +713,13 @@
     }
     .receiver-chat-btn {
       width: 100%; padding: 12px;
-      background: var(--accent); border: none;
+      background: linear-gradient(135deg, #C8A96E, #b89858); border: none;
       border-radius: 12px; color: #fff;
       font-family: 'Outfit', sans-serif; font-size: 14px;
       font-weight: 700; cursor: pointer;
       transition: all 0.2s;
     }
-    .receiver-chat-btn:hover { box-shadow: 0 0 16px var(--accent-glow); }
+    .receiver-chat-btn:hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
 
     /* ── Chat Panel (cream/gold theme) ── */
     .chat-panel {

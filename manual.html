@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" style="background:#f5e6d3">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
 
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #1a0e18 0%, #2a1525 30%, #1e1022 60%, #150c1a 100%);
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d5b7 50%, #f0dcc4 100%);
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
       font-family: 'Inter', sans-serif;
@@ -21,24 +21,24 @@
     body::before {
       content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background:
-        radial-gradient(ellipse at 20% 20%, rgba(255,105,180,0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(255,105,180,0.04) 0%, transparent 50%);
+        radial-gradient(ellipse at 20% 20%, rgba(200,169,110,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(200,169,110,0.04) 0%, transparent 50%);
       pointer-events: none;
     }
 
     .manual-card {
       width: 100%; max-width: 520px;
-      background: linear-gradient(145deg, #3a2035, #2a1525);
+      background: linear-gradient(145deg, #e8d5b0, #d4c09a);
       border-radius: 28px; padding: 3px;
       box-shadow:
-        0 40px 80px rgba(0,0,0,0.5),
-        0 0 40px rgba(255,105,180,0.08),
-        inset 0 1px 0 rgba(255,255,255,0.08);
+        0 40px 80px rgba(100,70,30,0.15),
+        0 0 40px rgba(200,169,110,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.3);
       position: relative; z-index: 1;
     }
 
     .manual-inner {
-      background: linear-gradient(145deg, #2a1825, #1e1018);
+      background: linear-gradient(145deg, #FFF8E7, #F5ECD8);
       border-radius: 25px; padding: 40px 30px;
       position: relative;
     }
@@ -46,14 +46,14 @@
     /* 나사 장식 */
     .screw {
       position: absolute; width: 10px; height: 10px;
-      background: linear-gradient(145deg, #4a2840, #2a1420);
+      background: linear-gradient(145deg, #d4c09a, #b89858);
       border-radius: 50%;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
     }
     .screw::after {
       content: ''; position: absolute;
       top: 50%; left: 50%; width: 60%; height: 1px;
-      background: #1a0c14; transform: translate(-50%, -50%) rotate(45deg);
+      background: #8B6914; transform: translate(-50%, -50%) rotate(45deg);
     }
     .screw-tl { top: 12px; left: 12px; }
     .screw-tr { top: 12px; right: 12px; }
@@ -62,16 +62,16 @@
 
     /* 스피커 */
     .speaker {
-      background: linear-gradient(145deg, #1a0c14, #0e060a);
+      background: linear-gradient(145deg, #e8d5b0, #d4c09a);
       border-radius: 8px; padding: 8px;
       margin-bottom: 24px;
-      border: 1px solid rgba(255,105,180,0.1);
+      border: 1px solid rgba(139,105,20,0.15);
     }
     .speaker-label {
       text-align: center;
       font-family: 'Orbitron', monospace;
       font-size: 10px; letter-spacing: 4px;
-      color: #f0c030;
+      color: #8B6914;
     }
 
     /* 헤더 */
@@ -81,21 +81,21 @@
 
     .manual-icon {
       width: 80px; height: 80px; margin: 0 auto 20px;
-      background: linear-gradient(135deg, #ff69b4, #e05a9e);
+      background: linear-gradient(135deg, #C8A96E, #b89858);
       border-radius: 50%; display: flex;
       align-items: center; justify-content: center;
       font-size: 36px;
-      box-shadow: 0 10px 30px rgba(255,105,180,0.3);
+      box-shadow: 0 10px 30px rgba(200,169,110,0.3);
     }
 
     .manual-title {
       font-family: 'Outfit', sans-serif; font-size: 24px;
-      font-weight: 800; color: #ff69b4;
+      font-weight: 800; color: #8B6914;
       letter-spacing: 2px; margin-bottom: 8px;
     }
 
     .manual-subtitle {
-      font-size: 13px; color: rgba(255,105,180,0.6);
+      font-size: 13px; color: #A08050;
     }
 
     /* 섹션 */
@@ -105,14 +105,14 @@
 
     .section-title {
       font-family: 'Outfit', sans-serif; font-size: 14px;
-      color: #ff69b4; letter-spacing: 1px;
+      color: #C8A96E; letter-spacing: 1px;
       margin-bottom: 12px; font-weight: 600;
       display: flex; align-items: center; gap: 8px;
     }
 
     .section-title::before {
       content: ''; width: 4px; height: 16px;
-      background: #ff69b4; border-radius: 2px;
+      background: #C8A96E; border-radius: 2px;
     }
 
     .step-list {
@@ -120,15 +120,15 @@
     }
 
     .step-item {
-      background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,105,180,0.15);
+      background: rgba(139,105,20,0.06);
+      border: 1px solid rgba(139,105,20,0.12);
       border-radius: 12px; padding: 14px 16px;
       display: flex; align-items: flex-start; gap: 12px;
     }
 
     .step-number {
       width: 24px; height: 24px; flex-shrink: 0;
-      background: linear-gradient(135deg, #ff69b4, #e05a9e);
+      background: linear-gradient(135deg, #C8A96E, #b89858);
       border-radius: 50%; display: flex;
       align-items: center; justify-content: center;
       font-family: 'Outfit', sans-serif; font-size: 12px;
@@ -140,33 +140,33 @@
     }
 
     .step-title {
-      font-size: 14px; color: rgba(255,255,255,0.9);
+      font-size: 14px; color: #3a2a10;
       font-weight: 600; margin-bottom: 4px;
     }
 
     .step-desc {
-      font-size: 12px; color: rgba(255,255,255,0.5);
+      font-size: 12px; color: #A08050;
       line-height: 1.5;
     }
 
     /* LCD 팁 박스 */
     .tip-box {
-      background: linear-gradient(180deg, #1a0a14, #140610);
+      background: linear-gradient(180deg, #FFF5E0, #F2E8D0);
       border-radius: 12px; padding: 16px;
       margin-bottom: 24px;
-      border: 2px solid rgba(255,105,180,0.15);
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+      border: 2px solid rgba(139,105,20,0.2);
+      box-shadow: inset 0 2px 8px rgba(100,70,30,0.1);
     }
 
     .tip-title {
       font-family: 'Orbitron', monospace; font-size: 11px;
-      color: #ff69b4; letter-spacing: 3px; font-weight: 700;
-      text-shadow: 0 0 10px rgba(255,105,180,0.6);
+      color: #8B6914; letter-spacing: 3px; font-weight: 700;
+      text-shadow: 0 0 10px rgba(200,169,110,0.4);
       margin-bottom: 10px; text-align: center;
     }
 
     .tip-text {
-      font-size: 12px; color: #e8609f;
+      font-size: 12px; color: #A08050;
       line-height: 1.7; text-align: center;
     }
 
@@ -178,7 +178,7 @@
 
     .link-btn {
       padding: 12px 28px; border-radius: 24px;
-      background: linear-gradient(135deg, #ff69b4, #e05a9e);
+      background: linear-gradient(135deg, #C8A96E, #b89858);
       color: #fff; text-decoration: none;
       font-family: 'Outfit', sans-serif; font-size: 14px;
       font-weight: 700; letter-spacing: 1px;
@@ -187,18 +187,18 @@
 
     .link-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(255,105,180,0.4);
+      box-shadow: 0 8px 24px rgba(200,169,110,0.4);
     }
 
     /* 푸터 */
     .manual-footer {
       padding-top: 20px;
-      border-top: 1px solid rgba(255,105,180,0.15);
+      border-top: 1px solid rgba(139,105,20,0.15);
       text-align: center;
     }
 
     .copyright {
-      font-size: 11px; color: rgba(255,105,180,0.3);
+      font-size: 11px; color: rgba(139,105,20,0.4);
     }
 
     /* 스크린샷 */
@@ -209,8 +209,8 @@
       position: relative;
       border-radius: 12px;
       overflow: hidden;
-      border: 2px solid rgba(255,105,180,0.2);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      border: 2px solid rgba(200,169,110,0.2);
+      box-shadow: 0 8px 24px rgba(100,70,30,0.1);
     }
     .screenshot-box img {
       width: 100%;
@@ -219,20 +219,20 @@
     .screenshot-caption {
       text-align: center;
       font-size: 11px;
-      color: rgba(255,105,180,0.5);
+      color: #A08050;
       margin-top: 8px;
     }
     /* 번호 마커 */
     .marker {
       position: absolute;
       width: 22px; height: 22px;
-      background: #ff69b4;
+      background: #C8A96E;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-family: 'Outfit', sans-serif;
       font-size: 12px; font-weight: 700;
       color: #fff;
-      box-shadow: 0 2px 8px rgba(255,105,180,0.5);
+      box-shadow: 0 2px 8px rgba(200,169,110,0.5);
       border: 2px solid #fff;
     }
     /* 번호별 설명 */
@@ -242,12 +242,12 @@
     }
     .marker-item {
       display: flex; align-items: flex-start; gap: 10px;
-      font-size: 12px; color: rgba(255,255,255,0.8);
+      font-size: 12px; color: #3a2a10;
       line-height: 1.5;
     }
     .marker-num {
       width: 20px; height: 20px; flex-shrink: 0;
-      background: #ff69b4;
+      background: #C8A96E;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-family: 'Outfit', sans-serif;
@@ -262,18 +262,18 @@
     .pdf-download-btn {
       position: absolute; top: 50%; right: 0;
       transform: translateY(-50%);
-      background: linear-gradient(135deg, #5bc0eb, #3a9fd8);
+      background: linear-gradient(135deg, #C8A96E, #b89858);
       border: none; border-radius: 10px;
       color: #fff; font-family: 'Outfit', sans-serif;
       font-size: 11px; font-weight: 700;
       padding: 8px 14px;
       cursor: pointer; transition: all 0.2s;
-      box-shadow: 0 3px 12px rgba(91,192,235,0.4);
+      box-shadow: 0 3px 12px rgba(200,169,110,0.4);
       display: flex; align-items: center; gap: 5px;
     }
     .pdf-download-btn:hover {
       transform: translateY(-50%) translateY(-2px);
-      box-shadow: 0 5px 20px rgba(91,192,235,0.5);
+      box-shadow: 0 5px 20px rgba(200,169,110,0.5);
     }
     .pdf-download-btn:active { transform: translateY(-50%) scale(0.95); }
     .pdf-download-btn.downloading {
@@ -786,7 +786,7 @@
         var gap = 1; // 섹션 간 간격 (mm)
 
         // 첫 페이지 배경
-        pdf.setFillColor(30, 16, 24);
+        pdf.setFillColor(245, 236, 216);
         pdf.rect(0, 0, pageW, pageH, 'F');
 
         canvases.forEach(function(cvs, idx){
@@ -796,7 +796,7 @@
           // 이 섹션이 현재 페이지에 안 들어가면 새 페이지
           if(curY + imgH > pageH - margin && curY > margin + 1) {
             pdf.addPage();
-            pdf.setFillColor(30, 16, 24);
+            pdf.setFillColor(245, 236, 216);
             pdf.rect(0, 0, pageW, pageH, 'F');
             curY = margin;
           }
@@ -809,7 +809,7 @@
             while(srcY < cvs.height) {
               if(curY > margin + 1) {
                 pdf.addPage();
-                pdf.setFillColor(30, 16, 24);
+                pdf.setFillColor(245, 236, 216);
                 pdf.rect(0, 0, pageW, pageH, 'F');
                 curY = margin;
               }

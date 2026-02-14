@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" style="background:#1a1a2e">
+<html lang="ko" style="background:#f5e6d3">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +11,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
-      background: #1a1a2e;
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d5b7 50%, #f0dcc4 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -22,25 +22,25 @@
 
     /* Quiz Card */
     .quiz-card {
-      background: linear-gradient(145deg, #3a2a1a, #2a1c0e);
-      border: 1px solid #f59e0b;
+      background: linear-gradient(145deg, #FFF8E7, #F5ECD8);
+      border: 1px solid rgba(139,105,20,0.15);
       border-radius: 20px; padding: 24px;
       width: 100%; max-width: 400px;
       text-align: center;
-      box-shadow: 0 0 30px rgba(245,158,11,0.3), 0 20px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 40px 80px rgba(100,70,30,0.15), 0 0 40px rgba(200,169,110,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
     }
     .quiz-title {
       font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
-      color: #f59e0b; letter-spacing: 3px; margin-bottom: 16px;
-      text-shadow: 0 0 10px rgba(245,158,11,0.5);
+      color: #8B6914; letter-spacing: 3px; margin-bottom: 16px;
+      text-shadow: none;
     }
     .quiz-subtitle {
       font-family: 'Inter', sans-serif; font-size: 14px;
-      color: rgba(255,255,255,0.7); margin-bottom: 16px; line-height: 1.5;
+      color: #3a2a10; margin-bottom: 16px; line-height: 1.5;
     }
     .quiz-label {
       font-family: 'Inter', sans-serif; font-size: 13px;
-      color: rgba(255,255,255,0.5); margin-bottom: 8px;
+      color: #A08050; margin-bottom: 8px;
     }
     .hidden { display: none !important; }
 
@@ -48,29 +48,29 @@
     .gift-link-box { display: flex; gap: 6px; margin-top: 12px; }
     .gift-link-box input {
       flex: 1; padding: 10px; border-radius: 8px;
-      background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-      color: #fff; font-size: 11px; font-family: 'Inter', sans-serif; outline: none;
+      background: rgba(255,255,255,0.7); border: 2px solid rgba(139,105,20,0.2);
+      color: #3a2a10; font-size: 11px; font-family: 'Inter', sans-serif; outline: none;
     }
     .gift-link-box button {
       padding: 10px 16px; border-radius: 8px;
-      background: #f59e0b; border: none; color: #fff;
+      background: linear-gradient(135deg, #C8A96E, #b89858); border: none; color: #fff;
       font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700;
       cursor: pointer; transition: all 0.2s;
     }
-    .gift-link-box button:hover { box-shadow: 0 0 12px rgba(245,158,11,0.5); }
-    .gift-copied { color: #f59e0b; font-size: 12px; margin-top: 6px; }
+    .gift-link-box button:hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
+    .gift-copied { color: #C8A96E; font-size: 12px; margin-top: 6px; }
 
     /* Waiting animation */
     .waiting-text {
       font-family: 'Inter', sans-serif; font-size: 14px;
-      color: rgba(255,255,255,0.6); margin-top: 16px;
+      color: #A08050; margin-top: 16px;
     }
     .waiting-dots {
       display: inline-flex; gap: 4px; margin-left: 4px;
     }
     .waiting-dots span {
       width: 6px; height: 6px; border-radius: 50%;
-      background: #f59e0b; display: inline-block;
+      background: #C8A96E; display: inline-block;
       animation: pulse-dot 1.4s infinite both;
     }
     .waiting-dots span:nth-child(2) { animation-delay: 0.2s; }
@@ -83,40 +83,40 @@
     /* Nickname input */
     .quiz-nickname-input {
       padding: 12px 16px; border-radius: 10px;
-      border: 1px solid rgba(245,158,11,0.3);
-      background: rgba(0,0,0,0.3); color: #fff;
+      border: 2px solid rgba(139,105,20,0.2);
+      background: rgba(255,255,255,0.7); color: #3a2a10;
       font-family: 'Inter', sans-serif; font-size: 14px;
       text-align: center; outline: none; width: 65%;
     }
-    .quiz-nickname-input:focus { border-color: #f59e0b; }
-    .quiz-nickname-input::placeholder { color: rgba(255,255,255,0.3); }
+    .quiz-nickname-input:focus { border-color: #C8A96E; }
+    .quiz-nickname-input::placeholder { color: rgba(100,70,30,0.4); }
 
     /* Buttons */
     .quiz-btn {
       padding: 12px 24px; border-radius: 12px;
-      background: #f59e0b; border: none; color: #fff;
+      background: linear-gradient(135deg, #C8A96E, #b89858); border: none; color: #fff;
       font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
       cursor: pointer; transition: all 0.2s; margin-top: 12px;
     }
-    .quiz-btn:hover { box-shadow: 0 0 16px rgba(245,158,11,0.5); }
+    .quiz-btn:hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
     .quiz-btn:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
     .quiz-btn-outline {
       padding: 12px 24px; border-radius: 12px;
-      background: transparent; border: 1px solid #f59e0b; color: #f59e0b;
+      background: transparent; border: 1px solid #C8A96E; color: #C8A96E;
       font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
       cursor: pointer; transition: all 0.2s; margin-top: 8px;
     }
-    .quiz-btn-outline:hover { background: rgba(245,158,11,0.1); }
+    .quiz-btn-outline:hover { background: rgba(200,169,110,0.1); }
     .quiz-btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
 
     /* Timer Bar */
     .quiz-timer {
-      height: 6px; background: rgba(255,255,255,0.1);
+      height: 6px; background: rgba(139,105,20,0.1);
       border-radius: 3px; margin: 12px 0; overflow: hidden;
     }
     .quiz-timer-bar {
       height: 100%; width: 100%;
-      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      background: linear-gradient(90deg, #C8A96E, #ef4444);
       border-radius: 3px;
       transition: width 0.5s linear;
     }
@@ -125,28 +125,29 @@
     .quiz-scoreboard {
       display: flex; justify-content: space-between;
       padding: 10px; margin-bottom: 12px;
-      background: rgba(0,0,0,0.3); border-radius: 12px;
+      background: rgba(139,105,20,0.06); border-radius: 12px;
+      border: 1px solid rgba(139,105,20,0.12);
     }
     .quiz-player { text-align: center; flex: 1; }
-    .quiz-player-name { font-size: 12px; color: rgba(255,255,255,0.6); }
+    .quiz-player-name { font-size: 12px; color: #A08050; }
     .quiz-player-score {
       font-family: 'Orbitron', monospace; font-size: 24px;
-      color: #f59e0b; font-weight: 700;
+      color: #C8A96E; font-weight: 700;
     }
     .quiz-vs {
       font-family: 'Orbitron', monospace; font-size: 11px;
-      color: rgba(255,255,255,0.3); align-self: center;
+      color: rgba(139,105,20,0.4); align-self: center;
       padding: 0 8px;
     }
 
     /* Question */
     .quiz-question-number {
       font-family: 'Orbitron', monospace; font-size: 11px;
-      color: rgba(245,158,11,0.7); letter-spacing: 2px; margin-bottom: 8px;
+      color: #C8A96E; letter-spacing: 2px; margin-bottom: 8px;
     }
     .quiz-question-text {
       font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600;
-      color: #fff; line-height: 1.5; margin-bottom: 4px;
+      color: #3a2a10; line-height: 1.5; margin-bottom: 4px;
       min-height: 48px;
     }
 
@@ -154,14 +155,14 @@
     .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
     .quiz-option {
       padding: 12px 16px; border-radius: 12px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #fff; font-family: 'Inter', sans-serif; font-size: 14px;
+      background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(139,105,20,0.2);
+      color: #3a2a10; font-family: 'Inter', sans-serif; font-size: 14px;
       cursor: pointer; transition: all 0.2s; text-align: left;
     }
-    .quiz-option:hover { background: rgba(245,158,11,0.15); border-color: #f59e0b; }
-    .quiz-option.correct { background: rgba(34,197,94,0.3); border-color: #22c55e; color: #22c55e; }
-    .quiz-option.wrong { background: rgba(239,68,68,0.3); border-color: #ef4444; color: #ef4444; }
+    .quiz-option:hover { background: rgba(200,169,110,0.2); border-color: #C8A96E; }
+    .quiz-option.correct { background: rgba(34,197,94,0.2); border-color: #22c55e; color: #166534; }
+    .quiz-option.wrong { background: rgba(239,68,68,0.2); border-color: #ef4444; color: #dc2626; }
     .quiz-option.disabled { pointer-events: none; opacity: 0.5; }
     .quiz-option.selected-mine {
       border-width: 2px;
@@ -177,7 +178,7 @@
     }
     .quiz-result-detail {
       font-family: 'Inter', sans-serif; font-size: 14px;
-      color: rgba(255,255,255,0.6); line-height: 1.6;
+      color: #A08050; line-height: 1.6;
     }
     .quiz-result-scores {
       display: flex; justify-content: center; gap: 32px;
@@ -185,11 +186,11 @@
     }
     .quiz-result-player { text-align: center; }
     .quiz-result-player-name {
-      font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 4px;
+      font-size: 13px; color: #A08050; margin-bottom: 4px;
     }
     .quiz-result-player-score {
       font-family: 'Orbitron', monospace; font-size: 28px;
-      color: #f59e0b; font-weight: 700;
+      color: #C8A96E; font-weight: 700;
     }
     .quiz-result-player.winner .quiz-result-player-score { color: #22c55e; }
 
@@ -300,6 +301,9 @@
 
   <!-- ========== HOST LOBBY ========== -->
   <div id="hostLobby">
+    <div style="text-align:left;margin-bottom:12px;">
+      <button onclick="history.back()" style="background:none;border:1px solid rgba(139,105,20,0.3);color:#A08050;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;padding:8px 14px;border-radius:8px;cursor:pointer;">&#9664; 이전</button>
+    </div>
     <div class="quiz-title">MUSIC QUIZ</div>
     <div class="quiz-subtitle">7080 음악 퀴즈 대결<br>친구에게 링크를 보내고 대결하세요!</div>
 
@@ -322,7 +326,7 @@
 
     <div id="hostReadyArea" class="hidden">
       <div style="color:#22c55e;font-size:14px;margin-top:12px;">상대방이 입장했습니다!</div>
-      <div style="color:rgba(255,255,255,0.6);font-size:13px;margin-top:4px;" id="guestNameDisplay"></div>
+      <div style="color:#A08050;font-size:13px;margin-top:4px;" id="guestNameDisplay"></div>
       <button class="quiz-btn" id="hostStartBtn" onclick="hostStartGame()">게임 시작</button>
     </div>
   </div>
@@ -827,7 +831,7 @@
     } else {
       icon = '&#129309;';
       title = '무승부!';
-      titleColor = '#f59e0b';
+      titleColor = '#C8A96E';
       detail = '실력이 비슷하네요! 한 판 더 해볼까요?';
     }
 

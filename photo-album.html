@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" style="background:#1a1a2e">
+<html lang="ko" style="background:#f5e6d3">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +11,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
-      background: #1a1a2e;
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d5b7 50%, #f0dcc4 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -22,49 +22,50 @@
 
     /* Album Card */
     .album-card {
-      background: linear-gradient(145deg, #3a2a1a, #2a1c0e);
-      border: 1px solid #ec4899;
+      background: linear-gradient(145deg, #FFF8E7, #F5ECD8);
+      border: 1px solid rgba(139,105,20,0.15);
       border-radius: 20px; padding: 24px;
       width: 100%; max-width: 400px;
       text-align: center;
-      box-shadow: 0 0 30px rgba(236,72,153,0.3), 0 20px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 40px 80px rgba(100,70,30,0.15), 0 0 40px rgba(200,169,110,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
     }
     .album-logo {
       font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700;
-      color: #fff; letter-spacing: 2px; margin-bottom: 6px;
-      text-shadow: 0 0 12px rgba(236,72,153,0.5);
+      color: #8B6914; letter-spacing: 2px; margin-bottom: 6px;
+      text-shadow: none;
     }
     .album-title {
       font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700;
-      color: #ec4899; letter-spacing: 3px; margin-bottom: 16px;
-      text-shadow: 0 0 10px rgba(236,72,153,0.5);
+      color: #8B6914; letter-spacing: 3px; margin-bottom: 16px;
+      text-shadow: none;
     }
     .album-back-btn {
       position: absolute; top: 12px; left: 12px;
-      background: none; border: 1px solid rgba(236,72,153,0.4);
-      color: #ec4899; font-size: 12px; padding: 4px 10px;
+      background: none; border: 1px solid rgba(139,105,20,0.4);
+      color: #8B6914; font-size: 12px; padding: 4px 10px;
       border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif;
       white-space: nowrap; z-index: 10;
     }
-    .album-back-btn:hover { background: rgba(236,72,153,0.1); }
+    .album-back-btn:hover { background: rgba(200,169,110,0.1); }
     .album-top-bar {
       position: relative; margin-bottom: 8px;
     }
 
     /* Upload Area */
     .album-upload-area {
-      border: 2px dashed rgba(236,72,153,0.4);
+      border: 2px dashed rgba(139,105,20,0.3);
       border-radius: 16px; padding: 30px;
       cursor: pointer; transition: all 0.3s;
       margin-bottom: 16px;
+      background: rgba(255,255,255,0.3);
     }
     .album-upload-area:hover, .album-upload-area.dragover {
-      border-color: #ec4899;
-      background: rgba(236,72,153,0.05);
+      border-color: #C8A96E;
+      background: rgba(200,169,110,0.1);
     }
     .album-upload-icon { font-size: 40px; margin-bottom: 8px; }
-    .album-upload-text { font-size: 13px; color: rgba(255,255,255,0.5); }
-    .album-upload-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 6px; }
+    .album-upload-text { font-size: 13px; color: #A08050; }
+    .album-upload-sub { font-size: 11px; color: rgba(139,105,20,0.4); margin-top: 6px; }
     .album-file-input { display: none; }
 
     /* Upload Progress */
@@ -74,15 +75,15 @@
     }
     .album-progress-bar {
       width: 100%; height: 4px; border-radius: 2px;
-      background: rgba(255,255,255,0.1); overflow: hidden;
+      background: rgba(139,105,20,0.1); overflow: hidden;
     }
     .album-progress-fill {
       height: 100%; width: 0%; border-radius: 2px;
-      background: #ec4899;
+      background: #C8A96E;
       transition: width 0.3s;
     }
     .album-progress-text {
-      font-size: 11px; color: rgba(255,255,255,0.5);
+      font-size: 11px; color: #A08050;
       margin-top: 4px;
     }
 
@@ -105,33 +106,33 @@
       color: #fff; font-size: 12px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
     }
-    .album-thumb-delete:hover { background: rgba(236,72,153,0.8); }
+    .album-thumb-delete:hover { background: rgba(200,169,110,0.8); }
 
     /* Link & Copy */
     .gift-link-box { display: flex; gap: 6px; margin-top: 12px; }
     .gift-link-box input {
       flex: 1; padding: 10px; border-radius: 8px;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #fff; font-size: 11px;
+      background: rgba(255,255,255,0.7);
+      border: 2px solid rgba(139,105,20,0.2);
+      color: #3a2a10; font-size: 11px;
       font-family: 'Inter', sans-serif; outline: none;
     }
     .gift-link-box button {
       padding: 10px 16px; border-radius: 8px;
-      background: #ec4899; border: none;
+      background: linear-gradient(135deg, #C8A96E, #b89858); border: none;
       color: #fff; font-family: 'Outfit', sans-serif;
       font-size: 13px; font-weight: 700; cursor: pointer;
     }
-    .gift-link-box button:hover { box-shadow: 0 0 12px rgba(236,72,153,0.5); }
-    .gift-copied { color: #ec4899; font-size: 12px; margin-top: 6px; }
+    .gift-link-box button:hover { box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
+    .gift-copied { color: #C8A96E; font-size: 12px; margin-top: 6px; }
     .album-waiting {
-      color: rgba(255,255,255,0.6); font-size: 12px; margin: 10px 0;
+      color: #A08050; font-size: 12px; margin: 10px 0;
       font-family: 'Inter', sans-serif; display: flex; align-items: center;
       justify-content: center; gap: 6px;
     }
     .waiting-dot {
       display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-      background: #ec4899; animation: waitPulse 1.2s ease-in-out infinite;
+      background: #C8A96E; animation: waitPulse 1.2s ease-in-out infinite;
     }
     @keyframes waitPulse {
       0%, 100% { opacity: 0.3; transform: scale(0.8); }
@@ -142,12 +143,12 @@
     /* Action Buttons */
     .album-action-btn {
       padding: 10px 20px; border-radius: 12px;
-      background: transparent; border: 1px solid #ec4899;
-      color: #ec4899; font-family: 'Outfit', sans-serif;
+      background: transparent; border: 1px solid #C8A96E;
+      color: #C8A96E; font-family: 'Outfit', sans-serif;
       font-size: 13px; font-weight: 700; cursor: pointer;
       transition: all 0.2s; margin: 4px;
     }
-    .album-action-btn:hover { background: rgba(236,72,153,0.15); }
+    .album-action-btn:hover { background: rgba(200,169,110,0.15); }
     .album-actions {
       display: flex; flex-wrap: wrap; justify-content: center;
       gap: 6px; margin-top: 12px;
@@ -155,7 +156,7 @@
 
     /* Photo Count */
     .album-photo-count {
-      font-size: 12px; color: rgba(255,255,255,0.4);
+      font-size: 12px; color: rgba(139,105,20,0.4);
       margin-bottom: 8px;
     }
 
@@ -173,7 +174,7 @@
       border-radius: 8px; cursor: pointer; z-index: 91;
       font-family: 'Inter', sans-serif;
     }
-    .album-slideshow-close:hover { border-color: #ec4899; color: #ec4899; }
+    .album-slideshow-close:hover { border-color: #C8A96E; color: #C8A96E; }
     .album-slideshow {
       position: relative; width: 100%; max-width: 400px;
       aspect-ratio: 4/3; border-radius: 16px;
@@ -202,18 +203,18 @@
       color: #fff; font-size: 14px; cursor: pointer;
       font-family: 'Inter', sans-serif;
     }
-    .album-slide-btn:hover { border-color: #ec4899; color: #ec4899; }
+    .album-slide-btn:hover { border-color: #C8A96E; color: #C8A96E; }
     .album-slide-count { color: rgba(255,255,255,0.6); font-size: 13px; }
     .album-slide-auto {
       padding: 8px 14px; border-radius: 10px;
-      background: rgba(236,72,153,0.15);
-      border: 1px solid rgba(236,72,153,0.4);
-      color: #ec4899; font-size: 12px; cursor: pointer;
+      background: rgba(200,169,110,0.15);
+      border: 1px solid rgba(200,169,110,0.4);
+      color: #C8A96E; font-size: 12px; cursor: pointer;
       font-family: 'Inter', sans-serif;
     }
     .album-slide-auto.active {
-      background: #ec4899; color: #fff;
-      border-color: #ec4899;
+      background: #C8A96E; color: #fff;
+      border-color: #C8A96E;
     }
 
     /* View Toggle */
@@ -222,14 +223,14 @@
     }
     .album-view-btn {
       padding: 6px 14px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(139,105,20,0.2);
+      background: rgba(255,255,255,0.3); color: #A08050;
       font-family: 'Inter', sans-serif; font-size: 12px;
       cursor: pointer; transition: all 0.2s;
     }
     .album-view-btn.active {
-      border-color: #ec4899; color: #ec4899;
-      background: rgba(236,72,153,0.1);
+      border-color: #C8A96E; color: #C8A96E;
+      background: rgba(200,169,110,0.15);
     }
 
     /* Fullscreen photo viewer (for grid click) */
@@ -257,14 +258,14 @@
       width: 50px; height: 50px;
       border-radius: 50%;
       background: radial-gradient(circle at 50% 50%, #333 0%, #111 40%, #333 41%, #111 60%, #333 61%, #222 100%);
-      box-shadow: 0 0 10px rgba(236,72,153,0.3);
+      box-shadow: 0 0 10px rgba(200,169,110,0.3);
       animation: lpSpin 3s linear infinite;
       z-index: 50;
     }
     .lp-overlay::after {
       content: ''; position: absolute;
       top: 50%; left: 50%; width: 12px; height: 12px;
-      background: #ec4899; border-radius: 50%;
+      background: #C8A96E; border-radius: 50%;
       transform: translate(-50%, -50%);
     }
     @keyframes lpSpin {
@@ -375,19 +376,19 @@
     /* Empty state */
     .album-empty {
       padding: 30px 16px;
-      color: rgba(255,255,255,0.4);
+      color: rgba(139,105,20,0.4);
       font-size: 14px;
     }
 
     /* Guide */
     .album-guide {
       text-align: left; margin-top: 14px; padding: 12px 14px;
-      background: rgba(255,255,255,0.06); border-radius: 10px;
-      border-left: 3px solid #ec4899;
+      background: rgba(139,105,20,0.06); border-radius: 10px;
+      border-left: 3px solid #C8A96E;
     }
     .album-guide p {
       font-family: 'Inter', sans-serif; font-size: 13px;
-      color: rgba(255,255,255,0.7); line-height: 1.6;
+      color: #3a2a10; line-height: 1.6;
       margin: 0 0 8px 0;
     }
     .album-guide p:last-child { margin-bottom: 0; }
