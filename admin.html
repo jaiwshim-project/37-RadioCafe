@@ -1126,22 +1126,15 @@
       if (e.key === 'Enter') adminLogin();
     });
 
-    // 리프레시 시 자동 복원
+    // 세션 중 자동 복원 (리프레시 시 로그인 유지)
     (function(){
-      var navEntries = performance.getEntriesByType && performance.getEntriesByType('navigation');
-      var isReload = (navEntries && navEntries[0] && navEntries[0].type === 'reload') ||
-                     (performance.navigation && performance.navigation.type === 1);
-      if(isReload && sessionStorage.getItem('adminLoggedIn')){
-        // 비밀번호 로드 후 자동 로그인
-        var waitPw = setInterval(function(){
-          if(ADMIN_PASSWORD){
-            clearInterval(waitPw);
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('adminPanel').classList.add('active');
-            var savedTab = sessionStorage.getItem('adminCurrentTab') || 'dashboard';
-            switchTab(savedTab);
-          }
-        }, 100);
+      var urlTab = new URLSearchParams(location.search).get('tab');
+      if(sessionStorage.getItem('adminLoggedIn') || urlTab){
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('active');
+        sessionStorage.setItem('adminLoggedIn', '1');
+        var targetTab = urlTab || sessionStorage.getItem('adminCurrentTab') || 'dashboard';
+        switchTab(targetTab);
       }
     })();
 
