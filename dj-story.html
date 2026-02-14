@@ -137,6 +137,19 @@
       transition: all 0.2s; white-space: nowrap;
     }
     .story-link-box button:hover { box-shadow: 0 0 12px var(--accent-glow); }
+    .story-waiting {
+      color: rgba(255,255,255,0.6); font-size: 12px; margin: 10px 0;
+      font-family: 'Inter', sans-serif; display: flex; align-items: center;
+      justify-content: center; gap: 6px;
+    }
+    .waiting-dot {
+      display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); animation: waitPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes waitPulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
     .story-copied {
       font-family: 'Inter', sans-serif; font-size: 12px;
       color: var(--accent); margin-bottom: 12px;
@@ -476,14 +489,17 @@
       <button onclick="copyStoryLink()">복사</button>
     </div>
     <div class="story-copied hidden" id="storyCopied">링크가 복사되었습니다!</div>
+    <div class="story-waiting hidden" id="storyWaiting">
+      <span class="waiting-dot"></span> 상대방이 링크를 열면 채팅이 시작됩니다...
+    </div>
     <div id="retryRow" style="display:none;">
       <div class="story-btn-row">
         <button class="story-btn-next" onclick="doUpload()">다시 업로드</button>
       </div>
     </div>
     <div class="story-guide" id="step3Guide" style="display:none;">
-      <p>복사 버튼을 선택하고 선물하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
-      <p>사연을 받은 상대방과 대화할 수 있는 채팅창으로 이동합니다.</p>
+      <p>1. 복사 버튼을 선택하고 선물하고 싶은 사람의 카톡 창이나 문자 메시지 창으로 가서 붙여넣기를 합니다.</p>
+      <p>2. 상대방이 링크를 열면 자동으로 채팅창이 열립니다.</p>
     </div>
     <div class="story-btn-row">
       <button class="story-btn-back" onclick="backToStep2()">이전</button>
@@ -732,13 +748,31 @@
     navigator.clipboard.writeText(input.value).then(function(){
       document.getElementById('storyCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('storyCopied').classList.add('hidden'); }, 2000);
-      openChatPanel();
+      waitForReceiver();
     }).catch(function(){
       document.execCommand('copy');
       document.getElementById('storyCopied').classList.remove('hidden');
       setTimeout(function(){ document.getElementById('storyCopied').classList.add('hidden'); }, 2000);
+      waitForReceiver();
+    });
+  }
+
+  var viewerChannel = null;
+  function waitForReceiver(){
+    var waitEl = document.getElementById('storyWaiting');
+    if(waitEl) waitEl.classList.remove('hidden');
+    initSupabase();
+    if(!supabaseClient) return;
+    if(viewerChannel) return;
+    viewerChannel = supabaseClient.channel('story-' + chatRoomId, {
+      config: { broadcast: { self: false } }
+    });
+    viewerChannel.on('broadcast', { event: 'viewer_opened' }, function(){
+      var waitEl2 = document.getElementById('storyWaiting');
+      if(waitEl2) waitEl2.classList.add('hidden');
       openChatPanel();
     });
+    viewerChannel.subscribe();
   }
 
   // === Voice Recording ===
@@ -870,10 +904,30 @@
         document.getElementById('receiverVoiceAudio').src = voiceUrl;
         document.getElementById('voicePlayBtn').style.display = 'inline-flex';
       }
+
+      // 보낸 사람에게 알리고 양쪽 채팅 오픈
+      notifySenderAndOpenChat();
     }).catch(function(err){
       console.log('사연 로드 실패:', err);
       document.getElementById('receiverLoading').style.display = 'none';
       document.getElementById('receiverError').style.display = '';
+    });
+  }
+
+  function notifySenderAndOpenChat(){
+    initSupabase();
+    if(!supabaseClient){
+      setTimeout(notifySenderAndOpenChat, 500);
+      return;
+    }
+    var notifyChannel = supabaseClient.channel('story-' + chatRoomId, {
+      config: { broadcast: { self: false } }
+    });
+    notifyChannel.subscribe(function(status){
+      if(status === 'SUBSCRIBED'){
+        notifyChannel.send({ type: 'broadcast', event: 'viewer_opened', payload: {} });
+        openChatPanel();
+      }
     });
   }
 
