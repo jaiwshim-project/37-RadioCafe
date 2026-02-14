@@ -1126,18 +1126,6 @@
       if (e.key === 'Enter') adminLogin();
     });
 
-    // 세션 중 자동 복원 (리프레시 시 로그인 유지)
-    (function(){
-      var urlTab = new URLSearchParams(location.search).get('tab');
-      if(sessionStorage.getItem('adminLoggedIn') || urlTab){
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('adminPanel').classList.add('active');
-        sessionStorage.setItem('adminLoggedIn', '1');
-        var targetTab = urlTab || sessionStorage.getItem('adminCurrentTab') || 'dashboard';
-        switchTab(targetTab);
-      }
-    })();
-
     // === 탭 전환 ===
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(function(btn) {
@@ -1808,6 +1796,15 @@
         appSettings = settings;
       } catch(e) { console.log('설정 로드 실패:', e); }
 
+      // 세션 중 자동 복원 (리프레시/돌아가기 시 로그인 유지)
+      var urlTab = new URLSearchParams(location.search).get('tab');
+      if(sessionStorage.getItem('adminLoggedIn') || urlTab){
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('active');
+        sessionStorage.setItem('adminLoggedIn', '1');
+        var targetTab = urlTab || sessionStorage.getItem('adminCurrentTab') || 'dashboard';
+        switchTab(targetTab);
+      }
     })();
   </script>
 </body>
