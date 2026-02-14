@@ -180,6 +180,12 @@
       overflow: hidden; background: #000;
       margin: 0 auto 16px;
     }
+    @media (orientation: landscape) {
+      .album-slideshow {
+        max-width: 90vw; max-height: 70vh;
+        aspect-ratio: auto; width: 90vw; height: 70vh;
+      }
+    }
     .album-slide {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       object-fit: contain; transition: opacity 0.5s;
@@ -940,11 +946,31 @@
     var wrap = document.getElementById('slideshowWrap');
     wrap.classList.remove('hidden');
     renderSlide();
+    // 모바일 자동 회전 허용
+    unlockOrientation();
   }
 
   function closeSlideshow(){
     document.getElementById('slideshowWrap').classList.add('hidden');
     stopAutoPlay();
+    // 세로 모드로 복원
+    lockOrientation();
+  }
+
+  function unlockOrientation(){
+    try {
+      if(screen.orientation && screen.orientation.unlock){
+        screen.orientation.unlock();
+      }
+    } catch(e){}
+  }
+
+  function lockOrientation(){
+    try {
+      if(screen.orientation && screen.orientation.lock){
+        screen.orientation.lock('portrait').catch(function(){});
+      }
+    } catch(e){}
   }
 
   function renderSlide(){
