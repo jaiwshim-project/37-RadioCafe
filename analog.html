@@ -2122,7 +2122,8 @@
     </div>
 
     <!-- Listen Together & Gift Song -->
-    <div class="analog-listen-together">
+    <div style="text-align:center;margin-top:36px;margin-bottom:6px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:#8B6914;letter-spacing:2px;">소확행 아이템</div>
+    <div class="analog-listen-together" style="margin-top:0;">
       <a class="analog-listen-together-btn" id="listenTogetherBtn" href="#" onclick="goListenTogether(event)" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">1. 같이듣기 초대</a>
       <a class="analog-listen-together-btn" href="gift-song.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">2. 노래 선물하기</a>
       <a class="analog-listen-together-btn" href="voice-gift.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">3. 노래+음성 선물하기</a>
@@ -3183,7 +3184,13 @@
     document.getElementById('analogVolKnob').style.cursor = 'default';
     var photoBtn = document.getElementById('analogPhotoBtn');
     if(photoBtn) photoBtn.style.display = 'none';
-    document.querySelectorAll('.analog-listen-together').forEach(function(el){ el.style.display = 'none'; });
+    document.querySelectorAll('.analog-listen-together-btn').forEach(function(el){
+      el.style.opacity = '0.5';
+      el.style.pointerEvents = 'none';
+      el.style.cursor = 'default';
+      el.removeAttribute('href');
+      el.removeAttribute('onclick');
+    });
   }
 
   function renderAnalogFreqTicks(){
