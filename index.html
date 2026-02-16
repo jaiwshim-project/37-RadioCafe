@@ -3575,7 +3575,7 @@
     <div class="radio-top-row2">
       <button class="photo-upload-btn" id="photoUploadBtn" onclick="reopenPhotoSelect()" title="사진 변경">+</button>
       <span class="brand-photos" id="brandPhotos"></span>
-      <button class="digital-to-analog-btn" onclick="document.body.style.visibility='hidden';location.href='analog.html'" title="아날로그 모드">ANALOG ▸</button>
+      <button class="digital-to-analog-btn" onclick="if(currentStation)localStorage.setItem('radio-switch-station',currentStation.id);document.body.style.visibility='hidden';location.href='analog.html'" title="아날로그 모드">ANALOG ▸</button>
     </div>
 
     <!-- Speaker Grille -->
