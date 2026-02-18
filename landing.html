@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>클라라 라디오카페 - 나만의 추억 사진과 함께 듣는 라디오</title>
+<meta name="description" content="대한민국 실시간 라디오를 디지털 & 아날로그로 즐기세요. 나만의 추억 사진을 보면서 라디오 방송을 들으세요!">
+<meta property="og:title" content="클라라 라디오카페">
+<meta property="og:description" content="나만의 추억 사진을 보면서 라디오 방송을 들으세요!">
+<meta property="og:image" content="og-image.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://radiokafe.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+/* ── Variables (Wood Classic 기반) ── */
+:root {
+  --gold: #d4a862;
+  --gold-dim: #b8944e;
+  --navy: #1a1a2e;
+  --brown-dark: #1e140a;
+  --brown: #3a2a1a;
+  --brown-light: #5a4a3a;
+  --cream: #f5e6c8;
+  --green-lcd: #55ff55;
+  --red: #ff3333;
+  --neon: #ff9933;
+  --led: #00ff88;
+  --text: #e8d5b8;
+  --text-dim: #a08060;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--brown-dark);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── Wood texture overlay ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    repeating-linear-gradient(90deg,
+      transparent, transparent 3px,
+      rgba(90,60,30,0.08) 3px, rgba(90,60,30,0.08) 4px
+    ),
+    repeating-linear-gradient(180deg,
+      transparent, transparent 40px,
+      rgba(60,40,20,0.06) 40px, rgba(60,40,20,0.06) 41px
+    );
+}
+
+section { position: relative; z-index: 1; }
+
+/* ── Typography ── */
+.font-display { font-family: 'Orbitron', monospace; }
+
+/* ── Nav ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(30,20,10,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212,168,98,0.2);
+  padding: 0 24px;
+  transition: box-shadow 0.3s;
+}
+.nav.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+}
+.nav-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--gold);
+  text-decoration: none;
+  letter-spacing: 2px;
+}
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 0.85rem; font-weight: 500;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: var(--brown-dark); border: none; border-radius: 20px;
+  padding: 8px 20px; font-weight: 700; font-size: 0.85rem;
+  cursor: pointer; text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(212,168,98,0.4);
+}
+
+/* ── Hero ── */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(212,168,98,0.08) 0%, transparent 60%),
+    linear-gradient(180deg, var(--brown-dark) 0%, var(--navy) 100%);
+}
+.hero-content { max-width: 700px; }
+.hero-badge {
+  display: inline-block;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem; letter-spacing: 4px;
+  color: var(--gold);
+  border: 1px solid rgba(212,168,98,0.3);
+  border-radius: 20px;
+  padding: 6px 18px;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1.2;
+  margin-bottom: 20px;
+  text-shadow: 0 0 40px rgba(212,168,98,0.3);
+}
+.hero p {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: var(--text-dim);
+  margin-bottom: 40px;
+  max-width: 500px;
+  margin-left: auto; margin-right: auto;
+}
+.hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: var(--brown-dark);
+  padding: 14px 36px; border-radius: 28px;
+  font-weight: 700; font-size: 1rem;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 24px rgba(212,168,98,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(212,168,98,0.5);
+}
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+  color: var(--gold);
+  padding: 14px 36px; border-radius: 28px;
+  font-weight: 600; font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid rgba(212,168,98,0.4);
+  transition: background 0.3s, border-color 0.3s;
+}
+.btn-secondary:hover {
+  background: rgba(212,168,98,0.1);
+  border-color: var(--gold);
+}
+
+/* ── Glow line divider ── */
+.glow-divider {
+  height: 1px; border: none;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.3;
+  margin: 0;
+}
+
+/* ── Section common ── */
+.section {
+  padding: 100px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem; letter-spacing: 4px;
+  color: var(--neon);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.section-desc {
+  color: var(--text-dim);
+  font-size: 1rem;
+  max-width: 550px;
+  margin-bottom: 48px;
+}
+
+/* ── Features ── */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+.feature-card {
+  background: linear-gradient(145deg, rgba(58,42,26,0.6), rgba(30,20,10,0.8));
+  border: 1px solid rgba(212,168,98,0.12);
+  border-radius: 16px;
+  padding: 32px 24px;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212,168,98,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+  background: rgba(212,168,98,0.1);
+}
+.feature-card h3 {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ── Screenshots ── */
+.screenshots-section {
+  padding: 100px 24px;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(26,26,46,0.5) 0%, transparent 70%),
+    var(--brown-dark);
+}
+.screenshots-inner {
+  max-width: 1100px; margin: 0 auto;
+}
+.screenshots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin-top: 48px;
+}
+.screenshot-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(212,168,98,0.15);
+  background: rgba(26,26,46,0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.screenshot-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.screenshot-item img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 9/16;
+  object-fit: cover;
+  object-position: top;
+}
+.screenshot-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 20px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+/* ── Themes showcase ── */
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+.theme-card {
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.3s, border-color 0.3s;
+  cursor: default;
+}
+.theme-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.2);
+}
+.theme-swatch {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  border: 2px solid rgba(255,255,255,0.15);
+}
+.theme-card .name {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+.theme-card .name-kr {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* ── CTA Section ── */
+.cta-section {
+  padding: 100px 24px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(212,168,98,0.06) 0%, transparent 60%);
+}
+.cta-section .section-title { margin-bottom: 20px; }
+.cta-section p {
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  margin-bottom: 36px;
+  max-width: 480px;
+  margin-left: auto; margin-right: auto;
+}
+
+/* ── Footer ── */
+.footer {
+  padding: 40px 24px;
+  text-align: center;
+  border-top: 1px solid rgba(212,168,98,0.1);
+}
+.footer p {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+.footer a {
+  color: var(--gold);
+  text-decoration: none;
+}
+.footer .footer-brand {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  color: var(--gold-dim);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+/* ── Scroll animations ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Mobile nav ── */
+.nav-toggle {
+  display: none;
+  background: none; border: none;
+  color: var(--gold); font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: block; }
+
+  .hero { padding: 100px 20px 60px; }
+  .section { padding: 60px 20px; }
+  .screenshots-section { padding: 60px 20px; }
+  .cta-section { padding: 60px 20px; }
+
+  .screenshots-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .themes-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .theme-card { padding: 14px 10px; }
+}
+
+@media (max-width: 480px) {
+  .themes-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-buttons { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">CLARA RADIO</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#screens">Screens</a></li>
+      <li><a href="#themes">Themes</a></li>
+    </ul>
+    <a href="index.html" class="nav-cta">LISTEN NOW</a>
+    <button class="nav-toggle" id="navToggle" aria-label="메뉴">&#9776;</button>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-content fade-up">
+    <div class="hero-badge font-display">Stereo Radio</div>
+    <h1>클라라<br>라디오카페</h1>
+    <p>나만의 추억 사진을 보면서<br>대한민국 실시간 라디오 방송을 들으세요</p>
+    <div class="hero-buttons">
+      <a href="index.html" class="btn-primary">&#9654;&ensp;라디오 듣기</a>
+      <a href="#features" class="btn-secondary">&#8595;&ensp;더 알아보기</a>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ── Features ── -->
+<section class="section" id="features">
+  <div class="fade-up">
+    <div class="section-label">Features</div>
+    <div class="section-title">당신만의 라디오 경험</div>
+    <div class="section-desc">아날로그 감성부터 디지털 편의성까지, 라디오카페가 제공하는 특별한 기능들</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card fade-up">
+      <div class="feature-icon">&#128251;</div>
+      <h3>실시간 스트리밍</h3>
+      <p>KBS, MBC, SBS, EBS 등 대한민국 주요 라디오 채널을 실시간으로 청취하세요</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">&#127912;</div>
+      <h3>아날로그 & 디지털</h3>
+      <p>빈티지 아날로그 다이얼과 모던 디지털 인터페이스를 자유롭게 전환하세요</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">&#127752;</div>
+      <h3>11가지 테마</h3>
+      <p>우드 클래식부터 네온 사이버까지, 나만의 스타일로 라디오를 꾸미세요</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">&#128247;</div>
+      <h3>추억 사진 앨범</h3>
+      <p>소중한 사진을 등록하고, 라디오를 들으며 추억을 감상하세요</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">&#127925;</div>
+      <h3>소확행 아이템</h3>
+      <p>같이듣기 초대, 노래 선물, 라디오 엽서, 타임캡슐 등 특별한 기능들</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">&#128197;</div>
+      <h3>기념일 대시보드</h3>
+      <p>소중한 기념일을 등록하고 D-day 카운트다운으로 관리하세요</p>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ── Screenshots ── -->
+<section class="screenshots-section" id="screens">
+  <div class="screenshots-inner">
+    <div class="fade-up">
+      <div class="section-label">Screens</div>
+      <div class="section-title">두 가지 모드, 하나의 감성</div>
+      <div class="section-desc">아날로그의 따뜻함과 디지털의 편리함을 모두 경험하세요</div>
+    </div>
+    <div class="screenshots-grid">
+      <div class="screenshot-item fade-up">
+        <img src="analog-screen.jpg" alt="아날로그 라디오 화면" loading="lazy">
+        <div class="screenshot-label">Analog Mode</div>
+      </div>
+      <div class="screenshot-item fade-up">
+        <img src="digital-screen.jpg" alt="디지털 라디오 화면" loading="lazy">
+        <div class="screenshot-label">Digital Mode</div>
+      </div>
+      <div class="screenshot-item fade-up">
+        <img src="landing-screen.jpg" alt="사용자 선택 화면" loading="lazy">
+        <div class="screenshot-label">User Select</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ── Themes ── -->
+<section class="section" id="themes">
+  <div class="fade-up">
+    <div class="section-label">Themes</div>
+    <div class="section-title">11가지 감성 테마</div>
+    <div class="section-desc">당신의 기분과 취향에 맞는 테마를 선택하세요</div>
+  </div>
+  <div class="themes-grid fade-up">
+    <div class="theme-card" style="background:linear-gradient(145deg,#3a2a1a,#1e140a);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#d4a862,#8b6914);"></div>
+      <div class="name">WOOD</div>
+      <div class="name-kr">우드 클래식</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#f5e6c8,#e2d1b0);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#8b4513,#654321);"></div>
+      <div class="name" style="color:#5a3a1a;">CREAM</div>
+      <div class="name-kr" style="color:#8b6914;">레트로 크림</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#222,#0e0e0e);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#fff,#888);"></div>
+      <div class="name">BLACK</div>
+      <div class="name-kr">미드나잇 블랙</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#4a5540,#2e3828);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#c8b400,#6b6000);"></div>
+      <div class="name">MILITARY</div>
+      <div class="name-kr">밀리터리</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#c0c0cc,#8a8a9a);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#1a1a2a,#444);"></div>
+      <div class="name" style="color:#1a1a2a;">SILVER</div>
+      <div class="name-kr" style="color:#444;">크롬 실버</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#15152a,#08081a);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#00e5ff,#0088aa);"></div>
+      <div class="name" style="color:#00e5ff;">CYBER</div>
+      <div class="name-kr" style="color:#0099bb;">네온 사이버</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#8a6070,#5a3545);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#ffc8d0,#ff88aa);"></div>
+      <div class="name" style="color:#ffc8d0;">ROSE</div>
+      <div class="name-kr" style="color:#ff99bb;">로즈 골드</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#faf8f5,#efe8e0);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#8B5E3C,#DEB887);"></div>
+      <div class="name" style="color:#8B5E3C;">MALTESE</div>
+      <div class="name-kr" style="color:#a0764e;">말티즈</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#1e1040,#100828);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#b388ff,#7c4dff);"></div>
+      <div class="name" style="color:#b388ff;">GALAXY</div>
+      <div class="name-kr" style="color:#9966ee;">퍼플 갤럭시</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#3a1038,#200820);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#ff69b4,#ff1493);"></div>
+      <div class="name" style="color:#ff69b4;">HOTPINK</div>
+      <div class="name-kr" style="color:#ff44aa;">핫핑크 네온</div>
+    </div>
+    <div class="theme-card" style="background:linear-gradient(145deg,#0e1e38,#081220);">
+      <div class="theme-swatch" style="background:linear-gradient(135deg,#66BBFF,#3388cc);"></div>
+      <div class="name" style="color:#66BBFF;">SKY</div>
+      <div class="name-kr" style="color:#4499dd;">하늘색 네온</div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="fade-up">
+    <div class="section-title">지금 바로 시작하세요</div>
+    <p>회원가입 없이 바로 라디오를 들을 수 있어요.<br>당신만의 라디오카페를 경험해 보세요.</p>
+    <a href="index.html" class="btn-primary">&#9654;&ensp;라디오카페 입장</a>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="footer-brand font-display">CLARA RADIO CAFE</div>
+  <p>&copy; 2026 클라라 라디오카페 &middot; v1.0<br>
+  Made by <a href="#">심재우</a> &middot; Hyein Cho</p>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Mobile nav toggle
+document.getElementById('navToggle').addEventListener('click', () => {
+  const links = document.querySelector('.nav-links');
+  if (links.style.display === 'flex') {
+    links.style.display = 'none';
+  } else {
+    links.style.display = 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '60px';
+    links.style.left = '0';
+    links.style.right = '0';
+    links.style.background = 'rgba(30,20,10,0.95)';
+    links.style.padding = '16px 24px';
+    links.style.gap = '16px';
+    links.style.borderBottom = '1px solid rgba(212,168,98,0.2)';
+  }
+});
+
+// Scroll fade-up animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
