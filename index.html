@@ -1948,6 +1948,26 @@
       width: 80px; height: 1px; margin: 12px auto 0;
       background: linear-gradient(90deg, transparent, rgba(102,187,255,0.6), transparent);
     }
+    /* Landing page button */
+    .landing-btn {
+      display: inline-block;
+      margin: 14px auto 10px;
+      padding: 9px 22px;
+      font-family: 'Orbitron', monospace;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #1a1a2e;
+      background: linear-gradient(135deg, #d4a862, #b8944e);
+      border-radius: 20px;
+      text-decoration: none;
+      box-shadow: 0 0 16px rgba(212,168,98,0.35);
+      transition: transform 0.2s, box-shadow 0.3s;
+      text-align: center;
+    }
+    .landing-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 24px rgba(212,168,98,0.55);
+    }
     /* LCD area - instructions */
     .photo-lcd {
       background: linear-gradient(180deg, #020a14, #061018);
@@ -3313,6 +3333,8 @@
         <span class="photo-brand-text"><span class="photo-brand-clara">클라라</span> <span class="photo-brand-cafe">라디오카페</span></span>
         <span class="photo-brand-sub">나만의 추억 사진을 보면서 라디오 방송을 들으세요!</span>
       </div>
+
+      <a href="landing.html" class="landing-btn">&#9733; 라디오카페 소개 보기</a>
 
       <!-- 사용자 선택 화면 -->
       <div class="login-box" id="userSelectBox">
