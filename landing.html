@@ -11,39 +11,40 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://radiokafe.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&family=Gamja+Flower&display=swap" rel="stylesheet">
 <style>
 /* ── Reset ── */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-/* ── Variables (Wood Classic 기반) ── */
+/* ── Variables (Soft Pink 테마) ── */
 :root {
-  --gold: #d4a862;
-  --gold-dim: #b8944e;
-  --navy: #1a1a2e;
-  --brown-dark: #1e140a;
-  --brown: #3a2a1a;
-  --brown-light: #5a4a3a;
-  --cream: #f5e6c8;
-  --green-lcd: #55ff55;
-  --red: #ff3333;
-  --neon: #ff9933;
-  --led: #00ff88;
-  --text: #e8d5b8;
-  --text-dim: #a08060;
+  --pink: #e8a0b4;
+  --pink-deep: #d4708a;
+  --pink-light: #f8d0dc;
+  --pink-pale: #fff0f4;
+  --rose: #c4607a;
+  --bg-dark: #1a0e14;
+  --bg-mid: #2a1520;
+  --bg-card: #2e1822;
+  --cream: #ffeef4;
+  --accent: #f4b8c8;
+  --neon: #ff80aa;
+  --led: #ff69b4;
+  --text: #f0d8e0;
+  --text-dim: #b08898;
 }
 
 html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', sans-serif;
-  background: var(--brown-dark);
+  background: var(--bg-dark);
   color: var(--text);
   overflow-x: hidden;
   line-height: 1.6;
 }
 
-/* ── Wood texture overlay ── */
+/* ── Soft sparkle overlay ── */
 body::before {
   content: '';
   position: fixed;
@@ -51,14 +52,12 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    repeating-linear-gradient(90deg,
-      transparent, transparent 3px,
-      rgba(90,60,30,0.08) 3px, rgba(90,60,30,0.08) 4px
-    ),
-    repeating-linear-gradient(180deg,
-      transparent, transparent 40px,
-      rgba(60,40,20,0.06) 40px, rgba(60,40,20,0.06) 41px
-    );
+    radial-gradient(1px 1px at 20% 30%, rgba(255,180,200,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 20%, rgba(255,150,180,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 70%, rgba(255,200,220,0.25) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 10% 80%, rgba(255,160,190,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 60%, rgba(255,140,170,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 10%, rgba(255,190,210,0.2) 0%, transparent 100%);
 }
 
 section { position: relative; z-index: 1; }
@@ -69,13 +68,13 @@ section { position: relative; z-index: 1; }
 /* ── Nav ── */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(30,20,10,0.92);
+  background: rgba(26,14,20,0.92);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(212,168,98,0.2);
+  border-bottom: 1px solid rgba(232,160,180,0.15);
   padding: 0 24px;
   transition: box-shadow 0.3s;
 }
-.nav.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+.nav.scrolled { box-shadow: 0 4px 20px rgba(200,80,120,0.15); }
 .nav-inner {
   max-width: 1100px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
@@ -84,7 +83,7 @@ section { position: relative; z-index: 1; }
 .nav-logo {
   font-family: 'Orbitron', monospace;
   font-size: 1.1rem; font-weight: 700;
-  color: var(--gold);
+  color: var(--pink);
   text-decoration: none;
   letter-spacing: 2px;
 }
@@ -94,17 +93,17 @@ section { position: relative; z-index: 1; }
   font-size: 0.85rem; font-weight: 500;
   transition: color 0.3s;
 }
-.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover { color: var(--pink); }
 .nav-cta {
-  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
-  color: var(--brown-dark); border: none; border-radius: 20px;
+  background: linear-gradient(135deg, var(--pink), var(--rose));
+  color: #fff; border: none; border-radius: 20px;
   padding: 8px 20px; font-weight: 700; font-size: 0.85rem;
   cursor: pointer; text-decoration: none;
   transition: transform 0.2s, box-shadow 0.3s;
 }
 .nav-cta:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(212,168,98,0.4);
+  box-shadow: 0 4px 16px rgba(232,160,180,0.5);
 }
 
 /* ── Hero ── */
@@ -114,16 +113,22 @@ section { position: relative; z-index: 1; }
   text-align: center;
   padding: 120px 24px 80px;
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(212,168,98,0.08) 0%, transparent 60%),
-    linear-gradient(180deg, var(--brown-dark) 0%, var(--navy) 100%);
+    radial-gradient(ellipse at 30% 20%, rgba(255,100,150,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(200,60,100,0.06) 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 100%);
 }
 .hero-content { max-width: 700px; }
+.hero-radio-img {
+  width: 120px; height: 120px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 20px rgba(255,150,180,0.4));
+}
 .hero-badge {
   display: inline-block;
   font-family: 'Orbitron', monospace;
   font-size: 0.7rem; letter-spacing: 4px;
-  color: var(--gold);
-  border: 1px solid rgba(212,168,98,0.3);
+  color: var(--pink-light);
+  border: 1px solid rgba(232,160,180,0.3);
   border-radius: 20px;
   padding: 6px 18px;
   margin-bottom: 28px;
@@ -133,13 +138,14 @@ section { position: relative; z-index: 1; }
   font-family: 'Orbitron', monospace;
   font-size: clamp(2rem, 6vw, 3.5rem);
   font-weight: 900;
-  color: var(--gold);
+  color: var(--pink-light);
   line-height: 1.2;
   margin-bottom: 20px;
-  text-shadow: 0 0 40px rgba(212,168,98,0.3);
+  text-shadow: 0 0 40px rgba(255,180,200,0.4), 0 0 80px rgba(255,100,150,0.15);
 }
 .hero p {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-family: 'Gamja Flower', cursive;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   color: var(--text-dim);
   margin-bottom: 40px;
   max-width: 500px;
@@ -148,37 +154,37 @@ section { position: relative; z-index: 1; }
 .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 .btn-primary {
   display: inline-flex; align-items: center; gap: 8px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
-  color: var(--brown-dark);
+  background: linear-gradient(135deg, var(--pink), var(--rose));
+  color: #fff;
   padding: 14px 36px; border-radius: 28px;
   font-weight: 700; font-size: 1rem;
   text-decoration: none; border: none; cursor: pointer;
   transition: transform 0.2s, box-shadow 0.3s;
-  box-shadow: 0 4px 24px rgba(212,168,98,0.3);
+  box-shadow: 0 4px 24px rgba(232,160,180,0.35);
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(212,168,98,0.5);
+  box-shadow: 0 8px 32px rgba(255,120,160,0.5);
 }
 .btn-secondary {
   display: inline-flex; align-items: center; gap: 8px;
   background: transparent;
-  color: var(--gold);
+  color: var(--pink-light);
   padding: 14px 36px; border-radius: 28px;
   font-weight: 600; font-size: 1rem;
   text-decoration: none;
-  border: 1px solid rgba(212,168,98,0.4);
+  border: 1px solid rgba(232,160,180,0.35);
   transition: background 0.3s, border-color 0.3s;
 }
 .btn-secondary:hover {
-  background: rgba(212,168,98,0.1);
-  border-color: var(--gold);
+  background: rgba(232,160,180,0.1);
+  border-color: var(--pink);
 }
 
 /* ── Glow line divider ── */
 .glow-divider {
   height: 1px; border: none;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--pink), transparent);
   opacity: 0.3;
   margin: 0;
 }
@@ -200,7 +206,7 @@ section { position: relative; z-index: 1; }
   font-family: 'Orbitron', monospace;
   font-size: clamp(1.5rem, 4vw, 2.2rem);
   font-weight: 700;
-  color: var(--gold);
+  color: var(--pink-light);
   margin-bottom: 16px;
 }
 .section-desc {
@@ -217,16 +223,16 @@ section { position: relative; z-index: 1; }
   gap: 24px;
 }
 .feature-card {
-  background: linear-gradient(145deg, rgba(58,42,26,0.6), rgba(30,20,10,0.8));
-  border: 1px solid rgba(212,168,98,0.12);
+  background: rgba(232,160,180,0.2);
+  border: 1px solid rgba(232,160,180,0.3);
   border-radius: 16px;
   padding: 32px 24px;
   transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 .feature-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(212,168,98,0.3);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border-color: rgba(232,160,180,0.3);
+  box-shadow: 0 8px 32px rgba(200,80,120,0.15);
 }
 .feature-icon {
   width: 48px; height: 48px;
@@ -234,7 +240,7 @@ section { position: relative; z-index: 1; }
   display: flex; align-items: center; justify-content: center;
   font-size: 1.4rem;
   margin-bottom: 16px;
-  background: rgba(212,168,98,0.1);
+  background: rgba(232,160,180,0.12);
 }
 .feature-card h3 {
   font-family: 'Orbitron', monospace;
@@ -253,8 +259,8 @@ section { position: relative; z-index: 1; }
 .screenshots-section {
   padding: 100px 24px;
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(26,26,46,0.5) 0%, transparent 70%),
-    var(--brown-dark);
+    radial-gradient(ellipse at 50% 50%, rgba(60,20,40,0.3) 0%, transparent 70%),
+    var(--bg-dark);
 }
 .screenshots-inner {
   max-width: 1100px; margin: 0 auto;
@@ -269,13 +275,13 @@ section { position: relative; z-index: 1; }
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(212,168,98,0.15);
-  background: rgba(26,26,46,0.4);
+  border: 1px solid rgba(232,160,180,0.15);
+  background: rgba(42,21,32,0.5);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .screenshot-item:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 12px 40px rgba(200,80,120,0.2);
 }
 .screenshot-item img {
   width: 100%;
@@ -290,7 +296,7 @@ section { position: relative; z-index: 1; }
   background: linear-gradient(transparent, rgba(0,0,0,0.8));
   font-family: 'Orbitron', monospace;
   font-size: 0.8rem;
-  color: var(--gold);
+  color: var(--pink-light);
   letter-spacing: 2px;
 }
 
@@ -335,12 +341,13 @@ section { position: relative; z-index: 1; }
   padding: 100px 24px;
   text-align: center;
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(212,168,98,0.06) 0%, transparent 60%);
+    radial-gradient(ellipse at 50% 50%, rgba(232,160,180,0.06) 0%, transparent 60%);
 }
 .cta-section .section-title { margin-bottom: 20px; }
 .cta-section p {
+  font-family: 'Gamja Flower', cursive;
   color: var(--text-dim);
-  font-size: 1.05rem;
+  font-size: 1.3rem;
   margin-bottom: 36px;
   max-width: 480px;
   margin-left: auto; margin-right: auto;
@@ -350,7 +357,7 @@ section { position: relative; z-index: 1; }
 .footer {
   padding: 40px 24px;
   text-align: center;
-  border-top: 1px solid rgba(212,168,98,0.1);
+  border-top: 1px solid rgba(232,160,180,0.1);
 }
 .footer p {
   font-size: 0.8rem;
@@ -358,13 +365,13 @@ section { position: relative; z-index: 1; }
   line-height: 1.8;
 }
 .footer a {
-  color: var(--gold);
+  color: var(--pink);
   text-decoration: none;
 }
 .footer .footer-brand {
   font-family: 'Orbitron', monospace;
   font-size: 0.75rem;
-  color: var(--gold-dim);
+  color: var(--pink-deep);
   letter-spacing: 2px;
   margin-bottom: 8px;
 }
@@ -374,31 +381,32 @@ section { position: relative; z-index: 1; }
   padding: 100px 24px;
   text-align: center;
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(212,168,98,0.04) 0%, transparent 60%);
+    radial-gradient(ellipse at 50% 50%, rgba(232,160,180,0.05) 0%, transparent 60%);
 }
 .story-inner { max-width: 600px; margin: 0 auto; }
 .story-quote {
   font-family: 'Orbitron', monospace;
   font-size: 4rem;
-  color: rgba(212,168,98,0.25);
+  color: rgba(232,160,180,0.25);
   line-height: 1;
   margin-bottom: -10px;
 }
 .story-text {
-  font-size: 1.05rem;
+  font-family: 'Gamja Flower', cursive;
+  font-size: 1.3rem;
   color: var(--text);
   line-height: 2;
   margin-bottom: 28px;
   letter-spacing: 0.5px;
 }
 .story-text.last {
-  color: var(--gold);
+  color: var(--pink-light);
   font-weight: 500;
 }
 .story-author {
   margin-top: 40px;
   padding-top: 24px;
-  border-top: 1px solid rgba(212,168,98,0.15);
+  border-top: 1px solid rgba(232,160,180,0.15);
 }
 .story-author-name {
   display: block;
@@ -437,35 +445,126 @@ section { position: relative; z-index: 1; }
 .nav-toggle {
   display: none;
   background: none; border: none;
-  color: var(--gold); font-size: 1.5rem;
+  color: var(--pink); font-size: 1.5rem;
   cursor: pointer;
 }
 
-/* ── Responsive ── */
+/* ── Responsive: Tablet ── */
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .nav-toggle { display: block; }
+  .nav-inner { height: 52px; }
+  .nav-logo { font-size: 0.95rem; }
 
-  .hero { padding: 100px 20px 60px; }
-  .section { padding: 60px 20px; }
-  .screenshots-section { padding: 60px 20px; }
-  .cta-section { padding: 60px 20px; }
+  .hero { padding: 80px 20px 50px; min-height: auto; }
+  .hero h1 { font-size: 2rem; }
+  .hero p { font-size: 1.15rem; margin-bottom: 28px; }
+  .hero-radio-img { width: 90px; height: 90px; margin-bottom: 16px; }
 
-  .screenshots-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+  .section { padding: 60px 16px; }
+  .section-title { font-size: 1.4rem; }
+  .section-desc { font-size: 0.9rem; margin-bottom: 32px; }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
+  .feature-card { padding: 22px 16px; }
+  .feature-icon { width: 40px; height: 40px; font-size: 1.2rem; }
+  .feature-card h3 { font-size: 0.85rem; }
+  .feature-card p { font-size: 0.8rem; }
+
+  .screenshots-section { padding: 60px 16px; }
+  .screenshots-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
   .themes-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
   .theme-card { padding: 14px 10px; }
+
+  .cta-section { padding: 60px 16px; }
+  .cta-section p { font-size: 1.15rem; }
+
+  .story-section { padding: 60px 16px; }
+  .story-text { font-size: 1.15rem; line-height: 1.8; }
+
+  .footer { padding: 30px 16px; }
 }
 
+/* ── Responsive: Mobile ── */
 @media (max-width: 480px) {
-  .themes-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero-buttons { flex-direction: column; align-items: center; }
-  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+  .nav-inner { height: 48px; padding: 0; }
+  .nav-logo { font-size: 0.85rem; letter-spacing: 1px; }
+  .nav-cta { padding: 6px 14px; font-size: 0.75rem; }
+
+  .hero { padding: 70px 16px 40px; }
+  .hero-badge { font-size: 0.6rem; letter-spacing: 3px; padding: 5px 14px; margin-bottom: 20px; }
+  .hero h1 { font-size: 1.7rem; margin-bottom: 14px; }
+  .hero p { font-size: 1.1rem; margin-bottom: 20px; }
+  .hero-radio-img { width: 80px; height: 80px; margin-bottom: 14px; }
+  .hero-buttons { flex-direction: column; align-items: center; gap: 10px; }
+  .btn-primary, .btn-secondary {
+    width: 100%; justify-content: center;
+    padding: 12px 28px; font-size: 0.9rem;
+  }
+
+  .section { padding: 48px 14px; }
+  .section-label { font-size: 0.6rem; letter-spacing: 3px; }
+  .section-title { font-size: 1.2rem; margin-bottom: 12px; }
+  .section-desc { font-size: 0.85rem; margin-bottom: 28px; }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .feature-card {
+    padding: 20px 18px;
+    display: flex; align-items: center; gap: 14px;
+    text-align: left;
+  }
+  .feature-icon {
+    width: 44px; height: 44px; min-width: 44px;
+    margin-bottom: 0;
+  }
+  .feature-card h3 { font-size: 0.85rem; margin-bottom: 4px; }
+  .feature-card p { font-size: 0.78rem; }
+
+  .screenshots-section { padding: 48px 14px; }
+  .screenshots-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .screenshot-item img { aspect-ratio: 9/16; }
+  .screenshot-label { font-size: 0.6rem; padding: 10px; letter-spacing: 1px; }
+
+  .themes-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .theme-card { padding: 12px 6px; border-radius: 10px; }
+  .theme-swatch { width: 32px; height: 32px; margin-bottom: 8px; }
+  .theme-card .name { font-size: 0.55rem; }
+  .theme-card .name-kr { font-size: 0.65rem; }
+
+  .story-section { padding: 48px 14px; }
+  .story-inner { max-width: 100%; }
+  .story-quote { font-size: 2.5rem; }
+  .story-text { font-size: 1.05rem; line-height: 1.8; margin-bottom: 20px; }
+  .story-author-name { font-size: 0.85rem; }
+  .story-author-title { font-size: 0.7rem; }
+
+  .cta-section { padding: 48px 14px; }
+  .cta-section .section-title { font-size: 1.2rem; }
+  .cta-section p { font-size: 1.05rem; margin-bottom: 24px; }
+  .cta-section img { width: 80px !important; height: 80px !important; }
+
+  .footer { padding: 24px 14px; }
+  .footer .footer-brand { font-size: 0.65rem; }
+  .footer p { font-size: 0.7rem; }
 }
 </style>
 </head>
@@ -474,7 +573,7 @@ section { position: relative; z-index: 1; }
 <!-- ── Nav ── -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#" class="nav-logo">CLARA RADIO</a>
+    <a href="#" class="nav-logo">CLARA RADIOKAFE<span style="display:block; font-size:0.5rem; color:#f8d0dc; letter-spacing:1.5px; font-weight:400; margin-top:1px;">www.radiokafe.com</span></a>
     <ul class="nav-links">
       <li><a href="#features">Features</a></li>
       <li><a href="#screens">Screens</a></li>
@@ -490,7 +589,9 @@ section { position: relative; z-index: 1; }
   <div class="hero-content fade-up">
     <div class="hero-badge font-display">Stereo Radio</div>
     <h1>클라라<br>라디오카페</h1>
+    <div style="color:#f8d0dc; font-family:'Orbitron',monospace; font-size:0.8rem; letter-spacing:2px; margin-bottom:20px;">www.radiokafe.com</div>
     <p>나만의 추억 사진을 보면서<br>대한민국 실시간 라디오 방송을 들으세요</p>
+    <img src="radio.png" alt="라디오" class="hero-radio-img">
     <div class="hero-buttons">
       <a href="index.html" class="btn-primary">&#9654;&ensp;라디오 듣기</a>
       <a href="#features" class="btn-secondary">&#8595;&ensp;더 알아보기</a>
@@ -537,6 +638,16 @@ section { position: relative; z-index: 1; }
       <div class="feature-icon">&#128197;</div>
       <h3>기념일 대시보드</h3>
       <p>소중한 기념일을 등록하고 D-day 카운트다운으로 관리하세요</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">&#127183;</div>
+      <h3>타로 카드</h3>
+      <p>오늘의 타로 카드를 뽑아보세요. 카드가 전하는 메시지로 하루를 시작하세요</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">&#128302;</div>
+      <h3>오늘의 운세</h3>
+      <p>생년월일 기반 매일 새로운 운세를 확인하고, 오늘 하루의 행운을 점쳐보세요</p>
     </div>
   </div>
 </section>
@@ -643,7 +754,8 @@ section { position: relative; z-index: 1; }
   <div class="fade-up">
     <div class="section-title">지금 바로 시작하세요</div>
     <p>회원가입 없이 바로 라디오를 들을 수 있어요.<br>당신만의 라디오카페를 경험해 보세요.</p>
-    <a href="index.html" class="btn-primary">&#9654;&ensp;라디오카페 입장</a>
+    <div style="text-align:center;"><img src="radio-waves.png" alt="라디오" style="width:100px; height:100px; margin-bottom:20px; display:block; margin-left:auto; margin-right:auto;"></div>
+    <div style="text-align:center;"><a href="index.html" class="btn-primary">&#9654;&ensp;라디오카페 입장</a></div>
   </div>
 </section>
 
@@ -682,12 +794,20 @@ section { position: relative; z-index: 1; }
 
 <!-- ── Footer ── -->
 <footer class="footer">
-  <div class="footer-brand font-display">CLARA RADIO CAFE</div>
+  <div class="footer-brand font-display">CLARA RADIOKAFE<br><span style="font-size:0.6rem; color:#f8d0dc; letter-spacing:1.5px; font-weight:400;">www.radiokafe.com</span></div>
   <p>&copy; 2026 클라라 라디오카페 &middot; v1.0<br>
   Made by <a href="about.html" style="color:#c0c0e0; text-shadow:0 0 8px rgba(192,192,255,0.6), 0 0 20px rgba(192,192,255,0.3); font-weight:700;">Hyein Cho</a></p>
 </footer>
 
 <script>
+// 페이지 로드 시 맨 위로 스크롤
+window.addEventListener('load', () => {
+  window.scrollTo(0, 0);
+});
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
 // Nav scroll effect
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
