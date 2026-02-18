@@ -369,6 +369,59 @@ section { position: relative; z-index: 1; }
   margin-bottom: 8px;
 }
 
+/* ── Story section ── */
+.story-section {
+  padding: 100px 24px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(212,168,98,0.04) 0%, transparent 60%);
+}
+.story-inner { max-width: 600px; margin: 0 auto; }
+.story-quote {
+  font-family: 'Orbitron', monospace;
+  font-size: 4rem;
+  color: rgba(212,168,98,0.25);
+  line-height: 1;
+  margin-bottom: -10px;
+}
+.story-text {
+  font-size: 1.05rem;
+  color: var(--text);
+  line-height: 2;
+  margin-bottom: 28px;
+  letter-spacing: 0.5px;
+}
+.story-text.last {
+  color: var(--gold);
+  font-weight: 500;
+}
+.story-author {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(212,168,98,0.15);
+}
+.story-author-name {
+  display: block;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.story-author-name a {
+  color: #c0c0e0;
+  text-decoration: none;
+  text-shadow: 0 0 8px rgba(192,192,255,0.6), 0 0 20px rgba(192,192,255,0.3);
+  transition: text-shadow 0.3s;
+}
+.story-author-name a:hover {
+  text-shadow: 0 0 12px rgba(192,192,255,0.8), 0 0 30px rgba(192,192,255,0.5);
+}
+.story-author-title {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
 /* ── Scroll animations ── */
 .fade-up {
   opacity: 0;
@@ -594,11 +647,44 @@ section { position: relative; z-index: 1; }
   </div>
 </section>
 
+<hr class="glow-divider">
+
+<!-- ── Story ── -->
+<section class="story-section">
+  <div class="story-inner fade-up">
+    <div class="section-label">Our Story</div>
+    <div class="story-quote">"</div>
+    <p class="story-text">
+      깜깜한 밤, 이불 속에 숨어<br>
+      작은 라디오에서 흘러나오던 노래 한 곡.<br>
+      그 선율 하나에 세상 모든 걱정이 사라지던<br>
+      그 시절을 기억하시나요?
+    </p>
+    <p class="story-text">
+      다이얼을 돌릴 때마다 들리던 지직거림,<br>
+      좋아하는 DJ의 목소리를 기다리던 설렘,<br>
+      신청곡이 나올까 두근거리던 그 마음&mdash;<br>
+      클라라 라디오카페는 그 따뜻한 순간들을<br>
+      다시 꺼내 보고 싶어 만들었습니다.
+    </p>
+    <p class="story-text last">
+      7080의 그 밤, 라디오와 함께한 당신의 추억이<br>
+      이곳에서 다시 한번 빛나기를 바랍니다.
+    </p>
+    <div class="story-author">
+      <span class="story-author-name"><a href="about.html">조혜인</a></span>
+      <span class="story-author-title">마이펫태일 대표 &middot; 인셀랩 대표 &middot; 서양화가</span>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
 <!-- ── Footer ── -->
 <footer class="footer">
   <div class="footer-brand font-display">CLARA RADIO CAFE</div>
   <p>&copy; 2026 클라라 라디오카페 &middot; v1.0<br>
-  Made by <a href="#">심재우</a> &middot; Hyein Cho</p>
+  Made by <a href="about.html" style="color:#c0c0e0; text-shadow:0 0 8px rgba(192,192,255,0.6), 0 0 20px rgba(192,192,255,0.3); font-weight:700;">Hyein Cho</a></p>
 </footer>
 
 <script>
